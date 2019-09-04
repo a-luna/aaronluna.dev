@@ -1,0 +1,10 @@
+<div id="social" class="widget-social widget">
+    {{ if .Site.Menus.icon }}
+    <h4 class="widget__title">{{ .Site.Params.widgets.social_title }}</h4>
+    <ul>
+        {{ range sort .Site.Menus.icon }}
+        <li><a href="{{ .URL }}" target="_blank"><i class="fa fa-{{ .Name }}"></i></a></li>
+        {{ end }}
+    </ul>
+    {{ end }}
+</div>

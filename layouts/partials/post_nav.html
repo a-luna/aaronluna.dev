@@ -1,0 +1,35 @@
+{{- if .Site.Params.post_navigation }} {{- if or (.PrevInSection) (.NextInSection) }}
+<div id="blog-nav" class="post-nav flex-container">
+    {{- if .PrevInSection }}
+    <div class="post-nav-flex-item-prev">
+        <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
+            <div class="post-nav__chevron chevron-prev">
+                <a class="post-nav__link post-nav__link--prev" href="{{.PrevInSection.RelPermalink}}" rel="prev">
+                    <i class="fa fa-lg fa-fw fa-chevron-left" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="post-nav__post-title title-prev">
+                <a class="post-nav__link post-nav__link--prev" href="{{.PrevInSection.RelPermalink}}" rel="prev">
+                    {{.PrevInSection.Title}}
+                </a>
+            </div>
+        </div>
+    </div>
+    {{- end }} {{- if .NextInSection }}
+    <div class="post-nav-flex-item-next">
+        <div class="post-nav__item post-nav__item--next inner-nav-flex-container">
+            <div class="post-nav__post-title title-next">
+                <a class="post-nav__link post-nav__link--next" href="{{.NextInSection.RelPermalink}}" rel="next">
+                    {{.NextInSection.Title}}
+                </a>
+            </div>
+            <div class="post-nav__chevron chevron-next">
+                <a class="post-nav__link post-nav__link--next" href="{{.NextInSection.RelPermalink}}" rel="next">
+                    <i class="fa fa-lg fa-fw fa-chevron-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {{- end }}
+</div>
+{{- end }} {{- end }}

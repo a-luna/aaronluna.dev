@@ -1,0 +1,13 @@
+{{ define "main" }}
+<main class="main" role="main">
+    <header class="post__header">
+        <h1 class="post__title">{{ .Title }}</h1>
+        {{- with .Params.lead }}
+        <p class="post__lead">{{ . }}</p>
+        {{- end }}
+    </header>
+    <div class="content post__content clearfix">
+        {{ .Content }}
+    </div>
+</main>
+{{ end }}

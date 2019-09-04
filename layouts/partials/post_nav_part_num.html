@@ -1,0 +1,49 @@
+{{- if .Site.Params.post_navigation }} {{- if or (.PrevInSection) (.NextInSection) }}
+<div id="header-nav" class="post-nav">
+    {{- if .PrevInSection }}
+    <a class="post-nav__link post-nav__link--prev" href="{{.PrevInSection.RelPermalink}}" rel="prev">
+        <div class="post-nav-flex-item-prev">
+            <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
+                <div class="post-nav__chevron chevron-prev">
+                    <i class="fa fa-lg fa-fw fa-chevron-left" aria-hidden="true"></i>
+                </div>
+                <div class="post-nav__post-title title-prev">
+                    {{.PrevInSection.Params.series_part}}
+                </div>
+            </div>
+        </div>
+    </a>
+    {{- else }}
+    <div class="post-nav-flex-item-disabled">
+        <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
+            <div class="post-nav__chevron chevron-prev">
+                <i class="fa fa-lg fa-fw fa-chevron-left" aria-hidden="true"></i>
+            </div>
+            <div class="post-nav__post-title title-prev">&nbsp;</div>
+        </div>
+    </div>
+    {{- end }} {{- if .NextInSection }}
+    <a class="post-nav__link post-nav__link--next" href="{{.NextInSection.RelPermalink}}" rel="next">
+        <div class="post-nav-flex-item-next">
+            <div class="post-nav__item post-nav__item--next inner-nav-flex-container">
+                <div class="post-nav__post-title title-next">
+                    {{.NextInSection.Params.series_part}}
+                </div>
+                <div class="post-nav__chevron chevron-next">
+                    <i class="fa fa-lg fa-fw fa-chevron-right" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+    {{- else }}
+    <div class="post-nav-flex-item-disabled">
+        <div class="post-nav__item post-nav__item--next inner-nav-flex-container">
+            <div class="post-nav__post-title title-next">&nbsp;</div>
+            <div class="post-nav__chevron chevron-next">
+                <i class="fa fa-lg fa-fw fa-chevron-right" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    {{- end }}
+</div>
+{{- end }} {{- end }}

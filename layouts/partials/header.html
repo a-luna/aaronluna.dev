@@ -1,0 +1,24 @@
+<header class="header">
+    <div id="top-bar" class="container">
+        <div class="flex-left">
+            <div class="logo">
+                <a class="logo__link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
+                    <div class="logo__title">{{ .Site.Title }}</div>
+                </a>
+            </div>
+            <div id="social">
+                <ul>
+                    <li><a href="mailto:admin@aaronluna.dev" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                    <li><a href="https://github.com/a-luna/" target="_blank"><i class="fa fa-github"></i></a></li>
+                    <li><a href="https://twitter.com/aaronlunadev/" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="https://www.linkedin.com/in/aaron-luna-reno-nv/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="nav-top">
+            <div class="nav-main">
+                {{ partial "menu.html" . }}
+            </div>
+        </div>
+    </div>
+</header>

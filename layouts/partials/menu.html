@@ -1,0 +1,22 @@
+{{- if .Site.Menus.main }}
+<nav class="menu">
+    <div id="menu-bar" class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+        <div class="site-name">{{ .Site.Title }}</div>
+        <div class="menu__btn-title" tabindex="-1"><i class="fa fa-bars"></i></div>
+    </div>
+    <ul class="menu__list">
+        {{- $currentNode := . }}
+        {{- range sort .Site.Menus.main }}
+            {{- if .Name }}
+            <a class="menu__link" href="{{ .URL }}">
+                <li class="menu__item{{ if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .) }} menu__item--active{{ end }}">
+                    {{ .Name }}
+                </li>
+            </a>
+            {{- end }}
+        {{- end }}
+    </ul>
+</nav>
+{{ else -}}
+<div class="divider"></div>
+{{- end }}

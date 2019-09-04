@@ -1,0 +1,21 @@
+{{ define "main" }}
+<main class="main about-me" role="main">
+    <article class="post">
+        <header class="post__header">
+            <h1 class="post__title">{{ .Title }}</h1>
+            <img alt="Aaron Luna" src="/img/AaronLuna.jpg" class="avatar" style="width:150px"> {{- with .Params.lead }}
+            <p class="post__lead">{{ . }}</p>
+            {{- end }}
+        </header>
+        {{- if .Params.thumbnail }}
+        <figure class="post__thumbnail">
+            <img src="{{ .Params.thumbnail | relURL }}" alt="{{ .Title }}">
+        </figure>
+        {{- end }} {{- partial "post_toc.html" . -}}
+        <div class="content post__content clearfix">
+            {{ .Content }}
+        </div>
+        {{ partial "post_tags.html" . }}
+    </article>
+</main>
+{{ partial "post_nav.html" . }} {{ end }}

@@ -1,0 +1,116 @@
+baseurl = "https://alunablog.netlify.com/"
+#baseurl = "https://aaronluna.dev/"
+title = "Aaron Luna"
+languageCode = "en-us"
+paginate = "3" # Number of posts per page
+#theme = "mainroad"
+#disqusShortname = "alunablog" # Enable comments by entering your Disqus shortname
+#googleAnalytics = "UA-111693264-1" # Enable Google Analytics by entering your tracking id
+pygmentsCodefences = true
+pygmentsCodefencesGuessSyntax = true
+pygmentsUseClasses = true
+
+
+[permalinks]
+  post = "/blog/:slug/"
+  project = "/project/:slug/"
+  flask_api_tutorial = "/:slug/"
+
+[Author]
+  name = "Aaron Luna"
+  bio = "Application and Web Developer living in Reno, NV"
+  avatar = "img/AaronLuna.jpg"
+
+[Params]
+  description = "Web development tutorials by Aaron Luna" # Description of your site
+  copyright = "Aaron Luna"
+  opengraph = false
+  twitter_cards = false
+  readmore = false
+  authorbox = false
+  post_navigation = true
+  postSections = ["post"]
+  menu_label = "Menu"
+  read_more = "Read More"
+  customCSS = ["css/syntax.css", "css/style.css", "css/custom.css", ]
+
+[taxonomies]
+  series = "series"
+  category = "categories"
+
+[menu]
+  [[menu.main]]
+    identifier = "post"
+    name = "Blog"
+    url = "/blog/"
+    weight = 1
+  [[menu.main]]
+    identifier = "flask-api-tutorial"
+    name = "Flask API Tutorial"
+    url = "/flask-api-tutorial/"
+    weight = 2
+  [[menu.main]]
+    identifier = "about-me"
+    name = "About Me"
+    url = "/about/"
+    weight = 3
+
+# For social icons, the "name" field should match the name of the icon to be used
+# The list of available icons can be found at http://fontawesome.io/icons/
+
+  [[menu.icon]]
+    url = "mailto:admin@aaronluna.dev"
+    name = "envelope"
+    weight = 1
+
+  [[menu.icon]]
+    url = "https://github.com/a-luna/"
+    name = "github"
+    weight = 2
+
+  [[menu.icon]]
+    url = "https://twitter.com/alunablog/"
+    name = "twitter"
+    weight = 3
+
+  [[menu.icon]]
+    url = "https://www.linkedin.com/in/aaron-luna-reno-nv/"
+    name = "linkedin"
+    weight = 4
+
+  [[menu.projects]]
+    url = "/project/newestversion-api/"
+    name = "Newest Version API"
+    weight = 1
+
+  [[menu.projects]]
+    url = "/project/vigorish/"
+    name = "Vigorish"
+    weight = 2
+
+  [[menu.projects]]
+    url = "/project/responsive-web-design/"
+    name = "Responsive Web Design"
+    weight = 3
+
+  [[menu.projects]]
+    url = "/project/async-file-server/"
+    name = "Async File Server"
+    weight = 4
+
+[Params.sidebar]
+  home = "right"   # Configure layout for home page
+  list = "right"   # Configure layout for list pages
+  single = "right" # Configure layout for single pages
+  # Enable widgets in given order
+  widgets = ["recent", "categories"]
+
+[Params.widgets]
+  recent_num = 8 # Set the number of articles in the "Recent articles" widget
+  tags_counter = false # Enable counter for each tag in "Tags" widget (disabled by default)
+  social_title = "Contact"
+  recent_title = "Recent Posts"
+  categories_title = "Categories"
+  tags_title = "Tags"
+  projects_title = "My Projects"
+  api_tutorial_title = "Flask API Tutorial"
