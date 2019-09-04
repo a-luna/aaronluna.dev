@@ -150,6 +150,7 @@ ol li p {
     background-color: #252525;
     margin: 0 auto 10px;
     padding: 10px 15px;
+    border: 1px solid #AE81FF;
     border-radius: 4px;
     max-width: 100%;
     min-width: 300px;
@@ -1421,8 +1422,8 @@ abbr[title] {
 }
 
 .menu__btn-title {
-    font-size: 1em;
-    padding: 5px 8px;
+    font-size: 1.3em;
+    padding: 6px 10px;
     border-radius: 4px;
     color: #252525;
     background: #7F7F7F;
@@ -1437,8 +1438,8 @@ abbr[title] {
 }
 
 .js .menu__btn--active {
-    color: #F2F2F2;
-    background-color: #202020;
+    color: #252525;
+    background-color: #F2F2F2;
 }
 
 .menu span {
@@ -1491,7 +1492,7 @@ abbr[title] {
 
 .js .menu__list {
     background-color: #202020;
-    font-size: 0.85em;
+    font-size: 1.2em;
     left: 0;
 }
 
@@ -2666,25 +2667,39 @@ table.aws-hosting-costs {
         margin: 0;
         padding: 0 1em;
         background-color: #202020;
+        height: 50px;
     }
     .site-name {
         color: #B3B3B3;
         text-align: left;
-        font-size: 1.2em;
+        font-size: 1.5em;
         font-weight: 400;
         letter-spacing: 1.4px;
+        line-height: 2;
+    }
+    .site-name-link {
+        color: #B3B3B3;
+        text-decoration: none;
+    }
+    .site-name-link:hover,
+    .site-name-link:active,
+    .site-name-link:active:hover,
+    .site-name-link:focus {
+        color: #F2F2F2;
+        text-decoration: none;
     }
     .menu__btn--active .site-name {
         color: #D8D8D8;
     }
     .menu__btn {
-        height: 40px;
+        width: auto;
     }
     .menu__item:first-child {
         border: 1px solid #292929;
     }
     .menu__item,
     .menu__link {
+        font-size: 0.97em;
         background-color: #292929;
         color: #D8D8D8;
         text-align: right;
@@ -2698,13 +2713,22 @@ table.aws-hosting-costs {
     .menu__link:hover {
         border: 1px solid #292929;
         background-color: #292929;
-        color: #86C8F9;
+        color: #F2F2F2;
     }
-    .menu__item--active {
+    .menu__list a.active {
         background-color: #292929;
         background: #292929;
-        color: #86C8F9;
-        border: 1px solid #292929;
+        color: #F2F2F2;
+        border-top: 1px solid #292929;
+        border-bottom: 1px solid #292929;
+        border-left: 1px solid #292929;
+        border-right: 2px solid #F2F2F2;
+    }
+    .menu__link--active {
+        border-top: 1px solid #292929;
+        border-bottom: 1px solid #292929;
+        border-left: 1px solid #292929;
+        border-right: 2px solid #F2F2F2;
     }
     .menu__item--active .menu__link {
         color: #D8D8D8;
@@ -2725,20 +2749,21 @@ table.aws-hosting-costs {
         font-size: 1em;
     }
     h1.post__title {
-        font-size: 1.3em;
+        font-size: 1.5em;
     }
     .tutorial h1.post__title {
         margin: 0 0 1em;
     }
     .post__lead,
     .tutorial .post__lead {
-        font-size: 1em;
+        font-size: 1.3em;
     }
     #showcase {
-        margin: 0;
+        margin: 0 5px;
     }
     #toc-header {
         display: block;
+        font-size: 1.15em;
     }
     .projects .post__title {
         font-size: 1.2em;
