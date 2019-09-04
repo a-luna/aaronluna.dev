@@ -19,7 +19,7 @@ If you just came here for the script, you can [download the completed shell scri
 
 The rest of this post will explain in detail how to install NGINX from source. It does not match my shell script exactly since the script is designed to run non-interactively and uses variables. The steps below require user input and no variables are used.
 
-# Build and Install NGINX from Source Code
+## Build and Install NGINX from Source Code
 
 These steps produce a .deb package which can be used to uninstall this version of NGINX via apt-get (the .deb package can also be used to install this customized version of NGINX on another system with the same architecture). You can find information on the checkinstall program which creates the .deb package [here](https://wiki.debian.org/CheckInstall).
 
@@ -40,7 +40,7 @@ After NGINX is built and installed, all source code files are added to a .tar.gz
 	</div>
 </div>
 
-## Install Prerequisites and Dependancies
+### Install Prerequisites and Dependancies
 
 This guide is written for Ubuntu, but the steps only need to be changed in minor ways to apply to other Linux distributions.
 
@@ -102,7 +102,7 @@ Reading state information... Done
   </li>
 </ol>
 
-## Prepare for Install
+### Prepare for Install
 
 <ol start="8">
   <li>
@@ -161,7 +161,7 @@ Reading state information... Done
   </li>
 </ol>
 
-## Build Configuration
+### Build Configuration
 
 <ol start="12">
   <li>
@@ -295,7 +295,7 @@ make[1]: Leaving directory '/opt/src_files/nginx-1.15.6'</span></code></pre>
   </li>
 </ol>
 
-## Create Debian Install Package
+### Create Debian Install Package
 
 <ol start="16">
   <li>
@@ -345,7 +345,7 @@ You can install it in your system anytime using:
   </li>
 </ol>
 
-## Install and Configure NGINX
+### Install and Configure NGINX
 
 <ol start="18">
   <li>
@@ -517,6 +517,6 @@ Nov 29 15:10:57 ip-10-10-0-225 systemd[1]: Started A high performance web server
   </li>
 </ol>
 
-## Conclusion
+### Conclusion
 
 Congratulations! You are now running the latest version of NGINX which includes the latest versions of the PCRE, zlib and OpenSSL libraries. Pre-built NGINX packages often include older versions of these libraries, which may contain high-severity bugs. By building NGINX from source, your web server contains the most up-to-date features of these libraries along with any bug fixes and security patches that have been released.
