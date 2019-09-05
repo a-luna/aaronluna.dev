@@ -261,7 +261,7 @@ There are two changes which are highlighted above:
     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
   </div>
   <div class="alert-message">
-    <p>The two changes we made to <code>run.py</code> will be repeated whenever a new model is added. However, I will not show the updated version of the <code>run.py</code> file each time and instead will instruct you to <i>"update the <code>run.py</code> file to import the new model class before running the <code>flask db migrate</code> command"</i>.</p>
+    <p>The changes we just made to <code>run.py</code> will be repeated whenever a new model is added. In general, whenever you add a new database model class to your project, you need to update your application entry point (in our case the <code>run.py</code> file to import the new model class before running the <code>flask db migrate</code> command.</p>
   </div>
 </div>
 
