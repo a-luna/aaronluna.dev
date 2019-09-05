@@ -75,7 +75,7 @@ ol li p {
 }
 
 .content {
-    font-size: 1.05em;
+    font-size: 1em;
     margin: 0 0 2em;
 }
 
@@ -520,7 +520,7 @@ h6 {
 }
 
 .content h2 {
-    font-size: 1.4em;
+    font-size: 1.35em;
 }
 
 h1.post__title {
@@ -1731,7 +1731,7 @@ abbr[title] {
 .toc__title,
 #widgets .toc__title,
 .tutorial-series-title {
-    font-size: 1.3em;
+    font-size: 1.35em;
     font-weight: 400;
     text-transform: none;
     color: #F2F2F2;
@@ -2760,7 +2760,7 @@ table.aws-hosting-costs {
         font-size: 1em;
     }
     h1.post__title {
-        font-size: 1.4em;
+        font-size: 1.5em;
     }
     .tutorial h1.post__title {
         margin: 0 0 1em;
@@ -2774,7 +2774,7 @@ table.aws-hosting-costs {
     }
     #toc-header {
         display: block;
-        font-size: 1.15em;
+        font-size: 1em;
     }
     .projects .post__title {
         font-size: 1.2em;
