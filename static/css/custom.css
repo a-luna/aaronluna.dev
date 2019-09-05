@@ -364,7 +364,7 @@ li.tags__item .btn:focus {
     font-weight: 400;
     margin: 0 0 1.75em;
     letter-spacing: 0.3px;
-    padding: 7px 10px;
+    padding: 5px 7px;
     border-radius: 4px;
 }
 
@@ -524,8 +524,8 @@ h6 {
 }
 
 h1.post__title {
-    font-size: 1.6em;
-    color: #F2F2F2;
+    font-size: 1.5em;
+    color: #E2E2E2;
     font-weight: 500;
 }
 
@@ -662,7 +662,6 @@ a:active:hover {
 .content ul,
 .content ol {
     margin: 0 0 20px 2em;
-    letter-spacing: 0.5px;
 }
 
 .content ul ul {
@@ -792,7 +791,8 @@ article p strong {
 
 .alert p strong,
 .alert p .emphasis,
-.alert p .bold-text {
+.alert p .bold-text,
+span.italics.requirements {
     color: #FFC107;
 }
 
@@ -807,7 +807,8 @@ article p strong {
 }
 
 .note p strong,
-.note p .bold-italics {
+.note p .bold-italics,
+.note p .emphasis {
     font-weight: 700;
     color: #2196F3;
 }
@@ -1174,7 +1175,7 @@ div.chroma .lntable pre.chroma {
 pre code,
 li pre code {
     display: block;
-    font-size: 0.85em;
+    font-size: 0.95em;
     color: #BFBFBF;
     background-color: #252525;
     padding: 0;
@@ -1417,17 +1418,15 @@ abbr[title] {
     font-size: 1em;
     color: #B3B3B3;
     background-color: #202020;
-    height: 35px;
     letter-spacing: 1.5px;
 }
 
 .menu__btn-title {
-    font-size: 1.3em;
-    padding: 5px 9px;
+    font-size: 1.2em;
+    padding: 4px 8px;
     border-radius: 4px;
     color: #252525;
     background: #7F7F7F;
-    line-height: 1.3;
 }
 
 .menu__btn--active .menu__btn-title {
@@ -1499,7 +1498,11 @@ abbr[title] {
 
 .js .menu__list--active {
     border-top: 1px solid #202020;
-    border-bottom: 1px solid #333333;
+    border-bottom: 1px solid #4c4c4c;
+}
+
+.wrapper #social {
+    display: none;
 }
 
 #social {
@@ -1523,16 +1526,38 @@ abbr[title] {
     text-decoration: underline;
 }
 
+.wrapper #social a {
+    font-weight: 400;
+    color: #86C8F9;
+}
+
+.wrapper #social a:active,
+.wrapper #social a:active:hover,
+.wrapper #social a:focus,
+.wrapper #social a:hover {
+    color: #F2F2F2;
+    text-decoration: none;
+}
+
 #social ul {
     font-size: 1.45em;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    width: max-content;
+}
+
+.wrapper #social ul {
+    font-size: 1.75em;
 }
 
 #social ul li {
     float: left;
+}
+
+.wrapper #social ul li {
+    line-height: 1.2;
 }
 
 #social ul li a {
@@ -1987,7 +2012,7 @@ a.post-nav__link:focus {
     justify-content: space-between;
     align-items: center;
     border: none;
-    font-size: 1.1em;
+    font-size: 1.05em;
     padding: 0;
     margin: 0 0 25px 0;
 }
@@ -2003,12 +2028,12 @@ header .post-nav {
 }
 
 #header-nav .post-nav-flex-item-prev {
-    padding: 3px 8px 3px 3px;
+    padding: 5px 0 5px 5px;
     margin: 0;
 }
 
 #header-nav .post-nav-flex-item-next {
-    padding: 3px 3px 3px 8px;
+    padding: 5px 5px 5px 0;
     margin: 0;
 }
 
@@ -2023,6 +2048,7 @@ header .post-nav {
     color: #323232;
     border: 1px solid #AE89F5;
     text-decoration: none;
+    min-width: 100px;
 }
 
 #header-nav .post-nav__link:hover,
@@ -2057,7 +2083,6 @@ header .post-nav {
 
 #header-nav .post-nav__post-title {
     font-size: 1em;
-    font-weight: 700;
 }
 
 #header-nav .post-nav__post-title:hover,
@@ -2112,7 +2137,7 @@ header a.post-nav__link:focus {
 .post-nav__chevron {
     display: inline;
     font-weight: 400;
-    font-size: 1em;
+    font-size: 0.7em;
     line-height: 1;
     margin: auto 0;
 }
@@ -2594,15 +2619,15 @@ table.aws-hosting-costs {
 
 #disqus-button {
     width: 100%;
-    background: #ABF76D;
+    background: #A9FB68;
     color: #252525;
-    border: 1px solid #ABF76D;
+    border: 1px solid #A9FB68;
     border-radius: 4px;
-    padding: 7px 0;
     font-size: 1.1em;
     letter-spacing: 1.3px;
     font-weight: 700;
-    margin: 0 auto;
+    margin: 1em auto;
+    min-height: 45px;
 }
 
 #disqus-button:hover,
@@ -2610,8 +2635,8 @@ table.aws-hosting-costs {
 #disqus-button:active:hover,
 #disqus-button:focus {
     background: #323232;
-    color: #ABF76D;
-    border: 1px solid #ABF76D;
+    color: #A9FB68;
+    border: 1px solid #A9FB68;
     font-weight: 700;
 }
 
@@ -2668,12 +2693,11 @@ table.aws-hosting-costs {
         margin: 0;
         padding: 0 1em;
         background-color: #202020;
-        height: 50px;
     }
     .site-name {
         color: #B3B3B3;
         text-align: left;
-        font-size: 1.5em;
+        font-size: 1.3em;
         font-weight: 400;
         letter-spacing: 1.4px;
         line-height: 2;
@@ -2698,53 +2722,36 @@ table.aws-hosting-costs {
     .js .menu__list {
         font-size: 1.15em;
     }
-    .menu__item:first-child {
-        border: 1px solid #292929;
-    }
     .menu__item,
     .menu__link {
-        font-size: 0.97em;
-        background-color: #292929;
-        color: #D8D8D8;
+        font-size: 0.9em;
+        background-color: #202020;
+        color: #7F7F7F;
         text-align: right;
-        border: 1px solid #292929;
     }
     .menu__item a {
         font-weight: 400;
-        border: 1px solid #292929;
     }
     .menu__item:hover,
     .menu__link:hover {
-        border: 1px solid #292929;
-        background-color: #292929;
+        background-color: #202020;
         color: #F2F2F2;
     }
     .menu__list a.active {
-        background-color: #292929;
-        background: #292929;
+        background-color: #202020;
+        background: #202020;
         color: #F2F2F2;
-        border-top: 1px solid #292929;
-        border-bottom: 1px solid #292929;
-        border-left: 1px solid #292929;
-        border-right: 2px solid #F2F2F2;
-    }
-    .menu__link--active {
-        border-top: 1px solid #292929;
-        border-bottom: 1px solid #292929;
-        border-left: 1px solid #292929;
-        border-right: 2px solid #F2F2F2;
     }
     .menu__item--active .menu__link {
         color: #D8D8D8;
-        background: #292929;
+        background: #202020;
         font-weight: 400;
-        border: 1px solid #292929;
     }
     .wrapper {
         padding: 1em;
     }
     .primary {
-        margin: 0 0 0.5em;
+        margin: 0;
     }
     .main__header h1 {
         font-size: 1.7em;
@@ -2753,14 +2760,14 @@ table.aws-hosting-costs {
         font-size: 1em;
     }
     h1.post__title {
-        font-size: 1.5em;
+        font-size: 1.4em;
     }
     .tutorial h1.post__title {
         margin: 0 0 1em;
     }
     .post__lead,
     .tutorial .post__lead {
-        font-size: 1.3em;
+        font-size: 1.1em;
     }
     #showcase {
         margin: 0 5px;
@@ -2793,8 +2800,16 @@ table.aws-hosting-costs {
         font-weight: 500;
         line-height: 1.4;
     }
-    #widgets {
+    .tutorial #widgets {
         display: none;
+    }
+    .wrapper #social {
+        display: block;
+        background-color: #323232;
+        margin: 0;
+    }
+    .wrapper #social ul {
+        margin: 0 auto;
     }
     .sidebar {
         padding: 0.5em 0 0;
@@ -2807,8 +2822,8 @@ table.aws-hosting-costs {
         border-bottom: 2px dotted #7E7F7F;
     }
     #disqus-container {
-        margin: 0 0.5em;
-        padding: 15px 0;
+        margin: 1em 0.5em;
+        padding: 0;
     }
     #disqus-button {
         padding: 10px 0;
@@ -2859,8 +2874,9 @@ table.aws-hosting-costs {
     }
     .post-nav {
         border-top: 1px dotted #7F7F7F;
-        margin: 0 0 2em 0;
-        padding: 2em 0 0 0;
+        border-bottom: 1px dotted #7F7F7F;
+        margin: 0 0 1em;
+        padding: 1em 0;
     }
     header .post-nav__item--prev,
     header .post-nav__item--next {
@@ -2873,12 +2889,6 @@ table.aws-hosting-costs {
     #header-nav .post-nav-flex-item-prev,
     #header-nav .post-nav-flex-item-next {
         flex: 0 0 100px;
-    }
-    #header-nav .post-nav-flex-item-prev {
-        margin: 2px 5px 2px 2px;
-    }
-    #header-nav .post-nav-flex-item-next {
-        margin: 2px 2px 2px 5px;
     }
     .post-nav-flex-item-prev,
     .post-nav-flex-item-next {
@@ -2894,18 +2904,7 @@ table.aws-hosting-costs {
 
 @media screen and (max-width: 400px) {
     #header-nav .post-nav__post-title,
-    #header-nav .post-nav__chevron {
-        font-weight: 700;
-        line-height: 1;
-        font-size: 1em;
-    }
-    .post-nav__post-title {
-        font-weight: 500;
-        line-height: 1.2;
-    }
-    .post-nav__chevron {
-        font-weight: 400;
-        font-size: 1em;
-        line-height: 1.2;
-    }
+    #header-nav .post-nav__chevron {}
+    .post-nav__post-title {}
+    .post-nav__chevron {}
 }

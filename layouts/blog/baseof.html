@@ -37,7 +37,7 @@
 <body class="body">
     <div class="container container--outer">
         {{ partial "header" . }}
-        <div class="wrapper flex tutorial">
+        <div class="wrapper flex blog-list">
             <div class="primary">
                 {{ block "main" . }} {{ with .Content }}
                 <div class="content main__content clearfix">
@@ -45,7 +45,7 @@
                 </div>
                 {{ end }} {{ end }}
             </div>
-            {{ partial "sidebar_tutorial.html" . }}
+            {{ partial "sidebar.html" . }}
         </div>
         {{ partial "footer" . }}
     </div>

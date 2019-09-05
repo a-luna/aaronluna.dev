@@ -1,5 +1,5 @@
 {{- if .Site.Params.post_navigation }} {{- if or (.PrevInSection) (.NextInSection) }}
-<div id="header-nav" class="post-nav">
+<div id="header-nav">
     {{- if .PrevInSection }}
     <a class="post-nav__link post-nav__link--prev" href="{{.PrevInSection.RelPermalink}}" rel="prev">
         <div class="post-nav-flex-item-prev">

@@ -906,7 +906,7 @@ test/test_user.py::test_decode_access_token_invalid PASSED                      
 
 ## Checkpoint
 
-I promise that the pace will pick up, since we have again made very little progress on the API requirements. I believe it's fair to say that one item is completely implemented (<span class="italics requirements">JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</span>). I think we can also claim partial credit on two items (<span class="italics requirements">Requests must be rejected if JWT has been modified</span> and <span class="italics requirements">Requests must be rejected if JWT is expired</span>)
+I promise that the pace will pick up, since we have again made very little progress on the API requirements. I believe it's fair to say that one item is completely implemented: <span class="italics requirements">JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</span>. I think we can also claim partial credit on two items: <span class="italics requirements">Requests must be rejected if JWT has been modified</span> and <span class="italics requirements">Requests must be rejected if JWT is expired</span>.
 
 <div class="requirements">
   <p class="title">User Management/JWT Authentication</p>

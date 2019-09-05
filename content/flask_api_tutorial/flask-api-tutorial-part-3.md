@@ -1042,7 +1042,7 @@ You can ignore the warning that is reported by <code>black</code> since the issu
 
 ## Checkpoint
 
-Once again, we only implemented a small number of features from the requirements list. It's not too surprising if you realize we only created one of the four `auth_ns` endpoints in this section. I think we have fully satisfied one requirement (<span class="italics requirements">New users can register by providing an email address and password</span>), and partially satisfied one more (<span class="italics requirements">JWT is sent in access_token field of HTTP response after successful authentication with email/password</span>) since the JWT is sent in the registration and login response:
+Once again, we only implemented a small number of features from the requirements list. It's not too surprising if you realize we only created one of the four `auth_ns` endpoints in this section. I think we have fully satisfied one requirement: <span class="italics requirements">New users can register by providing an email address and password</span>, and partially satisfied one more since the JWT is sent in the registration and login response: <span class="italics requirements">JWT is sent in access_token field of HTTP response after successful authentication with email/password</span>.
 
 <div class="requirements">
   <p class="title">User Management/JWT Authentication</p>
