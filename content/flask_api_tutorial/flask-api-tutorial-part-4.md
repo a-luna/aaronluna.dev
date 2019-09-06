@@ -424,18 +424,30 @@ The Flask-RESTPlus docs contain a <a href="https://flask-restplus.readthedocs.io
 
 Our next task is to create the business logic for the `api.auth_user` endpoint. The first thing we need to do is verify that the access token included in the request is valid. Sounds like a job for the `@token_required` decorator that we just created!
 
-Open `/app/api/auth/business.py` and update the import statements to include the `@token_required` decorator.
+Open `/app/api/auth/business.py` and update the import statements to include the `@token_required` decorator and a few helper functions from the `datetime_util` module (<strong>Line 8</strong> and <strong>Line 11</strong>).
 
-{{< highlight python "linenos=table,linenostart=8" >}}from app.api.auth.decorator import token_required{{< /highlight >}}
+{{< highlight python "linenos=table,linenostart=2,hl_lines=7 10" >}}from http import HTTPStatus
+
+from flask import current_app, jsonify
+from flask_restplus import abort
+
+from app import db
+from app.api.auth.decorator import token_required
+from app.models.token_blacklist import BlacklistedToken
+from app.models.user import User
+from app.util.datetime_util import remaining_fromtimestamp, format_timespan_digits{{< /highlight >}}
 
 Then, add the decorated function:
 
-{{< highlight python "linenos=table,linenostart=52" >}}@token_required
+{{< highlight python "linenos=table,linenostart=54" >}}@token_required
 def get_logged_in_user():
     public_id = get_logged_in_user.public_id
-    return User.find_by_public_id(public_id){{< /highlight >}}
+    user = User.find_by_public_id(public_id)
+    expires_at = get_logged_in_user.expires_at
+    user.token_expires_in = format_timespan_digits(remaining_fromtimestamp(expires_at))
+    return user{{< /highlight >}}
 
-Thanks to the `@token_required` decorator, if the request header does not contain an access token or the access token was sent but is invalid/expired, then `get_logged_in_user` is never actually executed (unless a valid token is found, the current request is aborted before calling the wrapped function). So what's the deal with **Line 54** above? It isn't very obvious, so let's break it down line-by-line. First, look at the code for `@token_required`:
+Thanks to the `@token_required` decorator, if the request header does not contain an access token or the access token was sent but is invalid/expired, then `get_logged_in_user` is never actually executed (unless a valid token is found, the current request is aborted before calling the wrapped function). So what's the deal with **Line 56** above? It isn't very obvious, so let's break it down line-by-line. First, look at the code for `@token_required`:
 
 {{< highlight python "linenos=table,linenostart=14" >}}def token_required(f):
     """Allow access to the wrapped function if the request header contains a valid access token."""
@@ -493,12 +505,27 @@ The important thing to grasp is that we are creating attributes on the `get_logg
 
 Let's again look at the code for `get_logged_in_user`:
 
-{{< highlight python "linenos=table,linenostart=52" >}}@token_required
+{{< highlight python "linenos=table,linenostart=54" >}}@token_required
 def get_logged_in_user():
     public_id = get_logged_in_user.public_id
-    return User.find_by_public_id(public_id){{< /highlight >}}
+    user = User.find_by_public_id(public_id)
+    expires_at = get_logged_in_user.expires_at
+    user.token_expires_in = format_timespan_digits(remaining_fromtimestamp(expires_at))
+    return user{{< /highlight >}}
 
-When **Line 54** is executed, the process of iterating over `user_dict.items()` has taken place and the value of `get_logged_in_user.public_id` contains `user_dict["public_id"]` (identifies the user the token was issued for), which was decoded from `access_token` in the request header. Finally, in **Line 55**, we call `User.find_by_public_id` to retrieve the `User` with this `public_id` from the database.
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 56: </strong>When this line is executed, the process of iterating over <code>user_dict.items()</code> has taken place and the value of <code>get_logged_in_user.public_id</code> contains <code>user_dict["public_id"]</code> (identifies the user the token was issued for), which was decoded from <code>access_token</code> in the request header.</p>
+      </li>
+      <li>
+        <p><strong>Line 57: </strong>Retrieve the <code>User</code> from the database with the same <code>public_id</code> that was decoded from the token.</p>
+      </li>
+      <li>
+        <p><strong>Lines 58-59: </strong>Here, we retrieve the <code>datetime</code> value equal to the time when the token expires and format the time remaining until the token expires as a string value. We store the formatted string in a new attribute named <code>token_expires_in</code>, which we defined as a field in the <code>user_model</code> API model that we created in the <code>app.api.auth.dto</code> module.</p>
+      </li>
+    </ul>
+</div>
 
 Whew! That was a lot of detail for a two-line function (which could easily be condensed to one), Let's keep things moving and define the concrete `Resource` class for the `api.auth_user` endpoint.
 
@@ -941,10 +968,11 @@ Even though access tokens are typically configured to expire less than a day aft
 
 Create a new file `token_blacklist.py` in `/app/models` and add the content below:
 
-{{< highlight python "linenos=table,hl_lines=18-20 25-28" >}}"""Class definition for BlacklistedToken."""
+{{< highlight python "linenos=table,hl_lines=14-16 20 25-28" >}}"""Class definition for BlacklistedToken."""
 from datetime import datetime, timezone
 
 from app import db
+from app.util.datetime_util import dtaware_fromtimestamp
 
 
 class BlacklistedToken(db.Model):
@@ -954,13 +982,12 @@ class BlacklistedToken(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     token = db.Column(db.String(500), unique=True, nullable=False)
-    blacklisted_on = db.Column(db.DateTime, nullable=False)
+    blacklisted_on = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     expires_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, token, expires_at):
         self.token = token
-        self.blacklisted_on = datetime.now(timezone.utc)
-        self.expires_at = datetime.fromtimestamp(expires_at).astimezone(timezone.utc)
+        self.expires_at = dtaware_fromtimestamp(expires_at, use_tz=timezone.utc)
 
     def __repr__(self):
         return f"<BlacklistToken token={self.token}>"

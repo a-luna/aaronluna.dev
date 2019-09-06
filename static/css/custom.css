@@ -1,3 +1,15 @@
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('/fonts/fontawesome-webfont.eot');
+    /* IE9 Compat Modes */
+    src: url('/fonts/fontawesome-webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('/fonts/fontawesome-webfont.woff2') format('woff2'), /* Super Modern Browsers */
+    url('/fonts/fontawesome-webfont.woff') format('woff'), /* Pretty Modern Browsers */
+    url('/fonts/fontawesome-webfont.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('/fonts/fontawesome-webfont.svg#svgFontName') format('svg');
+    /* Legacy iOS */
+}
+
 html {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
@@ -152,10 +164,6 @@ ol li p {
     padding: 10px 15px;
     border: 1px solid #19F6D6;
     border-radius: 4px;
-    max-width: 100%;
-    min-width: 300px;
-    opacity: 1;
-    letter-spacing: 0.7px;
 }
 
 #showcase p {
@@ -797,6 +805,7 @@ article p strong {
 .alert p strong,
 .alert p .emphasis,
 .alert p .bold-text,
+.alert p .bold-italics,
 span.italics.requirements {
     color: #FFC107;
 }
@@ -812,8 +821,9 @@ span.italics.requirements {
 }
 
 .note p strong,
-.note p .bold-italics,
-.note p .emphasis {
+.note p .emphasis,
+.note p .bold-text,
+.note p .bold-italics {
     font-weight: 700;
     color: #2196F3;
 }
@@ -906,8 +916,11 @@ div.note-flex {
 }
 
 .alert-message p,
-.note-message p {
+.note-message p,
+.content ul .alert .alert-message p,
+.content ul .alert .note-message p {
     font-size: 1em;
+    margin: auto 0;
 }
 
 p.alert,
@@ -1427,8 +1440,8 @@ abbr[title] {
 }
 
 .menu__btn-title {
-    font-size: 1.2em;
-    padding: 4px 8px;
+    font-size: 1.4em;
+    padding: 6px 9px;
     border-radius: 4px;
     color: #252525;
     background: #BFBFBF;
@@ -1983,7 +1996,6 @@ a.pagination__item:focus {
     margin: 0 2em 2em 0;
     border-bottom: none;
     background-color: #323232;
-    border-radius: 4px;
 }
 
 .post-nav__link,
@@ -2013,7 +2025,7 @@ a.post-nav__link:focus {
     justify-content: space-between;
     align-items: center;
     border: none;
-    font-size: 1.05em;
+    font-size: 1em;
     padding: 0;
     margin: 0 0 25px 0;
 }
@@ -2042,16 +2054,7 @@ header .post-nav {
     visibility: hidden;
 }
 
-#header-nav .post-nav__link {
-    display: inline;
-    border-radius: 4px;
-    background-color: #19F6D6;
-    color: #323232;
-    border: 1px solid #19F6D6;
-    text-decoration: none;
-    min-width: 105px;
-}
-
+#header-nav .post-nav__link,
 #header-nav .post-nav__link:hover,
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
@@ -2060,17 +2063,19 @@ header .post-nav {
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
 #header-nav .post-nav__link:focus {
-    background-color: #323232;
+    display: inline;
+    border-radius: 4px;
+    background-color: #292929;
     color: #19F6D6;
-    border: 1px solid #19F6D6;
     text-decoration: none;
+    min-width: 105px;
 }
 
 #header-nav .post-nav__chevron:hover,
 #header-nav .post-nav__chevron:active,
 #header-nav .post-nav__chevron:active:hover,
 #header-nav .post-nav__chevron:focus {
-    background-color: #323232;
+    background-color: #292929;
     color: #19F6D6;
 }
 
@@ -2083,17 +2088,19 @@ header .post-nav {
 }
 
 #header-nav .post-nav__post-title {
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: 400;
+    line-height: 1.1;
+    padding: 4px 0;
 }
 
 #header-nav .post-nav__post-title:hover,
 #header-nav .post-nav__post-title:active,
 #header-nav .post-nav__post-title:active:hover,
 #header-nav .post-nav__post-title:focus {
-    background-color: #323232;
+    background-color: #292929;
     color: #19F6D6;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 #header-nav .title-prev,
@@ -2699,10 +2706,11 @@ table.aws-hosting-costs {
     .site-name {
         color: #BFBFBF;
         text-align: left;
-        font-size: 1.3em;
+        font-size: 1.45em;
         font-weight: 400;
         letter-spacing: 1.4px;
-        line-height: 2;
+        line-height: 1;
+        margin: 10px 0;
     }
     .site-name-link {
         color: #B3B3B3;
@@ -2727,7 +2735,7 @@ table.aws-hosting-costs {
     .menu__item:first-child,
     .menu__link {
         font-size: 0.92em;
-        font-weight: 400;
+        font-weight: 700;
         background-color: #858585;
         border: none;
         color: #202020;
@@ -2750,7 +2758,7 @@ table.aws-hosting-costs {
         border: none;
     }
     .wrapper {
-        padding: 1em;
+        padding: 1.5em 1em 1em;
     }
     .primary {
         margin: 0;
@@ -2769,7 +2777,7 @@ table.aws-hosting-costs {
         font-size: 1em;
     }
     #showcase {
-        margin: 0;
+        padding: 7px 10px;
     }
     #toc-header {
         display: block;
@@ -2792,12 +2800,14 @@ table.aws-hosting-costs {
     .post-nav__post-title {
         font-weight: 500;
         font-size: 1em;
-        line-height: 1.2;
+        line-height: 1;
         margin: auto 0;
+    }
+    #header-nav .post-nav__post-title {
+        font-size: 1em;
     }
     .post-nav__chevron {
         font-weight: 500;
-        line-height: 1.4;
     }
     .tutorial #widgets {
         display: none;
@@ -2847,6 +2857,12 @@ table.aws-hosting-costs {
     .content p {
         line-height: 1.4;
     }
+    #showcase p {
+        line-height: 1.5;
+    }
+    .blog-list {
+        line-height: 1.6;
+    }
     h1 {
         font-size: 1.4em
     }
@@ -2892,6 +2908,7 @@ table.aws-hosting-costs {
     #header-nav .post-nav-flex-item-prev,
     #header-nav .post-nav-flex-item-next {
         flex: 0 0 100px;
+        padding: 3px 3px 3px 0;
     }
     .post-nav-flex-item-prev,
     .post-nav-flex-item-next {

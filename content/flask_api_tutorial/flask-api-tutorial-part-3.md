@@ -624,7 +624,7 @@ class RegisterUser(Resource):
       </li>
       <li>
         <p><strong>Line 16: </strong>The <code>expect</code> decorator is used to specify the data that the server expects the client to send in the HTTP request. The first argument can be either a request parser or an API model that defines the expected input model. The optional second argument is a bool value named <code>validate</code>. If <code>validate=True</code>, the request data will be checked to make sure it matches the expected input model.</p>
-        <p>You can also control validation behavior for an entire namespace, which we did when the <code>auth_ns</code> namespace was created in <strong>Line 10</strong>. You can also define this behavior for the entire API when instantiating the <code>api</code> object, or by setting the value of the app configuration setting <code>RESTPLUS_VALIDATE</code>. You can override these settings for each method using the <code>expect</code> decorator.</p>
+        <p>You can also control validation behavior for an entire namespace, which we did when the <code>auth_ns</code> namespace was created in <strong>Line 9</strong>. You can also define this behavior for the entire API when instantiating the <code>api</code> object, or by setting the value of the app configuration setting <code>RESTPLUS_VALIDATE</code>. You can override the validation behavior for each method using the <code>expect</code> decorator.</p>
         <p>We are using the <code>auth_reqparser</code> we created in <code>app/api/auth/dto.py</code>. In the Swagger UI, this renders a form with textboxes for the email and password values and also enforces the rules we configured for each argument. If we had used an API model, the Swagger UI instead renders a single textbox and an example of the expected JSON.</p>
       </li>
       <li>
@@ -647,7 +647,7 @@ class RegisterUser(Resource):
 
 ### Add <code>auth_ns</code> Namespace to <code>api</code>
 
-In order to register the `auth_ns` namespae with the `api` object, open `app/api/__init__.py` and add the highlighted lines:
+In order to register the `auth_ns` namespae with the `api` object, open `app/api/__init__.py` and add the highlighted lines (<strong>Line 5</strong> and <strong>Line 25</strong>):
 
 {{< highlight python "linenos=table,hl_lines=5 25" >}}"""API blueprint configuration."""
 from flask import Blueprint
@@ -689,15 +689,12 @@ api.specs            GET      /api/v1/swagger.json
 restplus_doc.static  GET      /swaggerui/<path:filename>
 static               GET      /static/<path:filename></span></code></pre>
 
-If the `api.auth_register` endpoint highlighted above is in the list of routes, that confirms a number of things:
+The presence of the `api.auth_register` endpoint in the list of routes confirms a number of things:
 
 <ul>
-  <li>The <code>RegisterUser</code> resource supports <code>POST</code> HTTP requests, and no other method types.</li>
+  <li>The <code>RegisterUser</code> resource supports HTTP <code>POST</code> requests, and no other method types.</li>
   <li><code>RegisterUser</code> is within the <code>auth_ns</code> namespace.</li>
-  <li>Because the <code>api_bp</code> <code>Blueprint</code> object is linked with the <code>api</code>  object AND registered with the <code>app</code> <code>Flask</code> application object:
-    <ul>
-      <li>Adding the <code>auth_ns</code> <code>Namespace</code> object to the <code>api</code> object with the <code>add_namespace</code> method automatically registers all routes within the namespace with the <code>Flask</code> application object.</li>
-    </ul>
+  <li>Because the <code>api_bp</code> <code>Blueprint</code> object is linked with the <code>api</code>  object AND registered with the <code>app</code> <code>Flask</code> application object, adding the <code>auth_ns</code> <code>Namespace</code> object to the <code>api</code> object with the <code>add_namespace</code> method automatically registers all routes within the namespace with the <code>Flask</code> application object.
   </li>
 </ul>
 

@@ -26,7 +26,14 @@ I also saw a performance boost by changing the driver for the hard drive bus typ
 
 VMWare only exposes a small number of settings through the UI. There are hundreds of additional configuration options which can only be modified by editing the .vmx file.
 
-<p class="alert"><strong>Please Note:</strong> You should always make a backup of the .vmx file before modifying it. You can easily make changes that render the VM unusable or unable to boot!</p>
+<div class="alert alert-flex">
+  <div class="alert-icon">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+  </div>
+  <div class="alert-message">
+    <p>You should always make a backup of the .vmx file before modifying it. You can easily make changes that render the VM unusable or unable to boot!</p>
+  </div>
+</div>
 
 Before changing the .vmx file itself, launch TextEdit and open the Preferences menu. **Make sure Smart quotes is unchecked** (See **Figure 3** below). If this option is checked and you save the .vmx file, you will not be able to boot your VM.
 

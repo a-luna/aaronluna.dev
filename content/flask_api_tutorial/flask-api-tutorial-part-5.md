@@ -190,7 +190,7 @@ My preferred solution is to expose a command in the Flask CLI that can create bo
 Then, add the content below and save the file:
 
 {{< highlight python "linenos=table,linenostart=19" >}}@app.cli.command("add-user", short_help="add a new user")
-@click.option("--admin", is_flag=True, default=False, help="New user has administrator privileges")
+@click.option("--admin", is_flag=True, default=False, help="New user has administrator role")
 @click.password_option(help="Do not set password on the command line!")
 @click.argument("email")
 def add_user(email, admin, password):

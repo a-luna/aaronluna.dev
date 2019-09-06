@@ -14,7 +14,7 @@ pygmentsUseClasses = true
 [permalinks]
   post = "/blog/:slug/"
   project = "/project/:slug/"
-  flask_api_tutorial = "/:slug/"
+  flask_api_tutorial = "/series/:slug/"
 
 [Author]
   name = "Aaron Luna"
@@ -47,7 +47,7 @@ pygmentsUseClasses = true
   [[menu.main]]
     identifier = "flask-api-tutorial"
     name = "Flask API Tutorial"
-    url = "/flask-api-tutorial/"
+    url = "/series/flask-api-tutorial-overview/"
     weight = 2
   [[menu.main]]
     identifier = "about-me"
@@ -58,22 +58,22 @@ pygmentsUseClasses = true
 # For social icons, the "name" field should match the name of the icon to be used
 # The list of available icons can be found at http://fontawesome.io/icons/
 
-  [[menu.icon]]
+  [[menu.social]]
     url = "mailto:admin@aaronluna.dev"
     name = "envelope"
     weight = 1
 
-  [[menu.icon]]
+  [[menu.social]]
     url = "https://github.com/a-luna/"
     name = "github"
     weight = 2
 
-  [[menu.icon]]
+  [[menu.social]]
     url = "https://twitter.com/alunablog/"
     name = "twitter"
     weight = 3
 
-  [[menu.icon]]
+  [[menu.social]]
     url = "https://www.linkedin.com/in/aaron-luna-reno-nv/"
     name = "linkedin"
     weight = 4

@@ -195,6 +195,8 @@ You can name your root folder whatever you like (represented by the top-level ".
 |   |
 |   |- <span class="project-folder">util</span>
 |   |   |- <span class="project-empty-file">__init__.py</span>
+|   |-  |- <span class="work-file">datetime_util.py</span>
+|   |-  |- <span class="work-file">result.py</span>
 |   |
 |   |- <span class="work-file">__init__.py</span>
 |   |- <span class="work-file">config.py</span>
@@ -256,9 +258,7 @@ setup(
         "Flask-SQLAlchemy",
         "PyJWT",
         "python-dotenv",
-        "pytz",
         "requests",
-        "tzlocal",
         "urllib3",
     ],
 ){{< /highlight >}}
@@ -340,7 +340,217 @@ Successfully installed flask-api-tutorial</span>
   </div>
 </div>
 
-The project setup is now complete. If you're anything like me, you're ready to write some code that defines the configuration settings that we wish to use for production, development and test environments. So lets's do that.
+## `app.util` Package
+
+The `app.util` package contains utlity classes and functions that I have curated over time. They are not related to the main topics of this tutorial, so let's just get them out of the way before we begin working on the actual project.
+
+### `Result` Class
+
+[In a previous post](/blog/error-handling-python-result-class/), I demonstrated and explained the merits of incorporating principles from functional programming, with the `Result` class as a useful example. We will use this class frequently, so please read the linked post. When you finish that, create a new file in `app/util` named `result.py` and add the content below:
+
+{{< highlight python >}}"""This module provides classes and exceptions for representing the outcome of an operation."""
+
+
+class Result:
+    """Represent the outcome of an operation."""
+
+    def __init__(self, success, value, error):
+        """Represent the outcome of an operation."""
+        self.success = success
+        self.error = error
+        self.value = value
+
+    def __str__(self):
+        """Informal string representation of a result."""
+        if self.success:
+            return "[Success]"
+        else:
+            return f"[Failure] {self.error}"
+
+    def __repr__(self):
+        """Official string representation of a result."""
+        if self.success:
+            return f"<Result success={self.success}>"
+        else:
+            return f'<Result success={self.success}, message="{self.error}">'
+
+    @property
+    def failure(self):
+        """Flag that indicates if the operation failed."""
+        return not self.success
+
+    def on_success(self, func, *args, **kwargs):
+        """Continuation method. Pass result of successful operation (if any) to function."""
+        if self.failure:
+            return self
+        if self.value:
+            return func(self.value, *args, **kwargs)
+        return func(*args, **kwargs)
+
+    def on_failure(self, func, *args, **kwargs):
+        """Continuation method. Pass error message from failed operation to function."""
+        if self.success:
+            return self.value if self.value else None
+        if self.error:
+            return func(self.error, *args, **kwargs)
+        return func(*args, **kwargs)
+
+    def on_both(self, func, *args, **kwargs):
+        """Continuation method. Pass result of operation (if any) to function."""
+        if self.value:
+            return func(self.value, *args, **kwargs)
+        return func(*args, **kwargs)
+
+    @staticmethod
+    def Fail(error_message):
+        """Create a Result object for a failed operation."""
+        return Result(False, value=None, error=error_message)
+
+    @staticmethod
+    def Ok(value=None):
+        """Create a Result object for a successful operation."""
+        return Result(True, value=value, error=None)
+
+    @staticmethod
+    def Combine(results):
+        """Return a Result object based on the outcome of a list of Results."""
+        if all([result.success for result in results]):
+            return Result.Ok()
+        errors = [result.error for result in results if result.failure]
+        return Result.Fail("\n".join(errors)){{< /highlight >}}
+
+### `datetime_util` Module
+
+If you've spent anytime programming in Python, there is a 100% chance that you have encountered an annoying issue with `datetime`, `timezone` and/or `timedelta` objects. The `datetime_util` module contains helper functions for converting `datetime` objects from naive to timezone-aware, formatting `datetime` and `timedelta` objects as strings and a `namedtuple` named `timespan` that represents the difference between two `datetime` values but provides more data than the set of attributes provided by the `timedelta` class.
+
+Create a new file in `app/util` named `datetime_util.py` and add the content below:
+
+{{< highlight python >}}"""Helper functions for datetime, timezone and timedelta objects."""
+import time
+from collections import namedtuple
+from datetime import datetime, timedelta, timezone
+
+
+DT_AWARE = "%m/%d/%y %I:%M:%S %p %Z"
+DT_NAIVE = "%m/%d/%y %I:%M:%S %p"
+DATE_MONTH_NAME = "%b %d %Y"
+DATE_ISO = "%Y-%m-%d"
+
+timespan = namedtuple(
+    "timespan",
+    [
+        "days",
+        "hours",
+        "minutes",
+        "seconds",
+        "milliseconds",
+        "microseconds",
+        "total_seconds",
+        "total_milliseconds",
+        "total_microseconds",
+    ],
+)
+
+
+def is_naive(dt):
+    """Return True if datetime object is not time-zone aware."""
+    return not dt.tzinfo or not dt.tzinfo.utcoffset(dt)
+
+
+def is_tzaware(dt):
+    """Return True if datetime object is time-zone aware."""
+    return dt.tzinfo and dt.tzinfo.utcoffset(dt)
+
+
+def localized_dt_string(dt, use_tz=None):
+    """Convert datetime value to a string, localized for the specified timezone."""
+    if not dt.tzinfo and not use_tz:
+        return dt.strftime(DT_NAIVE)
+    if not dt.tzinfo:
+        return dt.replace(tzinfo=use_tz).strftime(DT_AWARE)
+    return dt.astimezone(use_tz).strftime(DT_AWARE) if use_tz else dt.strftime(DT_AWARE)
+
+
+def get_local_utcoffset():
+    """Get UTC offset from local system and return as timezone object."""
+    utc_offset = timedelta(seconds=time.localtime().tm_gmtoff)
+    return timezone(offset=utc_offset)
+
+
+def make_tzaware(dt, use_tz=None, localize=True):
+    """Make a naive datetime object timezone-aware."""
+    if not use_tz:
+        use_tz = get_local_utcoffset()
+    return dt.astimezone(use_tz) if localize else dt.replace(tzinfo=use_tz)
+
+
+def dtaware_fromtimestamp(timestamp, use_tz=None):
+    """Time-zone aware datetime object from UNIX timestamp."""
+    timestamp_aware = datetime.fromtimestamp(timestamp).replace(tzinfo=get_local_utcoffset())
+    return timestamp_aware.astimezone(use_tz) if use_tz else timestamp_aware
+
+
+def remaining_fromtimestamp(timestamp):
+    """Calculate time remaining from now until UNIX timestamp value."""
+    now = datetime.now(timezone.utc)
+    dt_aware = dtaware_fromtimestamp(timestamp, use_tz=timezone.utc)
+    if dt_aware < now:
+        return timespan(0, 0, 0, 0, 0, 0, 0, 0, 0)
+    return get_timespan(dt_aware - now)
+
+
+def format_timespan_digits(ts):
+    """Format a timespan namedtuple as a string resembling a digital display."""
+    if ts.days:
+        return f"{ts.days}, {ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
+    if ts.seconds:
+        return f"{ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
+    return f"00:00:00.{ts.total_microseconds}"
+
+
+def format_timedelta_digits(td):
+    """Format a timedelta object as a string resembling a digital display."""
+    return format_timespan_digits(get_timespan(td))
+
+
+def format_timespan_str(ts):
+    """Format a timespan namedtuple as a readable string."""
+    if ts.days:
+        return f"{ts.days}d {ts.hours:.0f}h {ts.minutes:.0f}m {ts.seconds}s"
+    if ts.hours:
+        return f"{ts.hours:.0f}h {ts.minutes:.0f}m {ts.seconds}s"
+    if ts.minutes:
+        return f"{ts.minutes:.0f}m {ts.seconds}s"
+    if ts.seconds:
+        return f"{ts.seconds}s {ts.milliseconds:.0f}ms"
+    return f"{ts.total_microseconds}us"
+
+
+def format_timedelta_str(td):
+    """Format a timedelta object as a readable string."""
+    return format_timespan_str(get_timespan(td))
+
+
+def get_timespan(td):
+    """Convert timedelta object to timespan namedtuple."""
+    td_days = td.days
+    td_hours = 0
+    td_seconds = td.seconds % 60
+    td_minutes = (td.seconds - td_seconds) / 60
+    (td_milliseconds, td_microseconds) = divmod(td.microseconds, 1000)
+    if td_minutes > 60:
+        (td_hours, td_minutes) = divmod(td_minutes, 60)
+    return timespan(
+        td_days,
+        td_hours,
+        int(td_minutes),
+        td_seconds,
+        td_milliseconds,
+        td_microseconds,
+        td.seconds,
+        (td.seconds * 1000 + td_milliseconds),
+        (td.seconds * 1000 * 1000 + td_milliseconds * 1000 + td_microseconds),
+    ){{< /highlight >}}
 
 ## Environment Configuration
 
@@ -424,6 +634,7 @@ class Config:
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SWAGGER_UI_DOC_EXPANSION = "list"
     RESTPLUS_MASK_SWAGGER = False
+    JSON_SORT_KEYS = False
 
 
 class TestingConfig(Config):

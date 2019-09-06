@@ -109,7 +109,14 @@ Reading state information... Done
     <p>Next, create a directory to store source files:</p>
     <pre><code><span class="cmd-prompt">~$</span> <span class="cmd-input">sudo mkdir -p /opt/src_files && cd /opt/src_files</span>
 <span class="cmd-prompt">/opt/src_files $</span></code></pre>
-    <p class="alert"><strong>PLEASE DO NOT USE A FOLDER IN YOUR USER'S HOME DIRECTORY</strong>. If you plan on using the .deb file to install your custom version of NGINX on another system, the source files must be located in the same path on each system. If you store the source files in a directory in this user's home directory, you will only be able to use the .deb package on another system with a user who's name is exactly the same.</p>
+    <div class="alert alert-flex">
+      <div class="alert-icon">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      </div>
+      <div class="alert-message">
+        <p><span class="bold-italics">PLEASE DO NOT USE A FOLDER IN YOUR USER'S HOME DIRECTORY</span>. If you plan on using the .deb file to install your custom version of NGINX on another system, the source files must be located in the same path on each system. If you store the source files in a directory in this user's home directory, you will only be able to use the .deb package on another system with a user who's name is exactly the same.</p>
+      </div>
+    </div>
   </li>
   <li>
     <p>Download and extract the source code for <a href="http://www.nginx.org/en/download.html">the latest version of NGINX</a>:</p>
@@ -136,14 +143,28 @@ Reading state information... Done
     <ul>
       <li>
         <a href="https://www.pcre.org">https://www.pcre.org</a>
-        <p class="alert"><strong>NOTE:</strong> NGINX requires the original PCRE library, <strong>NOT PCRE2</strong></p>
+        <div class="alert alert-flex">
+          <div class="alert-icon">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+          <div class="alert-message">
+            <p>NGINX requires the original PCRE library, <span class="bold-italics">NOT PCRE2</span></p>
+          </div>
+        </div>
       </li>
       <li>
         <a href="http://zlib.net">http://zlib.net</a>
       </li>
       <li>
         <a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a>
-        <p class="alert"><strong>NOTE:</strong> NGINX can be built with any 1.x.x version of OpenSSL, but using the latest (1.1.1) is strongly recommended since this version includes suport for TLS 1.3, the latest and most secure version of the encryption protocol</p>
+        <div class="alert alert-flex">
+          <div class="alert-icon">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+          <div class="alert-message">
+            <p>NGINX can be built with any 1.x.x version of OpenSSL, but using the latest (1.1.1) is strongly recommended since this version includes suport for TLS 1.3, the latest and most secure version of the encryption protocol.</p>
+          </div>
+        </div>
       </li>
     </ul>
   </li>
@@ -182,8 +203,15 @@ drwxr-xr-x 14  501 staff 4096 Jan 15  2017 zlib-1.2.11</span>
   </li>
   <li>
     <p><strong>This is the most important step</strong>. With this <code>./configure</code> command, you enable/disable modules and manage all configuration settings:</p>
-    <p class="alert">The values below for OpenSSL, PCRE and zlib library folder paths (<strong>Line #18, 21 and 23</strong>, respectively)  are valid for the actions performed in <strong>Step 10</strong>. If you saved the source code somewhere besides <code>/opt/src_files</code>, modify the config arguments to use the correct location.</p>
-          <pre><code><span class="cmd-lineno"> 1</span> <span class="cmd-prompt">/opt/src_files/nginx-1.15.6 $</span> <span class="cmd-input">sudo ./configure \</span>
+    <div class="note note-flex">
+      <div class="note-icon">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </div>
+      <div class="note-message" style="flex-flow: column wrap">
+        <p>The values below for OpenSSL, PCRE and zlib library folder paths (<strong>Line #18, 21 and 23</strong>, respectively)  are valid for the actions performed in <strong>Step 10</strong>. If you saved the source code somewhere besides <code>/opt/src_files</code>, modify the config arguments to use the correct location.</p>
+      </div>
+    </div>
+    <pre><code><span class="cmd-lineno"> 1</span> <span class="cmd-prompt">/opt/src_files/nginx-1.15.6 $</span> <span class="cmd-input">sudo ./configure \</span>
 <span class="cmd-lineno"> 2</span> <span class="cmd-prompt">></span> <span class="cmd-input">--prefix=/usr/share/nginx \</span>
 <span class="cmd-lineno"> 3</span> <span class="cmd-prompt">></span> <span class="cmd-input">--sbin-path=/usr/sbin/nginx \</span>
 <span class="cmd-lineno"> 4</span> <span class="cmd-prompt">></span> <span class="cmd-input">--modules-path=/usr/lib/nginx/modules \</span>
@@ -364,7 +392,14 @@ Setting up nginx (1.15.6-1) ...</span></code></pre>
   </li>
   <li>
     <p>Move the .deb package to a new folder since we want to keep it separate from the source code files. Navigate to the location of the .deb file after you have moved it:</p>
-    <p class="alert">I created a new folder, <code>/opt/save</code>, and moved the .deb file to this location. Feel free to use any folder other than the directory containing the source files.</p>
+    <div class="note note-flex">
+      <div class="note-icon">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </div>
+      <div class="note-message" style="flex-flow: column wrap">
+        <p>I created a new folder, <code>/opt/save</code>, and moved the .deb file to this location. Feel free to use any folder other than the directory containing the source files.</p>
+      </div>
+    </div>
     <pre><code><span class="cmd-prompt">/opt/src_files/nginx-1.15.6 $</span> <span class="cmd-input">sudo mkdir -p /opt/save</span>
 <span class="cmd-prompt">/opt/src_files/nginx-1.15.6 $</span> <span class="cmd-input">sudo mv nginx_1.15.6-1_amd64.deb /opt/save</span>
 <span class="cmd-prompt">/opt/src_files/nginx-1.15.6 $</span> <span class="cmd-input">cd /opt/save</span>

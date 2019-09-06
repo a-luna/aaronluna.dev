@@ -1,8 +1,9 @@
 <div id="social">
+    {{ if .Site.Menus.social }}
     <ul>
-        <li><a href="mailto:admin@aaronluna.dev" target="_blank"><i class="fa fa-envelope"></i></a></li>
-        <li><a href="https://github.com/a-luna/" target="_blank"><i class="fa fa-github"></i></a></li>
-        <li><a href="https://twitter.com/aaronlunadev/" target="_blank"><i class="fa fa-twitter"></i></a></li>
-        <li><a href="https://www.linkedin.com/in/aaron-luna-reno-nv/" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+        {{ range sort .Site.Menus.social }}
+        <li><a href="{{ .URL }}" target="_blank"><i class="fa fa-{{ .Name }}"></i></a></li>
+        {{ end }}
     </ul>
+    {{ end }}
 </div>

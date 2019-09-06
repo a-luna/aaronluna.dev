@@ -4,7 +4,7 @@
     const blog_search = 'blog';
     const blog_url_1 = '/blog/';
     const tutorial_search = 'flask-api-tutorial';
-    const tutorial_url_1 = '/flask-api-tutorial/';
+    const tutorial_url_1 = '/series/flask-api-tutorial';
     const about_url_1 = '/about/';
     const about_url_2 = '/about/index.html';
 
@@ -39,7 +39,7 @@
     }
 
     function setActiveMenuItem(rel_url) {
-        var xpath_a = `//ul[@class="menu__list"]//a[@href="${rel_url}"]`;
+        var xpath_a = `//ul[@class="menu__list"]//a[contains(@href, "${rel_url}")]`;
         var xpath_li = `${xpath_a}/parent::li`;
         updateActiveMenuItem(xpath_a, xpath_li, true);
     }
