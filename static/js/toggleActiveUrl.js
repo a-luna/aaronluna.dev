@@ -1,6 +1,6 @@
 (function() {
-    const home_url_1 = 'https://alunablog.netlify.com/';
-    const home_url_2 = 'https://alunablog.netlify.com/index.html';
+    const home_url_1 = 'https://aaronlunadev.netlify.com/';
+    const home_url_2 = 'https://aaronlunadev.netlify.com/index.html';
     const blog_search = 'blog';
     const blog_url_1 = '/blog/';
     const tutorial_search = 'flask-api-tutorial';
