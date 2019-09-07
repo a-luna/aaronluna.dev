@@ -1478,7 +1478,7 @@ abbr[title] {
     border-bottom: 1px solid #202020;
     font-size: 1em;
     letter-spacing: 0.7px;
-    padding: 13px 15px;
+    padding: 9px 15px;
 }
 
 .menu__link {
@@ -2740,6 +2740,7 @@ table.aws-hosting-costs {
         border: none;
         color: #B3B3B3;
         text-align: right;
+        padding: 13px 15px;
     }
     .menu__item:hover,
     .menu__link:hover {
