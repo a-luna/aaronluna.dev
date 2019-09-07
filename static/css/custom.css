@@ -1166,30 +1166,6 @@ pre {
     line-height: 1.4;
 }
 
-pre.chroma {
-    margin: 0
-}
-
-div.chroma {
-    overflow: auto;
-    border-radius: 4px;
-}
-
-div.chroma .lntable pre.chroma {
-    border: none;
-    border-radius: 0;
-}
-
-.highlight {
-    margin: 1em 0;
-}
-
-.chroma .lntable {
-    display: table;
-    width: 100%;
-    padding: 0 0 5px;
-}
-
 pre code,
 li pre code {
     display: block;
@@ -1223,6 +1199,30 @@ li.alert code,
     color: #D8D8D8;
 }
 
+pre.chroma {
+    margin: 0
+}
+
+div.chroma {
+    overflow: auto;
+    border-radius: 4px;
+}
+
+div.chroma .lntable pre.chroma {
+    border: none;
+    border-radius: 0;
+}
+
+.highlight {
+    margin: 1em 0;
+}
+
+.chroma .lntable {
+    display: table;
+    width: 100%;
+    padding: 0 0 5px;
+}
+
 .list-of-links {
     color: #86C8F9;
 }
@@ -1233,13 +1233,13 @@ li.alert code,
 }
 
 .chroma .lntable tr td:last-child pre {
-    padding: 7px 10px 7px 0;
+    padding: 7px 10px;
     margin: 0;
 }
 
 .chroma .lnt {
-    margin-right: 0;
-    padding: 0 0.5em 0 0.5em;
+    margin: 0;
+    padding: 0;
 }
 
 .hljs {
