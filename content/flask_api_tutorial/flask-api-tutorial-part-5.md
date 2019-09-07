@@ -277,7 +277,7 @@ Finally, let's demonstrate how to use the `flask add-user` command:
 <ul style="list-style: none; margin: 0 0 20px 0">
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Create regular user</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="light-blue bold-text">Successfully added new user:
@@ -285,7 +285,7 @@ Repeat for confirmation:
   </li>
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Create admin user</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask add-user --admin admin@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user --admin admin@test.com</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="light-blue bold-text">Successfully added new admin user:
@@ -293,7 +293,7 @@ Repeat for confirmation:
   </li>
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Error: Email already exists</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="pink bold-text">Error: user@test.com is already registered</span></span></code></pre>

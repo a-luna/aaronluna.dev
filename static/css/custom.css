@@ -1475,10 +1475,10 @@ abbr[title] {
 
 .menu__item:first-child {
     background-color: #202020;
-    border-bottom: 2px solid #202020;
+    border-bottom: 1px solid #202020;
     font-size: 1em;
     letter-spacing: 0.7px;
-    padding: 9px 15px;
+    padding: 13px 15px;
 }
 
 .menu__link {
@@ -1493,7 +1493,7 @@ abbr[title] {
 
 .active .menu__item {
     color: #F2F2F2;
-    border-bottom: 2px solid #F2F2F2;
+    border-bottom: 1px solid #F2F2F2;
     font-weight: 400;
 }
 
@@ -1554,7 +1554,7 @@ abbr[title] {
 }
 
 #social ul {
-    font-size: 1.45em;
+    font-size: 1.55em;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -2065,7 +2065,7 @@ header .post-nav {
 #header-nav .post-nav__link:focus {
     display: inline;
     border-radius: 4px;
-    background-color: #292929;
+    background-color: #252525;
     color: #19F6D6;
     text-decoration: none;
     min-width: 105px;
@@ -2075,7 +2075,7 @@ header .post-nav {
 #header-nav .post-nav__chevron:active,
 #header-nav .post-nav__chevron:active:hover,
 #header-nav .post-nav__chevron:focus {
-    background-color: #292929;
+    background-color: #252525;
     color: #19F6D6;
 }
 
@@ -2098,7 +2098,7 @@ header .post-nav {
 #header-nav .post-nav__post-title:active,
 #header-nav .post-nav__post-title:active:hover,
 #header-nav .post-nav__post-title:focus {
-    background-color: #292929;
+    background-color: #252525;
     color: #19F6D6;
     text-decoration: underline;
 }
@@ -2116,7 +2116,7 @@ header a.post-nav__link:hover,
 header a.post-nav__link:active,
 header a.post-nav__link:active:hover,
 header a.post-nav__link:focus {
-    background-color: #323232;
+    background-color: #252525;
     color: #19F6D6;
 }
 
@@ -2700,7 +2700,7 @@ table.aws-hosting-costs {
     }
     .menu {
         margin: 0;
-        padding: 0 1em;
+        padding: 0 15px;
         background-color: #202020;
     }
     .site-name {
@@ -2734,7 +2734,7 @@ table.aws-hosting-costs {
     }
     .menu__item:first-child,
     .menu__link {
-        font-size: 0.95em;
+        font-size: 1.025em;
         font-weight: 400;
         background-color: #202020;
         border: none;
@@ -2755,7 +2755,6 @@ table.aws-hosting-costs {
     }
     .active .menu__item {
         color: #F2F2F2;
-        font-weight: 700;
         border: none;
     }
     .wrapper {
