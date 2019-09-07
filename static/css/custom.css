@@ -1169,7 +1169,7 @@ pre {
 pre code,
 li pre code {
     display: block;
-    font-size: 0.95em;
+    font-size: 0.85em;
     color: #BFBFBF;
     background-color: #252525;
     padding: 0;
@@ -1200,7 +1200,8 @@ li.alert code,
 }
 
 pre.chroma {
-    margin: 0
+    margin: 0;
+    background-color: #252525;
 }
 
 div.chroma {
@@ -1217,6 +1218,11 @@ div.chroma .lntable pre.chroma {
     margin: 1em 0;
 }
 
+pre.chroma code {
+    font-size: 0.85em;
+    line-height: 1.45;
+}
+
 .chroma .lntable {
     display: table;
     width: 100%;
@@ -1228,18 +1234,34 @@ div.chroma .lntable pre.chroma {
 }
 
 .chroma .lntable tr td:first-child pre {
-    padding: 7px 0 7px 10px;
+    padding: 7px 7px 7px 10px;
     margin: 0;
 }
 
 .chroma .lntable tr td:last-child pre {
-    padding: 7px 10px;
+    padding: 7px 10px 7px 0;
     margin: 0;
 }
 
 .chroma .lnt {
     margin: 0;
     padding: 0;
+    color: #666666;
+    background-color: #252525;
+}
+
+.chroma .lntd:first-child .hl {
+    background-color: #252525;
+}
+
+.chroma .hl {
+    background: #393939;
+}
+
+.chroma .hl .lnt {
+    color: #FFC107;
+    background-color: #252525;
+    font-weight: 700;
 }
 
 .hljs {
