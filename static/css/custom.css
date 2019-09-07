@@ -1475,6 +1475,7 @@ abbr[title] {
 
 .menu__item:first-child {
     background-color: #202020;
+    border-top: 1px solid #202020;
     border-bottom: 1px solid #202020;
     font-size: 1em;
     letter-spacing: 0.7px;
@@ -1554,9 +1555,9 @@ abbr[title] {
 }
 
 #social ul {
-    font-size: 1.55em;
+    font-size: 1.45em;
     list-style-type: none;
-    margin: 0;
+    margin: 1px 0;
     padding: 0;
     overflow: hidden;
     width: max-content;
