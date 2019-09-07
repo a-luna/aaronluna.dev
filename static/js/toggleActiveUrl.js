@@ -1,6 +1,4 @@
 (function() {
-    const home_url_1 = 'https://aaronlunadev.netlify.com/';
-    const home_url_2 = 'https://aaronlunadev.netlify.com/index.html';
     const blog_search = 'blog';
     const blog_url_1 = '/blog/';
     const tutorial_search = 'flask-api-tutorial';
@@ -19,10 +17,6 @@
         rel_url = about_url_1;
     } else if (currentUrl.endsWith(about_url_2)) {
         rel_url = about_url_1
-    } else if (currentUrl == home_url_1) {
-        rel_url = "/";
-    } else if (currentUrl == home_url_2) {
-        rel_url = "/";
     } else {
         matched = false;
     }
