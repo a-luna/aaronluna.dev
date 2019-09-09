@@ -1908,11 +1908,11 @@ a.pagination__item--prev {
 }
 
 a.pagination__item--next {
-    margin: 0 0 0 2px;
+    margin: 0;
 }
 
 .pagination__item--current {
-    margin: 0 2px;
+    margin: 0 0 0 2px;
 }
 
 
@@ -2276,6 +2276,7 @@ textarea {
     color: #C4C4C4;
     font-size: 1.45em;
     border-bottom: 1px solid #FFB86C;
+    text-transform: none;
 }
 
 #widgets div#api-tutorial {
