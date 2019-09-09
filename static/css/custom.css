@@ -106,10 +106,9 @@ ol li p {
 }
 
 #widgets div {
-    background: #252525;
-    margin: 0 0 1em;
-    padding: 7px 10px;
-    border-radius: 4px;
+    background-color: #252525;
+    margin: 0;
+    padding: 7px 10px 10px 10px;
 }
 
 #widgets div:last-child {
@@ -632,7 +631,8 @@ h4 {
 }
 
 .highlite {
-    border: 1px solid #FFC107;
+    border: 1px dotted #E5B965;
+    padding: 0;
 }
 
 a {
@@ -1246,7 +1246,7 @@ pre.chroma code {
 .chroma .lnt {
     margin: 0;
     padding: 0;
-    color: #666666;
+    color: #7F7F7F;
     background-color: #252525;
 }
 
@@ -1262,6 +1262,29 @@ pre.chroma code {
     color: #FFC107;
     background-color: #252525;
     font-weight: 700;
+}
+
+.chroma .nc,
+.chroma .nf {
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.chroma .nn {
+    text-decoration: none;
+}
+
+.chroma .n {
+    color: #f8f8f2;
+}
+
+.chroma .o {
+    font-weight: 700;
+}
+
+.chroma .nb,
+.chroma .mi {
+    font-weight: bold;
 }
 
 .hljs {
@@ -2342,6 +2365,7 @@ div.widget-search {
     background-color: #252525;
     border: 1px solid #A9FB68;
     padding: 0;
+    border-radius: 4px;
 }
 
 .widget-search {
@@ -2354,7 +2378,6 @@ div.widget-search {
     font-weight: 100;
     color: #A9FB68;
     background-color: #252525;
-    width: 37px;
     padding: 0 0 0 4px;
 }
 
@@ -2818,9 +2841,6 @@ table.aws-hosting-costs {
     #author-desc {
         font-size: 0.9em;
     }
-    .widget-search__form {
-        max-width: 400px;
-    }
     .post-nav__post-title {
         font-weight: 500;
         font-size: 1em;
@@ -2840,12 +2860,13 @@ table.aws-hosting-costs {
         display: block;
         background-color: #323232;
         margin: 0 auto;
+        padding: 7px 10px;
     }
     .wrapper #social ul {
         margin: 0 auto;
     }
     #widgets div:last-child {
-        margin: 0 auto;
+        margin: 7px auto 0 auto;
     }
     .sidebar {
         padding: 0.5em 0 0;

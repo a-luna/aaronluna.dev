@@ -157,7 +157,7 @@ Just like every other extension, Flask-RESTPlus can be initialized with a Flask 
 
 The best way to accomplish this is with <a href="http://flask.pocoo.org/docs/1.0/blueprints/#why-blueprints" target="_blank">Flask blueprints</a>. Typically, blueprints are used to factor a large, monolithic Flask application into a set of blueprints. Using a blueprint to register our Flask-RESTPlus API with the Flask application will allow us to define a `url_prefix` for the API endpoints.
 
-### API Blueprint
+### `api_bp` Blueprint
 
 In the `app/api/__init__.py` file, add the following content:
 

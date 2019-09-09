@@ -134,10 +134,10 @@ The `User` class demonstrates several important concepts for creating database m
 <div class="code-details">
     <ul>
         <li>
-            <p><strong>Line 13: </strong><code>User</code> is defined as a subclass of <code>db.Model</code>. Subclassing <code>db.Model</code> "registers" the model with SQLAlchemy, allowing the ORM to create a database table based on the column definitions in <strong>Lines 18-23</strong>.</p>
+            <p><strong>Line 12: </strong><code>User</code> is defined as a subclass of <code>db.Model</code>. Subclassing <code>db.Model</code> "registers" the model with SQLAlchemy, allowing the ORM to create a database table based on the column definitions in <strong>Lines 18-23</strong>.</p>
         </li>
         <li>
-            <p><strong>Line 16: </strong>Flask-SQLAlchemy will automatically set the name of the database table by converting the class name (<code>User</code>) to lowercase. However, <code>user</code> is a reserved word in multiple SQL implementations (e.g., PostgreSQL, MySQL, MSSQL), and using any reserved word as a table name is a bad idea. You can override this default value by setting the <code>__tablename__</code> class attribute.</strong></p>
+            <p><strong>Line 15: </strong>Flask-SQLAlchemy will automatically set the name of the database table by converting the class name (<code>User</code>) to lowercase. However, <code>user</code> is a reserved word in multiple SQL implementations (e.g., PostgreSQL, MySQL, MSSQL), and using any reserved word as a table name is a bad idea. You can override this default value by setting the <code>__tablename__</code> class attribute.</strong></p>
             <div class="note note-flex">
                 <div class="note-icon">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -148,7 +148,7 @@ The `User` class demonstrates several important concepts for creating database m
             </div>
         </li>
         <li>
-            <p><strong>Lines 18-23: </strong>Use <code>db.Column</code> to define a column. Dy default, the column name will be the same as the name of the attribute you assign it to. The first argument to <code>db.Column</code> is the data type (i.e., <code>db.Integer</code>, <code>db.String(size)</code>, <code>db.Boolean</code>). There are many different <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#generic-types" target="_blank">generic data types</a> as well as <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#sql-standard-and-multiple-vendor-types" target="_blank">vendor-specific data types</a> available. Our <code>site_user</code> table will have the following columns:</p>
+            <p><strong>Lines 17-22: </strong>Use <code>db.Column</code> to define a column. Dy default, the column name will be the same as the name of the attribute you assign it to. The first argument to <code>db.Column</code> is the data type (i.e., <code>db.Integer</code>, <code>db.String(size)</code>, <code>db.Boolean</code>). There are many different <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#generic-types" target="_blank">generic data types</a> as well as <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#sql-standard-and-multiple-vendor-types" target="_blank">vendor-specific data types</a> available. Our <code>site_user</code> table will have the following columns:</p>
             <ul>
                 <li>
                     <p><strong>id: </strong>This is the primary key for our table, specified by <code>primary_key=True</code>. We will use the <code>db.Integer</code> data type, but you could use another data type or even specify multiple columns as a primary key. Also, note that we have setup "autoincrement" behavior by specifying <code>autoincrement=True</code>. This is possible only with integer data types.</p>
@@ -179,7 +179,15 @@ The `User` class demonstrates several important concepts for creating database m
             </ul>
         </li>
         <li>
-            <p><strong>Lines 28-30: </strong>The <code>@hybrid_property</code> decorator is <a href="https://docs.sqlalchemy.org/en/13/orm/extensions/hybrid.html?highlight=hybrid%20properties" target="_blank">another SQLAlchemy feature</a> that is capable of much more than what I am demonstrating here. Most often, this decorator is used to create "computed" or "virtual" columns whose value is computed from the values of one or more columns. In this instance, the <code>registered_on_str</code> column converts the datetime value stored in <code>registered_on</code> to a formatted string.</p>
+            <p><strong>Lines 27-30: </strong>The <code>@hybrid_property</code> decorator is <a href="https://docs.sqlalchemy.org/en/13/orm/extensions/hybrid.html?highlight=hybrid%20properties" target="_blank">another SQLAlchemy feature</a> that is capable of much more than what I am demonstrating here. Most often, this decorator is used to create "computed" or "virtual" columns whose value is computed from the values of one or more columns. In this instance, the <code>registered_on_str</code> column converts the datetime value stored in <code>registered_on</code> to a formatted string.</p>
+            <div class="note note-flex">
+                <div class="note-icon">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                </div>
+                <div class="note-message" style="flex-flow: column wrap">
+                    <p>I am using several of the functions from the <code>app.util.datetime_util</code> module here. The <code>registered_on</code> value (and all <code>datetime</code> values) is always converted to the UTC timezone when the value is written to the database. The <code>registered_on_str</code> value converts this value to the timezone of the machine executing this code and formats it as a string value.</p>
+                </div>
+             </div>
         </li>
         <li>
             <p><strong>Lines 32-34: </strong>This is part of the password-hashing implementation. The <code>@property</code> decorator exposes a <code>password</code> attribute on our User class. However, this is designed as a write-only value so when a client attempts to call <code>user.password</code> and retrieve the value, an <code>AttributeError</code> is raised.</p>
@@ -228,7 +236,7 @@ The Flask-Migrate extension adds a new sub-command to the Flask CLI: `flask db`.
   Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/alembic.ini ... done
   Please edit configuration/connection/logging settings in '/Users/aaronluna/Projects/flask-api-tutorial/migrations/alembic.ini' before proceeding.</span></code></pre>
 
-In order for Flask-Migrate to detect the `User` model, we must import it in the `run.py` module:
+In order for Flask-Migrate to detect the `User` model, we must import it in the `run.py` module. Open `run.py` in the project root folder and make the changes highlighted below:
 
 {{< highlight python "linenos=table,hl_lines=5 12" >}}"""Flask CLI/Application entry point."""
 import os
@@ -243,12 +251,10 @@ app = create_app(os.getenv("FLASK_ENV", "development"))
 def shell():
     return {"db": db, "User": User}{{< /highlight >}}
 
-There are two changes which are highlighted above:
-
 <div class="code-details">
     <ul>
         <li>
-            <p><strong>Line 5: </strong>The User class will only be detected by the Flask-Migrate extension as a new database table if this import statement exists.</p>
+            <p><strong>Line 5: </strong>The <code>User</code> class will only be detected by the Flask-Migrate extension as a new database table if this import statement exists.</p>
         </li>
         <li>
             <p><strong>Line 12: </strong>We have added the <code>User</code> object to the dictionary that is imported by the <code>flask shell</code> command. This makes this class available in the shell context without needing to be explicitly imported.</p>
@@ -350,7 +356,7 @@ Depending on the environment, the access token will expire after a set amount of
 
 Let's start implementing our workflow by creating the method that will be used to generate access tokens. Since the token will be generated using attributes from a `User` instance, we will create the method as a member of the `User` class.
 
-First, update the import statements in `user.py` to include `datetime.timedelta` and the `jwt` package:
+First, update the import statements in `user.py` to include `datetime.timedelta` and the `jwt` package (**Line 2** and **Line 5** below):
 
 {{< highlight python "linenos=table,hl_lines=2 5" >}}"""Class definition for User model."""
 from datetime import datetime, timedelta, timezone
@@ -360,11 +366,12 @@ import jwt
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from app import db, bcrypt{{< /highlight >}}
+from app import db, bcrypt
+from app.util.datetime_util import get_local_utcoffset, make_tzaware, localized_dt_string{{< /highlight >}}
 
 Then, add the `encode_access_token` method to `user.py`:
 
-{{< highlight python "linenos=table,linenostart=47" >}}def encode_access_token(self):
+{{< highlight python "linenos=table,linenostart=46" >}}def encode_access_token(self):
     now = datetime.now(timezone.utc)
     token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")
     token_age_m = current_app.config.get("TOKEN_EXPIRE_MINUTES")
@@ -380,16 +387,16 @@ Let's breakdown how this method generates the access token:
 <div class="code-details">
     <ul>
         <li>
-            <p><strong>Lines 49-50: </strong>Using the <code>curent_app</code> proxy object, we retrieve the config settings <code>TOKEN_EXPIRE_HOURS</code> and <code>TOKEN_EXPIRE_MINUTES</code>. Remember, we defined different values for these settings for each environment (<code>development</code>, <code>testing</code>, <code>production</code>).</p>
+            <p><strong>Lines 48-49: </strong>Using the <code>curent_app</code> proxy object, we retrieve the config settings <code>TOKEN_EXPIRE_HOURS</code> and <code>TOKEN_EXPIRE_MINUTES</code>. Remember, we defined different values for these settings for each environment (<code>development</code>, <code>testing</code>, <code>production</code>).</p>
         </li>
         <li>
-            <p><strong>Line 51: </strong>We calculate the time when the token will expire based on the config settings and the current time.</p>
+            <p><strong>Line 50: </strong>We calculate the time when the token will expire based on the config settings and the current time.</p>
         </li>
         <li>
-            <p><strong>Lines 52-53: </strong>All tokens generated with the <code>testing</code> config settings will expire after five seconds, allowing us to write and execute test cases where the tokens actually expire so we can verify the expected behavior.</p>
+            <p><strong>Lines 51-52: </strong>All tokens generated with the <code>testing</code> config settings will expire after five seconds, allowing us to write and execute test cases where the tokens actually expire so we can verify the expected behavior.</p>
         </li>
         <li>
-            <p><strong>Line 54: </strong>The payload object is where data about the token and the user is stored. The payload contains a set of key/value pairs known as "claims" (refer to <a href="/flask-api-tutorial-part-1/">Part 1</a> for more info on claims). Our token will contain the following <a href="https://tools.ietf.org/html/rfc7519#section-4.1" target="_blank">registered claims</a>:</p>
+            <p><strong>Line 53: </strong>The payload object is where data about the token and the user is stored. The payload contains a set of key/value pairs known as "claims" (refer to <a href="/flask-api-tutorial-part-1/">Part 1</a> for more info on claims). Our token will contain the following <a href="https://tools.ietf.org/html/rfc7519#section-4.1" target="_blank">registered claims</a>:</p>
             <ul>
                 <li><strong>exp: </strong>Date/time when the token will expire</li>
                 <li><strong>iat: </strong>Date/time when the token was generated</li>
@@ -409,10 +416,10 @@ Let's breakdown how this method generates the access token:
             </div>
         </li>
         <li>
-            <p><strong>Line 55: </strong>In order to calculate the token's signature, we must retrieve the <code>SECRET_KEY</code> config setting. When creating the token, this value will be used in the algorithm that generates the cryptographic signature. We will use this same value to decode the token and ensure that the contents have not been modified.</p>
+            <p><strong>Line 54: </strong>In order to calculate the token's signature, we must retrieve the <code>SECRET_KEY</code> config setting. When creating the token, this value will be used in the algorithm that generates the cryptographic signature. We will use this same value to decode the token and ensure that the contents have not been modified.</p>
         </li>
         <li>
-            <p><strong>Line 56: </strong>The <code>jwt.encode()</code> function accepts three arguments. The first two of which we have just described: the payload and the secret key. The third argument is the signing algorithm. Most applications use the <code>HS256</code> algorithm, which is short for HMAC-SHA256. The signing algorithm is what protects the payload of the JWT against tampering.</p>
+            <p><strong>Line 55: </strong>The <code>jwt.encode()</code> function accepts three arguments. The first two of which we have just described: the payload and the secret key. The third argument is the signing algorithm. Most applications use the <code>HS256</code> algorithm, which is short for HMAC-SHA256. The signing algorithm is what protects the payload of the JWT against tampering.</p>
         </li>
     </ul>
 </div>
@@ -503,7 +510,7 @@ Here a few more things to note about the fixtures we defined in `conftest.py`:
 
 We are finally ready to write test code that verifies the `encode_access_token` method. Create a new file in the `test` folder named `test_user.py` and add the following content (ensure that `test_user.py` and `conftest.py` are in the same folder):
 
-{{< highlight python >}}"""Unit tests for User model class."""
+{{< highlight python "linenos=table" >}}"""Unit tests for User model class."""
 
 
 def test_encode_access_token(user):
@@ -555,9 +562,19 @@ test/test_user.py::test_encode_access_token PASSED                              
 
 ### <code>decode_access_token</code> Function
 
-Let's move on to the obvious next step in our authorization workflow: decoding tokens. We need to update the import statements in `user.py` to include the `Result` class:
+Let's move on to the obvious next step in our authorization workflow: decoding tokens. We need to update the import statements in `user.py` to include the `Result` class (**Line 11** below):
 
-{{< highlight python "linenos=table,linenostart=10" >}}from app.util.result import Result{{< /highlight >}}
+{{< highlight python "linenos=table,hl_lines=11" >}}"""Class definition for User model."""
+from datetime import datetime, timedelta, timezone
+from uuid import uuid4
+
+import jwt
+from flask import current_app
+from sqlalchemy.ext.hybrid import hybrid_property
+
+from app import db, bcrypt
+from app.util.datetime_util import get_local_utcoffset, make_tzaware, localized_dt_string
+from app.util.result import Result{{< /highlight >}}
 
 Next, add the `decode_access_token` method to the `user.py` file:
 
@@ -571,19 +588,20 @@ def decode_access_token(access_token):
     try:
         key = current_app.config.get("SECRET_KEY")
         payload = jwt.decode(access_token, key, algorithms=["HS256"])
-        user_dict = dict(
-            public_id=payload["sub"],
-            admin=payload["admin"],
-            token=access_token,
-            expires_at=payload["exp"],
-        )
-        return Result.Ok(user_dict)
     except jwt.ExpiredSignatureError:
         error = "Access token expired. Please log in again."
         return Result.Fail(error)
     except jwt.InvalidTokenError:
         error = "Invalid token. Please log in again."
-        return Result.Fail(error){{< /highlight >}}
+        return Result.Fail(error)
+
+    user_dict = dict(
+        public_id=payload["sub"],
+        admin=payload["admin"],
+        token=access_token,
+        expires_at=payload["exp"],
+    )
+    return Result.Ok(user_dict){{< /highlight >}}
 
 There are several important things to note about this method:
 
@@ -606,13 +624,13 @@ There are several important things to note about this method:
             <p><strong>Line 67: </strong>The <code>jwt.decode</code> function takes three arguments: the access token, the secret key, and a list of signature algorithms which the application accepts. If the access token is valid, has not been tampered with and has not expired, then the return value of the <code>jwt.decode</code> function (<code>payload</code>) is the dictionary containing the create time and expire time of the token, the user's public ID and a bool indicating if the user has administrator access.</p>
         </li>
         <li>
-            <p><strong>Line 68-74: </strong>This code will only execute if the token passed all validation criteria: token format is valid, signature is valid (i.e., token has not been modified/tampered) and token is not expired. In that case, we construct a dict object containing the validated <code>access_token</code>, the timestamp when the token expires, the user's public_id and administrator flag from the <code>payload</code> object. We return the dict within a <code>Result</code> object indicating the operation was successful.</p>
+            <p><strong>Line 68-70: </strong>This code will only execute if the token is expired. Note that we do not have to perform any of the work to verify whether the token is expired or not, that is handled by the <code>jwt.decode</code> function. If the token is expired, a <code>jwt.ExpiredSignatureError</code> is raised. Since this is an expected failure, we catch it and create a <code>Result</code> object with an error message describing the failure and return the <code>Result</code>.</p>
         </li>
         <li>
-            <p><strong>Line 75-77: </strong>This code will only execute if the token is expired. Note that we do not have to perform any of the work to verify whether the token is expired or not, that is handled by the <code>jwt.decode</code> function. If the token is expired, a <code>jwt.ExpiredSignatureError</code> is raised. Since this is an expected failure, we catch it and create a <code>Result</code> object with an error message describing the failure and return the <code>Result</code>.</p>
+            <p><strong>Line 71-73: </strong>This code will only execute if the signature validation process fails. This would occur if the token was tampered or modified in any way, and we will create unit tests to verify this works as expected. Again, we do not have to perform any of the work to determine if the token has been tampered with, that process is handled by the <code>jwt.decode</code> function. If the signature is invalid, a <code>jwt.InvalidTokenError</code> is raised. Since this is an expected failure, we catch it and create a <code>Result</code> object with an error message describing the failure and return the <code>Result</code>.</p>
         </li>
         <li>
-            <p><strong>Line 78-80: </strong>This code will only execute if the signature validation process fails. This would occur if the token was tampered or modified in any way, and we will create unit tests to verify this works as expected. Again, we do not have to perform any of the work to determine if the token has been tampered with, that process is handled by the <code>jwt.decode</code> function. If the signature is invalid, a <code>jwt.InvalidTokenError</code> is raised. Since this is an expected failure, we catch it and create a <code>Result</code> object with an error message describing the failure and return the <code>Result</code>.</p>
+            <p><strong>Line 75-81: </strong>This code will only execute if the token passed all validation criteria: token format is valid, signature is valid (i.e., token has not been modified/tampered) and token is not expired. In that case, we construct a dict object containing the validated <code>access_token</code>, the timestamp when the token expires, the user's public_id and administrator flag from the <code>payload</code> object. We return the dict within a <code>Result</code> object indicating the operation was successful.</p>
         </li>
     </ul>
 </div>
