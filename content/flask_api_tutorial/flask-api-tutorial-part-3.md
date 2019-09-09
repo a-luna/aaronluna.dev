@@ -183,7 +183,7 @@ api = Api(
     authorizations=authorizations,
 ){{< /highlight >}}
 
-There are a few important things to note about how we are configuring the Flask-RESTPlus `Api` object:
+There are a few important things to note about how we are configuring the `api` and `api_bp` objects:
 
 <div class="code-details">
     <ul>
@@ -259,7 +259,7 @@ static               GET      /static/<path:filename></span></code></pre>
 
 The first four routes in the list were added by registering the `api_bp` blueprint with our application. Next, run `flask run` to start the development server and point your browser to `http://localhost:5000/api/v1/ui` (if you are using a different port or hostname on your dev machine, adjust accordingly).
 
-You should see something similar to the screenshot below. Note that the API version, name and description are taken directly from values we provided to the `Api` constructor in the `app/api/__init__.py` file.
+You should see something similar to the screenshot below. Note that the URL path, API version, title and description are taken directly from values we provided to the `Api` constructor in the `app/api/__init__.py` file.
 
 <figure>
     <a href="/img/flask-api-tutorial/p03-01-empty-api.jpg">
@@ -274,8 +274,8 @@ In the same way that we can organize our Flask project with **blueprints**, we c
 
 Currently, the `app/api/auth` folder only contains the `__init__.py` file. We need to create 3 new files in the `auth` folder: `business.py`, `dto.py` and `endpoints.py`. Run the command below from the project root folder to create the files (or create them yourself however you wish):
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">cd app/api/auth && touch business.py dto.py endpoints.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app/api/auth $</span> <span class="cmd-input">ls -al</span>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">cd app/api/auth && touch business.py dto.py endpoints.py</span>
+<span class="cmd-venv">(venv) flask-api-tutorial/app/api/auth $</span> <span class="cmd-input">ls -al</span>
 <span class="cmd-results">total 8
 drwxr-xr-x  7 aaronluna  staff  224 Jun 30 01:20 .
 drwxr-xr-x  5 aaronluna  staff  160 Jun 27 02:47 ..

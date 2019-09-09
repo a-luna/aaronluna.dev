@@ -82,24 +82,22 @@ Why is this the case? The data required to register a new user or authenticate a
 
 Just like we did when processing a registration request, we need to return an HTTP response that includes the access token if the user credentials are successfully validated. Open `app/api/auth/business.py`, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=32" >}}def process_login_request(email, password):
+{{< highlight python "linenos=table,linenostart=31" >}}def process_login_request(email, password):
     user = User.find_by_email(email)
-    if user and user.check_password(password):
-        access_token = user.encode_access_token()
-        response = jsonify(
-            status="success",
-            message="successfully logged in",
-            access_token=access_token.decode(),
-            token_type="bearer",
-            expires_in=_get_token_expire_time(),
-        )
-        response.status_code = HTTPStatus.OK
-        response.headers["Cache-Control"] = "no-store"
-        response.headers["Pragma"] = "no-cache"
-        return response
-    else:
-        error = "email or password does not match"
-        abort(HTTPStatus.UNAUTHORIZED, error, status="fail"){{< /highlight >}}
+    if not user or not user.check_password(password):
+        abort(HTTPStatus.UNAUTHORIZED, "email or password does not match", status="fail")
+    access_token = user.encode_access_token()
+    response = jsonify(
+        status="success",
+        message="successfully logged in",
+        access_token=access_token.decode(),
+        token_type="bearer",
+        expires_in=_get_token_expire_time(),
+    )
+    response.status_code = HTTPStatus.OK
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Pragma"] = "no-cache"
+    return response{{< /highlight >}}
 
 The first thing we do in this function is call `User.find_by_email` with the email address provided by the user. If no user exists with this email address, the current request is aborted with a response including 401 `HTTPStatus.UNAUTHORIZED`.
 
@@ -109,13 +107,19 @@ If the password is verified, then the response is almost exactly the same as a s
 
 ### `LoginUser` Resource
 
-The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `app/api/auth/endpoints.py` to include the `process_login_request` function that we just created:
+The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `app/api/auth/endpoints.py` to include the `process_login_request` function that we just created (**Line 7** below):
 
-{{< highlight python >}}from app.api.auth.business import process_registration_request, process_login_request{{< /highlight >}}
+{{< highlight python "linenos=table,hl_lines=7" >}}"""API endpoint definitions for /auth namespace."""
+from http import HTTPStatus
+
+from flask_restplus import Namespace, Resource
+
+from app.api.auth.dto import auth_reqparser
+from app.api.auth.business import process_registration_request, process_login_request{{< /highlight >}}
 
 Next, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=34" >}}@auth_ns.route("/login", endpoint="auth_login")
+{{< highlight python "linenos=table,linenostart=29" >}}@auth_ns.route("/login", endpoint="auth_login")
 class LoginUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/login."""
 
@@ -136,10 +140,10 @@ There are two minor differences in the implementation of the `LoginUser` resourc
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Line 1: </strong>The <code>@auth_ns.route</code> decorator binds this resource to the <code>/api/v1/auth/login</code> URL route.</p>
+      <p><strong>Line 29: </strong>The <code>@auth_ns.route</code> decorator binds this resource to the <code>/api/v1/auth/login</code> URL route.</p>
     </li>
     <li>
-      <p><strong>Line 6-7: </strong>The HTTP status codes for successfully registering a new user and successfully authenticating an existing user are 201 <code>HTTPStatus.CREATED</code> and 200 <code>HTTPStatus.OK</code> , respectively.</p>
+      <p><strong>Line 34: </strong>The HTTP status codes for successfully registering a new user and successfully authenticating an existing user are 201 <code>HTTPStatus.CREATED</code> and 200 <code>HTTPStatus.OK</code> , respectively.</p>
     </li>
   </ul>
 </div>
@@ -395,10 +399,13 @@ The way we implement this endpoint will demonstrate a few new concepts:
 
 ### `user_model` API Model
 
-The first thing we need to do is create an API model for the `User` class. In `/app/api/auth/dto.py`, update the import statements to incude the `Model` class from `flask_restplus` and the `String` and `Boolean` classes from the `flask_restplus.fields` module:
+The first thing we need to do is create an API model for the `User` class. In `/app/api/auth/dto.py`, update the import statements to incude the `Model` class from `flask_restplus` and the `String` and `Boolean` classes from the `flask_restplus.fields` module (**Lines 2-3** below):
 
-{{< highlight python "linenos=table,linenostart=2" >}}from flask_restplus import Model
-from flask_restplus.fields import String, Boolean{{< /highlight >}}
+{{< highlight python "linenos=table,hl_lines=2-3" >}}"""Parsers and serializers for /auth API endpoints."""
+from flask_restplus import Model
+from flask_restplus.fields import String, Boolean
+from flask_restplus.inputs import email
+from flask_restplus.reqparse import RequestParser{{< /highlight >}}
 
 Next, add the content below and save the file:
 
@@ -409,6 +416,7 @@ Next, add the content below and save the file:
         "public_id": String,
         "admin": Boolean,
         "registered_on": String(attribute="registered_on_str"),
+        "token_expires_in": String,
     },
 ){{< /highlight >}}
 
@@ -418,28 +426,32 @@ Any other attributes of the object are considered private and will not be includ
 
 You probably notice that the `User` class has attributes named `registered_on` and `registered_on_str`, a `datetime` and `str` value, respectively. `registered_on_str` is the `datetime` value formatted as a consise, easy-to-read string. We want to use the string version in our JSON, but would rather use `registered_on` as the name, rather than `registered_on_str`. Specifying `attribute="registered_on_str"` in the `fields.String` constructor acheives this.
 
+The last attribute in the `User` API model is named `token_expires_in`, but the `User` db model does not contain an attribute that matches this in any way. So why would we define an API model with a value that doesn't exist on the object being modeled?
+
+Objects in Python are quite permissive due to the language's dynamic nature. For example, you are free to create new attributes of your choosing on any object, and we will modify the `User` object to include an attribute named `token_expires_in` before we marshal the object to JSON and send it to the client. The value for this attribute will be a formatted string representing the `timedelta` until the token expires, which is available from the payload of the user's access token after validating that the token is valid.
+
 The Flask-RESTPlus docs contain a <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.fields" target="_blank">full list of the classes available in the `fields' module</a> as well as <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#custom-fields-multiple-values" target="_blank">instructions for creating a custom formatter</a>.
 
 ### `get_logged_in_user` Function
 
 Our next task is to create the business logic for the `api.auth_user` endpoint. The first thing we need to do is verify that the access token included in the request is valid. Sounds like a job for the `@token_required` decorator that we just created!
 
-Open `/app/api/auth/business.py` and update the import statements to include the `@token_required` decorator and a few helper functions from the `datetime_util` module (<strong>Line 8</strong> and <strong>Line 11</strong>).
+Open `/app/api/auth/business.py` and update the import statements to include the `@token_required` decorator and a few helper functions from the `datetime_util` module (<strong>Line 8</strong> and <strong>Line 10</strong>).
 
-{{< highlight python "linenos=table,linenostart=2,hl_lines=7 10" >}}from http import HTTPStatus
+{{< highlight python "linenos=table,hl_lines=8 10" >}}"""Business logic for /auth API endpoints."""
+from http import HTTPStatus
 
 from flask import current_app, jsonify
 from flask_restplus import abort
 
 from app import db
 from app.api.auth.decorator import token_required
-from app.models.token_blacklist import BlacklistedToken
 from app.models.user import User
 from app.util.datetime_util import remaining_fromtimestamp, format_timespan_digits{{< /highlight >}}
 
 Then, add the decorated function:
 
-{{< highlight python "linenos=table,linenostart=54" >}}@token_required
+{{< highlight python "linenos=table,linenostart=51" >}}@token_required
 def get_logged_in_user():
     public_id = get_logged_in_user.public_id
     user = User.find_by_public_id(public_id)
@@ -447,7 +459,7 @@ def get_logged_in_user():
     user.token_expires_in = format_timespan_digits(remaining_fromtimestamp(expires_at))
     return user{{< /highlight >}}
 
-Thanks to the `@token_required` decorator, if the request header does not contain an access token or the access token was sent but is invalid/expired, then `get_logged_in_user` is never actually executed (unless a valid token is found, the current request is aborted before calling the wrapped function). So what's the deal with **Line 56** above? It isn't very obvious, so let's break it down line-by-line. First, look at the code for `@token_required`:
+Thanks to the `@token_required` decorator, if the request header does not contain an access token or the access token was sent but is invalid/expired, then `get_logged_in_user` is never actually executed (unless a valid token is found, the current request is aborted before calling the wrapped function). So what's the deal with **Line 53** above? It isn't very obvious, so let's break it down line-by-line. First, look at the code for `@token_required`:
 
 {{< highlight python "linenos=table,linenostart=14" >}}def token_required(f):
     """Allow access to the wrapped function if the request header contains a valid access token."""
@@ -505,7 +517,7 @@ The important thing to grasp is that we are creating attributes on the `get_logg
 
 Let's again look at the code for `get_logged_in_user`:
 
-{{< highlight python "linenos=table,linenostart=54" >}}@token_required
+{{< highlight python "linenos=table,linenostart=51" >}}@token_required
 def get_logged_in_user():
     public_id = get_logged_in_user.public_id
     user = User.find_by_public_id(public_id)
@@ -516,18 +528,18 @@ def get_logged_in_user():
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 56: </strong>When this line is executed, the process of iterating over <code>user_dict.items()</code> has taken place and the value of <code>get_logged_in_user.public_id</code> contains <code>user_dict["public_id"]</code> (identifies the user the token was issued for), which was decoded from <code>access_token</code> in the request header.</p>
+        <p><strong>Line 53: </strong>When this line is executed, the process of iterating over <code>user_dict.items()</code> has taken place and the value of <code>get_logged_in_user.public_id</code> contains <code>user_dict["public_id"]</code> (identifies the user the token was issued for), which was decoded from <code>access_token</code> in the request header.</p>
       </li>
       <li>
-        <p><strong>Line 57: </strong>Retrieve the <code>User</code> from the database with the same <code>public_id</code> that was decoded from the token.</p>
+        <p><strong>Line 54: </strong>Retrieve the <code>User</code> from the database with the same <code>public_id</code> that was decoded from the token.</p>
       </li>
       <li>
-        <p><strong>Lines 58-59: </strong>Here, we retrieve the <code>datetime</code> value equal to the time when the token expires and format the time remaining until the token expires as a string value. We store the formatted string in a new attribute named <code>token_expires_in</code>, which we defined as a field in the <code>user_model</code> API model that we created in the <code>app.api.auth.dto</code> module.</p>
+        <p><strong>Lines 55-56: </strong>Here, we retrieve the <code>datetime</code> value equal to the time when the token expires and format the time remaining until the token expires as a string value. We store the formatted string in a new attribute named <code>token_expires_in</code>, which we defined as a field in the <code>user_model</code> API model that we created in the <code>app.api.auth.dto</code> module.</p>
       </li>
     </ul>
 </div>
 
-Whew! That was a lot of detail for a two-line function (which could easily be condensed to one), Let's keep things moving and define the concrete `Resource` class for the `api.auth_user` endpoint.
+Whew! That was a lot of detail for a simple function. Let's keep things moving and define the concrete `Resource` class for the `api.auth_user` endpoint.
 
 ### `GetUser` Resource
 
@@ -968,7 +980,7 @@ Even though access tokens are typically configured to expire less than a day aft
 
 Create a new file `token_blacklist.py` in `/app/models` and add the content below:
 
-{{< highlight python "linenos=table,hl_lines=14-16 20 25-28" >}}"""Class definition for BlacklistedToken."""
+{{< highlight python "linenos=table" >}}"""Class definition for BlacklistedToken."""
 from datetime import datetime, timezone
 
 from app import db
@@ -1002,10 +1014,10 @@ The `BlacklistedToken` class is pretty simple, but please note the following:
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 18: </strong><code>token</code> is the string value of the access token.</p>
+        <p><strong>Line 14: </strong><code>token</code> is the string value of the access token.</p>
       </li>
       <li>
-        <p><strong>Line 19: </strong>Notice that we are capturing the current time with <code>datetime.now(timezone.utc)</code>, <span class="emphasis">NOT</span> <code>datetime.utcnow()</code>. What is the difference between these two methods? Consider the REPL commands below:</p>
+        <p><strong>Line 15: </strong>Notice that we are capturing the current time with <code>datetime.now(timezone.utc)</code>, <span class="emphasis">NOT</span> <code>datetime.utcnow()</code>. What is the difference between these two methods? Consider the REPL commands below:</p>
         <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from datetime import datetime, timezone</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">datetime.now(timezone.utc)</span>
 <span class="cmd-repl-results">datetime.datetime(2019, 8, 8, 9, 52, 4, 353389, tzinfo=datetime.timezone.utc)</span>
@@ -1037,9 +1049,7 @@ The `BlacklistedToken` class is pretty simple, but please note the following:
             <p>Always ensure that the <code>datetime</code> objects produced and utilized by your code have <code>tzinfo=timezone.UTC</code> when written to the database.</p>
           </div>
         </div>
-      </li>
-      <li>
-        <p><strong>Line 20: </strong>A simple example of why you should always use timezone "aware" <code>datetime</code> values is given below. When we create a <code>BlacklistedToken</code> object, the required <code>expires_at</code> parameter is a UNIX timestamp (i.e., an integer value) which can be converted to a <code>datetime</code> object using the <code>fromtimestamp</code> method:</p>
+        <p>A simple example of why you should always use timezone "aware" <code>datetime</code> values is given below. When we create a <code>BlacklistedToken</code> object, the required <code>expires_at</code> parameter is a UNIX timestamp (i.e., an integer value) which can be converted to a <code>datetime</code> object using the <code>fromtimestamp</code> method:</p>
         <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">expires_at = 1565257955</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">datetime.fromtimestamp(expires_at).astimezone(timezone.utc)</span>
 <span class="cmd-repl-results">datetime.datetime(2019, 8, 8, 9, 52, 35, tzinfo=datetime.timezone.utc)</span>
@@ -1120,7 +1130,7 @@ As explained in the [Decorators](#decorators) section of this post, the `access_
 
 We need to modify the `decode_access_token` method to check the blacklist and reurn a `Result` object indicating the token could not be decoded because it has been blacklisted. Open `/app/models/user.py` and add **Lines 69-71** (which are highlghted):
 
-{{< highlight python "linenos=table,linenostart=59,hl_lines=11-13" >}}@staticmethod
+{{< highlight python "linenos=table,linenostart=59,hl_lines=18-20" >}}@staticmethod
     def decode_access_token(access_token):
         if isinstance(access_token, bytes):
             access_token = access_token.decode("ascii")
@@ -1130,30 +1140,37 @@ We need to modify the `decode_access_token` method to check the blacklist and re
         try:
             key = current_app.config.get("SECRET_KEY")
             payload = jwt.decode(access_token, key, algorithms=["HS256"])
-            if BlacklistedToken.check_blacklist(access_token):
-                error = "Token blacklisted. Please log in again."
-                return Result.Fail(error)
-            user_dict = dict(
-                public_id=payload["sub"],
-                admin=payload["admin"],
-                token=access_token,
-                expires_at=payload["exp"],
-            )
-            return Result.Ok(user_dict)
         except jwt.ExpiredSignatureError:
             error = "Access token expired. Please log in again."
             return Result.Fail(error)
         except jwt.InvalidTokenError:
             error = "Invalid token. Please log in again."
-            return Result.Fail(error){{< /highlight >}}
+            return Result.Fail(error)
+
+        if BlacklistedToken.check_blacklist(access_token):
+            error = "Token blacklisted. Please log in again."
+            return Result.Fail(error)
+        user_dict = dict(
+            public_id=payload["sub"],
+            admin=payload["admin"],
+            token=access_token,
+            expires_at=payload["exp"],
+        )
+        return Result.Ok(user_dict){{< /highlight >}}
 
 Next, we need to create the concrete `Resource` class for the `api.auth_logout` endpoint.
 
 ### `LogoutUser` Resource
 
-Open `/app/api/auth/endpoints.py` and update the import statements to include the `process_logout_request` function we just created:
+Open `/app/api/auth/endpoints.py` and update the import statements to include the `process_logout_request` function we just created (**Line 11** below):
 
-{{< highlight python "linenos=table,linenostart=7,hl_lines=4" >}}from app.api.auth.business import (
+{{< highlight python "linenos=table,hl_lines=11" >}}"""API endpoint definitions for /auth namespace."""
+from http import HTTPStatus
+
+from flask_restplus import Namespace, Resource
+
+from app.api.auth.dto import auth_reqparser, user_model
+from app.api.auth.business import (
     process_registration_request,
     process_login_request,
     get_logged_in_user,
@@ -1162,7 +1179,7 @@ Open `/app/api/auth/endpoints.py` and update the import statements to include th
 
 Next, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=66" >}}@auth_ns.route("/logout", endpoint="auth_logout")
+{{< highlight python "linenos=table,linenostart=65" >}}@auth_ns.route("/logout", endpoint="auth_logout")
 class LogoutUser(Resource):
     """Handles HTTP requests to URL: /auth/logout."""
 
@@ -1182,7 +1199,6 @@ This should all look very familiar, the only difference between the `LogoutUser`
 Finally, we need to create tests for the `api.auth_logout` endpoint. The "happy path" test case shown below simply registers a new user, logs in and then logs out. Create a new file `/test/test_auth_logout.py` and add the content below:
 
 {{< highlight python "linenos=table" >}}"""Unit tests for api.auth_logout API endpoint."""
-import time
 from http import HTTPStatus
 
 from flask import url_for
@@ -1241,16 +1257,16 @@ There are a few things in this test case that we are seeing for the fist time, p
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 46-47: </strong>After retrieving the <code>access_token</code>, we verify that the <code>blacklist</code> is currently empty (i.e., no tokens have been blacklisted at this point).</p>
+        <p><strong>Line 45-46: </strong>After retrieving the <code>access_token</code>, we verify that the <code>blacklist</code> is currently empty (i.e., no tokens have been blacklisted at this point).</p>
       </li>
       <li>
-        <p><strong>Line 48-51: </strong>We submit a request to the <code>api.auth_logout</code> endpoint and verify that the response indicates that the request succeeded.</p>
+        <p><strong>Line 47-50: </strong>We submit a request to the <code>api.auth_logout</code> endpoint and verify that the response indicates that the request succeeded.</p>
       </li>
       <li>
-        <p><strong>Line 52-53: </strong>If the logout request succeeded, the token must have been added to the <code>blacklist</code>. The first way we verify this is by checking that the <code>blacklist</code> now contains one token.</p>
+        <p><strong>Line 51-52: </strong>If the logout request succeeded, the token must have been added to the <code>blacklist</code>. The first way we verify this is by checking that the <code>blacklist</code> now contains one token.</p>
       </li>
       <li>
-        <p><strong>Line 54: </strong>Finally, we verify that the blacklisted token is the same <code>access_token</code> that was submitted with the logout request.</p>
+        <p><strong>Line 53: </strong>Finally, we verify that the blacklisted token is the same <code>access_token</code> that was submitted with the logout request.</p>
       </li>
     </ul>
 </div>
@@ -1259,7 +1275,7 @@ We should definitely ensure that any requests for a protected resource using a b
 
 This is the scenario contained in `test_logout_token_blacklisted`, below. Add the function to `test_auth_logout.py`:
 
-{{< highlight python "linenos=table,linenostart=57" >}}def test_logout_token_blacklisted(client, db):
+{{< highlight python "linenos=table,linenostart=56" >}}def test_logout_token_blacklisted(client, db):
     register_user(client)
     response = login_user(client)
     assert "access_token" in response.json
@@ -1276,10 +1292,10 @@ This is the scenario contained in `test_logout_token_blacklisted`, below. Add th
   <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 58-63: </strong>We begin by performing the same actions as the previous test case, registering a new user, logging in and finally logging out.</p>
+        <p><strong>Line 57-62: </strong>We begin by performing the same actions as the previous test case, registering a new user, logging in and finally logging out.</p>
       </li>
       <li>
-        <p><strong>Line 63-69: </strong>The second time we call <code>POST /api/v1/auth/logout</code> with the same <code>access_token</code>, the status code of the HTTP response is <code>401 HTTPStatus.UNAUTHORIZED</code>. This is the expected behavior since the token has not been tampered with, has not yet expired <span class="emphasis">BUT</span> has been added to the <code>token_blacklist</code>.</p>
+        <p><strong>Line 63-68: </strong>The second time we call <code>POST /api/v1/auth/logout</code> with the same <code>access_token</code>, the status code of the HTTP response is <code>401 HTTPStatus.UNAUTHORIZED</code>. This is the expected behavior since the token has not been tampered with, has not yet expired <span class="emphasis">BUT</span> has been added to the <code>token_blacklist</code>.</p>
       </li>
     </ul>
 </div>
