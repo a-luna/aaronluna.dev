@@ -233,7 +233,7 @@ You might be wondering how is this different than the idea I dismissed, <span cl
 
 Also, help documentation is automatically generated for CLI commands (via click). You can view the documentation for the `add-user` command by running `flask add-user --help`:
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask add-user --help</span>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user --help</span>
 <span class="cmd-results">Usage: flask add-user [OPTIONS] EMAIL
 
   Add a new user to the database with email address = EMAIL.
@@ -245,7 +245,7 @@ Options:
 
 Users can view all Flask CLI commands, including custom commands by running `flask`:
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask</span>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask</span>
 <span class="cmd-results">Usage: flask [OPTIONS] COMMAND [ARGS]...
 
   A general utility script for Flask applications.
