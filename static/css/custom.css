@@ -1255,7 +1255,7 @@ pre.chroma code {
 }
 
 .chroma .hl {
-    background: #393939;
+    background: #323232;
 }
 
 .chroma .hl .lnt {
@@ -1899,6 +1899,14 @@ a.pagination__item:focus {
     color: #86C8F9;
     background: #323232;
     border: 1px solid #86C8F9;
+}
+
+a.pagination__item--prev {
+    margin: 0 3px 0 0;
+}
+
+a.pagination__item--next {
+    margin: 0 0 0 3px;
 }
 
 
