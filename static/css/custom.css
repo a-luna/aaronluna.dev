@@ -1912,7 +1912,7 @@ a.pagination__item--next {
 }
 
 .pagination__item--current {
-    margin: 0 0 0 2px;
+    margin: 0 1px 0 2px;
 }
 
 
