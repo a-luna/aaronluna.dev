@@ -1544,7 +1544,9 @@ abbr[title] {
 }
 
 .menu__item:hover,
-.menu__link:hover {
+.menu__link:hover,
+.menu__item:active,
+.menu__link:active {
     font-weight: 400;
     color: #F2F2F2;
     background-color: #202020;
@@ -1902,11 +1904,15 @@ a.pagination__item:focus {
 }
 
 a.pagination__item--prev {
-    margin: 0 3px 0 0;
+    margin: 0 2px 0 0;
 }
 
 a.pagination__item--next {
-    margin: 0 0 0 3px;
+    margin: 0 0 0 2px;
+}
+
+.pagination__item--current {
+    margin: 0 2px;
 }
 
 
