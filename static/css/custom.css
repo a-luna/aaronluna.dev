@@ -149,7 +149,7 @@ ol li p {
 .content .summary-read-more,
 .content .summary-read-more:hover,
 .content .summary-read-more:focus {
-    color: #86C8F9;
+    color: #6FC1FF;
     font-weight: 500;
 }
 
@@ -249,11 +249,11 @@ ol li p {
 li.tags__item .btn {
     font-size: 1em;
     font-weight: 500;
-    color: #86C8F9;
+    color: #6FC1FF;
     white-space: pre-line;
     background: #323232;
     padding: 9px 15px;
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
     text-transform: uppercase;
 }
 
@@ -262,18 +262,18 @@ li.tags__item .btn:active,
 li.tags__item .btn:active:hover,
 li.tags__item .btn:focus {
     color: #323232;
-    background: #86C8F9;
-    border: 1px solid #86C8F9;
+    background: #6FC1FF;
+    border: 1px solid #6FC1FF;
     text-decoration: none;
 }
 
 .list__footer .btn {
     font-weight: 500;
-    color: #86C8F9;
+    color: #6FC1FF;
     white-space: pre-line;
     background: #323232;
     padding: 6px 10px;
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
     text-transform: uppercase;
 }
 
@@ -282,8 +282,8 @@ li.tags__item .btn:focus {
 .list__footer .btn:active:hover,
 .list__footer .btn:focus {
     color: #323232;
-    background: #86C8F9;
-    border: 1px solid #86C8F9;
+    background: #6FC1FF;
+    border: 1px solid #6FC1FF;
     text-decoration: none;
 }
 
@@ -291,9 +291,9 @@ li.tags__item .btn:focus {
     font-weight: 500;
     color: #323232;
     white-space: pre-line;
-    background: #86C8F9;
+    background: #6FC1FF;
     padding: 5px 8px;
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
 }
 
 .widget .btn:hover,
@@ -301,10 +301,10 @@ li.tags__item .btn:focus {
 .widget .btn:active:hover,
 .widget .btn:focus {
     font-weight: 500;
-    color: #86C8F9;
+    color: #6FC1FF;
     background: #323232;
     padding: 5px 8px;
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
     text-decoration: none;
 }
 
@@ -583,7 +583,7 @@ h4 {
 }
 
 .projects .content h1 {
-    color: #86C8F9;
+    color: #6FC1FF;
     margin: 0.5em 0;
 }
 
@@ -637,7 +637,7 @@ h4 {
 
 a {
     font-weight: 400;
-    color: #86C8F9;
+    color: #6FC1FF;
     text-decoration: none;
 }
 
@@ -646,14 +646,14 @@ a:focus,
 a:active,
 a:active:hover {
     font-weight: 400;
-    color: #86C8F9;
+    color: #6FC1FF;
     text-decoration: underline;
 }
 
 .widget a,
 .widget a:hover {
     font-weight: 400;
-    color: #A9FB68;
+    color: #FFB86C;
 }
 
 .widget a:hover {
@@ -662,13 +662,13 @@ a:active:hover {
 
 .content a {
     font-weight: 400;
-    color: #86C8F9;
+    color: #6FC1FF;
     text-decoration: none;
 }
 
 .content a:hover {
     font-weight: 400;
-    color: #86C8F9;
+    color: #6FC1FF;
     text-decoration: underline;
 }
 
@@ -833,7 +833,7 @@ span.italics.requirements {
 }
 
 .light-blue {
-    color: #86C8F9;
+    color: #6FC1FF;
 }
 
 .bright-white {
@@ -1230,7 +1230,7 @@ pre.chroma code {
 }
 
 .list-of-links {
-    color: #86C8F9;
+    color: #6FC1FF;
 }
 
 .chroma .lntable tr td:first-child pre {
@@ -1403,7 +1403,7 @@ abbr[title] {
 }
 
 .warning {
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
 }
 
 
@@ -1588,7 +1588,7 @@ abbr[title] {
 
 .wrapper #social a {
     font-weight: 400;
-    color: #86C8F9;
+    color: #6FC1FF;
 }
 
 .wrapper #social a:active,
@@ -1653,11 +1653,11 @@ abbr[title] {
 }
 
 .warning a {
-    color: #86C8F9;
+    color: #6FC1FF;
 }
 
 .warning a:hover {
-    color: #86C8F9;
+    color: #6FC1FF;
 }
 
 .tags {
@@ -1667,13 +1667,13 @@ abbr[title] {
 }
 
 .tags__item:hover {
-    background: #86C8F9;
+    background: #6FC1FF;
 }
 
 .icon-tag {
     background: #323232;
-    fill: #86C8F9;
-    border: 1px solid #86C8F9;
+    fill: #6FC1FF;
+    border: 1px solid #6FC1FF;
 }
 
 
@@ -1761,7 +1761,7 @@ abbr[title] {
 }
 
 #widgets .toc {
-    color: #86C8F9;
+    color: #6FC1FF;
     margin: 2em 0 0;
 }
 
@@ -1788,7 +1788,7 @@ abbr[title] {
     font-size: 1.35em;
     font-weight: 400;
     text-transform: none;
-    color: #F2F2F2;
+    color: #C4C4C4;
     border-bottom: 1px solid #19F6D6;
     border-radius: 0;
     background-color: #252525;
@@ -1797,7 +1797,7 @@ abbr[title] {
 }
 
 .tutorial-series-title {
-    border-bottom: 1px solid #86C8F9;
+    border-bottom: 1px solid #6FC1FF;
 }
 
 .tutorial-series-list ul,
@@ -1888,17 +1888,17 @@ span.pagination__item--current:active,
 span.pagination__item--current:active:hover,
 span.pagination__item--current:focus {
     color: #323232;
-    background: #86C8F9;
-    border: 1px solid #86C8F9;
+    background: #6FC1FF;
+    border: 1px solid #6FC1FF;
 }
 
 a.pagination__item:hover,
 a.pagination__item:active,
 a.pagination__item:active:hover,
 a.pagination__item:focus {
-    color: #86C8F9;
+    color: #6FC1FF;
     background: #323232;
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
 }
 
 a.pagination__item--prev {
@@ -2230,13 +2230,13 @@ input[type=email]:hover,
 input[type=tel]:hover,
 input[type=url]:hover,
 textarea:hover {
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
 }
 
 input[type=submit],
 input[type=reset] {
     color: #D8DBD8;
-    background: #86C8F9;
+    background: #6FC1FF;
 }
 
 input[type=submit]:hover,
@@ -2267,9 +2267,9 @@ textarea {
 }
 
 .widget__title {
-    color: #F2F2F2;
+    color: #C4C4C4;
     font-size: 1.45em;
-    border-bottom: 1px solid #A9FB68;
+    border-bottom: 1px solid #FFB86C;
 }
 
 #widgets div#api-tutorial {
@@ -2312,13 +2312,13 @@ textarea {
 
 #categories .widget__title {
     font-size: 1.45em;
-    border-bottom: 1px solid #A9FB68;
+    border-bottom: 1px solid #FFB86C;
 }
 
 #categories a,
 #categories a:hover {
     font-weight: 400;
-    color: #A9FB68;
+    color: #FFB86C;
 }
 
 #api-tutorial a:hover {
@@ -2404,11 +2404,11 @@ svg.widget-social__link-icon.icon-mail {
     font-size: 0.85em;
     color: #7E7F7F;
     background: #323232;
-    border-top: 2px solid #86C8F9;
+    border-top: 2px solid #6FC1FF;
 }
 
 .footer a {
-    color: #86C8F9;
+    color: #6FC1FF;
 }
 
 
@@ -2459,7 +2459,7 @@ div.responsive {
 
 .responsive tbody td {
     color: #D8D8D8;
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
 }
 
 .responsive tfoot {
@@ -2467,7 +2467,7 @@ div.responsive {
 }
 
 .responsive table a {
-    color: #86C8F9;
+    color: #6FC1FF;
     font-weight: 500;
 }
 
@@ -2484,10 +2484,10 @@ div.responsive {
 
 th.column-header,
 .responsive thead tr th {
-    background-color: #86C8F9;
+    background-color: #6FC1FF;
     color: #323232;
     line-height: 0.8;
-    border: 1px solid #86C8F9;
+    border: 1px solid #6FC1FF;
     vertical-align: middle;
     text-align: center;
 }
@@ -2501,7 +2501,7 @@ th.first-column,
 .responsive td.first-column,
 .responsive tbody tr td:first-child,
 .responsive thead tr th:first-child {
-    border-left: 1px solid #86C8F9;
+    border-left: 1px solid #6FC1FF;
     padding: 5px 5px 5px 8px;
     vertical-align: middle;
 }
@@ -2514,14 +2514,14 @@ th.last-column,
 .responsive td.last-column,
 .responsive tbody tr td:last-child,
 .responsive thead tr th:last-child {
-    border-right: 1px solid #86C8F9;
+    border-right: 1px solid #6FC1FF;
     padding: 5px 8px 5px 5px;
     vertical-align: middle;
 }
 
 .responsive td.last-row,
 .responsive tbody tr:last-child td {
-    border-bottom: 1px solid #86C8F9;
+    border-bottom: 1px solid #6FC1FF;
 }
 
 .responsive td.table-footer {
@@ -2616,15 +2616,15 @@ th.last-column,
 }
 
 .table-wrapper .aws-hosting-costs tbody td.first-column {
-    border-left: 1px solid #86C8F9;
+    border-left: 1px solid #6FC1FF;
 }
 
 .table-wrapper .aws-hosting-costs tbody td.last-column {
-    border-right: 1px solid #86C8F9;
+    border-right: 1px solid #6FC1FF;
 }
 
 .table-wrapper .aws-hosting-costs tbody td.last-row {
-    border-bottom: 1px solid #86C8F9;
+    border-bottom: 1px solid #6FC1FF;
 }
 
 .table-wrapper .aws-hosting-costs tbody td.common-config {
@@ -2673,15 +2673,15 @@ table.aws-hosting-costs {
 
 #disqus-button {
     width: 100%;
-    background: #A9FB68;
+    background: #6FC1FF;
     color: #252525;
-    border: 1px solid #A9FB68;
+    border: 1px solid #6FC1FF;
     border-radius: 4px;
     font-size: 1.1em;
     letter-spacing: 1.3px;
     font-weight: 700;
     margin: 1em auto;
-    min-height: 45px;
+    min-height: 35px;
 }
 
 #disqus-button:hover,
@@ -2689,8 +2689,8 @@ table.aws-hosting-costs {
 #disqus-button:active:hover,
 #disqus-button:focus {
     background: #323232;
-    color: #A9FB68;
-    border: 1px solid #A9FB68;
+    color: #6FC1FF;
+    border: 1px solid #6FC1FF;
     font-weight: 700;
 }
 
@@ -2804,7 +2804,7 @@ table.aws-hosting-costs {
         border: none;
     }
     .wrapper {
-        padding: 1.5em 1em 1em;
+        padding: 1em;
     }
     .primary {
         margin: 0;
