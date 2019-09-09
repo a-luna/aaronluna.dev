@@ -107,8 +107,9 @@ ol li p {
 
 #widgets div {
     background-color: #252525;
-    margin: 0;
-    padding: 7px 10px 10px 10px;
+    border-radius: 4px;
+    margin: 0 0 1em;
+    padding: 7px 10px;
 }
 
 #widgets div:last-child {
@@ -2356,14 +2357,14 @@ textarea {
 
 /* Search widget */
 
-div.widget-search {
+#widgets .widget-search {
     background-color: #323232;
-    padding: 3px;
+    padding: 0;
 }
 
 .widget-search__form {
     background-color: #252525;
-    border: 1px solid #A9FB68;
+    border: 1px solid #252525;
     padding: 0;
     border-radius: 4px;
 }
@@ -2376,9 +2377,9 @@ div.widget-search {
 .widget-search .fa {
     font-size: 1.5em;
     font-weight: 100;
-    color: #A9FB68;
+    color: #7F7F7F;
     background-color: #252525;
-    padding: 0 0 0 4px;
+    padding: 0 4px 0 7px;
 }
 
 .widget-search__field {
@@ -2386,7 +2387,7 @@ div.widget-search {
     font-size: 1em;
     color: #D8DBD8;
     background-color: #252525;
-    border-left: 1px solid #A9FB68;
+    border-left: 1px solid #252525;
     border-right: none;
     border-top: none;
     border-bottom: none;
@@ -2866,7 +2867,10 @@ table.aws-hosting-costs {
         margin: 0 auto;
     }
     #widgets div:last-child {
-        margin: 7px auto 0 auto;
+        margin: 0 auto;
+    }
+    #widgets .widget-search {
+        display: none;
     }
     .sidebar {
         padding: 0.5em 0 0;
