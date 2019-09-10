@@ -1791,6 +1791,7 @@ abbr[title] {
     font-weight: 400;
     text-transform: none;
     color: #C4C4C4;
+    line-height: 1.3;
     border-bottom: 1px solid #19F6D6;
     border-radius: 0;
     background-color: #252525;
