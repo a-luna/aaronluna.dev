@@ -317,11 +317,10 @@ li.tags__item .btn:focus {
 }
 
 .main__header h1 {
-    color: #7E7F7F;
+    color: #D8D8D8;
     font-size: 2em;
     font-weight: 400;
     letter-spacing: 1px;
-    text-transform: uppercase;
     margin: 0 0 10px;
 }
 
@@ -369,14 +368,11 @@ li.tags__item .btn:focus {
 
 .tutorial .post__lead,
 .tutorial .post__header_nav {
-    color: #C4C4C4;
-    background-color: #252525;
-    font-size: 1.2em;
-    font-style: normal;
+    color: #6FC1FF;
+    font-size: 1em;
     font-weight: 400;
-    margin: 0 0 20px;
+    margin: 10px 0 20px;
     letter-spacing: 0.3px;
-    padding: 5px 7px;
     border-radius: 4px;
 }
 
@@ -542,7 +538,7 @@ h1.post__title {
 }
 
 .tutorial h1.post__title {
-    margin: 0 0 20px;
+    margin: 0 0 10px;
 }
 
 h3,
@@ -1688,9 +1684,8 @@ abbr[title] {
 }
 
 #api-tutorial ul {
-    list-style: none;
-    margin: 10px 0 0 5px;
-    color: #19F6D6;
+    color: #AE81FF;
+    margin: 10px 0 5px 20px;
 }
 
 #widgets .toc__menu ul,
@@ -1708,9 +1703,9 @@ abbr[title] {
 
 #widgets .toc__menu ul li ul,
 .toc__menu ul li ul {
-    list-style: square;
+    list-style: disc;
     padding: 0;
-    margin: 10px 0 0 20px;
+    margin: 0 0 0 20px;
 }
 
 #widgets .toc__menu ul li,
@@ -1740,7 +1735,7 @@ abbr[title] {
 #widgets .toc__menu ul ul ul,
 .toc__menu ul ul ul {
     font-size: 0.9em;
-    list-style: square;
+    list-style: circle;
     margin: 5px 0 0 15px;
 }
 
@@ -1786,7 +1781,7 @@ abbr[title] {
     font-size: 1.35em;
     font-weight: 400;
     text-transform: none;
-    color: #C4C4C4;
+    color: #E2E2E2;
     line-height: 1.3;
     border-bottom: 1px solid #19F6D6;
     border-radius: 0;
@@ -2079,7 +2074,7 @@ a.post-nav__link:focus {
     border: none;
     font-size: 1em;
     padding: 0;
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
 }
 
 header .post-nav {
@@ -2261,7 +2256,7 @@ textarea {
     display: flex;
     width: 100%;
     flex-flow: column nowrap;
-    margin: 1.5em 0 0;
+    margin: 1.5em 0 2em;
     padding: 0;
 }
 
@@ -2270,7 +2265,7 @@ textarea {
 }
 
 .widget__title {
-    color: #C4C4C4;
+    color: #E2E2E2;
     font-size: 1.45em;
     border-bottom: 1px solid #FFB86C;
     text-transform: none;
@@ -2282,7 +2277,7 @@ textarea {
 
 #api-tutorial .widget__title {
     font-size: 1.3em;
-    border-bottom: 1px solid #19F6D6;
+    border-bottom: 1px solid #AE81FF;
     text-transform: none;
 }
 
@@ -2292,7 +2287,7 @@ textarea {
 
 #api-tutorial a,
 #api-tutorial a:hover {
-    color: #19F6D6;
+    color: #AE81FF;
 }
 
 #api-tutorial a:hover {
@@ -2677,9 +2672,9 @@ table.aws-hosting-costs {
 
 #disqus-button {
     width: 100%;
-    background: #6FC1FF;
+    background: #19F6D6;
     color: #252525;
-    border: 1px solid #6FC1FF;
+    border: 1px solid #19F6D6;
     border-radius: 4px;
     font-size: 1.1em;
     letter-spacing: 1.3px;
@@ -2693,9 +2688,24 @@ table.aws-hosting-costs {
 #disqus-button:active:hover,
 #disqus-button:focus {
     background: #323232;
-    color: #6FC1FF;
-    border: 1px solid #6FC1FF;
+    color: #19F6D6;
+    border: 1px solid #19F6D6;
     font-weight: 700;
+}
+
+.tutorial #disqus-button {
+    background: #19F6D6;
+    color: #252525;
+    border: 1px solid #19F6D6;
+}
+
+.tutorial #disqus-button:hover,
+.tutorial #disqus-button:active,
+.tutorial #disqus-button:active:hover,
+.tutorial #disqus-button:focus {
+    background: #323232;
+    color: #19F6D6;
+    border: 1px solid #19F6D6;
 }
 
 #disqus-comments {

@@ -1,11 +1,9 @@
-{{- $recent := where .Site.RegularPages "Section" "in" (slice "flask_api_tutorial") }} {{- if $recent }}
 <div class="tutorial-series">
     <div class="tutorial-series-list">
         <ul>
-            {{- range sort $recent "Date" "asc" }}
+            {{ range .Site.Taxonomies.series.flask_api_tutorial }}
             <li><a href="{{ .RelPermalink }}">{{ .Params.Lead }}</a></li>
             {{- end }}
         </ul>
     </div>
 </div>
-{{- end }}

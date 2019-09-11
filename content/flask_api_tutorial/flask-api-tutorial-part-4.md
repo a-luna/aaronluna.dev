@@ -1,10 +1,10 @@
 ---
-title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication (Part 4)"
+title: "How To: Create a Flask API with JWT-Based Authentication (Part 4)"
 lead: "Part 4: JWT Authentication, Decorators and Blacklisting Tokens"
-slug: "flask-api-tutorial-part-4"
-date: "2019-08-14"
-series: ["Flask API Tutorial"]
-series_title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication"
+slug: "part-4"
+series: ["flask_api_tutorial"]
+series_weight: 4
+series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 4"
 series_part_lead: "JWT Authentication, Decorators and Blacklisting Tokens"
 categories: ["Flask", "Python"]

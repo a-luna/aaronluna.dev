@@ -1,10 +1,10 @@
 ---
-title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication (Part 2)"
+title: "How To: Create a Flask API with JWT-Based Authentication (Part 2)"
 lead: "Part 2: Database Models, Migrations and JWT Setup"
-slug: "flask-api-tutorial-part-2"
-date: "2019-08-12"
-series: ["Flask API Tutorial"]
-series_title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication"
+slug: "part-2"
+series: ["flask_api_tutorial"]
+series_weight: 2
+series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 2"
 series_part_lead: "Database Models, Migrations and JWT Setup"
 categories: ["Flask", "Python"]

@@ -4,7 +4,7 @@ title = "Aaron Luna"
 languageCode = "en-us"
 paginate = "3" # Number of posts per page
 #theme = "mainroad"
-#disqusShortname = "alunablog" # Enable comments by entering your Disqus shortname
+disqusShortname = "alunablog" # Enable comments by entering your Disqus shortname
 #googleAnalytics = "UA-111693264-1" # Enable Google Analytics by entering your tracking id
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
@@ -14,7 +14,7 @@ pygmentsUseClasses = true
 [permalinks]
   post = "/blog/:slug/"
   project = "/project/:slug/"
-  flask_api_tutorial = "/series/:slug/"
+  flask_api_tutorial = "/series/flask_api_tutorial/:slug/"
 
 [Author]
   name = "Aaron Luna"
@@ -47,7 +47,7 @@ pygmentsUseClasses = true
   [[menu.main]]
     identifier = "flask-api-tutorial"
     name = "Flask API Tutorial"
-    url = "/series/flask-api-tutorial-overview/"
+    url = "/series/flask_api_tutorial/overview/"
     weight = 2
   [[menu.main]]
     identifier = "about-me"
@@ -113,4 +113,3 @@ pygmentsUseClasses = true
   categories_title = "Categories"
   tags_title = "Tags"
   projects_title = "My Projects"
-  api_tutorial_title = "Flask API Tutorial"
