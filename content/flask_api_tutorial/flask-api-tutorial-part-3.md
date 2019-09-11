@@ -4,6 +4,7 @@ lead: "Part 3: API Configuration and User Registration"
 slug: "flask-api-tutorial-part-3"
 date: "2019-08-13"
 series: ["Flask API Tutorial"]
+series_title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication"
 series_part: "Part 3"
 series_part_lead: "API Configuration and User Registration"
 categories: ["Flask", "Python"]

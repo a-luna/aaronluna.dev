@@ -4,6 +4,7 @@ lead: "Part 5: Widget API"
 slug: "flask-api-tutorial-part-5"
 date: "2019-08-15"
 series: ["Flask API Tutorial"]
+series_title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication"
 series_part: "Part 5"
 series_part_lead: "Widget API"
 categories: ["Flask", "Python"]
@@ -88,8 +89,8 @@ The only features of this resource that I am willing to state are 100% bona fide
 
 <ul>
   <li>The naming convention of the resource and associated endpoints.</li>
-  <li>The combination of resource endpoints and the HTTP methods supported by each endpoint that allows clients to perform CRUD operations.</li>
-  <li>Use of pagination and navigational links in response JSON (HATEOAS).</li>
+  <li>The HTTP methods supported by each endpoint that enables clients to perform CRUD operations.</li>
+  <li>Through the use of pagination and navigational links included in JSON sent by the server, clients can interact with the API purely through hypertext (i.e., clients <span class="emphasis">NEVER</span> need to manually construct URLs to interact with the API).</li>
 </ul>
 
 The resource we will create is a collection of **widgets**. I decided to model something generic rather than the cliche "to-do list" project that you encounter in every introductory programming tutorial. I feel safe assuming that you aren't reading this because you have a burning desire to create the next, great API-driven  to-do list.
@@ -98,7 +99,7 @@ The `Widget` model will contain custom validators for parsing request data and c
 
 ## `widget_ns` Endpoints
 
-The proper way to name resources is one of the (many) hotly debated topics regarding RESTful web services. I recommend taking the time to read the two articles below to understand the current, accepted best practices:
+The proper way to name resources is one of the (many) hotly debated topics regarding RESTful web services. I recommend taking the time to read the articles below to understand the current, accepted best practices:
 
 <ul class="list-of-links">
     <li>
@@ -107,9 +108,14 @@ The proper way to name resources is one of the (many) hotly debated topics regar
     <li>
         <a href="https://www.thoughtworks.com/insights/blog/rest-api-design-resource-modeling" target="_blank">REST API Design - Resource Modeling (ThoughtWorks)</a>
     </li>
+    <li>
+        <a href="https://phauer.com/2015/restful-api-design-best-practices" target="_blank">RESTful API Design. Best Practices in a Nutshell (Philipp Hauer's Blog)</a>
+    </li>
 </ul>
 
-<a href="https://phauer.com/2015/restful-api-design-best-practices/#use-consistently-plural-nouns" target="_blank">The accepted best practice for resource naming</a> is to use plural nouns when constructing a URI for a resource. <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-two-urls-per-resource" target="_blank">The best practice for URI design</a> is to create two endpoints &mdash; one for operations that apply to the entire collection and one for operations that apply only to a single resource. Following these guidelines, the endpoints for the `Widget` resource will be `/api/v1/widgets` and <code>/api/v1/widgets/&lt;name&gt;</code>.
+<a href="https://phauer.com/2015/restful-api-design-best-practices/#use-consistently-plural-nouns" target="_blank">The accepted best practice for naming resources</a> is to use plural nouns when constructing a URI for a resource. <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-two-urls-per-resource" target="_blank">Another widely accepted standard</a> is to create two endpoints (i.e., URIs) per resource &mdash; one for operations that apply to the entire collection (e.g., <code>/api/v1/widgets</code>) and one for operations that apply only to a single resource (e.g., <code>/api/v1/widgets/&lt;name&gt;</code>).
+
+
 
 These endpoints allow the client to perform CRUD operations on the resource (<strong>C</strong>reate, <strong>R</strong>etrieve, <strong>U</strong>pdate, <strong>D</strong>elete) by defining the set of HTTP methods that each endpoint supports. The full set of HTTP methods that we will implement in the `widget_ns` namespace are explained in the table below:
 
@@ -183,9 +189,17 @@ Currently, the `api/v1/auth/register` endpoint can only create regular (non-admi
 
 There are a few different methods we could use to create admin users. Using the `flask shell` command, we can execute arbitrary statements to create admin users. Or, we could create a function and store it in a file in our project, then run the function through the command-line. However, both of these methods are cumbersome and would require documentation if anyone else needed to create an admin user.
 
-My preferred solution is to expose a command in the Flask CLI that can create both regular and admin users. To do so, open `run.py` in the project root folder. First, add the import statement below:
+My preferred solution is to expose a command in the Flask CLI that can create both regular and admin users. To do so, open `run.py` in the project root folder. First, update the import statements to include `click` (**Line 4** below):
 
-{{< highlight python "linenos=table,linenostart=4" >}}import click{{< /highlight >}}
+{{< highlight python "linenos=table,hl_lines=4" >}}"""Flask CLI/Application entry point."""
+import os
+
+import click
+
+from app import create_app, db
+from app.models.token_blacklist import BlacklistedToken
+from app.models.user import User
+from app.models.widget import Widget{{< /highlight >}}
 
 Then, add the content below and save the file:
 
@@ -300,7 +314,7 @@ Repeat for confirmation:
   </li>
 </ul>
 
-As you can see, after running the command, the user is immediately prompted for a password and to confirm the password. Before proceeding, please create an admin user with the `flask add-user` command since creating, modifying and deleting widgets cannot be performed otherwise.
+As you can see, after running the command, the user is immediately prompted to create a password and to confirm the password for the new user. Before proceeding, please create an admin user with the `flask add-user` command since creating, modifying and deleting widgets cannot be performed otherwise.
 
 ## Pagination
 
@@ -370,22 +384,23 @@ Query string parameters can be parsed from request data with `RequestParser` arg
   </div>
 </div>
 
-## `datetime_util` Module
-
-{{< highlight python >}}{{< /highlight >}}
-
 ## `Widget` DB Model
 
 Create a new file `widget.py` in `/app/models` and add the content below:
 
 {{< highlight python "linenos=table" >}}"""Class definition for Widget model."""
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from flask import url_for
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import db
-from app.util.datetime_util import get_date_now_utc
+from app.util.datetime_util import (
+    format_timedelta_digits,
+    get_local_utcoffset,
+    localized_dt_string,
+    make_tzaware,
+)
 
 
 class Widget(db.Model):
@@ -396,8 +411,8 @@ class Widget(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     info_url = db.Column(db.String(255), unique=False)
-    date_created = db.Column(db.DateTime, default=get_date_now_utc)
-    deadline = db.Column(db.DateTime, default=lambda: datetime.min.replace(tzinfo=timezone.utc))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    deadline = db.Column(db.DateTime)
 
     owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
     owner = db.relationship("User", backref=db.backref("widgets"))
@@ -406,8 +421,27 @@ class Widget(db.Model):
         return f"<Widget name={self.name}, info_url={self.info_url}>"
 
     @hybrid_property
-    def days_remaining(self):
-        return (self.deadline.replace(tzinfo=timezone.utc) - get_date_now_utc()).days
+    def created_at_str(self):
+        created_at_utc = make_tzaware(self.created_at, use_tz=timezone.utc, localize=False)
+        return localized_dt_string(created_at_utc, use_tz=get_local_utcoffset())
+
+    @hybrid_property
+    def deadline_str(self):
+        deadline_utc = make_tzaware(self.deadline, use_tz=timezone.utc, localize=False)
+        return localized_dt_string(deadline_utc, use_tz=get_local_utcoffset())
+
+    @hybrid_property
+    def deadline_passed(self):
+        return datetime.now(timezone.utc) > self.deadline.replace(tzinfo=timezone.utc)
+
+    @hybrid_property
+    def time_remaining(self):
+        time_remaining = self.deadline.replace(tzinfo=timezone.utc) - datetime.now(timezone.utc)
+        return timedelta(0) if self.deadline_passed else time_remaining
+
+    @hybrid_property
+    def time_remaining_str(self):
+        return format_timedelta_digits(self.time_remaining)
 
     @hybrid_property
     def uri(self):
@@ -415,8 +449,7 @@ class Widget(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
-        return cls.query.filter_by(name=name).first()
-{{< /highlight >}}
+        return cls.query.filter_by(name=name).first(){{< /highlight >}}
 
 Most of the interesting things about the `Widget` model were previously discussed when introducing other classes, but there are a couple new things worth calling out:
 

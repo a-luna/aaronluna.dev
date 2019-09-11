@@ -4,6 +4,7 @@ lead: "Part 2: Database Models, Migrations and JWT Setup"
 slug: "flask-api-tutorial-part-2"
 date: "2019-08-12"
 series: ["Flask API Tutorial"]
+series_title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication"
 series_part: "Part 2"
 series_part_lead: "Database Models, Migrations and JWT Setup"
 categories: ["Flask", "Python"]

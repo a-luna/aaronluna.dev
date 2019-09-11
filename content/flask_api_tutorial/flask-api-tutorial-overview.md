@@ -4,6 +4,7 @@ lead: "Project Overview"
 slug: "flask-api-tutorial-overview"
 date: "2019-08-10"
 series: ["Flask API Tutorial"]
+series_title: "The Complete Guide to Creating a Flask API with JWT-Based Authentication"
 series_part: "Overview"
 series_part_lead: "Project Overview"
 categories: ["Flask", "Python"]

@@ -1681,10 +1681,6 @@ abbr[title] {
 
 /* Table of Contents */
 
-#toc-header {
-    display: none;
-}
-
 #widgets .toc__menu,
 #widgets .toc__menu nav,
 .toc__menu nav {
@@ -2860,9 +2856,6 @@ table.aws-hosting-costs {
     .post-nav__chevron {
         font-weight: 500;
     }
-    .tutorial #widgets {
-        display: none;
-    }
     .wrapper #social {
         display: block;
         background-color: #323232;
@@ -2871,6 +2864,9 @@ table.aws-hosting-costs {
     }
     .wrapper #social ul {
         margin: 0 auto;
+    }
+    #widgets {
+        margin: 1em 0 0;
     }
     #widgets div:last-child {
         margin: 0 auto;
