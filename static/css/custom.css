@@ -524,13 +524,14 @@ h4,
 h5,
 h6 {
     font-weight: 500;
-    margin: 2em 0 1em;
+    margin: 1em 0;
 }
 
 .content h2 {
     font-size: 1.35em;
 }
 
+h1,
 h1.post__title {
     font-size: 1.5em;
     color: #E2E2E2;
@@ -1399,7 +1400,31 @@ abbr[title] {
 }
 
 .warning {
-    border: 1px solid #6FC1FF;
+    color: #F92672;
+    border: none;
+    background-color: #252525;
+}
+
+.warning__code {
+    font-size: 6em;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 5px;
+    margin: 0 0 10px;
+}
+
+.warning__headline {
+    color: #F92672;
+    font-size: 2em;
+    font-weight: 700;
+    margin: 10px 0 1em;
+    text-transform: uppercase;
+}
+
+.warning__text {
+    font-size: 1.3em;
+    color: #D8D8D8;
+    margin: 0;
 }
 
 
