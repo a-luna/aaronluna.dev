@@ -3,14 +3,7 @@
     <article class="post">
         <header class="post__header">
             <h1 class="post__title">{{ .Params.series_title }}</h1>
-            {{ if .Param "toc" }} {{ partial "post_nav_part_num.html" . }}
-            <div id="toc-header" class="post__toc toc">
-                <div class="toc__title">{{ .Params.lead }}</div>
-                <div class="toc__menu">
-                    {{ .TableOfContents }}
-                </div>
-            </div>
-            {{ end }}
+            {{ partial "api_tutorial_accordian.html" . }}
         </header>
         {{- if .Params.thumbnail }}
         <figure class="post__thumbnail">

@@ -1,10 +1,10 @@
 ---
-title: "How To: Create a Flask API with JWT-Based Authentication (Overview)"
+title: "Create a Flask API with JWT-Based Authentication (Overview)"
 lead: "Project Overview"
 slug: "overview"
 series: ["flask_api_tutorial"]
 series_weight: 0
-series_title: "How To: Create a Flask API with JWT-Based Authentication"
+series_title: "Create a Flask API with JWT-Based Authentication"
 series_part: "Overview"
 series_part_lead: "Project Overview"
 categories: ["Flask", "Python"]
@@ -13,7 +13,7 @@ summary: "This tutorial series provides step-by-step instructions and in-depth e
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
-  title: "How To: Create a Flask API with JWT-Based Authentication"
+  title: "Create a Flask API with JWT-Based Authentication"
   description: "Step-by-step instructions and in-depth explanations to guide you through the process of creating a robust, production-quality REST API using Flask, Flask-RESTlus, pyjwt, SQLAlchemy and more."
   image: "http://localhost:1313/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg"
 ---

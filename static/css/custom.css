@@ -2749,6 +2749,65 @@ table.aws-hosting-costs {
     overflow-y: auto;
 }
 
+
+/* Accordian */
+
+.accordian section,
+.accordian .pointer,
+.accordian h2,
+.accordian i,
+.accordian p {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.accordian {
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.accordian h2 {
+    line-height: 1.3;
+    font-size: 1.3em;
+    background-color: #252525;
+    margin: auto 0;
+    padding: 5px 10px;
+}
+
+.accordian h2 a {
+    color: #AE81FF;
+}
+
+.accordian section {
+    overflow: hidden;
+    border: none;
+}
+
+.accordian section.ac_hidden {
+    height: 35px;
+}
+
+.accordian .pointer {
+    color: #AE81FF;
+    padding: 0;
+    margin: auto 10px auto 0;
+}
+
+.accordian section:not(.ac_hidden) h2 {
+    background-color: #252525;
+}
+
+.accordian section:not(.ac_hidden) .pointer {
+    display: block;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    padding: 0;
+}
+
 @media screen and (min-width: 767px) {
     .menu__item {
         border-left: none;

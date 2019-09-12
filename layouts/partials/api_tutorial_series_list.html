@@ -1,9 +1,0 @@
-<div class="tutorial-series">
-    <div class="tutorial-series-list">
-        <ul>
-            {{ range .Site.Taxonomies.series.flask_api_tutorial }}
-            <li><a href="{{ .RelPermalink }}">{{ .Params.Lead }}</a></li>
-            {{- end }}
-        </ul>
-    </div>
-</div>

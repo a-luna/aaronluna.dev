@@ -1,0 +1,23 @@
+{{ if .Param "toc" }} {{ partial "post_nav_part_num.html" . }} {{ end }}
+<div class="accordian">
+    <section id="item1" class="accordian-item ac_hidden">
+        <h2 class="accordian-button"><i class="fa fa-lg fa-fw fa-chevron-right pointer"></i><a href="#">Tutorial Sections</a></h2>
+        <div id="api-tutorial" class="widget-api-tutorial widget">
+            <div class="widget__content">
+                <ul>
+                    {{ range .Site.Taxonomies.series.flask_api_tutorial }}
+                    <li><a href="{{ .RelPermalink }}">{{ .Params.Lead }}</a></li>
+                    {{- end }}
+                </ul>
+            </div>
+        </div>
+    </section>
+    {{ if .Param "toc" }}
+    <section id="item2" class="accordian-item ac_hidden">
+        <h2 class="accordian-button"><i class="fa fa-lg fa-fw fa-chevron-right pointer"></i><a href="#">Table of Contents</a></h2>
+        <div id="toc-header" class="post__toc toc">
+            <div class="toc__menu">{{ .TableOfContents }}</div>
+        </div>
+    </section>
+    {{ end }}
+</div>
