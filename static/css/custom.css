@@ -1229,9 +1229,13 @@ li code {
     color: #A9FB68;
 }
 
-li.alert code,
+li.alert code {
+    color: #D8D8D8;
+}
+
 .toc code {
     color: #D8D8D8;
+    background-color: #323232;
 }
 
 pre.chroma {
@@ -2791,7 +2795,7 @@ table.aws-hosting-costs {
     line-height: 1.3;
     font-size: 1.2em;
     margin: auto 0;
-    padding: 5px;
+    padding: 7px 5px;
 }
 
 .accordian h2 a {
@@ -2802,7 +2806,6 @@ table.aws-hosting-costs {
 .accordian section {
     background-color: #323232;
     overflow: hidden;
-    border: none;
 }
 
 .accordian section:first-child {
@@ -2816,7 +2819,7 @@ table.aws-hosting-costs {
 }
 
 .accordian section.ac_hidden {
-    height: 30px;
+    height: 34px;
 }
 
 .accordian .pointer {
