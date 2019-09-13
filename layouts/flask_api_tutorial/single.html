@@ -2,7 +2,8 @@
 <main class="main tutorial" role="main">
     <article class="post">
         <header class="post__header">
-            <h1 class="post__title">{{ .Params.series_title }}</h1>
+            <div class="article-badges"><span class="new-badge badge">New</span><span class="tutorial-series-badge badge">Tutorial Series</span></div>
+            <h1 class="post__title">{{ .Params.title }}</h1>
             {{ partial "api_tutorial_accordian.html" . }}
         </header>
         {{- if .Params.thumbnail }}
@@ -15,4 +16,4 @@
         </div>
     </article>
 </main>
-{{ partial "comments.html" . }}{{ partial "post_nav_lead.html" . }} {{ partial "social.html" . }} {{ end }}
+{{ partial "post_nav_lead.html" . }} {{ partial "comments.html" . }} {{ partial "social.html" . }} {{ end }}

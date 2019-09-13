@@ -45,21 +45,18 @@
                 </div>
                 {{ end }} {{ end }}
             </div>
-            {{ partial "sidebar_tutorial.html" . }}
+            {{ partial "sidebar.html" . }}
         </div>
         {{ partial "footer" . }}
     </div>
     <script async defer src="{{ "js/menu.js" | relURL }}"></script>
     <script async defer src="{{ "js/toggleActiveUrl.js" | relURL }}"></script>
     <script>
-      function toggleAccordionItem(e) {
-        const accordianItems = document.querySelectorAll('.accordian-item');
-        accordianItems.forEach(ac_item => ac_item.classList.add("ac_hidden"));
-        this.parentElement.classList.toggle("ac_hidden", false);
-        e.preventDefault();
-      };
-        const accordionButtons = document.querySelectorAll('.accordian-button');
-        accordionButtons.forEach(ac_button => ac_button.addEventListener('click', toggleAccordionItem));
+        document.querySelectorAll('.accordian-button').forEach(
+          ac_button => ac_button.addEventListener('click', function(e) {
+              this.parentElement.classList.toggle("ac_hidden");
+            })
+        );
     </script>
 </body>
 </html>
