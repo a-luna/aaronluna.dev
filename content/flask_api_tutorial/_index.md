@@ -1,5 +1,5 @@
 ---
 title: "Tutorial Series"
-lead: "Create a Flask API with JWT-Based Authentication"
+lead: "How To: Create a Flask API with JWT-Based Authentication"
 sidebar: false
 ---

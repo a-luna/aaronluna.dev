@@ -367,12 +367,12 @@ li.tags__item .btn:focus {
     margin: 0 0 1em 0;
 }
 
-.tutorial .post__lead,
-.tutorial .post__header_nav {
-    color: #6FC1FF;
-    font-size: 1em;
-    font-weight: 400;
-    margin: 10px 0 20px;
+.tutorial .post__lead {
+    color: #AE81FF;
+    font-size: 1.2em;
+    font-weight: 700;
+    font-style: normal;
+    margin: 0 0 10px;
     letter-spacing: 0.3px;
     border-radius: 4px;
 }
@@ -540,7 +540,7 @@ h1.post__title {
 }
 
 .tutorial h1.post__title {
-    margin: 0 0 20px;
+    margin: 0 0 10px;
 }
 
 .article-badges {
@@ -2159,12 +2159,12 @@ header .post-nav {
 }
 
 #header-nav .post-nav-flex-item-prev {
-    padding: 5px 0 5px 5px;
+    padding: 0;
     margin: 0;
 }
 
 #header-nav .post-nav-flex-item-next {
-    padding: 5px 5px 5px 0;
+    padding: 0;
     margin: 0;
 }
 
@@ -2185,7 +2185,6 @@ header .post-nav {
     border-radius: 4px;
     color: #19F6D6;
     text-decoration: none;
-    min-width: 105px;
 }
 
 #header-nav .post-nav__chevron:hover,
@@ -2196,18 +2195,19 @@ header .post-nav {
 }
 
 #header-nav .chevron-prev {
-    margin: auto 5px auto 0;
+    margin: auto 0;
 }
 
 #header-nav .chevron-next {
-    margin: auto 0 auto 5px;
+    margin: auto 0;
 }
 
 #header-nav .post-nav__post-title {
     font-size: 1.2em;
     font-weight: 400;
-    line-height: 1.1;
-    padding: 4px 0;
+    line-height: 1.2;
+    padding: 0;
+    margin: 0 3px;
 }
 
 #header-nav .post-nav__post-title:hover,
@@ -2242,13 +2242,11 @@ header a.post-nav__link:focus {
 .post-nav__item--prev {
     text-align: left;
     justify-content: flex-start;
-    margin: 0 5px 0 0;
 }
 
 .post-nav__item--next {
     text-align: right;
     justify-content: flex-end;
-    margin: 0 0 0 5px;
 }
 
 .post-nav__post-title {
@@ -3085,11 +3083,6 @@ table.aws-hosting-costs {
 }
 
 @media screen and (max-width: 500px) {
-    #header-nav .post-nav-flex-item-prev,
-    #header-nav .post-nav-flex-item-next {
-        flex: 0 0 100px;
-        padding: 3px 3px 3px 0;
-    }
     .post-nav-flex-item-prev,
     .post-nav-flex-item-next {
         flex: 1 0 100%;
@@ -3101,5 +3094,3 @@ table.aws-hosting-costs {
         margin: 5px 0 0;
     }
 }
-
-;

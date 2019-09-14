@@ -1,10 +1,10 @@
 ---
-title: "Create a Flask API with JWT-Based Authentication (Part 3)"
+title: "How To: Create a Flask API with JWT-Based Authentication (Part 3)"
 lead: "Part 3: API Configuration and User Registration"
 slug: "part-3"
 series: ["flask_api_tutorial"]
 series_weight: 3
-series_title: "Create a Flask API with JWT-Based Authentication"
+series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 3"
 series_part_lead: "API Configuration and User Registration"
 categories: ["Flask", "Python"]
