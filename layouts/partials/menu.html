@@ -9,7 +9,7 @@
     <ul class="menu__list">
         {{- $currentNode := . }} {{- range sort .Site.Menus.main }} {{- if .Name }}
         <a class="menu__link" href="{{ .URL }}">
-            <li class="menu__item{{ if or ($currentNode.IsMenuCurrent " main " .) ($currentNode.HasMenuCurrent "main " .) }} menu__item--active{{ end }}">
+            <li class="menu__item{{ if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .) }} menu__item--active{{ end }}">
                 {{ .Name }}
             </li>
         </a>
