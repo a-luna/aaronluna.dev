@@ -1,8 +1,8 @@
 (function() {
     const blog_search = 'blog';
     const blog_url_1 = '/blog/';
-    const tutorial_search = 'flask-api-tutorial';
-    const tutorial_url_1 = '/series/flask-api-tutorial';
+    const tutorial_search = 'flask_api_tutorial';
+    const tutorial_url_1 = '/series/flask_api_tutorial';
     const about_url_1 = '/about/';
     const about_url_2 = '/about/index.html';
 
