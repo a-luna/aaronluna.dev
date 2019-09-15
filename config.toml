@@ -1,6 +1,6 @@
 baseurl = "https://aaronlunadev.netlify.com/"
 #baseurl = "https://aaronluna.dev/"
-title = "Aaron Luna"
+title = "aaronluna.dev"
 languageCode = "en-us"
 paginate = "3" # Number of posts per page
 #theme = "mainroad"
@@ -40,20 +40,31 @@ pygmentsUseClasses = true
 
 [menu]
   [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
     identifier = "post"
     name = "Blog"
     url = "/blog/"
-    weight = 1
-  [[menu.main]]
-    identifier = "flask-api-tutorial"
-    name = "Flask API Tutorial"
-    url = "/series/flask_api_tutorial/overview/"
     weight = 2
+  [[menu.main]]
+    identifier = "tutorials"
+    name = "Tutorials"
+    url = "/series/"
+    weight = 3
   [[menu.main]]
     identifier = "about-me"
     name = "About Me"
     url = "/about/"
-    weight = 3
+    weight = 4
+
+  [[menu.tutorials]]
+    identifier = "flask-api-tutorial"
+    name = "How To: Create a Flask API with JWT-Based Authentication"
+    url = "/series/flask_api_tutorial/"
+    weight = 0
 
 # For social icons, the "name" field should match the name of the icon to be used
 # The list of available icons can be found at http://fontawesome.io/icons/
@@ -113,3 +124,4 @@ pygmentsUseClasses = true
   categories_title = "Categories"
   tags_title = "Tags"
   projects_title = "My Projects"
+  tutorials_title = "Tutorials"

@@ -576,7 +576,7 @@ h1.post__title {
 }
 
 .new-badge {
-    color: #A9FB68;
+    color: #FFC107;
 }
 
 h3,
@@ -1740,6 +1740,12 @@ abbr[title] {
     border: 1px solid #6FC1FF;
 }
 
+.list__header,
+.post__header,
+.main__header {
+    background-color: #323232;
+}
+
 
 /* Table of Contents */
 
@@ -2370,6 +2376,10 @@ textarea {
     border-bottom: 1px solid #A9FB68;
 }
 
+#api-tutorial .widget__title {
+    border-bottom: 1px solid #19F6D6;
+}
+
 #projects a,
 #projects a:hover {
     font-weight: 400;
@@ -2425,37 +2435,41 @@ textarea {
 
 /* Search widget */
 
-#widgets .widget-search {
-    background-color: #323232;
+#search-site,
+#search-field {
+    background-color: #202020;
+    border: none;
     padding: 0;
 }
 
 .widget-search__form {
-    background-color: #252525;
-    border: 1px solid #252525;
+    background-color: #202020;
+    border: 1px solid #202020;
     padding: 0;
     border-radius: 4px;
 }
 
-.widget-search {
+#widgets .widget-search {
+    background-color: #202020;
     text-align: left;
     margin: 0 0 1em;
+    padding: 7px 10px 7px 0;
 }
 
 .widget-search .fa {
     font-size: 1.5em;
     font-weight: 100;
     color: #7F7F7F;
-    background-color: #252525;
-    padding: 0 4px 0 7px;
+    background-color: #202020;
+    padding: 0 10px;
 }
 
 .widget-search__field {
     display: inline-block;
     font-size: 1em;
     color: #D8DBD8;
-    background-color: #252525;
-    border-left: 1px solid #252525;
+    background-color: #202020;
+    border-left: 1px solid #202020;
     border-right: none;
     border-top: none;
     border-bottom: none;
@@ -2839,9 +2853,101 @@ table.aws-hosting-costs {
     transform: rotate(90deg);
 }
 
+
+/* New Menu */
+
+header,
+#menu {
+    color: #D8D8D8;
+    background-color: #202020;
+}
+
+.menu-bar {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+.site-name {
+    margin: auto 0;
+}
+
+#menu a {
+    color: #B3B3B3;
+    text-decoration: none;
+}
+
+#menu a:hover,
+#menu a:focus,
+#menu a:active,
+#menu a:active:hover {
+    color: #F2F2F2;
+    text-decoration: none;
+}
+
+#menu a.active,
+#menu a.active:hover,
+#menu a.active:focus,
+#menu a.active:active,
+#menu a.active:active:hover {
+    color: #F2F2F2;
+    border-bottom: 1px solid #F2F2F2;
+}
+
+.site-social,
+.site-menu {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: auto 0;
+}
+
+.site-social ul,
+.site-menu ul {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.site-social ul li,
+.site-menu ul li {
+    float: left;
+    white-space: nowrap;
+}
+
+.site-social a,
+.site-menu a {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 0 8px;
+    text-decoration: none;
+}
+
 @media screen and (min-width: 767px) {
-    .menu__item {
-        border-left: none;
+    #menu {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+    }
+    .site-name {
+        flex-grow: 0;
+    }
+    .site-social {
+        flex-grow: 0;
+    }
+    .site-search {
+        display: none;
+    }
+    .site-menu {
+        align-self: flex-start;
+        flex-grow: 1;
+    }
+    .site-menu ul {
+        justify-content: flex-end;
     }
 }
 
@@ -2855,82 +2961,56 @@ table.aws-hosting-costs {
         margin: 0 0 2em 0;
         padding: 2em 0 0 0;
     }
-    #top-bar {
-        display: block;
-    }
-    #menu-bar {
+    #menu {
         display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: center;
-        color: #B3B3B3;
-        background-color: #202020;
-        text-transform: none;
+        flex-flow: column nowrap;
     }
-    .logo,
-    .logo__tagline,
-    #social {
+    .menu-bar,
+    .site-menu {
+        flex: 1 0 100%;
+    }
+    .menu-bar {
+        min-height: 35px;
+        padding: 0 1em;
+    }
+    .site-name-link,
+    .site-search {
+        font-size: 1.2em;
+        margin: auto 0;
+    }
+    #menu .site-search {
+        text-align: left;
+    }
+    #menu .site-search fa {
+        font-size: 1.5em;
+        color: #A9FB68;
+        padding: 0 4px 0 7px;
+    }
+    #menu .search-submit-btn {
         display: none;
     }
-    .menu {
-        margin: 0;
-        padding: 0 15px;
+    #menu .search-form {
+        display: block;
         background-color: #202020;
+        padding: 0;
+        margin: 0 auto;
     }
-    .site-name {
-        color: #BFBFBF;
-        text-align: left;
-        font-size: 1.6em;
-        font-weight: 400;
-        letter-spacing: 1.4px;
-        line-height: 1;
-        margin: 14px 0;
+    #social,
+    .site-social {
+        display: none;
     }
-    .site-name-link {
-        color: #B3B3B3;
-        text-decoration: none;
+    .site-menu ul {
+        justify-content: space-between;
+        padding: 0.25em 1em 0 1em;
     }
-    .site-name-link:hover,
-    .site-name-link:active,
-    .site-name-link:active:hover,
-    .site-name-link:focus {
-        color: #F2F2F2;
-        text-decoration: none;
+    .site-menu a {
+        padding: 3px 7px;
     }
-    .menu__btn--active .site-name {
-        color: #D8D8D8;
+    .site-menu a:first-child {
+        padding: 3px 7px 3px 0;
     }
-    .menu__btn {
-        width: auto;
-    }
-    .js .menu__list {
-        font-size: 1.15em;
-    }
-    .menu__item:first-child,
-    .menu__link {
-        font-size: 1.025em;
-        font-weight: 400;
-        background-color: #202020;
-        border: none;
-        color: #B3B3B3;
-        text-align: right;
-        padding: 13px 15px;
-    }
-    .menu__item:hover,
-    .menu__link:hover {
-        background-color: #202020;
-        color: #F2F2F2;
-    }
-    .menu__list a.active {
-        color: #F2F2F2;
-    }
-    .menu__item--active .menu__link {
-        background-color: #202020;
-        color: #F2F2F2;
-    }
-    .active .menu__item {
-        color: #F2F2F2;
-        border: none;
+    .site-menu a:last-child {
+        padding: 3px 0 3px 7px;
     }
     .wrapper {
         padding: 1em;

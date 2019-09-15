@@ -10,6 +10,7 @@ series_part_lead: "Test Coverage, Code Quality, Logging and More"
 categories: ["Flask", "Python"]
 toc: true
 summary: ""
+test_this: "What a great section this part of the tutorial was. Just magnificent."
 twitter:
   card: "summary"
   creator: "@aaronlunadev"

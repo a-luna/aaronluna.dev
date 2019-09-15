@@ -1,21 +1,31 @@
 {{- if .Site.Menus.main }}
-<nav class="menu">
-    <div id="menu-bar">
+<div id="menu">
+    <div class="menu-bar">
         <a class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
             <div class="site-name">{{ .Site.Title }}</div>
         </a>
-        <div class="menu__btn menu__btn-title" aria-haspopup="true" aria-expanded="false" tabindex="0"><i class="fa fa-bars"></i></div>
+        {{ partial "social.html" . }}
+        <div class="site-search">
+            <form class="search-form" role="search" method="get" action="https://google.com/search">
+                <label for="search-field">
+                    <input id="search-field" name="search-field" class="search-field" type="search" placeholder="search" value="" aria-label="search">
+                </label>
+                <i class="fa fa-lg fa-fw fa-search"></i>
+                <input class="search-submit-btn" type="submit" value="Search">
+                <input type="hidden" name="sitesearch" value="{{ .Site.BaseURL }}" />
+            </form>
+        </div>
     </div>
-    <ul class="menu__list">
-        {{- $currentNode := . }} {{- range sort .Site.Menus.main }} {{- if .Name }}
-        <a class="menu__link" href="{{ .URL }}">
-            <li class="menu__item{{ if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .) }} menu__item--active{{ end }}">
-                {{ .Name }}
-            </li>
-        </a>
-        {{- end }} {{- end }}
-    </ul>
-</nav>
+    <nav class="site-menu">
+        <ul>
+            {{- $currentNode := . }} {{- range sort .Site.Menus.main }} {{- if .Name }}
+            <a href="{{ .URL }}" class="site-menu-link">
+                <li>{{ .Name }}</li>
+            </a>
+            {{- end }} {{- end }}
+        </ul>
+    </nav>
+</div>
 {{ else -}}
 <div class="divider"></div>
 {{- end }}
