@@ -1,8 +1,22 @@
 (function() {
+  currentUrl = location.href;
   const menuLinks = Array.from(document.querySelectorAll('.site-menu-link'));
   menuLinks.forEach(link => link.classList.remove("active"));
-  const activeLinks = menuLinks.filter(link => location.href.endsWith(link));
-  if (activeLinks && activeLinks.length == 1) {
-    activeLinks[0].classList.add("active");
+  if (currentUrl.indexOf("/blog/") > 0) {
+    document.getElementById('blog').classList.add("active");
+    return;
+  }
+  if (currentUrl.indexOf("/series/") > 0) {
+    document.getElementById('tutorials').classList.add("active");
+    return;
+  }
+  homeLink = document.getElementById('home');
+  if (currentUrl.endsWith(homeLink)) {
+    homeLink.classList.add("active");
+    return;
+  }
+  aboutMeLink = document.getElementById('about-me');
+  if (currentUrl.endsWith(aboutMeLink)) {
+    aboutMeLink.classList.add("active");
   }
 }())

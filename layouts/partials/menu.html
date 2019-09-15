@@ -19,7 +19,7 @@
     <nav class="site-menu">
         <ul>
             {{- $currentNode := . }} {{- range sort .Site.Menus.main }} {{- if .Name }}
-            <a href="{{ .URL }}" class="site-menu-link">
+            <a id="{{ .Identifier }}" href="{{ .URL }}" class="site-menu-link">
                 <li>{{ .Name }}</li>
             </a>
             {{- end }} {{- end }}
