@@ -3030,7 +3030,7 @@ header,
     .menu-bar {
         line-height: 1;
         min-height: 35px;
-        padding: 0 1em;
+        padding: 0.25em 1em 0 1em;
     }
     #menu .site-name {
         color: #F2F2F2;
@@ -3040,7 +3040,7 @@ header,
         margin: auto 0;
     }
     .site-search {
-        font-size: 1.2em;
+        font-size: 1.3em;
         margin: auto 0;
     }
     .search-field {
@@ -3072,7 +3072,7 @@ header,
     }
     .site-menu ul {
         justify-content: space-between;
-        padding: 0.5em 1em 0 1em;
+        padding: 0.25em 1em 0 1em;
     }
     .site-menu-link {
         font-size: 1.2em;
