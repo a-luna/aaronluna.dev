@@ -41,7 +41,7 @@ Ok, since we are all on the same page, let's discuss some of the core concepts w
 
 ### Statelessness
 
-I have made the conscious decision NOT to refer to this series as a REST API tutorial. Seemingly every API and every how-to article on API design written in the last few years proclaims itself RESTful. This trend is a disservice to the depth and complexity that Roy Fielding laid out in his doctoral thesis introducing and defining REST. I will go into further detail on this subject in [Part 3](/flask-api-tutorial-part-3/) when we begin configuring the API.
+I have made the conscious decision NOT to refer to this series as a REST API tutorial. Seemingly every API and every how-to article on API design written in the last few years proclaims itself RESTful. This trend is a disservice to the depth and complexity that Roy Fielding laid out in his doctoral thesis introducing and defining REST. I will go into further detail on this subject in [Part 3](/series/flask_api_tutorial/part-3/) when we begin configuring the API.
 
 However, I think it is important to point out where I am attempting to adhere to the requirements/constraints of REST. One of these constaints is **statelessness**. Statelessness is an essential characteristic of a RESTful system, but it can be a confusing concept at first.
 
@@ -51,7 +51,7 @@ This has obvious implications for authentication scenarios since in a RESTful sy
 
 ### JSON Web Tokens
 
-JSON Web Token (JWT) is an [open IETF standard](https://tools.ietf.org/html/rfc7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. JWTs are made up of three parts: header, payload and signature. These are converted to a URL-safe base64-encoded string and concatenated together. Each part is separated by "." (the <a href="http://www.fileformat.info/info/unicode/char/2e/index.htm" target="_blank">full-stop</a> or period character).
+JSON Web Token (JWT) is an <a href="https://tools.ietf.org/html/rfc7519" target="_blank">open IETF standard</a> that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. JWTs are made up of three parts: header, payload and signature. These are converted to a URL-safe base64-encoded string and concatenated together. Each part is separated by "." (the <a href="http://www.fileformat.info/info/unicode/char/2e/index.htm" target="_blank">full-stop</a> or period character).
 
 The **header** will identify the object as a JWT and also identify the algorithm used to generate the signature (e.g., `{"typ": "JWT", "alg": "HS256"}`). The conversion to URL-safe base64-encoded string is shown below:
 
@@ -60,7 +60,7 @@ The **header** will identify the object as a JWT and also identify the algorithm
 
 The **payload** is made up of various **claims**, which are key/value pairs containing information about the user and the key itself. There are many claims which are predefined (called <a href="https://tools.ietf.org/html/rfc7519#section-4.1" target="_blank">registered claims</a>), but you are free to create your own as well.
 
-Usually, the payload contains the time when the token was issued and the time when the token expires. These are registered claims and are identified by `iat` and `exp`, respectively. Datetime values must be expressed as "seconds since the epoch", and python contains [built-in functions](https://docs.python.org/3/library/time.html) for converting `datetime` objects to this numeric format. However, the PyJWT package will take care of this conversion for you when creating a token.
+Usually, the payload contains the time when the token was issued and the time when the token expires. These are registered claims and are identified by `iat` and `exp`, respectively. Datetime values must be expressed as "seconds since the epoch", and python contains <a href="https://docs.python.org/3/library/time.html" target="_blank">built-in functions</a> for converting `datetime` objects to this numeric format. However, the PyJWT package will take care of this conversion for you when creating a token.
 
 Another registered claim is `sub` (subject) which is meant to represent the entity that the token was issued to. When a user registers with the API, a random UUID value is generated and stored in the database which will be used as the value for `sub`.
 
