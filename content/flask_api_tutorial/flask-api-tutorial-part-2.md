@@ -18,7 +18,7 @@ twitter:
 ---
 ## Project Structure
 
-The chart below shows the folder structure that was created in [Part 1](/flask-api-tutorial-part-1/). In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from [Part 1](/flask-api-tutorial-part-1/) but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
+The chart below shows the folder structure that was created in [Part 1](/series/flask_api_tutorial/part-1/#project-structure). In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from Part 1 but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">app</span>
@@ -72,7 +72,7 @@ A common task that I rarely see covered in tutorials like this is how to manage 
 
 ### `User` DB Model
 
-[In Part 1]((/flask-api-tutorial-part-1/)), we created an instance of the Flask-SQLAlchemy extension with the name `db` in the `app/__init__.py` file and initialized it in the `create_app` method. The `db` object contains functions and classes from `sqlalchemy` and `sqlalchemy.orm`.
+[In Part 1](/series/flask_api_tutorial/part-1/#the-application-factory-pattern), we created an instance of the Flask-SQLAlchemy extension with the name `db` in the `app/__init__.py` file and initialized it in the `create_app` method. The `db` object contains functions and classes from `sqlalchemy` and `sqlalchemy.orm`.
 
 Whenever we need to declare a new database model (i.e., create a new database table), we create a class that derives from `db.Model`. Since we are creating an API that performs user authentication, our first SQLAlchemy model will be a `User` class that stores login credentials and metadata for registered users.
 
@@ -322,7 +322,7 @@ The `alembic_version` table contains a single column named `version_num` and a s
 
 ## JSON Web Token Authentication
 
-The user authentication process that we are implementing utilizes JSON Web Tokens (JWT), which were defined in detail in [Part 1](/flask-api-tutorial-part-1/#json-web-tokens). The general workflow is given below:
+The user authentication process that we are implementing utilizes JSON Web Tokens (JWT), which were defined in detail in [Part 1](/series/flask_api_tutorial/part-1/#json-web-tokens). The general workflow is given below:
 
 <div class="steps">
   <ul>

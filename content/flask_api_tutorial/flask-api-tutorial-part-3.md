@@ -775,7 +775,7 @@ Everything appears to be working correctly for the `/register` endpoint. Next, w
 
 ### Unit Tests: <code>test_auth_register.py</code>
 
-In the [previous post](/flask-api-tutorial-part-2/#global-test-fixtures), I explained the meaning and purpose of the `app` and `client` test fixtures. In order to make an HTTP request to the Flask application, you need to include `client` as a parameter of your test function.
+In the [previous post](/series/flask_api_tutorial/part-2/#global-test-fixtures-code-conftest-py-code), I explained the meaning and purpose of the `app` and `client` test fixtures. In order to make an HTTP request to the Flask application, you need to include `client` as a parameter of your test function.
 
 To demonstrate how the `client` object can be used to interact with the API, create a new file `test_auth_register.py` in the `test` foder, add the content below and save the file:
 

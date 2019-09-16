@@ -714,7 +714,7 @@ There are a few things to note about this test case:
   </ul>
 </div>
 
-Let's do one more. In [Part 2](/flask-api-tutorial-part-2/#unit-tests-decode-access-token), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired. Copy the test case below and add it to `test_auth_user.py`:
+Let's do one more. In [Part 2](/series/flask_api_tutorial/part-2/#code-decode-access-token-code-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired. Copy the test case below and add it to `test_auth_user.py`:
 
 {{< highlight python "linenos=table,linenostart=59" >}}def test_auth_user_expired_token(client, db):
     register_user(client)
@@ -1092,7 +1092,7 @@ def shell():
     </ul>
 </div>
 
-Finally, we need to create a new migration script and upgrade the database to create the actual <code>token_blacklist</code> table. We already went through this in [Part 2](/flask-api-tutorial-part-2/#creating-the-first-migration) when we created the <code>User</code> model class, but let's demonstrate the process once more.
+Finally, we need to create a new migration script and upgrade the database to create the actual <code>token_blacklist</code> table. We already went through this in [Part 2](/series/flask_api_tutorial/part-2/#creating-the-first-migration) when we created the <code>User</code> model class, but let's demonstrate the process once more.
 
 First, run <code>flask db migrate</code> and add a message explaining the changes that will be made by running this migration:
 

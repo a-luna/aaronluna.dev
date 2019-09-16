@@ -1,12 +1,28 @@
 {{ define "main" }}
 <main class="main list series-list" role="main">
     <header class="main__header">
-        <h1 class="main__title">{{ .Title }}</h1>
-        <h2 class="series_name">{{ .Params.lead }}</h2>
-    </header> {{- with .Content }}
+        <h1 class="main__title">{{ .Params.series_title }}</h1>
+    </header>
     <div class="content main__content clearfix">
-        {{ . }}
+        {{ partial "api_tutorial_series.html" . }} {{ .Content }}
     </div>
-    {{- end }} {{- range (.Paginator 10).Pages }} {{- .Render "summary" }} {{- end }}
+    {{ if not (eq .Params.series_part "Overview") }} {{- range (.Paginator 10).Pages }} {{- .Render "summary" }} {{- end }} {{ end }}
 </main>
-{{ partial "pagination.html" . }} {{ end }}
+{{ if not (eq .Params.series_part "Overview") }} {{ partial "pagination.html" . }} {{ else }}
+<div class="post-nav flex-container">
+    <div class="post-nav-flex-item-next">
+        <div class="post-nav__item post-nav__item--next inner-nav-flex-container">
+            <div class="post-nav__post-title title-next">
+                <a class="post-nav__link post-nav__link--next" href="/series/flask_api_tutorial/part-1/" rel="next">
+                    Part 1: Project Setup and Environment Configuration
+                </a>
+            </div>
+            <div class="post-nav__chevron chevron-next">
+                <a class="post-nav__link post-nav__link--next" href="/series/flask_api_tutorial/part-1/" rel="next">
+                    <i class="fa fa-lg fa-fw fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }} {{ end }}

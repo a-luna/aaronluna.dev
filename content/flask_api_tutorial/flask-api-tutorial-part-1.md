@@ -97,11 +97,11 @@ In this project, `requirements_dev.txt` will install a code formatter, linter, t
 
 ### PyJWT
 
-[PyJWT](https://pyjwt.readthedocs.io/en/latest/) is the package we will use to generate and decode JSON Web Tokens (JWTs).
+<a href="https://pyjwt.readthedocs.io/en/latest/" target="_blank">PyJWT</a> is the package we will use to generate and decode JSON Web Tokens (JWTs).
 
 ### Flask-RESTPlus
 
-[Flask-RESTPlus](https://flask-restplus.readthedocs.io/en/stable/) is a Flask extension that makes creating APIs simple (in fact, most of the configuration can be done with decorators). This extension provides helpful tools for marshalling data from custom Python objects to an appropriate format for sending as a HTTP response. As you would expect, there are also tools for parsing data from HTTP requests into basic and custom Python datatypes. However, my favorite feature is the visual, interactive documentation that is automatically generated for you using <a href="https://swagger.io/tools/swagger-ui/" target="_blank">Swagger UI</a>.
+<a href="https://flask-restplus.readthedocs.io/en/stable/" target="_blank">Flask-RESTPlus</a> is a Flask extension that makes creating APIs simple (in fact, most of the configuration can be done with decorators). This extension provides helpful tools for marshalling data from custom Python objects to an appropriate format for sending as a HTTP response. As you would expect, there are also tools for parsing data from HTTP requests into basic and custom Python datatypes. However, my favorite feature is the visual, interactive documentation that is automatically generated for you using <a href="https://swagger.io/tools/swagger-ui/" target="_blank">Swagger UI</a>.
 
 ### OpenAPI/Swagger UI
 
@@ -109,19 +109,19 @@ The <a href="https://www.openapis.org" target="_blank">OpenAPI Initiative (OAI)<
 
 ### Flask-CORS
 
-[Flask-CORS](https://flask-cors.readthedocs.io/en/latest/) is a Flask extension for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible. Using this extension to enable CORS for all routes (as is the case in this project) is extremely simple. As you will see shortly, the entire process involves initializing the extension with the Flask application instance with default values.
+<a href="https://flask-cors.readthedocs.io/en/latest/" target="_blank">Flask-CORS</a> is a Flask extension for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible. Using this extension to enable CORS for all routes (as is the case in this project) is extremely simple. As you will see shortly, the entire process involves initializing the extension with the Flask application instance with default values.
 
 ### Flask-SQLAlchemy
 
-[Flask-SQLAlchemy](http://flask-sqlalchemy.palletsprojects.com/en/2.x/) is a Flask extension that adds support for [SQLAlchemy](https://www.sqlalchemy.org/) and makes integrating the ORM with your Flask application simple. If you are unfamiliar with SQLAlchemy, the description below from the official documentation is a perfect summation:
+<a href="http://flask-sqlalchemy.palletsprojects.com/en/2.x/" target="_blank">Flask-SQLAlchemy</a> is a Flask extension that adds support for <a href="https://www.sqlalchemy.org/" target="_blank">SQLAlchemy</a> and makes integrating the ORM with your Flask application simple. If you are unfamiliar with SQLAlchemy, the description below from the official documentation is a perfect summation:
 
 <blockquote cite="https://docs.sqlalchemy.org/en/13/orm/tutorial.html"><p>The <strong>SQLAlchemy Object Relational Mapper</strong> presents a method of associating user-defined Python classes with database tables, and instances of those classes (objects) with rows in their corresponding tables. It includes a system that transparently synchronizes all changes in state between objects and their related rows, called a unit of work, as well as a system for expressing database queries in terms of the user defined classes and their defined relationships between each other.</p></blockquote>
 
-I know, it sounds like magic. [Another key feature](https://docs.sqlalchemy.org/en/13/core/engines.html) of SQLALchemy is that the type of database you use (MySQL, SQLite, PostgreSQL, etc.) is almost completely irrelevent (it comes into play if you need to use a feature that is only supported by a specific backend). For example, you could have your API configured to use a PostgreSQL database in production, and use a simple SQLite file as the backend in your test and development environments. There would be no need to change any code to support each configuration, which, again sounds like magic.
+I know, it sounds like magic. <a href="https://docs.sqlalchemy.org/en/13/core/engines.html" target="_blank">Another key feature</a> of SQLALchemy is that the type of database you use (MySQL, SQLite, PostgreSQL, etc.) is almost completely irrelevent (it comes into play if you need to use a feature that is only supported by a specific backend). For example, you could have your API configured to use a PostgreSQL database in production, and use a simple SQLite file as the backend in your test and development environments. There would be no need to change any code to support each configuration, which, again sounds like magic.
 
 ### Flask-Migrate (Alembic)
 
-[Alembic](https://pypi.org/project/alembic/) is a database migrations tool created by the author of SQLAlchemy, and [Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/) is a Flask extension that adds Alembic's operations to the Flask CLI. A database migration is a set of changes to a database schema (e.g., add new table, update foreign key relationships, etc.), similar to a commit in a version-control system. With Flask-Migrate, each migration is represented as a script of SQL statements, allowing you to "upgrade" a database to apply the schema changes or "downgrade" and undo the changes. This makes the process of deploying database changes to a production environment safe and easy; simply create a migration script when your changes have been tested and verified, then run the migration script in the production environment to apply the changes.
+<a href="https://pypi.org/project/alembic/" target="_blank">Alembic</a> is a database migrations tool created by the author of SQLAlchemy, and <a href="https://flask-migrate.readthedocs.io/en/latest/" target="_blank">Flask-Migrate</a> is a Flask extension that adds Alembic's operations to the Flask CLI. A database migration is a set of changes to a database schema (e.g., add new table, update foreign key relationships, etc.), similar to a commit in a version-control system. With Flask-Migrate, each migration is represented as a script of SQL statements, allowing you to "upgrade" a database to apply the schema changes or "downgrade" and undo the changes. This makes the process of deploying database changes to a production environment safe and easy; simply create a migration script when your changes have been tested and verified, then run the migration script in the production environment to apply the changes.
 
 ### Pytest
 
@@ -146,7 +146,7 @@ When this test executes, pytest will discover and call the fixture named `db`, m
 
 ### Black
 
-[Black](https://github.com/python/black) is my preferred code formatter. Compared to YAPF or autopep8, black is deliberately opinionated and provides very few configuration options. With the other formatting tools, you have to spend time tweaking the configuration until it produces your desired format. With black, the only setting I tweak is the maximum line length (I increase it from 79 to 99).
+<a href="https://github.com/python/black" target="_blank">Black</a> is my preferred code formatter. Compared to YAPF or autopep8, black is deliberately opinionated and provides very few configuration options. With the other formatting tools, you have to spend time tweaking the configuration until it produces your desired format. With black, the only setting I tweak is the maximum line length (I increase it from 79 to 99).
 
 This has an additional benefit if you are collaborating with others on a code base, since enforcing consistent style/format is difficult when everyone is using different customized autopep8 settings. Having a consistent style throughout a project will make your team more productive since less time will be spent conforming to style and the code will become easier to digest visually.
 
@@ -739,7 +739,7 @@ def create_app(config_name):
     bcrypt.init_app(app)
     return app{{< /highlight >}}
 
-We are using the [application factory pattern](http://flask.pocoo.org/docs/0.12/patterns/appfactories/) to create instances of our app. This makes creating different versions of our application with different settings simple, just provide the type of environment you wish to use as the `config_name` parameter to the `create_app` function. This value retrieves the configuration settings using the `get_config` function we created in `config.py`.
+We are using the <a href="http://flask.pocoo.org/docs/0.12/patterns/appfactories/" target="_blank">application factory pattern</a> to create instances of our app. This makes creating different versions of our application with different settings simple, just provide the type of environment you wish to use as the `config_name` parameter to the `create_app` function. This value retrieves the configuration settings using the `get_config` function we created in `config.py`.
 
 After creating the Flask app and applying the config settings, we initialize the extension objects (`cors`, `db`, `migrate`, `bcrypt`) by calling each object's `init_app` method with the newly-created Flask app. By doing this, no application-specific state is stored on the extension object, so one extension object can be used for multiple apps.
 
@@ -1012,7 +1012,7 @@ In the regular Python interpreter, the `app` and `db` objects are not recognized
 def shell():
     return {"db": db}{{< /highlight >}}
 
-In [Part 2](/flask-api-tutorial-part-2/), as we add model classes for each database table, we will add the models to this dictionary so they will be available to us in the shell context without importing them manually. The `shell_context_processor` function must return a dictionary and not a list. This allows you to control the names used in the shell, since the dictionary key for each object will be used as the name.
+In [Part 2](/series/flask_api_tutorial/part-2/), as we add model classes for each database table, we will add the models to this dictionary so they will be available to us in the shell context without importing them manually. The `shell_context_processor` function must return a dictionary and not a list. This allows you to control the names used in the shell, since the dictionary key for each object will be used as the name.
 
 Let's make sure that the error we saw earlier has been fixed, Run `flask`:
 

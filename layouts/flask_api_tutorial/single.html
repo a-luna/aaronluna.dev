@@ -5,7 +5,7 @@
             <div class="article-badges"><span class="new-badge badge">New</span><span class="tutorial-series-badge badge">Tutorial Series</span></div>
             <h1 class="post__title">{{ .Params.series_title }}</h1>
             <p class="post__lead">{{ .Params.lead }}</p>
-            {{ partial "api_tutorial_accordian.html" . }}
+            {{ partial "post_nav_part_num.html" . }} {{ partial "api_tutorial_series.html" . }} {{ partial "api_tutorial_toc.html" . }}
         </header>
         {{- if .Params.thumbnail }}
         <figure class="post__thumbnail">
@@ -17,4 +17,4 @@
         </div>
     </article>
 </main>
-{{ partial "post_nav_lead.html" . }} {{ partial "comments.html" . }} {{ partial "social.html" . }} {{ end }}
+{{ partial "post_nav_lead.html" . }} {{ partial "comments.html" . }} {{ end }}

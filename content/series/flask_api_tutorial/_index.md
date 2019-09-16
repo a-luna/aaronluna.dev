@@ -1,7 +1,21 @@
 ---
-title: "How To: Create a Flask API with JWT-Based Authentication"
-summary_template: "flask_api_tutorial"
+title: "How To: Create a Flask API with JWT-Based Authentication (Overview)"
+lead: "Project Overview"
+slug: "overview"
+series: ["flask_api_tutorial"]
+series_weight: 0
+series_title: "How To: Create a Flask API with JWT-Based Authentication"
+series_part: "Overview"
+series_part_lead: "Project Overview"
+categories: ["Flask", "Python"]
+toc: false
 summary: "This tutorial series provides step-by-step instructions and in-depth explanations to guide you through the process of creating a robust, production-quality REST API. The toolstack consists of Flask, Flask-RESTPlus, pyjwt, SQLAlchemy and other packages. Code quality is a major focus, with considerable time dedicated to testing (using pytest), logging and tools such as coverage, flake8 and mypy. The tutorial concludes by creating a process that continuously tnregrates (with tox, travis/circle CI, coveralls) and deploys the API (with either Github or Azure DevOps to Heroku)."
+twitter:
+  card: "summary"
+  creator: "@aaronlunadev"
+  title: "How To: Create a Flask API with JWT-Based Authentication"
+  description: "Step-by-step instructions and in-depth explanations to guide you through the process of creating a robust, production-quality REST API using Flask, Flask-RESTlus, pyjwt, SQLAlchemy and more."
+  image: "http://localhost:1313/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg"
 ---
 ## Project Overview
 

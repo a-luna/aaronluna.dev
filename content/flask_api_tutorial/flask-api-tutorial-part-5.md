@@ -81,7 +81,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 
 ## Introduction
 
-In the previous section, we created four API endpoints to perform basic user registration and authentication operations. However, these API endpoints <span class="emphasis">are not</span> designed as RESTful resources (I explained [my reasoning for this choice in Part 3](/flask-api-tutorial-part-3/#user-authentication-in-a-restful-system)).
+In the previous section, we created four API endpoints to perform basic user registration and authentication operations. However, these API endpoints <span class="emphasis">are not</span> designed as RESTful resources (I explained [my reasoning for this choice in Part 3](/series/flask_api_tutorial/part-3/#user-authentication-in-a-restful-system)).
 
 In this section of the tutorial, we will create a resource that is REST-like. I am deliberately <span class="emphasis">NOT</span> describing it as RESTful, because <strong>designing a truly RESTful system is</strong> <span class="emphasis">HARD</span>. Check out <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" target="_blank">this blog post from Roy Fielding</a> and the discussion in the comments to get an idea of what I mean.
 
@@ -183,7 +183,7 @@ These endpoints allow the client to perform CRUD operations on the resource (<st
 
 ## `flask add-user` Command
 
-[Way back in Part 1](/flask-api-tutorial-part-1/#flask-cli-application-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a>. Click can create powerful CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
+[Way back in Part 1](/series/flask_api_tutorial/part-1/#flask-cli-application-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a>. Click can create powerful CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
 
 Currently, the `api/v1/auth/register` endpoint can only create regular (non-admin) users. We want to leave it this way since this endpoint is publically-accessible. However, we also need a way to create admin users since regular users cannot create, update or delete widget objects.
 
