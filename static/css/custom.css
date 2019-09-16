@@ -2994,7 +2994,7 @@ header,
         justify-content: flex-end;
     }
     .site-menu-link {
-        font-size: 1em;
+        font-size: 1.1em;
         letter-spacing: 0.7px;
         margin: 0 15px;
         padding: 9px 0;
@@ -3028,6 +3028,7 @@ header,
         flex: 1 0 100%;
     }
     .menu-bar {
+        line-height: 1;
         min-height: 35px;
         padding: 0 1em;
     }
@@ -3036,8 +3037,13 @@ header,
     }
     .site-name-link,
     .site-search {
-        font-size: 1.2em;
+        font-size: 1.3em;
         margin: auto 0;
+    }
+    .site-search {}
+    .search-field {
+        color: #F2F2F2;
+        font-size: 1em;
     }
     #menu .site-search {
         text-align: left;
@@ -3068,17 +3074,17 @@ header,
         padding: 0 1em;
     }
     .site-menu-link {
-        font-size: 1.1em;
+        font-size: 1.2em;
         margin: 0 9px;
-        padding: 6px 0;
+        padding: 8px 0;
     }
     .site-menu-link:first-child {
         margin: 0 9px 0 0;
-        padding: 6px 0 6px 0;
+        padding: 8px 0 8px 0;
     }
     .site-menu-link:last-child {
         margin: 0 0 0 9px;
-        padding: 6px 0 6px 0;
+        padding: 8px 0 8px 0;
     }
     .wrapper {
         padding: 1em;
@@ -3238,5 +3244,18 @@ header,
     }
     .post-nav-flex-item-next {
         margin: 5px 0 0;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .site-name-link,
+    .site-search {
+        font-size: 1.1em;
+    }
+    .search-field {
+        font-size: 1em;
+    }
+    .site-menu-link {
+        font-size: 1.1em;
     }
 }
