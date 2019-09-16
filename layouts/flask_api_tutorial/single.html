@@ -2,9 +2,8 @@
 <main class="main tutorial" role="main">
     <article class="post">
         <header class="post__header">
-            <div class="article-badges"><span class="new-badge badge">New</span><span class="tutorial-series-badge badge">Tutorial Series</span></div>
-            <h1 class="post__title">{{ .Params.series_title }}</h1>
-            <p class="post__lead">{{ .Params.lead }}</p>
+            <div class="series__title">Tutorial Series: {{ .Params.series_title}}</div>
+            <h1 class="post__title">{{ .Params.lead }}</h1>
             {{ partial "post_nav_part_num.html" . }} {{ partial "api_tutorial_series.html" . }} {{ partial "api_tutorial_toc.html" . }}
         </header>
         {{- if .Params.thumbnail }}

@@ -543,7 +543,14 @@ h1.post__title {
 }
 
 .tutorial h1.post__title {
+    margin: 0 0 1em;
+}
+
+.series__title {
+    color: #C4C4C4;
     margin: 0 0 10px;
+    padding: 0 0 5px;
+    border-bottom: 1px dotted #7F7F7F;
 }
 
 .article-badges {
@@ -2396,13 +2403,13 @@ textarea {
 
 #categories .widget__title {
     font-size: 1.45em;
-    border-bottom: 1px solid #FFB86C;
+    border-bottom: 1px solid #6FC1FF;
 }
 
 #categories a,
 #categories a:hover {
     font-weight: 400;
-    color: #FFB86C;
+    color: #6FC1FF;
 }
 
 #api-tutorial a:hover {
@@ -2478,7 +2485,7 @@ textarea {
     border-top: none;
     border-bottom: none;
     margin: 0;
-    width: 80%;
+    width: auto;
 }
 
 svg.widget-social__link-icon.icon-mail {
@@ -2862,7 +2869,7 @@ table.aws-hosting-costs {
 
 header,
 #menu {
-    color: #F2F2F2;
+    color: #999999;
     background-color: #202020;
 }
 
@@ -2891,44 +2898,24 @@ header,
     text-decoration: none;
 }
 
-#home.active,
-#home.active:hover,
-#home.active:focus,
-#home.active:active,
-#home.active:active:hover {
-    color: #F92672;
-    border-bottom: 1px solid #F92672;
-    text-decoration: underline;
+#menu a.active,
+#menu a.active:hover,
+#menu a.active:focus,
+#menu a.active:active,
+#menu a.active:active:hover {
+    color: #F2F2F2;
+    border-bottom: 1px solid #F2F2F2;
+    text-decoration: none;
 }
 
-#blog.active,
-#blog.active:hover,
-#blog.active:focus,
-#blog.active:active,
-#blog.active:active:hover {
-    color: #FFC107;
-    border-bottom: 1px solid #FFC107;
-    text-decoration: underline;
-}
-
-#tutorials.active,
-#tutorials.active:hover,
-#tutorials.active:focus,
-#tutorials.active:active,
-#tutorials.active:active:hover {
-    color: #19F6D6;
-    border-bottom: 1px solid #19F6D6;
-    text-decoration: underline;
-}
-
-#about-me.active,
-#about-me.active:hover,
-#about-me.active:focus,
-#about-me.active:active,
-#about-me.active:active:hover {
-    color: #A9FB68;
-    border-bottom: 1px solid #A9FB68;
-    text-decoration: underline;
+#menu .site-name-link.active,
+#menu .site-name-link.active:hover,
+#menu .site-name-link.active:focus,
+#menu .site-name-link.active:active,
+#menu .site-name-link.active:active:hover {
+    color: #F2F2F2;
+    border: none;
+    text-decoration: none;
 }
 
 .site-social,
@@ -3021,7 +3008,7 @@ header,
     .post-nav {
         border-top: 1px dotted #7F7F7F;
         margin: 0 0 2em 0;
-        padding: 2em 0 0 0;
+        padding: 1em 0;
     }
     #menu {
         display: flex;
@@ -3035,9 +3022,6 @@ header,
         line-height: 1;
         min-height: 35px;
         padding: 0.5em 1em 0 1em;
-    }
-    #menu .site-name {
-        color: #F2F2F2;
     }
     .site-name-link {
         font-size: 1.4em;
@@ -3095,7 +3079,7 @@ header,
         padding: 1em;
     }
     .primary {
-        margin: 0;
+        margin: 1em 0 0;
     }
     .main__header h1 {
         font-size: 1.7em;

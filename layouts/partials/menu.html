@@ -1,7 +1,7 @@
 {{- if .Site.Menus.main }}
 <div id="menu">
     <div class="menu-bar">
-        <a class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
+        <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
             <div class="site-name">{{ .Site.Title }}</div>
         </a>
         {{ partial "social.html" . }}

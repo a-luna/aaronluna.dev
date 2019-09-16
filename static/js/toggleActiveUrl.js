@@ -12,7 +12,10 @@
   }
   homeLink = document.getElementById('home');
   if (currentUrl.endsWith(homeLink)) {
+    siteNameLink = document.getElementById('site-name');
+    console.log(siteNameLink);
     homeLink.classList.add("active");
+    siteNameLink.classList.add("active");
     return;
   }
   aboutMeLink = document.getElementById('about-me');

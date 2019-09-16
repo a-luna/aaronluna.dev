@@ -114,10 +114,10 @@ pygmentsUseClasses = true
   list = "right"   # Configure layout for list pages
   single = "right" # Configure layout for single pages
   # Enable widgets in given order
-  widgets = ["search", "recent", "categories"]
+  widgets = ["recent", "categories", "search"]
 
 [Params.widgets]
-  recent_num = 8 # Set the number of articles in the "Recent articles" widget
+  recent_num = 5 # Set the number of articles in the "Recent articles" widget
   tags_counter = false # Enable counter for each tag in "Tags" widget (disabled by default)
   social_title = "Contact"
   recent_title = "Recent Posts"

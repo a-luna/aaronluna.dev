@@ -1,10 +1,14 @@
 {{ define "main" }}
 <main class="main list series-list" role="main">
     <header class="main__header">
+        {{ if eq .Params.series_part "Overview" }}
         <h1 class="main__title">{{ .Params.series_title }}</h1>
+        {{ else }}
+        <h1 class="main__title">{{ .Params.title }}</h1>
+        {{ end }}
     </header>
     <div class="content main__content clearfix">
-        {{ partial "api_tutorial_series.html" . }} {{ .Content }}
+        {{ if eq .Params.series_part "Overview" }} {{ partial "api_tutorial_series.html" . }} {{ end }} {{ .Content }}
     </div>
     {{ if not (eq .Params.series_part "Overview") }} {{- range (.Paginator 10).Pages }} {{- .Render "summary" }} {{- end }} {{ end }}
 </main>
