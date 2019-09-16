@@ -2,8 +2,8 @@
 <main class="main tutorial" role="main">
     <article class="post">
         <header class="post__header">
-            <div class="series__title">Tutorial Series: {{ .Params.series_title}}</div>
             <h1 class="post__title">{{ .Params.lead }}</h1>
+            <div class="series__title">{{ .Params.series_title}}</div>
             {{ partial "post_nav_part_num.html" . }} {{ partial "api_tutorial_series.html" . }} {{ partial "api_tutorial_toc.html" . }}
         </header>
         {{- if .Params.thumbnail }}
