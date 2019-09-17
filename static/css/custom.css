@@ -2826,6 +2826,13 @@ table.aws-hosting-costs {
     margin: 0 0 0 5px;
 }
 
+.accordian h2 a:hover,
+.accordian h2 a:focus,
+.accordian h2 a:active,
+.accordian h2 a:active:hover {
+    color: #19F6D6;
+}
+
 .accordian section {
     background-color: #323232;
     overflow: hidden;
