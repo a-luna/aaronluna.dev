@@ -529,7 +529,7 @@ def _get_token_expire_time():
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Lines 12-13: </strong>The first thing we do is verify that the email address provided by the user has not been registered. If a `User` already exists with the same email address, the request is aborted.</p>
+      <p><strong>Lines 12-13: </strong>The first thing we do is verify that the email address provided by the user has not been registered. If a <code>User</code> already exists with the same email address, the request is aborted.</p>
       <div class="note note-flex">
         <div class="note-icon">
           <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -543,7 +543,7 @@ def _get_token_expire_time():
       <p><strong>Line 14-16: </strong>If the email address has not been registered, we proceed to create a <code>User</code> object with the provided email and password values, and then commit the new user to the database.</p>
     </li>
     <li>
-      <p><strong>Line 17: </strong>We are going to include an access token in the response, we we issue a new token by calling <code>encode_access_token</code> on the <code>user</code> object.</p>
+      <p><strong>Line 17: </strong>The response needs to include an access token and we can issue one by calling <code>encode_access_token</code> on the <code>user</code> object.</p>
     </li>
     <li>
       <p><strong>Line 18: </strong>The specification cited above requires that any response containing an access token must have the <code>Cache-Control</code> and <code>Pragma</code> fields present in the header. The only way to add the necessary headers is by constructing the response object ourselves.</p>

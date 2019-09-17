@@ -185,7 +185,7 @@ ol li p {
 #showcase h2 {
     color: #19F6D6;
     font-size: 1.25rem;
-    margin: 0 0 5px;
+    margin: 0 0 10px;
 }
 
 #showcase .meta,
@@ -2934,6 +2934,11 @@ header,
     margin: auto 0;
 }
 
+.site-name,
+.site-menu {
+    letter-spacing: 0.5px;
+}
+
 .site-social ul,
 .site-menu ul {
     display: flex;
@@ -3089,6 +3094,11 @@ header,
     }
     .primary {
         margin: 1em 0 0;
+    }
+    .about-me .post {
+        margin: 0 0 1.25rem;
+        padding: 0 0 1.25rem;
+        border-bottom: 2px dotted #7F7F7F;
     }
     .main__header h1 {
         font-size: 1.7em;

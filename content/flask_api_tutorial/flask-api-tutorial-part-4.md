@@ -1117,7 +1117,7 @@ With the `BlacklistedToken` class fully implemented, we have everything we need 
 
 After receiving a logout request containing a valid, unexpired token, the server then proceeds to create a `BlasklistedToken` object, add it to the database and commit the changes. Then, the server sends an HTTP response indicating that the logout request succeeded.
 
-The function that performs this process will be defined in`/app/api/auth/business.py`. First, open the file and update the import statements to include the `BlacklistedToken` class: (**Line 9**)
+The function that performs this process will be defined in`/app/api/auth/business.py`. Open that file and update the import statements to include the `BlacklistedToken` class: (**Line 9**)
 
 {{< highlight python "linenos=table,hl_lines=9" >}}"""Business logic for /auth API endpoints."""
 from http import HTTPStatus
