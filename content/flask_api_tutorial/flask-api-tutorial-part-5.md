@@ -409,7 +409,7 @@ class Widget(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
-    info_url = db.Column(db.String(255), unique=False)
+    info_url = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
     deadline = db.Column(db.DateTime)
 
@@ -455,22 +455,34 @@ Most of the interesting things about the `Widget` model were previously discusse
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 17: </strong>The <code>name</code> attribute will be used as the identifier in the widget's URI path. When we define the <code>RequestParser</code> for requests to create a new widget, we will ensure that this value contains only lowercase-letters, numbers, underscore and/or hyphen characters. Also, obviously, this value must be unique.</p>
+        <p><strong>Line 22: </strong>The <code>name</code> attribute will be used as the identifier in the widget's URI path. When we define the <code>RequestParser</code> for requests to create a new widget, we will ensure that this value contains only lowercase-letters, numbers, underscore and/or hyphen characters. Also, obviously, this value must be unique.</p>
       </li>
       <li>
-        <p><strong>Line 18: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not valid URLs must be rejected without adding the widget to the database.</p>
+        <p><strong>Line 23: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not valid URLs must be rejected without adding the widget to the database.</p>
       </li>
       <li>
-        <p><strong>Line 19: </strong>.</p>
+        <p><strong>Line 25: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 22-23: </strong>.</p>
+        <p><strong>Lines 27-28: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 29-30: </strong>.</p>
+        <p><strong>Lines 33-36, 38-41: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 33-34: </strong>.</p>
+        <p><strong>Lines 43-45: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 47-50: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 52-54: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 56-58: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 60-62: </strong>.</p>
       </li>
     </ul>
 </div>
@@ -481,13 +493,13 @@ Most of the interesting things about the `Widget` model were previously discusse
 
 {{< highlight python "linenos=table" >}}"""Parsers and serializers for /widgets API endpoints."""
 import re
-from datetime import date, datetime
+from datetime import date, datetime, time
 from dateutil import parser
 
 from flask_restplus.inputs import URL
 from flask_restplus.reqparse import RequestParser
 
-from app.util.datetime_util import get_date_with_min_time
+from app.util.datetime_util import DATE_MONTH_NAME
 
 
 def widget_name(name):
@@ -516,14 +528,14 @@ def future_date_string(input):
             "represent the same date: '2018-5-13' -or- '05/13/2018' -or- 'May 13 2018'."
         )
 
-    parsed_date = get_date_with_min_time(parsed_date)
     if parsed_date.date() < date.today():
         raise ValueError(
-            f"Successfully parsed {input} as {parsed_date.strftime('%b %d %Y')}. However, this "
-            f"value must be a date in the future and {parsed_date.strftime('%b %d %Y')} is "
-            f"BEFORE {datetime.now().strftime('%b %d %Y')}"
+            f"Successfully parsed {input} as {parsed_date.strftime(DATE_MONTH_NAME)}. However, "
+            f"this value must be a date in the future and "
+            f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
+            f"{datetime.now().strftime(DATE_MONTH_NAME)}"
         )
-    return parsed_date
+    return datetime.combine(parsed_date.date(), time.max)
 
 
 widget_reqparser = RequestParser(bundle_errors=True)
@@ -555,8 +567,10 @@ widget_reqparser.add_argument(
 {{< highlight python "linenos=table" >}}"""Business logic for /widgets API endpoints."""
 from http import HTTPStatus
 
+from flask import jsonify
 from flask_restplus import abort
 
+from app import db
 from app.api.auth.decorator import admin_token_required
 from app.models.user import User
 from app.models.widget import Widget
