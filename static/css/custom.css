@@ -888,6 +888,11 @@ span.italics.requirements {
     color: #2196F3;
 }
 
+.note p .italics {
+    font-size: 0.9em;
+    color: #FFC107;
+}
+
 .orange {
     color: #FD971F;
 }

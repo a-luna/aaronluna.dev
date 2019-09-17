@@ -387,16 +387,37 @@ Most of the interesting things about the `Widget` model were previously discusse
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 22: </strong>The <code>name</code> attribute will be used as the identifier in the widget's URI path. When we define the <code>RequestParser</code> for requests to create a new widget, we will ensure that this value contains only lowercase-letters, numbers, underscore and/or hyphen characters. Also, obviously, this value must be unique.</p>
+        <p><strong>Line 22: </strong>Since the URI that allows clients to interact with a single widget will contain the <code>name</code> attribute (<code>/api/v1/widgets/&lt;name&gt;</code>), we should reject values that contain chracters that are not URL-safe. To accomplish this, we will design a <code>RequestParser</code> that rejects values unless they contain only lowercase-letters, numbers, underscore and/or hyphen characters. Also, since the widget <code>name</code> is used as an identifier this value must be unique.</p>
+        <div class="note note-flex">
+            <div class="note-icon">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </div>
+            <div class="note-message" style="flex-flow: column wrap">
+                <p>The requirements for the <code>name</code> attribute come from the orginal project requirements (which we have been monitoring and marking complete at the end of each section): <span class="italics">The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</span></p>
+            </div>
+        </div>
       </li>
       <li>
-        <p><strong>Line 23: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not valid URLs must be rejected without adding the widget to the database.</p>
+        <p><strong>Lines 23, 25: </strong>The purpose of the <code>info_url</code> and <code>deadline</code> attributes are to demonstrate how to implement input validation for URL and <code>datetime</code> values. Any values that are not recognized as valid a URL or <code>datetime</code> must be rejected without adding the widget to the database.</p>
+        <div class="note note-flex">
+            <div class="note-icon">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </div>
+            <div class="note-message" style="flex-flow: column wrap">
+                <p>The requirements for the <code>info_url</code> and <code>deadline</code> attributes also come from the orginal project requirements: <span class="italics">The widget model contains fields with URL and datetime data types, along with normal text fields</span> and <span class="italics">URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated)</span>.</p>
+            </div>
+        </div>
       </li>
       <li>
-        <p><strong>Line 25: </strong>.</p>
-      </li>
-      <li>
-        <p><strong>Lines 27-28: </strong>.</p>
+        <p><strong>Lines 27-28: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
+        <div class="note note-flex">
+            <div class="note-icon">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </div>
+            <div class="note-message" style="flex-flow: column wrap">
+                <p>After this table has been added to the database, all <code>User</code> instances will contain a attribute named <code>widgets</code>, the value of which is a list of <code>Widget</code> objects created by the <code>User</code>. This attribute is created automatically due to <code>db.relationship</code> specifying <code>backref=db.backref("widgets")</code> in <span class="bold-text">Line 28</sp>.</p>
+            </div>
+        </div>
       </li>
       <li>
         <p><strong>Lines 33-36, 38-41: </strong>.</p>
