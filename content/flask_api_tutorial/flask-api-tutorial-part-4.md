@@ -975,9 +975,9 @@ Now that we have an access token, the only thing we need to do is send it in the
 
 The "logout" process for the API is really simple since we don't actually implement any session handling. The `api.auth_logout` endpoint will use the `@token_required` decorator, just like the `api.auth_user` endpoint. Therefore, if a request is received without an access token or with an invalid/expired token, it will be aborted without executing any of the business logic we define for the logout process.
 
-One of the requriements states: <span class="italics requirements">If user logs out, their JWT is immediately invalid/expired</span>. In order to satisfy this requirement, when a user logs out and their access token is <span class="emphasis">NOT</span> invalid/expired, we must add the token to a blacklist and ensure that any subsequent request for a protected resource that includes the token is aborted.
+One of the requirements states: <span class="italics requirements">If user logs out, their JWT is immediately invalid/expired</span>. In order to satisfy this requirement, when a user logs out and their access token is <span class="emphasis">NOT</span> invalid/expired, we must add the token to a blacklist and ensure that any subsequent request for a protected resource that includes the token is unsuccessful.
 
-Even though access tokens are typically configured to expire less than a day after being issued, the blacklist should be persistent (i.e., <span class="emphasis">NOT</span> stored in RAM). We can create a database table to store blacklisted tokens, which is what we will do next.
+Even though access tokens are typically configured to expire less than a day after being issued, the blacklist should be persistent (i.e., stored in the database, <span class="emphasis">NOT</span> in RAM). We can create a database table to store blacklisted tokens, which is what we will do next.
 
 ### `BlacklistedToken` DB Model
 
@@ -1115,9 +1115,25 @@ With the `BlacklistedToken` class fully implemented, we have everything we need 
 
 ### `process_logout_request` Function
 
-The `process_logout_request` function adds the access token that was sent with the request to the blacklist and sends an HTTP response after doing so. Open `/app/api/auth/business.py` and add the content below:
+After receiving a logout request containing a valid, unexpired token, the server then proceeds to create a `BlasklistedToken` object, add it to the database and commit the changes. Then, the server sends an HTTP response indicating that the logout request succeeded.
 
-{{< highlight python "linenos=table,linenostart=59" >}}@token_required
+The function that performs this process will be defined in`/app/api/auth/business.py`. First, open the file and update the import statements to include the `BlacklistedToken` class: (**Line 9**)
+
+{{< highlight python "linenos=table,hl_lines=9" >}}"""Business logic for /auth API endpoints."""
+from http import HTTPStatus
+
+from flask import current_app, jsonify
+from flask_restplus import abort
+
+from app import db
+from app.api.auth.decorator import token_required
+from app.models.token_blacklist import BlacklistedToken
+from app.models.user import User
+from app.util.datetime_util import remaining_fromtimestamp, format_timespan_digits{{< /highlight >}}
+
+Next, add the `process_logout_request` function and save the file:
+
+{{< highlight python "linenos=table,linenostart=61" >}}@token_required
 def process_logout_request():
     access_token = process_logout_request.token
     expires_at = process_logout_request.expires_at
@@ -1131,37 +1147,54 @@ As explained in the [Decorators](#decorators) section of this post, the `access_
 
 ### Update `decode_access_token` Method
 
-We need to modify the `decode_access_token` method to check the blacklist and reurn a `Result` object indicating the token could not be decoded because it has been blacklisted. Open `/app/models/user.py` and add **Lines 69-71** (which are highlghted):
+There's one more process we need to update in order to make the blacklist fully functional. Currently, when verifying an access token, it is only rejected by the server if the token is invalid or expired. Now, the server must also check if the token has been blacklisted before processing the client's request.
+
+Open `/app/models/user.py` and update the import statements to include the `BlacklistedToken` class: (**Line 10**)
+
+{{< highlight python "linenos=table,hl_lines=10" >}}"""Class definition for User model."""
+from datetime import datetime, timedelta, timezone
+from uuid import uuid4
+
+import jwt
+from flask import current_app
+from sqlalchemy.ext.hybrid import hybrid_property
+
+from app import db, bcrypt
+from app.models.token_blacklist import BlacklistedToken
+from app.util.datetime_util import get_local_utcoffset, make_tzaware, localized_dt_string
+from app.util.result import Result{{< /highlight >}}
+
+We need to modify the `decode_access_token` method to reurn a `Result` object indicating the token has been blacklisted if that is the case. Add **Lines 76-78** and save the changes:
 
 {{< highlight python "linenos=table,linenostart=59,hl_lines=18-20" >}}@staticmethod
-    def decode_access_token(access_token):
-        if isinstance(access_token, bytes):
-            access_token = access_token.decode("ascii")
-        if access_token.startswith("Bearer "):
-            split = access_token.split("Bearer")
-            access_token = split[1].strip()
-        try:
-            key = current_app.config.get("SECRET_KEY")
-            payload = jwt.decode(access_token, key, algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            error = "Access token expired. Please log in again."
-            return Result.Fail(error)
-        except jwt.InvalidTokenError:
-            error = "Invalid token. Please log in again."
-            return Result.Fail(error)
+def decode_access_token(access_token):
+    if isinstance(access_token, bytes):
+        access_token = access_token.decode("ascii")
+    if access_token.startswith("Bearer "):
+        split = access_token.split("Bearer")
+        access_token = split[1].strip()
+    try:
+        key = current_app.config.get("SECRET_KEY")
+        payload = jwt.decode(access_token, key, algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        error = "Access token expired. Please log in again."
+        return Result.Fail(error)
+    except jwt.InvalidTokenError:
+        error = "Invalid token. Please log in again."
+        return Result.Fail(error)
 
-        if BlacklistedToken.check_blacklist(access_token):
-            error = "Token blacklisted. Please log in again."
-            return Result.Fail(error)
-        user_dict = dict(
-            public_id=payload["sub"],
-            admin=payload["admin"],
-            token=access_token,
-            expires_at=payload["exp"],
-        )
-        return Result.Ok(user_dict){{< /highlight >}}
+    if BlacklistedToken.check_blacklist(access_token):
+        error = "Token blacklisted. Please log in again."
+        return Result.Fail(error)
+    user_dict = dict(
+        public_id=payload["sub"],
+        admin=payload["admin"],
+        token=access_token,
+        expires_at=payload["exp"],
+    )
+    return Result.Ok(user_dict){{< /highlight >}}
 
-Next, we need to create the concrete `Resource` class for the `api.auth_logout` endpoint.
+With that out of the way, we can create the concrete `Resource` class for the `api.auth_logout` endpoint.
 
 ### `LogoutUser` Resource
 
@@ -1182,7 +1215,7 @@ from app.api.auth.business import (
 
 Next, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=65" >}}@auth_ns.route("/logout", endpoint="auth_logout")
+{{< highlight python "linenos=table,linenostart=66" >}}@auth_ns.route("/logout", endpoint="auth_logout")
 class LogoutUser(Resource):
     """Handles HTTP requests to URL: /auth/logout."""
 
@@ -1304,6 +1337,11 @@ This is the scenario contained in `test_logout_token_blacklisted`, below. Add th
 </div>
 
 The full set of test cases for the `api.auth_logout` endpoint are available in the github repo. You should try to create test cases for as many different scenarios as you can think of and compare them to mine.
+
+You should run <code>pytest</code> to make sure the new test case passes and that nothing else broke because of the changes:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pytest</span>
+<span class="cmd-warning">TEST RESULTS NEEDED!</span></code></pre>
 
 ## Checkpoint
 

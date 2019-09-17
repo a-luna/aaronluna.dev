@@ -972,71 +972,7 @@ There are quite a few more test cases that we need to create for the <code>api.a
 You should run <code>pytest</code> to make sure the new test case passes and that nothing else broke because of the changes:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pytest</span>
-<span class="cmd-results">============================================ test session starts =============================================
-platform darwin -- Python 3.7.4, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/aaronluna/Projects/flask-api-tutorial/venv/bin/python
-cachedir: .pytest_cache
-rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
-plugins: forked-1.0.2, dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
-collected 52 items
-
-run.py::BLACK PASSED                                                                                   [  1%]
-run.py::FLAKE8 PASSED                                                                                  [  3%]
-setup.py::BLACK PASSED                                                                                 [  5%]
-setup.py::FLAKE8 PASSED                                                                                [  7%]
-app/__init__.py::BLACK PASSED                                                                          [  9%]
-app/__init__.py::FLAKE8 PASSED                                                                         [ 11%]
-app/config.py::BLACK PASSED                                                                            [ 13%]
-app/config.py::FLAKE8 PASSED                                                                           [ 15%]
-app/api/__init__.py::BLACK PASSED                                                                      [ 17%]
-app/api/__init__.py::FLAKE8 PASSED                                                                     [ 19%]
-app/api/auth/__init__.py::BLACK PASSED                                                                 [ 21%]
-app/api/auth/__init__.py::FLAKE8 PASSED                                                                [ 23%]
-app/api/auth/business.py::BLACK PASSED                                                                 [ 25%]
-app/api/auth/business.py::FLAKE8 PASSED                                                                [ 26%]
-app/api/auth/decorator.py::BLACK PASSED                                                                [ 28%]
-app/api/auth/decorator.py::FLAKE8 PASSED                                                               [ 30%]
-app/api/auth/dto.py::BLACK PASSED                                                                      [ 32%]
-app/api/auth/dto.py::FLAKE8 PASSED                                                                     [ 34%]
-app/api/auth/endpoints.py::BLACK PASSED                                                                [ 36%]
-app/api/auth/endpoints.py::FLAKE8 PASSED                                                               [ 38%]
-app/api/widget/__init__.py::BLACK PASSED                                                               [ 40%]
-app/api/widget/__init__.py::FLAKE8 PASSED                                                              [ 42%]
-app/models/__init__.py::BLACK PASSED                                                                   [ 44%]
-app/models/__init__.py::FLAKE8 PASSED                                                                  [ 46%]
-app/models/user.py::BLACK PASSED                                                                       [ 48%]
-app/models/user.py::FLAKE8 PASSED                                                                      [ 50%]
-app/util/__init__.py::BLACK PASSED                                                                     [ 51%]
-app/util/__init__.py::FLAKE8 PASSED                                                                    [ 53%]
-app/util/result.py::BLACK PASSED                                                                       [ 55%]
-app/util/result.py::FLAKE8 PASSED                                                                      [ 57%]
-test/conftest.py::BLACK PASSED                                                                         [ 59%]
-test/conftest.py::FLAKE8 PASSED                                                                        [ 61%]
-test/test_auth_register.py::BLACK PASSED                                                               [ 67%]
-test/test_auth_register.py::FLAKE8 PASSED                                                              [ 69%]
-test/test_auth_register.py::test_auth_register PASSED                                                  [ 71%]
-test/test_auth_register.py::test_auth_register_email_already_registered PASSED                         [ 73%]
-test/test_auth_register.py::test_auth_register_invalid_email PASSED                                    [ 75%]
-test/test_config.py::BLACK PASSED                                                                      [ 80%]
-test/test_config.py::FLAKE8 PASSED                                                                     [ 82%]
-test/test_config.py::test_config_development PASSED                                                    [ 84%]
-test/test_config.py::test_config_testing PASSED                                                        [ 86%]
-test/test_config.py::test_config_production PASSED                                                     [ 88%]
-test/test_user.py::BLACK PASSED                                                                        [ 90%]
-test/test_user.py::FLAKE8 PASSED                                                                       [ 92%]
-test/test_user.py::test_encode_access_token PASSED                                                     [ 94%]
-test/test_user.py::test_decode_access_token_success PASSED                                             [ 96%]
-test/test_user.py::test_decode_access_token_expired PASSED                                             [ 98%]
-test/test_user.py::test_decode_access_token_invalid PASSED                                             [100%]
-
-============================================== warnings summary ==============================================
-app/api/auth/business.py::BLACK
-  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restplus/reqparse.py:7: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated, and in 3.8 it will stop working
-    from collections import Hashable
-
--- Docs: https://docs.pytest.org/en/latest/warnings.html
-=================================== 48 passed, 1 warnings in 12.22 seconds ===================================</span></code></pre>
-
-You can ignore the warning that is reported by <code>black</code> since the issue is with code from the Flask-RESTPlus package. We will eventually fix it after all the <code>auth_ns</code> endpoints have been implemented.
+<span class="cmd-warning">TEST RESULTS NEEDED!</span></code></pre>
 
 ## Checkpoint
 
