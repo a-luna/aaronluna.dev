@@ -551,7 +551,7 @@ h1.post__title {
 .series__title {
     font-size: 0.95em;
     font-style: italic;
-    color: #C4C4C4;
+    color: #7F7F7F;
     margin: 0 0 2em;
 }
 
@@ -1677,7 +1677,7 @@ abbr[title] {
 }
 
 #social ul {
-    font-size: 1.4em;
+    font-size: 1.3em;
     list-style-type: none;
     margin: 1px 0;
     padding: 0;

@@ -81,7 +81,9 @@ Why is this the case? The data required to register a new user or authenticate a
 
 ### `process_login_request` Function
 
-Just like we did when processing a registration request, we need to return an HTTP response that includes the access token if the user credentials are successfully validated. Open `app/api/auth/business.py`, add the content below and save the file:
+When a user sends a login request and their credentials are successfully validated, the server must return an HTTP response that includes an access token. As we saw when we implemented the registration process, any response that includes sensitive information (e.g., an access token) must satisfy all <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">OAuth 2.0 requirements</a>, which we thoroughly documented and implemented [in Part 3](/series/flask_api_tutorial/part-3/#process-registration-request). The implementation for the response to a successful login request will be nearly identical.
+
+Open `app/api/auth/business.py`, add the content below and save the file:
 
 {{< highlight python "linenos=table,linenostart=31" >}}def process_login_request(email, password):
     user = User.find_by_email(email)

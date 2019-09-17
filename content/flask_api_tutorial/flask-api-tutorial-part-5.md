@@ -93,9 +93,9 @@ The only features of this resource that I am willing to state are 100% bona fide
   <li>Through the use of pagination and navigational links included in JSON sent by the server, clients can interact with the API purely through hypertext (i.e., clients <span class="emphasis">NEVER</span> need to manually construct URLs to interact with the API).</li>
 </ul>
 
-The resource we will create is a collection of **widgets**. I decided to model something generic rather than the cliche "to-do list" project that you encounter in every introductory programming tutorial. I feel safe assuming that you aren't reading this because you have a burning desire to create the next, great API-driven  to-do list.
+The resource we will create is a collection of **widgets**. I decided to model something generic rather than the cliche "to-do list" project that you encounter in every introductory programming tutorial. I feel safe assuming that you are not reading this because you have a burning desire to create the next, great API-driven  to-do list.
 
-The `Widget` model will contain custom validators for parsing request data and custom field types for marshalling `Widget` objects to JSON. Whatever project you have in mind, the widget implementation can easily be adapted to any object in your domain model.
+The `Widget` model will contain custom validators for parsing request data and custom field types for marshalling `Widget` objects to JSON. . Whatever project you have in mind, the widget implementation can easily be adapted to any object in your domain model.
 
 ## `widget_ns` Endpoints
 
