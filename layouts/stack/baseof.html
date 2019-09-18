@@ -29,7 +29,7 @@
     {{ range .Site.Params.customCSS -}}
         <link rel="stylesheet" href="{{ . | relURL }}">
     {{- end }}
-    <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
+    <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}"> 
     {{- if not .Site.IsServer }}
         {{ template "_internal/google_analytics_async.html" . }}
     {{- end }}
@@ -38,7 +38,7 @@
 <body class="body">
     <div class="container container--outer">
         {{ partial "header" . }}
-        <div class="wrapper flex tutorial">
+        <div class="wrapper flex stack">
             <div class="primary">
                 {{ block "main" . }} {{ with .Content }}
                 <div class="content main__content clearfix">
@@ -52,12 +52,6 @@
     </div>
     <script async defer src="{{ "js/toggleActiveUrl.js" | relURL }}"></script>
     <script async defer src="{{ "js/hanchor.js" | relURL }}"></script>
-    <script>
-        document.querySelectorAll('.accordian-button').forEach(
-          ac_button => ac_button.addEventListener('click', function(e) {
-              this.parentElement.classList.toggle("ac_hidden");
-            })
-        );
-    </script>
+    <script async src="https://cdn1.stackshare.io/javascripts/client-code.js" charset="utf-8"></script>
 </body>
 </html>

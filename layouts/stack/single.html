@@ -1,0 +1,23 @@
+{{ define "main" }}
+<main class="main about-me" role="main">
+    <article class="post">
+        <header class="post__header">
+            <h1 class="post__title">{{ .Title }}</h1>
+            {{- with .Params.lead }}
+            <p class="post__lead">{{ . }}</p>
+            {{- end }}
+        </header>
+        {{- if .Params.thumbnail }}
+        <figure class="post__thumbnail">
+            <img src="{{ .Params.thumbnail | relURL }}" alt="{{ .Title }}">
+        </figure>
+        {{- end }} {{- partial "post_toc.html" . -}}
+        <div class="content post__content clearfix">
+            {{ .Content }}
+            <div id="stack-embed"></div>
+            <a frameborder="0" data-theme="dark" data-layers="1,2,3,4" data-stack-embed="true" href="https://embed.stackshare.io/stacks/embed/ac9feead1ecc2083a51e3483d7cceb" /></a>
+        </div>
+        {{ partial "post_tags.html" . }}
+    </article>
+</main>
+{{ end }}

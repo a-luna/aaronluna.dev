@@ -40,25 +40,20 @@ pygmentsUseClasses = true
 
 [menu]
   [[menu.main]]
-    identifier = "home"
-    name = "Home"
-    url = "/"
-    weight = 1
-  [[menu.main]]
     identifier = "blog"
     name = "Blog"
     url = "/blog/"
-    weight = 2
+    weight = 1
   [[menu.main]]
     identifier = "tutorials"
     name = "Tutorials"
     url = "/series/"
-    weight = 3
+    weight = 2
   [[menu.main]]
     identifier = "about-me"
     name = "About Me"
     url = "/about/"
-    weight = 4
+    weight = 3
 
   [[menu.tutorials]]
     identifier = "flask-api-tutorial"

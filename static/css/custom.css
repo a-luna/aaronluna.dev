@@ -10,9 +10,15 @@
     /* Legacy iOS */
 }
 
+#stack-embed {
+    border: 1px solid #7F7F7F;
+    background-color: #323232;
+    color: #323232;
+}
+
 .content a.hanchor {
     color: #C4C4C4;
-    font-size: 0.85em;
+    font-size: 0.75em;
     margin: 0 0 0 6px;
     opacity: 0.4;
 }
@@ -32,7 +38,7 @@ html {
 body {
     font-family: "Roboto", Helvetica, Arial, sans-serif;
     font-weight: 400;
-    background: hsl(0, 0%, 40%);
+    background: #666666;
     color: #C4C4C4;
     margin: 0;
 }
@@ -414,6 +420,14 @@ li.tags__item .btn:focus {
 
 .post__header p {
     margin: 2px 0;
+}
+
+.stck .post__title {
+    font-size: 1.5em;
+}
+
+.stack p {
+    font-size: 1.2em;
 }
 
 #author-desc {
@@ -2935,11 +2949,7 @@ header,
     text-decoration: none;
 }
 
-#menu .site-name-link.active,
-#menu .site-name-link.active:hover,
-#menu .site-name-link.active:focus,
-#menu .site-name-link.active:active,
-#menu .site-name-link.active:active:hover {
+#menu .site-name-link {
     color: #F2F2F2;
     border: none;
     text-decoration: none;

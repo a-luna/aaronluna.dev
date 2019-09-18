@@ -1,5 +1,5 @@
 function addAnchor(e) {
-    e.insertAdjacentHTML('beforeend', `<a href="#${e.id}" class="hanchor" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-paperclip"></i></a></a>`)
+    e.insertAdjacentHTML('beforeend', `<a href="#${e.id}" class="hanchor" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`)
     e.insertAdjacentHTML('beforeend', `<a href="#top-of-page" class="hanchor" title="Return to top of page"><i class="fa fa-angle-double-up"></i></a></a>`)
 }
 document.addEventListener('DOMContentLoaded', function() {
