@@ -18,7 +18,11 @@
 
 .content a.hanchor {
     color: #C4C4C4;
+<<<<<<< HEAD
     font-size: 0.75em;
+=======
+    font-size: 0.9em;
+>>>>>>> 7f72447c626e04ea35701116fa4818a5bc058872
     margin: 0 0 0 6px;
     opacity: 0.4;
 }
