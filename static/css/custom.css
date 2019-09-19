@@ -2246,6 +2246,11 @@ header .post-nav {
     margin: auto 0;
 }
 
+#header-nav .chevron-prev i.fa,
+#header-nav .chevron-next i.fa {
+    padding: 0 0 4px 0;
+}
+
 #header-nav .chevron-next {
     margin: auto 0;
 }
