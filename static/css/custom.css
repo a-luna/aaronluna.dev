@@ -10,12 +10,6 @@
     /* Legacy iOS */
 }
 
-#stack-embed {
-    border: 1px solid #7F7F7F;
-    background-color: #323232;
-    color: #323232;
-}
-
 .content a.hanchor {
     color: #C4C4C4;
     font-size: 0.75em;
@@ -27,6 +21,10 @@
 .content a.hanchor:hover {
     color: #C4C4C4;
     opacity: 1;
+}
+
+.content a.hanchor:last-child {
+    font-size: 1em;
 }
 
 html {
