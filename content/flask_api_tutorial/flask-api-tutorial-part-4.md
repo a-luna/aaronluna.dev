@@ -1008,8 +1008,8 @@ class BlacklistedToken(db.Model):
         return f"<BlacklistToken token={self.token}>"
 
     @classmethod
-    def check_blacklist(cls, access_token):
-        exists = cls.query.filter_by(token=access_token).first()
+    def check_blacklist(cls, token):
+        exists = cls.query.filter_by(token=token).first()
         return True if exists else False{{< /highlight >}}
 
 The `BlacklistedToken` class is pretty simple, but please note the following:
