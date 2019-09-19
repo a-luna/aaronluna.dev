@@ -2248,7 +2248,7 @@ header .post-nav {
 
 #header-nav .chevron-prev i.fa,
 #header-nav .chevron-next i.fa {
-    padding: 0 0 4px 0;
+    padding: 0;
 }
 
 #header-nav .chevron-next {
@@ -2311,7 +2311,7 @@ header a.post-nav__link:focus {
 .post-nav__chevron {
     display: inline;
     font-weight: 400;
-    font-size: 0.9em;
+    font-size: 0.8em;
     line-height: 1;
     margin: auto 0;
 }
