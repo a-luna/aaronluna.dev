@@ -716,7 +716,7 @@ There are a few things to note about this test case:
   </ul>
 </div>
 
-Let's do one more. In [Part 2](/series/flask_api_tutorial/part-2/#code-decode-access-token-code-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired. Copy the test case below and add it to `test_auth_user.py`:
+Let's do one more. In [Part 2](/series/flask_api_tutorial/part-2/#decode-access-token-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired. Copy the test case below and add it to `test_auth_user.py`:
 
 {{< highlight python "linenos=table,linenostart=59" >}}def test_auth_user_expired_token(client, db):
     register_user(client)

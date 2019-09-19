@@ -2151,7 +2151,7 @@ a.pagination__item--next {
 
 .chevron-prev,
 .chevron-next {
-    flex: 0 0 20px;
+    flex: 0 0 auto;
 }
 
 .inner-nav-flex-container {
@@ -2196,7 +2196,7 @@ a.post-nav__link:focus {
     align-items: center;
     border: none;
     font-size: 1em;
-    padding: 0;
+    padding: 0 5px;
     margin: 0 0 10px;
 }
 
@@ -2247,7 +2247,7 @@ header .post-nav {
 }
 
 #header-nav .chevron-prev {
-    margin: auto 0;
+    margin: auto 5px auto 0;
 }
 
 #header-nav .chevron-prev i.fa,
@@ -2256,7 +2256,7 @@ header .post-nav {
 }
 
 #header-nav .chevron-next {
-    margin: auto 0;
+    margin: auto 0 auto 5px;
 }
 
 #header-nav .post-nav__post-title {
@@ -2278,6 +2278,14 @@ header .post-nav {
 #header-nav .title-prev,
 #header-nav .title-next {
     flex: 0 0 auto;
+}
+
+#header-nav .title-prev {
+    margin: 0 0 0 1px
+}
+
+#header-nav .title-next {
+    margin: 0 1px 0 0;
 }
 
 header .post-nav__link:hover,
@@ -2331,14 +2339,6 @@ header a.post-nav__link:focus {
 
 .post-nav a {
     padding: 0;
-}
-
-.chevron-prev {
-    margin: 0 10px 0 0;
-}
-
-.chevron-next {
-    margin: 0 0 0 10px;
 }
 
 
@@ -2863,7 +2863,7 @@ table.aws-hosting-costs {
 
 .accordian h2 a {
     color: #19F6D6;
-    margin: 0 0 0 5px;
+    margin: 0 0 0 1px;
 }
 
 .accordian h2 a:hover,
@@ -2894,7 +2894,7 @@ table.aws-hosting-costs {
 
 .accordian .pointer {
     color: #19F6D6;
-    font-size: 0.8em;
+    font-size: 0.72727em;
     margin: auto 5px;
 }
 

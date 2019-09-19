@@ -348,7 +348,7 @@ API models can be used to document the output of an API operation as well as the
 
 We will see this shortly in the `auth/user` API route which inspects the access token of the current user and returns a representation of the `User` object as the HTTP response. The API model we define as the expected output of this API route omits the `id` and `password_hash` attributes from the response.
 
-## <code>auth_ns</code> Endpoints
+## `auth_ns` Endpoints
 
 Within the <code>auth_ns</code> namespace, we will create the four API endpoints listed in the table below:
 
@@ -418,11 +418,11 @@ We will implement each endpoint in the same way, following the steps listed belo
 
 This process will result in an updated Swagger UI page containing a documented version of the API endpoint which allows clients to construct data in the expected format, send HTTP requests and inspect responses from the server.
 
-## <code>api.auth_register</code> Endpoint
+## `api.auth_register` Endpoint
 
 The first resource we create will handle the process of registering a new user account. If this were a full-stack tutorial, we would probably create a registration form that calls this API endpoint when a user clicks the Submit button. I'm leaving all decisions regarding the front-end in your hands, therefore designing such a form is your task to conquer.
 
-### <code>auth_reqparser</code> Request Parser
+### `auth_reqparser` Request Parser
 
 When a new user attempts to register, what data is required? The way our `User` model is defined, the value for `email` must be unique (i.e., two users cannot register with the same email address). The only other value which is provided by the user is their password, which is not stored in the database (the actual password is ony needed to create the `password_hash` value and to authenticate a user attempting to login). Open `app/api/auth/dto.py`, add the content below and save the file:
 
@@ -455,7 +455,13 @@ The remaining parameters are the same for both arguments: `location="form", requ
 
 ### Process Registration Request
 
-Next, we need to create a function that adds a new user to the database and returns an HTTP response that includes an access token. For any response containing sensitive information (e.g., access tokens, credentials, etc), <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">RFC6749 (OAuth 2.0)</a> defines the required and optional fields in both the response body and header:
+Next, we need to create a function that performs the following actions:
+
+* Add a new user to the database
+* Issue an access token for the new user
+* Construct an HTTP response including the access token and send the response the client
+
+For any response containing sensitive information (e.g., access tokens, credentials, etc), <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">RFC6749 (OAuth 2.0)</a> defines the required and optional fields in both the response body and header:
 
 <blockquote class="rfc" cite="https://tools.ietf.org/html/rfc6749#section-5.1"><span class="bold-text">5.1 Successful Response</span>
   <p style="margin: 1em 0 0 1em">The authorization server issues an access token and optional refresh token, and constructs the response by adding the following parameters to the entity-body of the HTTP response:
@@ -547,7 +553,7 @@ def _get_token_expire_time():
     </li>
     <li>
       <p><strong>Line 18: </strong>The specification cited above requires that any response containing an access token must have the <code>Cache-Control</code> and <code>Pragma</code> fields present in the header. The only way to add the necessary headers is by constructing the response object ourselves.</p>
-      <p>Flask provides the <code>jsonify</code> function which takes either a dict, a list of arguments, or a list of keyword-arguments and calls <code>json.dumps</code> on the data provided. <code>jsonify</code> returns a response object with the JSON object as the response body.</p>
+      <p>Flask provides the <code>jsonify</code> function which takes either a dict, a list of arguments, or a list of keyword-arguments and converts the data to a JSON object (similar to calling <code>json.dumps</code> on an object). Finally, <code>jsonify</code> returns a response object with the JSON object as the response body.</p>
     </li>
     <li>
       <p><strong>Line 21: </strong>Per the specification, the <code>access_token</code> attribute is included as a parameter of the serialized JSON in the response body.</p>
@@ -557,7 +563,7 @@ def _get_token_expire_time():
     </li>
     <li>
       <p><strong>Line 23: </strong>Per the specification, the <code>expires_in</code> attribute is included as a parameter of the serialized JSON in the response body.</p>
-      <p>We calculate the lifespan of the <code>access_token</code> by getting the <code>app.config</code> values <code>TOKEN_EXPIRE_HOURS</code> and <code>TOKEN_EXPIRE_MINUTES</code>. If the <code>app.config["TESTING"]</code> flag is set, then five seconds is used as the lifespan of the token. Otherwise, the lifespan in seconds is calculated with <code>TOKEN_EXPIRE_HOURS * 3600 + TOKEN_EXPIRE_MINUTES * 60</code>.</p>
+      <p>We calculate the lifespan of the <code>access_token</code> from the <code>app.config</code> values <code>TOKEN_EXPIRE_HOURS</code> and <code>TOKEN_EXPIRE_MINUTES</code>. If the <code>app.config["TESTING"]</code> flag is set, then five seconds is used as the lifespan of the token. Otherwise, the lifespan in seconds is calculated with <code>TOKEN_EXPIRE_HOURS * 3600 + TOKEN_EXPIRE_MINUTES * 60</code>.</p>
     </li>
     <li>
       <p><strong>Line 25: </strong>The most appropriate HTTP status code for a response indicating we have created a new resource is <code>HTTPStatus.CREATED</code> (201).</p>
@@ -571,15 +577,17 @@ def _get_token_expire_time():
   </ul>
 </div>
 
-Whew! That explanation was longer and more in-depth than I expected. Next, we need to create the API endpoint and incorporate it with the `auth_reqparser` and `process_registration_request` function.
+Next, we need to create the API endpoint and incorporate it with the `auth_reqparser` and `process_registration_request` function.
 
-### <code>RegisterUser</code> Resource
+### `RegisterUser` Resource
 
 If you look back at all of the material covered in this tutorial, it's amazing (IMO) that we haven't written one line of code that that makes our Flask application perform one of the basic functions of a web server: URL routing. It's time to fix that.
 
-In an application that adheres to the [principles of REST](#understanding-rest), each API endpoint (IOW, each URL) is a representation of a resource. Calling an API endpoint with a supported HTTP method (e.g., `GET`, `PUT`, `POST`) allows clients to interact with the resource. For this reason, when we need to add a URL route to the API, we define a class that inherits from the `flask_restplus.Resource` base class.
+In an application that adheres to the [principles of REST](#understanding-rest), each API endpoint (IOW, each URL) is a representation of a resource. Clients interact with resources by sending HTTP requests. The method type of the client's request (e.g., `GET`, `PUT`, `POST`) is used to perform different operations, and the nature of the operation should be related to the. For this reason, when we need to add a URL route to the API, we define a class that inherits from the `flask_restplus.Resource` base class.
 
-In our API, users can send a request to register a new account to `/api/v1/auth/register`. To create this API endpoint, open `app/api/auth/endpoints.py`, add the content below and save the file:
+
+
+[According to the table defining the API endpoints for the `auth_ns` namespace](#auth-ns-endpoints), users can register for a new account by sending a `POST` request to `/api/v1/auth/register`. To create this API endpoint, open `app/api/auth/endpoints.py`, add the content below and save the file:
 
 {{< highlight python "linenos=table" >}}"""API endpoint definitions for /auth namespace."""
 from http import HTTPStatus

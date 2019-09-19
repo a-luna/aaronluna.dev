@@ -353,7 +353,7 @@ The user authentication process that we are implementing utilizes JSON Web Token
 
 Depending on the environment, the access token will expire after a set amount of time. When this happens, the client must login with their email and password to obtain a new token.
 
-### <code>encode_access_token</code> Function
+### `encode_access_token` Function
 
 Let's start implementing our workflow by creating the method that will be used to generate access tokens. Since the token will be generated using attributes from a `User` instance, we will create the method as a member of the `User` class.
 
@@ -561,7 +561,7 @@ test/test_user.py::test_encode_access_token PASSED                              
 
 ============================================= 30 passed in 3.37 seconds ==============================================</span></code></pre>
 
-### <code>decode_access_token</code> Function
+### `decode_access_token` Function
 
 Let's move on to the obvious next step in our authorization workflow: decoding tokens. We need to update the import statements in `user.py` to include the `Result` class (**Line 11** below):
 
