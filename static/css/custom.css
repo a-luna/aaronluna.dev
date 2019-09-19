@@ -1730,8 +1730,12 @@ abbr[title] {
 #social ul li a {
     display: block;
     text-align: center;
-    padding: 0 8px;
+    padding: 0 6px;
     text-decoration: none;
+}
+
+#widgets #social ul li a {
+    padding: 0 8px;
 }
 
 .meta__text,
@@ -2852,6 +2856,7 @@ table.aws-hosting-costs {
 
 .accordian h2 {
     font-size: 1.1em;
+    line-height: 1;
     margin: auto 0;
     padding: 7px 5px;
 }
@@ -2884,13 +2889,13 @@ table.aws-hosting-costs {
 }
 
 .accordian section.ac_hidden {
-    height: 34px;
+    height: 29px;
 }
 
 .accordian .pointer {
     color: #19F6D6;
     font-size: 0.8em;
-    margin: 0 5px;
+    margin: auto 5px;
 }
 
 .accordian section h2 {
@@ -3165,7 +3170,7 @@ header,
     .post-nav__post-title {
         font-weight: 500;
         font-size: 1em;
-        line-height: 1;
+        line-height: 1.2;
         margin: auto 0;
     }
     #header-nav .post-nav__post-title {
