@@ -2077,7 +2077,8 @@ a.pagination__item--next {
     font-weight: 700;
 }
 
-.fa-bullet-list-item {
+.fa-bullet-list-item,
+.fa-bullet-list p {
     position: relative;
     margin: 0 0 2em 2em;
 }
@@ -2248,7 +2249,7 @@ header .post-nav {
 }
 
 #header-nav .chevron-prev {
-    margin: auto 5px auto 0;
+    margin: 0 5px auto 0;
 }
 
 #header-nav .chevron-prev i.fa,
@@ -2257,7 +2258,7 @@ header .post-nav {
 }
 
 #header-nav .chevron-next {
-    margin: auto 0 auto 5px;
+    margin: 0 0 auto 5px;
 }
 
 #header-nav .chevron-prev,
@@ -2331,7 +2332,7 @@ header a.post-nav__link:focus {
 }
 
 .post-nav .post-nav__chevron {
-    margin: 3px 0 auto 0;
+    margin: 2px 0 auto 0;
 }
 
 .post-nav__chevron {
@@ -2503,20 +2504,20 @@ textarea {
 
 #search-site,
 #search-field {
-    background-color: #202020;
+    background-color: #252525;
     border: none;
     padding: 0;
 }
 
 .widget-search__form {
-    background-color: #202020;
-    border: 1px solid #202020;
+    background-color: #252525;
+    border: 1px solid #252525;
     padding: 0;
     border-radius: 4px;
 }
 
 #widgets .widget-search {
-    background-color: #202020;
+    background-color: #252525;
     text-align: left;
     margin: 0 0 1em;
     padding: 7px 10px 7px 0;
@@ -2526,7 +2527,7 @@ textarea {
     font-size: 1.5em;
     font-weight: 100;
     color: #7F7F7F;
-    background-color: #202020;
+    background-color: #252525;
     padding: 0 10px;
 }
 
@@ -2534,8 +2535,8 @@ textarea {
     display: inline-block;
     font-size: 1em;
     color: #D8DBD8;
-    background-color: #202020;
-    border-left: 1px solid #202020;
+    background-color: #252525;
+    border-left: 1px solid #252525;
     border-right: none;
     border-top: none;
     border-bottom: none;
@@ -3187,11 +3188,11 @@ header,
     .post-nav__post-title {
         font-weight: 500;
         font-size: 1em;
-        line-height: 1.2;
+        line-height: 1.1;
         margin: auto 0;
     }
     #header-nav .post-nav__post-title {
-        font-size: 1.2em;
+        font-size: 1.1em;
     }
     .post-nav__chevron {
         font-weight: 500;
