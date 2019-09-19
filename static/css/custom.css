@@ -2957,7 +2957,7 @@ header,
 #menu a:focus,
 #menu a:active,
 #menu a:active:hover {
-    color: #FFC107;
+    color: #F2F2F2;
     text-decoration: none;
 }
 
@@ -2966,8 +2966,8 @@ header,
 #menu a.active:focus,
 #menu a.active:active,
 #menu a.active:active:hover {
-    color: #FFC107;
-    border-bottom: 1px solid #FFC107;
+    color: #F2F2F2;
+    border-bottom: 1px solid #F2F2F2;
     text-decoration: none;
 }
 
@@ -3144,6 +3144,9 @@ header,
     }
     .primary {
         margin: 1em 0 0;
+    }
+    .list .content {
+        margin: 0;
     }
     .about-me .post {
         margin: 0 0 1.25rem;
