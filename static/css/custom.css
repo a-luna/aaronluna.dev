@@ -2083,6 +2083,10 @@ a.pagination__item--next {
     margin: 0 0 2em 2em;
 }
 
+.about-me .fa-bullet-list-item:last-child {
+    margin: 0 0 0 2em;
+}
+
 .alert .fa-bullet-list-item {
     margin: 0 0 0 40px;
 }
@@ -3146,9 +3150,6 @@ header,
     .primary {
         margin: 1em 0 0;
     }
-    .about-me .list .content {
-        margin: 0;
-    }
     .about-me .post {
         margin: 0 0 1.25rem;
         padding: 0 0 1.25rem;
@@ -3237,7 +3238,7 @@ header,
         margin: 0;
     }
     .about-me .content {
-        margin: 0 0.5em 1em;
+        margin: 0 0.5em 0 1em;
     }
     .about-me-text {
         margin: 0 0 1em 2em;
