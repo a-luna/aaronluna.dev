@@ -327,7 +327,8 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import db
 from app.util.datetime_util import (
-    format_timedelta_digits,
+    utc_now,
+    format_timedelta_str,
     get_local_utcoffset,
     localized_dt_string,
     make_tzaware,
@@ -342,7 +343,7 @@ class Widget(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     info_url = db.Column(db.String(255))
-    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, default=utc_now)
     deadline = db.Column(db.DateTime)
 
     owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
@@ -367,12 +368,16 @@ class Widget(db.Model):
 
     @hybrid_property
     def time_remaining(self):
-        time_remaining = self.deadline.replace(tzinfo=timezone.utc) - datetime.now(timezone.utc)
+        time_remaining = self.deadline.replace(tzinfo=timezone.utc) - utc_now()
         return timedelta(0) if self.deadline_passed else time_remaining
 
     @hybrid_property
     def time_remaining_str(self):
-        return format_timedelta_digits(self.time_remaining)
+        return (
+            "No time remaining"
+            if self.deadline_passed
+            else format_timedelta_str(self.time_remaining)
+        )
 
     @hybrid_property
     def uri(self):
@@ -387,7 +392,7 @@ Most of the interesting things about the `Widget` model were previously discusse
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 22: </strong>Since the URI that allows clients to interact with a single widget will contain the <code>name</code> attribute (<code>/api/v1/widgets/&lt;name&gt;</code>), we should reject values that contain chracters that are not URL-safe. To accomplish this, we will design a <code>RequestParser</code> that rejects values unless they contain only lowercase-letters, numbers, underscore and/or hyphen characters. Also, since the widget <code>name</code> is used as an identifier this value must be unique.</p>
+        <p><strong>Line 23: </strong>Since the URI that allows clients to interact with a single widget will contain the <code>name</code> attribute (<code>/api/v1/widgets/&lt;name&gt;</code>), we should reject values that contain chracters that are not URL-safe. To accomplish this, we will design a <code>RequestParser</code> that rejects values unless they contain only lowercase-letters, numbers, underscore and/or hyphen characters. Also, since the widget <code>name</code> is used as an identifier this value must be unique.</p>
         <div class="note note-flex">
             <div class="note-icon">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -398,44 +403,44 @@ Most of the interesting things about the `Widget` model were previously discusse
         </div>
       </li>
       <li>
-        <p><strong>Lines 23, 25: </strong>The purpose of the <code>info_url</code> and <code>deadline</code> attributes are to demonstrate how to implement input validation for URL and <code>datetime</code> values. Any values that are not recognized as valid a URL or <code>datetime</code> must be rejected without adding the widget to the database.</p>
+        <p><strong>Lines 24, 26: </strong>The purpose of the <code>info_url</code> and <code>deadline</code> attributes are to demonstrate how to implement input validation for URL and <code>datetime</code> values. Any values that are not recognized as valid a URL or <code>datetime</code> must be rejected without adding the widget to the database.</p>
         <div class="note note-flex">
             <div class="note-icon">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
             </div>
             <div class="note-message" style="flex-flow: column wrap">
-                <p>The requirements for the <code>info_url</code> and <code>deadline</code> attributes also come from the orginal project requirements: <span class="italics">The widget model contains fields with URL and datetime data types, along with normal text fields</span> and <span class="italics">URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated)</span>.</p>
+                <p>The requirements for the <code>info_url</code> and <code>deadline</code> attributes come from the orginal project requirements: <span class="italics">The widget model contains fields with URL and datetime data types, along with normal text fields</span> and <span class="italics">URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated)</span>.</p>
             </div>
         </div>
       </li>
       <li>
-        <p><strong>Lines 27-28: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
+        <p><strong>Lines 28-29: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
         <div class="note note-flex">
             <div class="note-icon">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
             </div>
             <div class="note-message" style="flex-flow: column wrap">
-                <p>After this table has been added to the database, all <code>User</code> instances will contain a attribute named <code>widgets</code>, the value of which is a list of <code>Widget</code> objects created by the <code>User</code>. This attribute is created automatically due to <code>db.relationship</code> specifying <code>backref=db.backref("widgets")</code> in <span class="bold-text">Line 28</sp>.</p>
+                <p>After this table has been added to the database, all <code>User</code> instances will contain a attribute named <code>widgets</code>, the value of which is a list of <code>Widget</code> objects created by the <code>User</code>. This attribute is created automatically due to <code>db.relationship</code> specifying <code>backref=db.backref("widgets")</code> in <span class="bold-text">Line 28</span>. This is a feature of the SQLAlchemy ORM, <a href="https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many" target="_blank">click here</a> for more information on this feature.</p>
             </div>
         </div>
       </li>
       <li>
-        <p><strong>Lines 33-36, 38-41: </strong>.</p>
+        <p><strong>Lines 34-42: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 43-45: </strong>.</p>
+        <p><strong>Lines 44-46: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 47-50: </strong>.</p>
+        <p><strong>Lines 48-51: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 52-54: </strong>.</p>
+        <p><strong>Lines 53-59: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 56-58: </strong>.</p>
+        <p><strong>Lines 61-63: </strong>.</p>
       </li>
       <li>
-        <p><strong>Lines 60-62: </strong>.</p>
+        <p><strong>Lines 65-67: </strong>.</p>
       </li>
     </ul>
 </div>
@@ -452,7 +457,7 @@ from dateutil import parser
 from flask_restplus.inputs import URL
 from flask_restplus.reqparse import RequestParser
 
-from app.util.datetime_util import DATE_MONTH_NAME
+from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
 
 def widget_name(name):
@@ -488,7 +493,8 @@ def future_date_string(input):
             f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}"
         )
-    return datetime.combine(parsed_date.date(), time.max)
+    deadline = datetime.combine(parsed_date.date(), time.max)
+    return make_tzaware(deadline, use_tz=timezone.utc)
 
 
 widget_reqparser = RequestParser(bundle_errors=True)

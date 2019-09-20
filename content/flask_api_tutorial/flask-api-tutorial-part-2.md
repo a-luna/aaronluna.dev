@@ -86,7 +86,7 @@ from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import db, bcrypt
-from app.util.datetime_util import get_local_utcoffset, make_tzaware, localized_dt_string
+from app.util.datetime_util import utc_now, get_local_utcoffset, make_tzaware, localized_dt_string
 
 
 class User(db.Model):
@@ -97,7 +97,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
-    registered_on = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    registered_on = db.Column(db.DateTime, default=utc_now)
     admin = db.Column(db.Boolean, default=False)
     public_id = db.Column(db.String(36), unique=True, default=lambda: str(uuid4()))
 
@@ -161,7 +161,15 @@ The `User` class demonstrates several important concepts for creating database m
                     <p><strong>password_hash: </strong>Storing passwords in a database is poor practice. Instead, we will compute a hash of the password using Flask-Bcrypt and store the hashed value in this column. When a user attempts to authenticate, we will again use Flask-Bcrypt to compare the password provided by the user to the hashed value. This will be explained in detail later on in this post.</p>
                 </li>
                 <li>
-                    <p><strong>registered_on: </strong>This column will contain the date and time when the user account was created. <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#sqlalchemy.types.DateTime" target="_blank">SQLAlchemy provides many ways to store datetime values</a>, but the simplist method is to use <code>db.DateTime</code>.  Notice that we have specified a default value for this column, <code>default=lambda: datetime.now(timezone.utc)</code>. This function returns the current UTC date and time as an "aware" datetime object (i.e., <code>tzinfo=timezone.utc</code>). When a new User is added to the database, the current UTC time will be evaluated and stored as the value for <code>registered_on</code>. In this project, all datetime values are assumed to be in UTC when written to the database.</p>
+                    <p><strong>registered_on: </strong>This column will contain the date and time when the user account was created. <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#sqlalchemy.types.DateTime" target="_blank">SQLAlchemy provides many ways to store datetime values</a>, but the simplist method is to use <code>db.DateTime</code>.  Notice that we have specified a default value for this column, <code>default=utc_now</code>. This is a function in the <code>app.util.datetime_util</code> module that returns the current UTC date and time as an "aware" datetime object. When a new User is added to the database, the current UTC time will be evaluated and stored as the value for <code>registered_on</code>.</p>
+                    <div class="alert alert-flex">
+                        <div class="alert-icon">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        </div>
+                        <div class="alert-message">
+                            <p>In this project, all datetime values are assumed to be in UTC when written to the database.</p>
+                        </div>
+                    </div>
                 </li>
                 <li>
                     <p><strong>admin: </strong>This is a flag that indicates whether a user has administrator access. Use the <code>db.Boolean</code> data type to create a column containing only TRUE/FALSE values. By default, users should not have administrator access. We specify <code>default=False</code> to ensure this behavior.</p>

@@ -453,14 +453,9 @@ timespan = namedtuple(
 )
 
 
-def is_naive(dt):
-    """Return True if datetime object is not time-zone aware."""
-    return not dt.tzinfo or not dt.tzinfo.utcoffset(dt)
-
-
-def is_tzaware(dt):
-    """Return True if datetime object is time-zone aware."""
-    return dt.tzinfo and dt.tzinfo.utcoffset(dt)
+def utc_now():
+    """Get the current UTC date and time with the microsecond value normalized to zero."""
+    return datetime.now(timezone.utc).replace(microsecond=0)
 
 
 def localized_dt_string(dt, use_tz=None):
@@ -503,7 +498,8 @@ def remaining_fromtimestamp(timestamp):
 def format_timespan_digits(ts):
     """Format a timespan namedtuple as a string resembling a digital display."""
     if ts.days:
-        return f"{ts.days}, {ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
+        day_or_days = "days" if ts.days > 1 else "day"
+        return f"{ts.days} {day_or_days}, {ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
     if ts.seconds:
         return f"{ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
     return f"00:00:00.{ts.total_microseconds}"
@@ -517,14 +513,15 @@ def format_timedelta_digits(td):
 def format_timespan_str(ts):
     """Format a timespan namedtuple as a readable string."""
     if ts.days:
-        return f"{ts.days}d {ts.hours:.0f}h {ts.minutes:.0f}m {ts.seconds}s"
+        day_or_days = "days" if ts.days > 1 else "day"
+        return f"{ts.days} {day_or_days} {ts.hours:.0f} hours {ts.minutes:.0f} minutes {ts.seconds} seconds"
     if ts.hours:
-        return f"{ts.hours:.0f}h {ts.minutes:.0f}m {ts.seconds}s"
+        return f"{ts.hours:.0f} hours {ts.minutes:.0f} minutes {ts.seconds} seconds"
     if ts.minutes:
-        return f"{ts.minutes:.0f}m {ts.seconds}s"
+        return f"{ts.minutes:.0f} minutes {ts.seconds} seconds"
     if ts.seconds:
-        return f"{ts.seconds}s {ts.milliseconds:.0f}ms"
-    return f"{ts.total_microseconds}us"
+        return f"{ts.seconds} seconds {ts.milliseconds:.0f} milliseconds"
+    return f"{ts.total_microseconds} mircoseconds"
 
 
 def format_timedelta_str(td):
@@ -534,23 +531,19 @@ def format_timedelta_str(td):
 
 def get_timespan(td):
     """Convert timedelta object to timespan namedtuple."""
-    td_days = td.days
-    td_hours = 0
-    td_seconds = td.seconds % 60
-    td_minutes = (td.seconds - td_seconds) / 60
-    (td_milliseconds, td_microseconds) = divmod(td.microseconds, 1000)
-    if td_minutes > 60:
-        (td_hours, td_minutes) = divmod(td_minutes, 60)
+    (milliseconds, microseconds) = divmod(td.microseconds, 1000)
+    (minutes, seconds) = divmod(td.seconds, 60)
+    (hours, minutes) = divmod(minutes, 60)
     return timespan(
-        td_days,
-        td_hours,
-        int(td_minutes),
-        td_seconds,
-        td_milliseconds,
-        td_microseconds,
+        td.days,
+        hours,
+        minutes,
+        seconds,
+        milliseconds,
+        microseconds,
         td.seconds,
-        (td.seconds * 1000 + td_milliseconds),
-        (td.seconds * 1000 * 1000 + td_milliseconds * 1000 + td_microseconds),
+        (td.seconds * 1000 + milliseconds),
+        (td.seconds * 1000 * 1000 + milliseconds * 1000 + microseconds),
     ){{< /highlight >}}
 
 ## Environment Configuration
