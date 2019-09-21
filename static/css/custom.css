@@ -2246,14 +2246,6 @@ header .post-nav {
     color: #19F6D6;
 }
 
-#header-nav .post-nav__link--title__prev {
-    margin: 0 0 0 1px;
-}
-
-#header-nav .post-nav__link--title__next {
-    margin: 0;
-}
-
 #header-nav .post-nav__link:hover,
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
@@ -2902,7 +2894,7 @@ table.aws-hosting-costs {
 
 .accordian h2 a {
     color: #19F6D6;
-    margin: 0 0 0 1px;
+    margin: 0 0 0 5px;
 }
 
 .accordian h2 a:hover,
