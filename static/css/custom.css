@@ -2246,6 +2246,14 @@ header .post-nav {
     color: #19F6D6;
 }
 
+#header-nav .post-nav__link--prev {
+    margin: 0 0 0 3px;
+}
+
+#header-nav .post-nav__link--next {
+    margin: 0 3px 0 0;
+}
+
 #header-nav .post-nav__link:hover,
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
