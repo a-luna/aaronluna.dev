@@ -22,11 +22,11 @@
     opacity: 1;
 }
 
-.content a.hanchor-self {
+.content a.hanchor:first-child {
     margin: 0 0 0 7px;
 }
 
-.content a.hanchor-top {
+.content a.hanchor:last-child {
     font-size: 1em;
     margin: 0 0 0 6px;
 }
@@ -2205,15 +2205,9 @@ a.post-nav__link:focus {
     justify-content: space-between;
     align-items: center;
     border: none;
-    font-size: 1.1em;
-    line-height: 1;
+    font-size: 1em;
     padding: 0 5px;
     margin: 0 0 10px;
-}
-
-#header-nav i.fa {
-    vertical-align: middle;
-    font-size: 0.8em;
 }
 
 header .post-nav {
@@ -2222,7 +2216,7 @@ header .post-nav {
 
 #header-nav .post-nav-flex-item-prev,
 #header-nav .post-nav-flex-item-next {
-    flex: 0 0 auto;
+    flex: 0 0 100px;
     border: none;
 }
 
@@ -2240,12 +2234,7 @@ header .post-nav {
     visibility: hidden;
 }
 
-#header-nav .post-nav__link {
-    display: inline;
-    border-radius: 4px;
-    color: #19F6D6;
-}
-
+#header-nav .post-nav__link,
 #header-nav .post-nav__link:hover,
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
@@ -2254,7 +2243,10 @@ header .post-nav {
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
 #header-nav .post-nav__link:focus {
-    text-decoration: underline;
+    display: inline;
+    border-radius: 4px;
+    color: #19F6D6;
+    text-decoration: none;
 }
 
 #header-nav .post-nav__chevron:hover,
@@ -2894,7 +2886,7 @@ table.aws-hosting-costs {
 
 .accordian h2 a {
     color: #19F6D6;
-    margin: 0 0 0 5px;
+    margin: 0 0 0 1px;
 }
 
 .accordian h2 a:hover,
