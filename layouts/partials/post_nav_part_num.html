@@ -5,7 +5,7 @@
         <a class="post-nav__link post-nav__link--prev" href="{{.NextInSection.RelPermalink}}" rel="prev">
             <i class="fa fa-lg fa-fw fa-arrow-left" aria-hidden="true"></i>
         </a>
-        <a class="post-nav__link post-nav__link--prev" href="{{.NextInSection.RelPermalink}}" rel="prev">
+        <a class="post-nav__link post-nav__link--title__prev" href="{{.NextInSection.RelPermalink}}" rel="prev">
             {{.NextInSection.Params.series_part}}
         </a>
     </div>
@@ -20,7 +20,7 @@
     </div>
     {{- end }} {{- if .PrevInSection }}
     <div class="post-nav-flex-item-prev">
-        <a class="post-nav__link post-nav__link--next" href="{{.PrevInSection.RelPermalink}}" rel="next">
+        <a class="post-nav__link post-nav__link--title__next" href="{{.PrevInSection.RelPermalink}}" rel="next">
             {{.PrevInSection.Params.series_part}}
         </a>
         <a class="post-nav__link post-nav__link--next" href="{{.PrevInSection.RelPermalink}}" rel="next">
