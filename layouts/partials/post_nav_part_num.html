@@ -1,18 +1,14 @@
 {{- if .Site.Params.post_navigation }} {{- if or (.PrevInSection) (.NextInSection) }}
 <div id="header-nav">
     {{- if .NextInSection }}
-    <a class="post-nav__link post-nav__link--prev" href="{{.NextInSection.RelPermalink}}" rel="prev">
-        <div class="post-nav-flex-item-prev">
-            <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
-                <div class="post-nav__chevron chevron-prev">
-                    <i class="fa fa-lg fa-fw fa-arrow-left" aria-hidden="true"></i>
-                </div>
-                <div class="post-nav__post-title title-prev">
-                    {{.NextInSection.Params.series_part}}
-                </div>
-            </div>
-        </div>
-    </a>
+    <div class="post-nav-flex-item-prev">
+        <a class="post-nav__link post-nav__link--prev" href="{{.NextInSection.RelPermalink}}" rel="prev">
+            <i class="fa fa-lg fa-fw fa-arrow-left" aria-hidden="true"></i>
+        </a>
+        <a class="post-nav__link post-nav__link--prev" href="{{.NextInSection.RelPermalink}}" rel="prev">
+            {{.NextInSection.Params.series_part}}
+        </a>
+    </div>
     {{- else }}
     <div class="post-nav-flex-item-disabled">
         <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
@@ -23,18 +19,14 @@
         </div>
     </div>
     {{- end }} {{- if .PrevInSection }}
-    <a class="post-nav__link post-nav__link--next" href="{{.PrevInSection.RelPermalink}}" rel="next">
-        <div class="post-nav-flex-item-next">
-            <div class="post-nav__item post-nav__item--next inner-nav-flex-container">
-                <div class="post-nav__post-title title-next">
-                    {{.PrevInSection.Params.series_part}}
-                </div>
-                <div class="post-nav__chevron chevron-next">
-                    <i class="fa fa-lg fa-fw fa-arrow-right" aria-hidden="true"></i>
-                </div>
-            </div>
-        </div>
-    </a>
+    <div class="post-nav-flex-item-prev">
+        <a class="post-nav__link post-nav__link--next" href="{{.PrevInSection.RelPermalink}}" rel="next">
+            {{.PrevInSection.Params.series_part}}
+        </a>
+        <a class="post-nav__link post-nav__link--next" href="{{.PrevInSection.RelPermalink}}" rel="next">
+            <i class="fa fa-lg fa-fw fa-arrow-right" aria-hidden="true"></i>
+        </a>
+    </div>
     {{- else }}
     <div class="post-nav-flex-item-disabled">
         <div class="post-nav__item post-nav__item--next inner-nav-flex-container">

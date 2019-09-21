@@ -373,11 +373,8 @@ class Widget(db.Model):
 
     @hybrid_property
     def time_remaining_str(self):
-        return (
-            "No time remaining"
-            if self.deadline_passed
-            else format_timedelta_str(self.time_remaining)
-        )
+        timedelta_str = format_timedelta_str(self.time_remaining)
+        return "No time remaining" if self.deadline_passed else timedelta_str
 
     @hybrid_property
     def uri(self):
@@ -393,25 +390,9 @@ Most of the interesting things about the `Widget` model were previously discusse
     <ul>
       <li>
         <p><strong>Line 23: </strong>Since the URI that allows clients to interact with a single widget will contain the <code>name</code> attribute (<code>/api/v1/widgets/&lt;name&gt;</code>), we should reject values that contain chracters that are not URL-safe. To accomplish this, we will design a <code>RequestParser</code> that rejects values unless they contain only lowercase-letters, numbers, underscore and/or hyphen characters. Also, since the widget <code>name</code> is used as an identifier this value must be unique.</p>
-        <div class="note note-flex">
-            <div class="note-icon">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </div>
-            <div class="note-message" style="flex-flow: column wrap">
-                <p>The requirements for the <code>name</code> attribute come from the orginal project requirements (which we have been monitoring and marking complete at the end of each section): <span class="italics">The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</span></p>
-            </div>
-        </div>
       </li>
       <li>
         <p><strong>Lines 24, 26: </strong>The purpose of the <code>info_url</code> and <code>deadline</code> attributes are to demonstrate how to implement input validation for URL and <code>datetime</code> values. Any values that are not recognized as valid a URL or <code>datetime</code> must be rejected without adding the widget to the database.</p>
-        <div class="note note-flex">
-            <div class="note-icon">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </div>
-            <div class="note-message" style="flex-flow: column wrap">
-                <p>The requirements for the <code>info_url</code> and <code>deadline</code> attributes come from the orginal project requirements: <span class="italics">The widget model contains fields with URL and datetime data types, along with normal text fields</span> and <span class="italics">URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated)</span>.</p>
-            </div>
-        </div>
       </li>
       <li>
         <p><strong>Lines 28-29: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
@@ -425,25 +406,30 @@ Most of the interesting things about the `Widget` model were previously discusse
         </div>
       </li>
       <li>
-        <p><strong>Lines 34-42: </strong>.</p>
+        <p><strong>Lines 34-42: </strong>Both of these hybrid properties convert the datetime value stored in the database to the timezone of the machine executing the code and formats the datetime a string value.</p>
       </li>
       <li>
-        <p><strong>Lines 44-46: </strong>.</p>
+        <p><strong>Lines 44-46: </strong><code>deadline_passed</code> is a bool value, this has been included as part of the <code>Widget</code> model solely to increase the number of data types that are serialized when <code>Widget</code> objects are included in an HTTP response.</p>
       </li>
       <li>
-        <p><strong>Lines 48-51: </strong>.</p>
+        <p><strong>Lines 48-56: </strong><code>time_remaining</code> is a <code>timedelta</code> value that represents the time remaining until the <code>deadline</code> is passed.</p>
       </li>
       <li>
-        <p><strong>Lines 53-59: </strong>.</p>
+        <p><strong>Lines 58-60: </strong><code>time_remaining_str</code> converts the <code>timedelta</code> object returned by <code>time_remaining</code> to a formatted string if the <code>deadline</code> has not been passed. If the <code>deadline</code> has passed, <span class="bold-text">"No time remaining"</span> is returned.</p>
       </li>
       <li>
-        <p><strong>Lines 61-63: </strong>.</p>
-      </li>
-      <li>
-        <p><strong>Lines 65-67: </strong>.</p>
+        <p><strong>Lines 62-64: </strong><code>find_by_name</code> is a class method just like the <code>find_by_email</code> and <code>find_by_public_id</code> methods we previously created in the <code>User</code> class. Since the <code>name</code> attribute must be unique, we can use it to retrieve a specific <code>Widget</code>.</p>
       </li>
     </ul>
 </div>
+
+Also, the requirements for the `name`, `info_url` and `deadline` attributes come from the orginal project requirements (which we have been monitoring and marking complete at the end of each section):
+
+<ul class="alert italics" style="font-size: 0.9em">
+    <li>The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
+    <li>The widget model contains fields with URL and datetime data types, along with normal text fields.</li>
+    <li>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</li>
+</ul>
 
 ## Create Widget
 

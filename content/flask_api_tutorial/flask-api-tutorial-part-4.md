@@ -987,7 +987,7 @@ Create a new file `token_blacklist.py` in `/app/models` and add the content belo
 from datetime import datetime, timezone
 
 from app import db
-from app.util.datetime_util import dtaware_fromtimestamp
+from app.util.datetime_util import utc_now, dtaware_fromtimestamp
 
 
 class BlacklistedToken(db.Model):
@@ -997,7 +997,7 @@ class BlacklistedToken(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     token = db.Column(db.String(500), unique=True, nullable=False)
-    blacklisted_on = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    blacklisted_on = db.Column(db.DateTime, default=utc_now)
     expires_at = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, token, expires_at):
@@ -1005,12 +1005,7 @@ class BlacklistedToken(db.Model):
         self.expires_at = dtaware_fromtimestamp(expires_at, use_tz=timezone.utc)
 
     def __repr__(self):
-        return f"<BlacklistToken token={self.token}>"
-
-    @classmethod
-    def check_blacklist(cls, token):
-        exists = cls.query.filter_by(token=token).first()
-        return True if exists else False{{< /highlight >}}
+        return f"<BlacklistToken token={self.token}>"{{< /highlight >}}
 
 The `BlacklistedToken` class is pretty simple, but please note the following:
 
@@ -1020,38 +1015,18 @@ The `BlacklistedToken` class is pretty simple, but please note the following:
         <p><strong>Line 14: </strong><code>token</code> is the string value of the access token.</p>
       </li>
       <li>
-        <p><strong>Line 15: </strong>Notice that we are capturing the current time with <code>datetime.now(timezone.utc)</code>, <span class="emphasis">NOT</span> <code>datetime.utcnow()</code>. What is the difference between these two methods? Consider the REPL commands below:</p>
-        <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from datetime import datetime, timezone</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">datetime.now(timezone.utc)</span>
-<span class="cmd-repl-results">datetime.datetime(2019, 8, 8, 9, 52, 4, 353389, tzinfo=datetime.timezone.utc)</span>
+        <p><strong>Line 15: </strong>Notice that we are capturing the current time with <code>utc_now</code>, which is a function from the <code>app.util.datetime_util</code> module. What is the difference between using this function which returns a timezone-aware <code>datetime</code> object and <code>datetime.utcnow</code> which returns a naive <code>datetime</code>? Consider the REPL commands below:</p>
+        <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app.util.datetime_util import utc_now</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from datetime import datetime</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">utc_now()</span>
+<span class="cmd-repl-results">datetime.datetime(2019, 8, 8, 9, 52, 4, tzinfo=datetime.timezone.utc)</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">datetime.utcnow()</span>
 <span class="cmd-repl-results">datetime.datetime(2019, 8, 8, 9, 52, 6, 793105)</span></code></pre>
-        <p><code>datetime.utcnow()</code> produces a "naive" <code>datetime</code> object (i.e., without any timezone awareness), and <code>datetime.now(timezone.utc)</code> produces an "timezone-aware" <code>datetime</code> object.</p>
-        <div class="note note-flex">
-          <div class="note-icon">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
-          </div>
-          <div class="note-message">
-            <p>You may have noticed that <code>datetime.now(timezone.utc)</code> is also used to generate the default value of the <code>registered_on</code> attribute in the <code>User</code> class.</p>
-          </div>
-        </div>
         <p>Working with <code>datetime</code> objects can be a source of insidious bugs that are very difficult to diagnose. For a thorough explanation of best practices that will prevent such issues, read <a href="https://lo.calho.st/dev-culture/the-problem-with-pythons-datetime-class/" target="_blank">this post by Travis Mick</a>. The TL;DR version boils down to two guidelines:</p>
-        <div class="alert alert-flex">
-          <div class="alert-icon">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-          </div>
-          <div class="alert-message">
-            <p>Always ensure that your code produces and handles <code>datetime</code> objects that are timezone "aware".</p>
-          </div>
-        </div>
-        <div class="alert alert-flex">
-          <div class="alert-icon">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-          </div>
-          <div class="alert-message">
-            <p>Always ensure that the <code>datetime</code> objects produced and utilized by your code have <code>tzinfo=timezone.UTC</code> when written to the database.</p>
-          </div>
-        </div>
+        <ul class="alert bold-text">
+          <li>Always ensure that your code produces and handles <code style="background-color: #252525; font-weight: 400">datetime</code> objects that are timezone-aware.</li>
+          <li>Always ensure that the <code style="background-color: #252525; font-weight: 400">datetime</code> objects produced and utilized by your code are localized to the UTC timezone when written to the database (i.e., <code style="background-color: #252525; font-weight: 400">tzinfo=datetime.timezone.utc</code>).</li>
+        </ul>
         <p>A simple example of why you should always use timezone "aware" <code>datetime</code> values is given below. When we create a <code>BlacklistedToken</code> object, the required <code>expires_at</code> parameter is a UNIX timestamp (i.e., an integer value) which can be converted to a <code>datetime</code> object using the <code>fromtimestamp</code> method:</p>
         <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">expires_at = 1565257955</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">datetime.fromtimestamp(expires_at).astimezone(timezone.utc)</span>

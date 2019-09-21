@@ -13,7 +13,6 @@
 .content a.hanchor {
     color: #C4C4C4;
     font-size: 0.75em;
-    margin: 0 0 0 6px;
     opacity: 0.4;
 }
 
@@ -23,8 +22,13 @@
     opacity: 1;
 }
 
+.content a.hanchor:first-child {
+    margin: 0 0 0 7px;
+}
+
 .content a.hanchor:last-child {
     font-size: 1em;
+    margin: 0 0 0 6px;
 }
 
 html {
@@ -464,7 +468,7 @@ li.tags__item .btn:focus {
 
 .fa {
     display: inline-block;
-    font: normal normal normal 14px/1 FontAwesome;
+    font-family: FontAwesome;
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -2201,9 +2205,15 @@ a.post-nav__link:focus {
     justify-content: space-between;
     align-items: center;
     border: none;
-    font-size: 1em;
+    font-size: 1.1em;
+    line-height: 1;
     padding: 0 5px;
     margin: 0 0 10px;
+}
+
+#header-nav i.fa {
+    vertical-align: middle;
+    font-size: 0.8em;
 }
 
 header .post-nav {
@@ -2212,7 +2222,7 @@ header .post-nav {
 
 #header-nav .post-nav-flex-item-prev,
 #header-nav .post-nav-flex-item-next {
-    flex: 0 0 100px;
+    flex: 0 0 auto;
     border: none;
 }
 
@@ -2230,7 +2240,12 @@ header .post-nav {
     visibility: hidden;
 }
 
-#header-nav .post-nav__link,
+#header-nav .post-nav__link {
+    display: inline;
+    border-radius: 4px;
+    color: #19F6D6;
+}
+
 #header-nav .post-nav__link:hover,
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
@@ -2239,10 +2254,7 @@ header .post-nav {
 #header-nav .post-nav__link:active,
 #header-nav .post-nav__link:active:hover,
 #header-nav .post-nav__link:focus {
-    display: inline;
-    border-radius: 4px;
-    color: #19F6D6;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 #header-nav .post-nav__chevron:hover,
