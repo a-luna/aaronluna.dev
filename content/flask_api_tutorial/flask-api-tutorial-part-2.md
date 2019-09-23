@@ -234,7 +234,7 @@ Did you notice that we never defined a <code>&#95;&#95;init&#95;&#95;</code> met
 
 Whenever we make a change to our database schema (e.g., add new table, change column name, change foreign key dependencies, etc.) we need to create a migration with the Flask-Migrate extension. Each migration is stored in the migration database (which is actually just a folder named **migrations**), which also keeps track of the order that the migrations occurred. This allows us to either upgrade or downgrade our database all the way back to the database's initial state.
 
-The Flask-Migrate extension adds a new sub-command to the Flask CLI: `flask db`. In order to create the migration database, we must run `flask db init`:
+The Flask-Migrate extension adds a new set of commands to the Flask CLI grouped under `flask db`. In order to create the migration database, we must run `flask db init`:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db init</span>
 <span class="cmd-results">  Creating directory /Users/aaronluna/Projects/flask-api-tutorial/migrations ... done

@@ -22,11 +22,11 @@
     opacity: 1;
 }
 
-.content a.hanchor:first-child {
+.content a.hanchor-self {
     margin: 0 0 0 7px;
 }
 
-.content a.hanchor:last-child {
+.content a.hanchor-top {
     font-size: 1em;
     margin: 0 0 0 6px;
 }

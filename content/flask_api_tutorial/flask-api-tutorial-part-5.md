@@ -135,16 +135,16 @@ These endpoints allow the client to perform CRUD operations on the resource (<st
             <tr>
                 <td class="first-column">api.widget_list</td>
                 <td>/api/v1/widgets</td>
-                <td>GET</td>
-                <td>Retrieve a list of widgets</td>
-                <td class="last-column">Regular user</td>
+                <td>POST</td>
+                <td>Create a new widget</td>
+                <td class="last-column">Admin user</td>
             </tr>
             <tr>
                 <td class="first-column">api.widget_list</td>
                 <td>/api/v1/widgets</td>
-                <td>POST</td>
-                <td>Create a new widget</td>
-                <td class="last-column">Admin user</td>
+                <td>GET</td>
+                <td>Retrieve a list of widgets</td>
+                <td class="last-column">Regular user</td>
             </tr>
             <tr>
                 <td class="first-column">api.widget</td>
@@ -428,10 +428,74 @@ Also, the requirements for the `name`, `info_url` and `deadline` attributes come
 <ul class="alert italics" style="font-size: 0.9em">
     <li>The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
     <li>The widget model contains fields with URL and datetime data types, along with normal text fields.</li>
-    <li>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</li>
 </ul>
 
+Next, we need to update `run.py` in order for the Flask-Migrate extension to recognize it and create a migration script that adds the new table to the database (this is the same process performed for the User class in [Part 2](/series/flask_api_tutorial/part-2/#user-db-model) and for the BlacklistedToken class in [Part 4](/series/flask_api_tutorial/part-4/#blacklistedtoken-db-model)).
+
+Open run.py in the project root folder and make the changes noted below:
+
+{{< highlight python "linenos=table,hl_lines=9 16" >}}"""Flask CLI/Application entry point."""
+import os
+
+import click
+
+from app import create_app, db
+from app.models.token_blacklist import BlacklistedToken
+from app.models.user import User
+from app.models.widget import Widget
+
+app = create_app(os.getenv("FLASK_ENV", "development"))
+
+
+@app.shell_context_processor
+def make_shell_context():
+    return {"db": db, "User": User, "BlacklistedToken": BlacklistedToken, "Widget": Widget}{{< /highlight >}}
+
+Next, run <code>flask db migrate</code> and add a message explaining that this migration adds the `widget` table:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add Widget model"</span>
+<span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.autogenerate.compare] Detected added table 'widget'
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/fdd8ca8d8666_add_widget_model.py ... done</span></code></pre>
+
+Next, run <code>flask db upgrade</code> to run the migration script on the local dev database:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
+<span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
+INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade 8fa4b4909211 -> fdd8ca8d8666, add Widget model</span></code></pre>
+
+With the `widget` table created, we can start implementing the [Widget API endpoints](#widget-ns-endpoints).
+
 ## Create Widget
+
+It makes the most sense (to me) to start with the endpoint responsible for creating `Widget` objects. Obviously, if our database lacks `Widget` objects there's nothing to be retrieved, updated or deleted. So, what do we need to do in order to allow clients to create a `Widget`? If you answered "the same thing we did for the `auth_ns` endpoints", you would be correct.
+
+In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints), we followed the process below for each API endpoint:
+
+<div class="steps">
+  <ol>
+    <li>Create request parsers/API models to validate request data and serialize response data.</li>
+    <li>Define the business logic necessary to process the request if validation succeeds.</li>
+    <li>Create a class that inherits from <code>Resource</code> and bind it to the API endpoint/URL route.</li>
+    <li>Define the set of HTTP methods that the API endpoint will support and expose methods on the concrete <code>Resource</code> class for each. Methods named <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> or <code>head</code> will be called when the API endpoint receives a request of the same HTTP method type.
+    <div class="alert alert-flex">
+      <div class="alert-icon">
+        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      </div>
+      <div class="alert-message">
+        <p>If the API endpoint does not support the HTTP method, do not expose a method with the name of the HTTP method and the client will receive a response with status code 405 <code>HTTPStatus.METHOD_NOT_ALLOWED</code></p>
+      </div>
+    </div>
+    </li>
+    <li>Document the <code>Resource</code> class and all methods <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">as explained in the Flask-RESTPlus docs</a>. Most of the content on the Swagger UI page is generated by decorating your concrete <code>Resource</code> classes and their methods.</li>
+    <li>Utilize the business logic created in Step 2 within the approprate HTTP methods to process the request.</li>
+    <li>Create unit tests to verify that the input validation provided by the request parsers/API models is working correctly, and verify the endpoint behaves as expected.</li>
+  </ol>
+</div>
+
+Step 1 says <span class="bold-italics">create request parsers/API models to validate request data and serialize response data</span>. So let's dive into it!
 
 ### `widget_reqparser` Request Parser
 
@@ -457,24 +521,24 @@ def widget_name(name):
         )
 
 
-def future_date_string(input):
-    """Validation logic for future_date_string.
+def future_date(date_str):
+    """Validation logic for future_date.
 
-    Return parsed_date if dateutil.parser correctly parsed input string AND if parsed_date is
+    Return datetime value if dateutil.parser correctly parsed input string AND if parsed_date is
     greater than or equal to today's date, raise an excaption if validation fails.
     """
     try:
-        parsed_date = parser.parse(input)
+        parsed_date = parser.parse(date_str)
     except ValueError:
         raise ValueError(
-            f"Failed to parse '{input}' as a valid date. You can use any format recognized "
+            f"Failed to parse '{date_str}' as a valid date. You can use any format recognized "
             "by dateutil.parser. For example, all of the strings below are valid ways to "
             "represent the same date: '2018-5-13' -or- '05/13/2018' -or- 'May 13 2018'."
         )
 
     if parsed_date.date() < date.today():
         raise ValueError(
-            f"Successfully parsed {input} as {parsed_date.strftime(DATE_MONTH_NAME)}. However, "
+            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. However, "
             f"this value must be a date in the future and "
             f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}"
@@ -501,7 +565,7 @@ widget_reqparser.add_argument(
 )
 widget_reqparser.add_argument(
     "deadline",
-    type=future_date_string,
+    type=future_date,
     location="form",
     required=True,
     nullable=False,
