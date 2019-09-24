@@ -432,7 +432,7 @@ Also, the requirements for the `name`, `info_url` and `deadline` attributes come
 
 Next, we need to update `run.py` in order for the Flask-Migrate extension to recognize it and create a migration script that adds the new table to the database (this is the same process performed for the User class in [Part 2](/series/flask_api_tutorial/part-2/#user-db-model) and for the BlacklistedToken class in [Part 4](/series/flask_api_tutorial/part-4/#blacklistedtoken-db-model)).
 
-Open run.py in the project root folder and make the changes noted below:
+Open run.py in the project root folder and update the import statements to include the `Widget` class **(Line 9)**. Then add the `Widget` class to the `dict` object that is returned by the `make_shell_context` function **(Line 16)**:
 
 {{< highlight python "linenos=table,hl_lines=9 16" >}}"""Flask CLI/Application entry point."""
 import os
@@ -451,26 +451,26 @@ app = create_app(os.getenv("FLASK_ENV", "development"))
 def make_shell_context():
     return {"db": db, "User": User, "BlacklistedToken": BlacklistedToken, "Widget": Widget}{{< /highlight >}}
 
-Next, run <code>flask db migrate</code> and add a message explaining that this migration adds the `widget` table:
+Next, run <code>flask db migrate</code> and add a message explaining that after applying this migration the `widget` table will be added to the database:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add Widget model"</span>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget table"</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'widget'
-  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/fdd8ca8d8666_add_widget_model.py ... done</span></code></pre>
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/fdd8ca8d8666_add_widget_table.py ... done</span></code></pre>
 
 Next, run <code>flask db upgrade</code> to run the migration script on the local dev database:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade 8fa4b4909211 -> fdd8ca8d8666, add Widget model</span></code></pre>
+INFO  [alembic.runtime.migration] Running upgrade 8fa4b4909211 -> fdd8ca8d8666, add widget table</span></code></pre>
 
 With the `widget` table created, we can start implementing the [Widget API endpoints](#widget-ns-endpoints).
 
 ## Create Widget
 
-It makes the most sense (to me) to start with the endpoint responsible for creating `Widget` objects. Obviously, if our database lacks `Widget` objects there's nothing to be retrieved, updated or deleted. So, what do we need to do in order to allow clients to create a `Widget`? If you answered "the same thing we did for the `auth_ns` endpoints", you would be correct.
+It makes the most sense (to me) to start with the endpoint responsible for creating `Widget` objects. Obviously, without `Widget` objects there's nothing to be retrieved, updated or deleted. So, what do we need to do in order to allow clients to create a `Widget`? If you answered "the same thing we did for the `auth_ns` endpoints", you would be correct.
 
 In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints), we followed the process below for each API endpoint:
 
@@ -498,6 +498,38 @@ In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints), we followed t
 Step 1 says <span class="bold-italics">create request parsers/API models to validate request data and serialize response data</span>. So let's dive into it!
 
 ### `widget_reqparser` Request Parser
+
+What exactly does a client need to provide to create a new `Widget`? Take a look at the attributes of the `Widget` class:
+
+{{< highlight python "linenos=table,linenostart=22,hl_lines=2-3 5" >}}id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+name = db.Column(db.String(100), unique=True, nullable=False)
+info_url = db.Column(db.String(255))
+created_at = db.Column(db.DateTime, default=utc_now)
+deadline = db.Column(db.DateTime)
+
+owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
+owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
+
+The client must provide values for the three attributes highlighted above (`name`, `info_url` and `deadline`).
+
+<div class="code-details">
+    <ul>
+      <li>
+        <p><span class="bold-text">id: </span>This is the database table's primary key. The value is automatically set when a <code>Widget</code> is committed to the database (starting at one, then incrementing by one each time a <code>Widget</code> is added).</p>
+      </li>
+      <li>
+        <p><span class="bold-text">created_at: </span>When a <code>Widget</code> object is created, the expression specified in the <code>default</code> parameter is evaluated and stored as the value for <code>created_at</code>. <code>utc_now</code> returns the current date and time as a <code>datetime</code> value that is timezone-aware and localized to UTC.</p>
+      </li>
+      <li>
+        <p><span class="bold-text">owner_id: </span></p>
+      </li>
+      <li>
+        <p><span class="bold-text">owner: </span></p>
+      </li>
+    </ul>
+</div>
+
+We will need to create custom validation functions in order to restrict
 
 {{< highlight python "linenos=table" >}}"""Parsers and serializers for /widgets API endpoints."""
 import re
