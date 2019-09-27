@@ -2031,6 +2031,9 @@ abbr[title] {
 /* Pagination */
 
 .pagination {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
     margin: 1.5em 2em 0 0;
 }
 
@@ -2067,7 +2070,7 @@ a.pagination__item--next {
 }
 
 .pagination__item--current {
-    margin: 0;
+    margin: 0 3px;
 }
 
 
