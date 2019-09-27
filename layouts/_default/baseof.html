@@ -59,6 +59,10 @@
       document.querySelectorAll('.site-menu-link').forEach(link => toggleActive(link));
     </script>
     <script>
+      const postTitle = document.querySelector('h1.post__title');
+      if (postTitle) {
+          postTitle.id = "top-of-page"
+      }
       const headings = document.querySelectorAll('article h2[id], article h3[id], article h4[id]');
       headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#${h.id}" class="hanchor hanchor-self" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`));
       headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#top-of-page" class="hanchor hanchor-top" title="Return to top of page"><i class="fa fa-angle-double-up"></i></a></a>`));
