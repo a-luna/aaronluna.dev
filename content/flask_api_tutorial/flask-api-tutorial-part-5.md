@@ -604,11 +604,11 @@ widget_reqparser.add_argument(
 
 Let's break this down by looking at how each of the attributes are validated by the code above:
 
-#### <code>name</code> Argument
+#### `name` Argument
 
-In order to fulfull the requirements for the <code>name</code> attribute, we must define our own custom type. This is a fairly trivial process, basically we only need to create a method that evaluates the value provided by the client and converts it to the format required by the attribute. If the value is not valid for the attribute, the method must raise a `ValueError` with a message explaining why the value is invalid.
+In order to fulfull the requirements for the `name` attribute, we must define our own custom type. This is a fairly trivial process. We need to create a method that validates the value provided by the client and returns it. Optionally, if the attribute expects a data type other than a string the custom type function must also convert the validated value to the expected type. If the value provided by the client is invalid, the method must raise a `ValueError`.
 
-Remember, the `name` attribute must consist of <span class="bold-text">ONLY</span> lowercase-letters, numbers, '-' (hyphen character) or '_' (underscore character). With that in mind, let's talk through how the `widget_name` function fulfills these requirements:
+Remember, the `name` attribute must consist of **ONLY** lowercase-letters, numbers, '-' (hyphen character) or '_' (underscore character). With that in mind, let's talk through how the `widget_name` function fulfills these requirements:
 
 {{< highlight python "linenos=tabl4,linenostart=15" >}}def widget_name(name):
     """Return name if valid, raise an excaption if validation fails."""
@@ -620,9 +620,9 @@ Remember, the `name` attribute must consist of <span class="bold-text">ONLY</spa
             "only letters, numbers, hyphen and/or underscore characters."
         ){{< /highlight >}}
 
-The simplist way to implement our custom type is with a regular expression. The regex <code>^[\w-]+$</code> will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and/or the hyphen character. If a value is passed to this function that does not match this regex, a <code>ValueError</code> is raised.
+The simplist way to implement our custom type is with a regular expression. The regex `^[\w-]+$` will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and/or the hyphen character. If a value is passed to this function that does not match this regex, a `ValueError` is raised.
 
-We can see how this function works by testing it in the <code>flask shell</code>:
+We can see how this function works by testing it in the `flask shell`:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-repl-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
@@ -646,6 +646,8 @@ Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
   File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 20, in widget_name
     f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
 <span class="cmd-warning">ValueError: 't**&*' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span></code></pre>
+
+
 
 {{< highlight python "linenos=table,linenostart=50" >}}widget_reqparser.add_argument(
     "name",
