@@ -703,6 +703,10 @@ h4 {
     color: #2196F3;
 }
 
+.cmd-repl-comment {
+    color: #E5B965;
+}
+
 .cmd-warning {
     color: #FF2C6D;
 }
@@ -1882,7 +1886,7 @@ abbr[title] {
 #widgets .toc__menu ul li ul li ul li:last-child,
 .toc__menu ul li ul li ul li:last-child,
 .toc__menu ul li ul li ul li ul li:last-child {
-    margin: 0 0 15px;
+    margin: 0 0 10px;
 }
 
 #widgets .toc__menu ul ul ul,
@@ -2055,7 +2059,7 @@ a.pagination__item:focus {
 }
 
 a.pagination__item--prev {
-    margin: 0 2px 0 0;
+    margin: 0;
 }
 
 a.pagination__item--next {
@@ -2063,7 +2067,7 @@ a.pagination__item--next {
 }
 
 .pagination__item--current {
-    margin: 0 2px;
+    margin: 0;
 }
 
 

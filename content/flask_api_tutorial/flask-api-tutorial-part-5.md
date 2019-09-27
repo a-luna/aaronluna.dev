@@ -630,24 +630,30 @@ We can see how this function works by testing it in the `flask shell`:
 App: flask-api-tutorial [development]
 Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app.api.widgets.dto import widget_name</span>
+<span class="cmd-repl-comment"># 1. 'test' is a valid widget_name</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("test")</span>
 <span class="cmd-repl-results">'test'</span>
+<span class="cmd-repl-comment"># 2. 'test_1-AZ' is a valid widget_name</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("test_1-AZ")</span>
 <span class="cmd-repl-results">'test_1-AZ'</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("test 1-AZ")</span>
+<span class="cmd-repl-comment"># 3. 'this widget' is NOT a valid widget_name</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("this widget")</span>
 <span class="cmd-repl-results">Traceback (most recent call last):
   File "&lt;console&gt;", line 1, in &lt;module&gt;
-  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 20, in widget_name
+  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 18, in widget_name
     f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
-<span class="cmd-warning">ValueError: 'test 1-AZ' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span>
+<span class="cmd-warning">ValueError: 'this widget' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span>
+<span class="cmd-repl-comment"># 4. 't**&*' is NOT a valid widget_name</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("**&*&")</span>
 <span class="cmd-repl-results">Traceback (most recent call last):
   File "&lt;console&gt;", line 1, in &lt;module&gt;
-  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 20, in widget_name
+  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 18, in widget_name
     f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
 <span class="cmd-warning">ValueError: 't**&*' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span></code></pre>
 
+The first test passes since 'test' consists of only letters. The second test passes because it contains one of each of the allowed character types (letter, number, hyphen, underscore) and no other characters. The third and fourth tests fail because they both contain one or more forbiddedn characters (space, asterisk, ampersand).
 
+Wait, let's back up. Didn't the requirement for the `name` attribute say that only **lowercase** letters were allowed? Yep, you got me. I kinda sort-of lied about the second example **(test_1-AZ)** being a valid `widget_name`. But there is a reason why I did this, which will be revealed by the configuration of the argument object for the `name` attribute:
 
 {{< highlight python "linenos=table,linenostart=50" >}}widget_reqparser.add_argument(
     "name",
@@ -658,7 +664,11 @@ Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
     case_sensitive=True,
 ){{< /highlight >}}
 
-#### <code>info_url</code> Argument
+To use our custom type, we simply specify the name of the function that we created (`widget_name`) as the `type`. The `location`, `required` and `nullable` parameters should be familiar to you since we explained their purpose in [Part 3](/series/flask_api_tutorial/part-3/#request-parser-configuration). This is the first time we are using the `case_sensitive` parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, this is used to specify "whether argument values in the request are case sensitive or not (this will convert all values to lowercase)".
+
+Configuring the `name` argument with `type=widget_name` and `case_sensitive=True` allows the client to provide a value for the widget name in any combination of upper and lowercase letters. The name will be converted to lowercase and the widget will be created if the name contains only valid characters and also does not already exist in the database.
+
+#### `info_url` Argument
 
 {{< highlight python "linenos=table,linenostart=58" >}}widget_reqparser.add_argument(
     "info_url",
@@ -668,7 +678,7 @@ Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
     nullable=False,
 ){{< /highlight >}}
 
-#### <code>deadline</code> Argument
+#### `deadline` Argument
 
 {{< highlight python "linenos=table,linenostart=23" >}}def future_date(date_str):
     """Validation logic for future_date.
