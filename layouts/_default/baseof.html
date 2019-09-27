@@ -23,7 +23,7 @@
     {{ with .OutputFormats.Get "rss" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{ end -}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,300,400,600,700,800" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,300,400,600,700,800" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" type="text/css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     {{ range .Site.Params.customCSS -}}
@@ -50,7 +50,18 @@
         </div>
         {{ partial "footer" . }}
     </div>
-    <script async defer src="{{ "js/toggleActiveUrl.js" | relURL }}"></script>
-    <script async defer src="{{ "js/hanchor.js" | relURL }}"></script>
+    <script>
+      const toggleActive = function(link) {
+          if (location.href == link.href) {
+              link.classList.add("active");
+          }
+      };
+      document.querySelectorAll('.site-menu-link').forEach(link => toggleActive(link));
+    </script>
+    <script>
+      const headings = document.querySelectorAll('article h2[id], article h3[id], article h4[id]');
+      headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#${h.id}" class="hanchor hanchor-self" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`));
+      headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#top-of-page" class="hanchor hanchor-top" title="Return to top of page"><i class="fa fa-angle-double-up"></i></a></a>`));
+    </script>
 </body>
 </html>

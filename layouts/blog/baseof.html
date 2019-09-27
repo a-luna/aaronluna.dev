@@ -23,7 +23,7 @@
     {{ with .OutputFormats.Get "rss" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{ end -}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,300,400,600,700,800" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,300,400,600,700,800" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" type="text/css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     {{ range .Site.Params.customCSS -}}
@@ -50,7 +50,13 @@
         </div>
         {{ partial "footer" . }}
     </div>
-    <script async defer src="{{ "js/menu.js" | relURL }}"></script>
-    <script async defer src="{{ "js/toggleActiveUrl.js" | relURL }}"></script>
+    <script>
+      const toggleActive = function(link) {
+          if (location.href == link.href) {
+              link.classList.add("active");
+          }
+      };
+      document.querySelectorAll('.site-menu-link').forEach(link => toggleActive(link));
+    </script>
 </body>
 </html>
