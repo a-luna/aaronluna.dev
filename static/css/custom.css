@@ -3114,7 +3114,7 @@ header,
 @media screen and (max-width: 767px) {
     main,
     .authorbox {
-        margin: 0 0 15px;
+        margin: 0 0 10px;
     }
     .post-nav {
         border-top: 1px dotted #7F7F7F;
@@ -3262,10 +3262,13 @@ header,
         padding: 0.5em 0 0;
         margin: 0;
     }
+    .list__item {
+        margin: 0 0 15px;
+    }
     .pagination {
         margin: 0;
-        padding: 0 0 1.25em;
-        text-align: center;
+        padding: 0 0 15px;
+        justify-content: center;
         border-bottom: 2px dotted #7E7F7F;
     }
     #disqus-container {
