@@ -664,9 +664,23 @@ Wait, let's back up. Didn't the requirement for the `name` attribute say that on
     case_sensitive=True,
 ){{< /highlight >}}
 
-To use our custom type, we simply specify the name of the function that we created as the `type`. The `location`, `required` and `nullable` parameters should be familiar to you since we explained their purpose in [Part 3](/series/flask_api_tutorial/part-3/#request-parser-configuration). This is the first time we are using the `case_sensitive` parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, this is used to specify "whether argument values in the request are case sensitive or not (this will convert all values to lowercase)".
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 52: </strong>To use our custom type, we simply specify the name of the function that we created as the <code>type</code>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 53-55: </strong>The <code>location</code>, <code>required</code> and <code>nullable</code> parameters should be familiar since we explained their purpose in <a href="/series/flask_api_tutorial/part-3/#request-parser-configuration">Part 3</a>.</p>
+      </li>
+      <li>
+        <p><strong>Line 56: </strong>This is the first time we are using the <code>case_sensitive</code> parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, if <code>case_sensitive=True</code> "this will convert all values to lowercase".</p>
+      </li>
+    </ul>
+</div>
 
-Configuring the `name` argument with `type=widget_name` and `case_sensitive=True` allows the client to provide a value for the widget name in any combination of upper and lowercase letters. When an HTTP request is received to create a widget, if the request contains a `name` attribute, the value of that attribute will be passed to the `widget_name` function. If the value converted to lowercase and the widget will be created if the name contains only valid characters and also does not already exist in the database.
+Configuring the `name` argument with `type=widget_name` and `case_sensitive=True` allows the client to provide a value for the widget name in any combination of upper and lowercase letters. When an HTTP request is received to create a widget, if the request contains a `name` attribute, the value of that attribute will be passed to the `widget_name` function.
+
+If the widget name contains only valid characters, it will be converted to lowercase before being passed to the business logic. The business logic will query the database for widgets with the same name. If a widget is found with the same name, the request will be aborted and the widget will not be created. If no widget is found with the same name, a new widget object will be created and added to the database.
 
 #### `info_url` Argument
 
