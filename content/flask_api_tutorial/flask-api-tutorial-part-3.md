@@ -249,7 +249,7 @@ The placement of the import statement is deliberate. To avoid a circular import,
 
 It's a good idea to make sure that everything still works and we have not broken anything, so run the unit tests with `pytest`. They should all pass. Then, run `flask routes` to see the new URL routes that have been registered in our application:
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
 <span class="cmd-results">Endpoint             Methods  Rule
 -------------------  -------  --------------------------
 api.doc              GET      /api/v1/ui
@@ -1009,7 +1009,7 @@ Once again, we only implemented a small number of features from the requirements
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains fields with URL and datetime data types, along with normal text fields.</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>

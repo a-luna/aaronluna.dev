@@ -343,7 +343,7 @@ Successfully installed flask-api-tutorial</span>
 
 ## `app.util` Package
 
-The `app.util` package contains utlity classes and functions that I have curated over time. They are not related to the main topics of this tutorial, so let's just get them out of the way before we begin working on the actual project.
+The `app.util` package contains general-purpose utlity classes and functions that we will use througout this project. They are not related to the main topics of this tutorial, so let's just get them out of the way before we begin working on the actual project.
 
 ### `Result` Class
 
@@ -1060,7 +1060,7 @@ Most of the work done in this section wasn't related to any specific project req
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains fields with URL and datetime data types, along with normal text fields.</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>

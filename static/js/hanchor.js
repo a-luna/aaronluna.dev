@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         postTitle.id = "top-of-page"
     }
     // Add anchor links to all headings
-    var headers = document.querySelectorAll('article h2[id], article h3[id]')
+    var headers = document.querySelectorAll('article h2[id], article h3[id], article h4[id]')
     if (headers) {
         headers.forEach(addAnchor)
     }

@@ -392,18 +392,13 @@ Most of the interesting things about the `Widget` model were previously discusse
         <p><strong>Line 23: </strong>Since the URI that allows clients to interact with a single widget will contain the <code>name</code> attribute (<code>/api/v1/widgets/&lt;name&gt;</code>), we should reject values that contain chracters that are not URL-safe. To accomplish this, we will design a <code>RequestParser</code> that rejects values unless they contain only lowercase-letters, numbers, underscore and/or hyphen characters. Also, since the widget <code>name</code> is used as an identifier this value must be unique.</p>
       </li>
       <li>
-        <p><strong>Lines 24, 26: </strong>The purpose of the <code>info_url</code> and <code>deadline</code> attributes are to demonstrate how to implement input validation for URL and <code>datetime</code> values. Any values that are not recognized as valid a URL or <code>datetime</code> must be rejected without adding the widget to the database.</p>
+        <p><strong>Line 24: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not recognized as a valid URL must be rejected without adding the widget to the database.</p>
+      </li>
+      <li>
+        <p><strong>Line 26: </strong>The purpose of the <code>deadline</code> attribute is to demonstrate how to implement input validation for <code>datetime</code> values. Additionally, only <code>datetime</code> values that are either the same as or greater than the current date are allowed. Values not recognized as valid <code>datetime</code> values <span class="emphasis">AND</span> valid <code>datetime</code> values in the past must be rejected without adding the widget to the database.</p>
       </li>
       <li>
         <p><strong>Lines 28-29: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
-        <div class="note note-flex">
-            <div class="note-icon">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </div>
-            <div class="note-message" style="flex-flow: column wrap">
-                <p>After this table has been added to the database, all <code>User</code> instances will contain a attribute named <code>widgets</code>, the value of which is a list of <code>Widget</code> objects created by the <code>User</code>. This attribute is created automatically due to <code>db.relationship</code> specifying <code>backref=db.backref("widgets")</code> in <span class="bold-text">Line 28</span>. This is a feature of the SQLAlchemy ORM, <a href="https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many" target="_blank">click here</a> for more information on this feature.</p>
-            </div>
-        </div>
       </li>
       <li>
         <p><strong>Lines 34-42: </strong>Both of these hybrid properties convert the datetime value stored in the database to the timezone of the machine executing the code and formats the datetime a string value.</p>
@@ -426,7 +421,7 @@ Most of the interesting things about the `Widget` model were previously discusse
 Also, the requirements for the `name`, `info_url` and `deadline` attributes come from the orginal project requirements (which we have been monitoring and marking complete at the end of each section):
 
 <ul class="alert italics" style="font-size: 0.9em">
-    <li>The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
+    <li>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
     <li>The widget model contains fields with URL and datetime data types, along with normal text fields.</li>
 </ul>
 
@@ -510,7 +505,7 @@ deadline = db.Column(db.DateTime)
 owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
 owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
 
-The client must provide values for the three attributes highlighted above (`name`, `info_url` and `deadline`).
+The client must provide values for the three attributes highlighted above (`name`, `info_url` and `deadline`). What about the other attributes?
 
 <div class="code-details">
     <ul>
@@ -521,15 +516,19 @@ The client must provide values for the three attributes highlighted above (`name
         <p><span class="bold-text">created_at: </span>When a <code>Widget</code> object is created, the expression specified in the <code>default</code> parameter is evaluated and stored as the value for <code>created_at</code>. <code>utc_now</code> returns the current date and time as a <code>datetime</code> value that is timezone-aware and localized to UTC.</p>
       </li>
       <li>
-        <p><span class="bold-text">owner_id: </span></p>
+        <p><span class="bold-text">owner_id: </span>This value is a foreign-key, which is specified by the second argument to <code>db.Column</code> being <code>db.ForeignKey("site_user.id")</code>. <span class="bold-text">site_user</span> is the name of the actual database table where <code>User</code> objects are stored, and <span class="bold-text">site_user.id</span> is the primary-key that the <code>owner_id</code> column is referencing.</p>
       </li>
       <li>
-        <p><span class="bold-text">owner: </span></p>
+        <p><span class="bold-text">owner: </span>It is important to note that <code>owner</code> is <span class="emphasis">NOT</span> an instance of <code>db.Column</code> (i.e., this is not a column that exists in the <code>widget</code> database table). Instead, this is a relationship object that demonstates one of the main features of the SQLAlchemy ORM (<a href="https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many" target="_blank">Click here</a> for more information).</p>
+        <p>When processing a request to create a new <code>Widget</code>, the business logic will set the value of the <code>owner_id</code> attribute to the <code>id</code> of the <code>User</code> who sent the request. After the <code>Widget</code> is created and committed to the database, the <code>owner</code> attribute will contain a <code>User</code> object that represents the <code>User</code> who created it.</p>
+        <p>Another interesting feature is achieved by <code>backref=db.backref("widgets")</code>. This creates a new attribute on all <code>User</code> objects named <span class="bold-text">widgets</span> (without modifying the <code>User</code> class at all), which is a list of all <code>Widget</code> objects in the database where <code>User.id</code> is equal to <code>owner_id</code>.</p>
       </li>
     </ul>
 </div>
 
-We will need to create custom validation functions in order to restrict
+When we created the `auth_reqparser` in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` and used this class to verify if a value provided by the client is a valid email address. Flask-RESTPlus includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
+
+Create a new file named `dto.py` in `app/api/widgets` and enter the content below:
 
 {{< highlight python "linenos=table" >}}"""Parsers and serializers for /widgets API endpoints."""
 import re
@@ -596,6 +595,105 @@ widget_reqparser.add_argument(
     nullable=False,
 )
 widget_reqparser.add_argument(
+    "deadline",
+    type=future_date,
+    location="form",
+    required=True,
+    nullable=False,
+){{< /highlight >}}
+
+Let's break this down by looking at how each of the attributes are validated by the code above:
+
+#### <code>name</code> Argument
+
+In order to fulfull the requirements for the <code>name</code> attribute, we must define our own custom type. This is a fairly trivial process, basically we only need to create a method that evaluates the value provided by the client and converts it to the format required by the attribute. If the value is not valid for the attribute, the method must raise a `ValueError` with a message explaining why the value is invalid.
+
+Remember, the `name` attribute must consist of <span class="bold-text">ONLY</span> lowercase-letters, numbers, '-' (hyphen character) or '_' (underscore character). With that in mind, let's talk through how the `widget_name` function fulfills these requirements:
+
+{{< highlight python "linenos=tabl4,linenostart=15" >}}def widget_name(name):
+    """Return name if valid, raise an excaption if validation fails."""
+    if re.compile(r"^[\w-]+$").match(name):
+        return name
+    else:
+        raise ValueError(
+            f"'{name}' contains one or more invalid characters. Widget name must contain "
+            "only letters, numbers, hyphen and/or underscore characters."
+        ){{< /highlight >}}
+
+The simplist way to implement our custom type is with a regular expression. The regex <code>^[\w-]+$</code> will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and/or the hyphen character. If a value is passed to this function that does not match this regex, a <code>ValueError</code> is raised.
+
+We can see how this function works by testing it in the <code>flask shell</code>:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
+<span class="cmd-repl-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
+[Clang 10.0.1 (clang-1001.0.46.4)] on darwin
+App: flask-api-tutorial [development]
+Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app.api.widgets.dto import widget_name</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("test")</span>
+<span class="cmd-repl-results">'test'</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("test_1-AZ")</span>
+<span class="cmd-repl-results">'test_1-AZ'</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("test 1-AZ")</span>
+<span class="cmd-repl-results">Traceback (most recent call last):
+  File "&lt;console&gt;", line 1, in &lt;module&gt;
+  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 20, in widget_name
+    f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
+<span class="cmd-warning">ValueError: 'test 1-AZ' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("**&*&")</span>
+<span class="cmd-repl-results">Traceback (most recent call last):
+  File "&lt;console&gt;", line 1, in &lt;module&gt;
+  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 20, in widget_name
+    f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
+<span class="cmd-warning">ValueError: 't**&*' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span></code></pre>
+
+{{< highlight python "linenos=table,linenostart=50" >}}widget_reqparser.add_argument(
+    "name",
+    type=widget_name,
+    location="form",
+    required=True,
+    nullable=False,
+    case_sensitive=True,
+){{< /highlight >}}
+
+#### <code>info_url</code> Argument
+
+{{< highlight python "linenos=table,linenostart=58" >}}widget_reqparser.add_argument(
+    "info_url",
+    type=URL(schemes=["http", "https"]),
+    location="form",
+    required=True,
+    nullable=False,
+){{< /highlight >}}
+
+#### <code>deadline</code> Argument
+
+{{< highlight python "linenos=table,linenostart=23" >}}def future_date(date_str):
+    """Validation logic for future_date.
+
+    Return datetime value if dateutil.parser correctly parsed input string AND if parsed_date is
+    greater than or equal to today's date, raise an excaption if validation fails.
+    """
+    try:
+        parsed_date = parser.parse(date_str)
+    except ValueError:
+        raise ValueError(
+            f"Failed to parse '{date_str}' as a valid date. You can use any format recognized "
+            "by dateutil.parser. For example, all of the strings below are valid ways to "
+            "represent the same date: '2018-5-13' -or- '05/13/2018' -or- 'May 13 2018'."
+        )
+
+    if parsed_date.date() < date.today():
+        raise ValueError(
+            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. However, "
+            f"this value must be a date in the future and "
+            f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
+            f"{datetime.now().strftime(DATE_MONTH_NAME)}"
+        )
+    deadline = datetime.combine(parsed_date.date(), time.max)
+    return make_tzaware(deadline, use_tz=timezone.utc){{< /highlight >}}
+
+{{< highlight python "linenos=table,linenostart=65" >}}widget_reqparser.add_argument(
     "deadline",
     type=future_date,
     location="form",
@@ -692,7 +790,7 @@ api.add_namespace(widget_ns, path="/widgets"){{< /highlight >}}
 
 ### Unit Tests: `test_create_widget.py`
 
-## Get Widget List
+## Retrieve Widget List
 
 ### Pagination
 
@@ -916,7 +1014,7 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
 
 ### Unit Tests: `test_get_widget_list.py`
 
-## Get Widget
+## Retrieve Widget
 
 ### `retrieve_widget` Method
 

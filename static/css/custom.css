@@ -632,17 +632,27 @@ h4 {
 }
 
 .content h2,
-.content h3 {
+.content h3,
+.content h4 {
     color: #E2E2E2;
     font-weight: 400;
     margin: 1.5em 0 0.5em;
 }
 
 .content h2 code,
-.content h3 code {
+.content h3 code,
+.content h4 code {
     color: #E2E2E2;
     font-size: 0.85em;
     padding: 4px 6px;
+}
+
+.content h4 {
+    font-size: 1em;
+}
+
+.content h4 code {
+    font-size: 0.8em;
 }
 
 .highlight {
@@ -1103,6 +1113,23 @@ ul.tool-list {
 
 .code-details pre code {
     font-size: 0.85em;
+}
+
+.code-details-wrapper .code-details {
+    margin: 0 0 0 10px;
+}
+
+.content p.code-details-title {
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.code-details-title .fa {
+    font-size: 0.5em;
+}
+
+.code-details-title code {
+    margin: 0 0 0 5px;
 }
 
 .command code {
@@ -1846,25 +1873,29 @@ abbr[title] {
 }
 
 #widgets .toc__menu ul li ul li ul li,
-.toc__menu ul li ul li ul li {
+.toc__menu ul li ul li ul li,
+.toc__menu ul li ul li ul li ul li {
     padding: 0;
     margin: 0 0 5px;
 }
 
 #widgets .toc__menu ul li ul li ul li:last-child,
-.toc__menu ul li ul li ul li:last-child {
+.toc__menu ul li ul li ul li:last-child,
+.toc__menu ul li ul li ul li ul li:last-child {
     margin: 0 0 15px;
 }
 
 #widgets .toc__menu ul ul ul,
-.toc__menu ul ul ul {
+.toc__menu ul ul ul,
+.toc__menu ul ul ul ul {
     font-size: 0.9em;
     list-style: circle;
     margin: 5px 0 0 15px;
 }
 
 #widgets .toc__menu ul ul ul a,
-.toc__menu ul ul ul a {
+.toc__menu ul ul ul a,
+.toc__menu ul ul ul ul a {
     padding-left: 0;
 }
 

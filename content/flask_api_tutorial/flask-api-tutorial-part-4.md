@@ -265,8 +265,8 @@ def token_required(f):
 
     @wraps(f)
     def decorated(*args, **kwargs):
-        user_dict = _check_access_token()
-        for name, val in user_dict.items():
+        token_payload = _check_access_token(admin_only=False)
+        for name, val in token_payload.items():
             setattr(decorated, name, val)
         return f(*args, **kwargs)
 
@@ -274,40 +274,40 @@ def token_required(f):
 
 
 def admin_token_required(f):
-    """Allow access to the wrapped function if user has admin privileges."""
+    """Allow access to the wrapped function if the user has admin privileges."""
 
     @wraps(f)
     def decorated(*args, **kwargs):
-        user_dict = _check_access_token(admin_token=True)
-        if not user_dict["admin"]:
+        token_payload = _check_access_token(admin_only=True)
+        if not token_payload["admin"]:
             _abort_admin_token_required()
-        for name, val in user_dict.items():
+        for name, val in token_payload.items():
             setattr(decorated, name, val)
         return f(*args, **kwargs)
 
     return decorated
 
 
-def _check_access_token(admin_token=False):
-    access_token = request.headers.get("Authorization")
-    if not access_token:
-        _abort_no_access_token(admin_token)
-    return User.decode_access_token(access_token).on_failure(_abort_invalid_token, admin_token)
+def _check_access_token(admin_only):
+    token = request.headers.get("Authorization")
+    if not token:
+        _abort_no_access_token(admin_only)
+    payload = User.decode_access_token(token).on_failure(_abort_invalid_token, admin_only)
+    return payload
 
 
-def _abort_no_access_token(admin_token):
+def _abort_no_access_token(admin_only):
     response = jsonify(status="fail", message="Unauthorized")
     response.status_code = HTTPStatus.UNAUTHORIZED
-    realm = _REALM_ADMIN_USERS if admin_token else _REALM_REGULAR_USERS
+    realm = _REALM_ADMIN_USERS if admin_only else _REALM_REGULAR_USERS
     response.headers["WWW-Authenticate"] = f'Bearer realm="{realm}"'
     abort(response)
 
 
-def _abort_invalid_token(message, admin_token):
+def _abort_invalid_token(message, admin_only):
     response = jsonify(status="fail", message=f"{message}")
     response.status_code = HTTPStatus.UNAUTHORIZED
-    realm = _REALM_ADMIN_USERS if admin_token else _REALM_REGULAR_USERS
-    response.headers["Content-Type"] = "application/json"
+    realm = _REALM_ADMIN_USERS if admin_only else _REALM_REGULAR_USERS
     response.headers["WWW-Authenticate"] = (
         f'Bearer realm="{realm}", '
         f'error="invalid_token", '
@@ -319,7 +319,6 @@ def _abort_invalid_token(message, admin_token):
 def _abort_admin_token_required():
     response = jsonify(status="fail", message="You are not an administrator")
     response.status_code = HTTPStatus.FORBIDDEN
-    response.headers["Content-Type"] = "application/json"
     response.headers["WWW-Authenticate"] = (
         f'Bearer realm="{_REALM_ADMIN_USERS}", '
         f'error="insufficient_scope", '
@@ -348,7 +347,7 @@ There are multiple things I want to point out about the purpose of these decorat
       <p><strong>Line 46: </strong>This line demonstrates how <code>Result</code> objects can be used to chain a sequence of function calls based on the outcome of the previous operation. If the call to <code>User.decode_access_token</code> was successful, the <code>result.value</code> from the decoded token is returned to the decorator function. If the token was not decoded successfully, then the <code>on_failure</code> method passes <code>result.error</code> from the failed operation to <code>_abort_invalid_token</code>.</p>
     </li>
     <li>
-      <p><strong>Lines 49-54: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the request does not include an <code>access_token</code> in the header, then the request will be aborted by calling <code>_abort_no_access_token</code>.</p>
+      <p><strong>Lines 50-55: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the request does not include an <code>access_token</code> in the header, then the request will be aborted by calling <code>_abort_no_access_token</code>.</p>
       <p>The <code>jsonify</code> function basically calls <code>json.dumps</code> and turns the JSON into a HTTP response (the <a href="https://flask.palletsprojects.com/en/1.1.x/api/?highlight=jsonify#flask.json.jsonify" target="_blank">actual behavior</a> is more nuanced than that). Creating a response object manually is necessary if you need to add a custom header, which is required whenever a request for a protected resource does not contain an access token. <a href="https://tools.ietf.org/html/rfc6750#section-3" target="_blank">Per Section 3 of RFC6750</a> (the specification doc for Bearer token authentication):</p>
       <blockquote class="rfc">If the protected resource request does not include authentication credentials or does not contain an access token that enables access to the protected resource, the resource server MUST include the HTTP
    "WWW-Authenticate" response header field ... If the request lacks any authentication information (e.g., the client
@@ -366,7 +365,7 @@ There are multiple things I want to point out about the purpose of these decorat
       <p>If a request is recieved without an access token in the request header, the <span class="bold-text">realm</span> attribute in the <span class="bold-text">WWW-Authenticate</span> field of the response header will communicate the access level necessary for the requested resource &mdash; either <code>registered_users@mydomain.com</code> or <code>admin_users@mydomain.com</code>.</p>
     </li>
     <li>
-      <p><strong>Line 57: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the <code>access_token</code> is invalid or expired, then the request will be aborted by calling <code>_abort_invalid_token</code>.</p>
+      <p><strong>Line 58: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the <code>access_token</code> is invalid or expired, then the request will be aborted by calling <code>_abort_invalid_token</code>.</p>
     </li>
     <li>
       <p><strong>Lines 62-65: </strong>The required response to a request where the token failed authentication is given in <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">Section 3.1 of RFC6750</a>:</p>
@@ -379,7 +378,7 @@ There are multiple things I want to point out about the purpose of these decorat
       <p><strong>Line 70: </strong>If a function is decorated with <code>@admin_token_required</code> and the <code>access_token</code> is decoded successfully <span class="emphasis">BUT</span> the user does not have administrator priveleges, then the request will be aborted by calling <code>_abort_admin_token_required</code>.</p>
     </li>
     <li>
-      <p><strong>Lines 74-77: </strong>The required response to a request where the token was successfully decoded but the user does not have administrator priveleges is nearly the same as the required response to a request where the token failed authentication. The "error" attribute of the response should be <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">"insufficient_scope"</a>, and the HTTP status code is 403 <code>HTTPStatus.FORBIDDEN</code> rather than 401 <code>HTTPStatus.UNAUTHORIZED</code>:</p>
+      <p><strong>Lines 73-76: </strong>The required response to a request where the token was successfully decoded but the user does not have administrator priveleges is nearly the same as the required response to a request where the token failed authentication. The "error" attribute of the response should be <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">"insufficient_scope"</a>, and the HTTP status code is 403 <code>HTTPStatus.FORBIDDEN</code> rather than 401 <code>HTTPStatus.UNAUTHORIZED</code>:</p>
       <blockquote class="rfc">insufficient_scope
       <p style="margin: 0 0 0 1em">The request requires higher privileges than provided by the access token.  The resource server SHOULD respond with the HTTP 403 (Forbidden) status code and MAY include the "scope" attribute with the scope necessary to access the protected resource.</p></blockquote>
     </li>
@@ -469,8 +468,8 @@ Thanks to the `@token_required` decorator, if the request header does not contai
 
     @wraps(f)
     def decorated(*args, **kwargs):
-        user_dict = _check_access_token()
-        for name, val in user_dict.items():
+        token_payload = _check_access_token(admin_only=False)
+        for name, val in token_payload.items():
             setattr(decorated, name, val)
         return f(*args, **kwargs)
 
@@ -484,25 +483,25 @@ The code below shows the value of all local variables while iterating over `user
 @wraps(f)
 def decorated(*args, **kwargs):
     # decorated = <function get_logged_in_user at 0x1080a1f80>
-    user_dict = _check_access_token()
-    # user_dict = {'public_id': '77e8570c-5432-4a5a-9a5d-71915604a0db', 'admin': False, 'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE...HNlfQ.wNvDzYMiY70wWm4xmt698G1WYgPPup6OH1NrcsfaXy0', 'expires_at': 1565075425}
-    # len(user_dict) = 4
-    for name, val in user_dict.items():
+    token_payload = _check_access_token(admin_only=False)
+    # token_payload = {'public_id': '77e8570c-5432-4a5a-9a5d-71915604a0db', 'admin': False, 'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE...HNlfQ.wNvDzYMiY70wWm4xmt698G1WYgPPup6OH1NrcsfaXy0', 'expires_at': 1565075425}
+    # len(token_payload) = 4
+    for name, val in token_payload.items():
     # name = 'public_id'
     # val = '77e8570c-5432-4a5a-9a5d-71915604a0db'
         setattr(decorated, name, val)
         # decorated.public_id = '77e8570c-5432-4a5a-9a5d-71915604a0db'
-    for name, val in user_dict.items():
+    for name, val in token_payload.items():
     # name = 'admin'
     # val = False
         setattr(decorated, name, val)
         # decorated.admin = False
-    for name, val in user_dict.items():
+    for name, val in token_payload.items():
     # name = 'token'
     # val = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE...HNlfQ.wNvDzYMiY70wWm4xmt698G1WYgPPup6OH1NrcsfaXy0'
         setattr(decorated, name, val)
         # decorated.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE...HNlfQ.wNvDzYMiY70wWm4xmt698G1WYgPPup6OH1NrcsfaXy0'
-    for name, val in user_dict.items():
+    for name, val in token_payload.items():
     # name = 'expires_at'
     # val = 1565075425
         setattr(decorated, name, val)
@@ -1345,7 +1344,7 @@ As promised, we have implemented all of the required features in the **User Mana
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains fields with URL and datetime data types, along with normal text fields.</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>
