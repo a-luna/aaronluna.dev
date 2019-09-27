@@ -505,7 +505,7 @@ deadline = db.Column(db.DateTime)
 owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
 owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
 
-<p style="margin: 0 0 10px">The client must provide values for the three attributes highlighted above (`name`, `info_url` and `deadline`). What about the other attributes?</p>
+<p style="margin: 0 0 10px">The client must provide values for the three attributes highlighted above (<code>name</code>, <code>info_url</code> and <code>deadline</code>). What about the other attributes?</p>
 
 <div style="font-size: 0.9em; padding: 5px; line-height: 1.5">
     <ul>
@@ -684,8 +684,6 @@ If the widget name contains only valid characters, it will be converted to lower
 
 #### `info_url` Argument
 
-
-
 {{< highlight python "linenos=table,linenostart=58" >}}widget_reqparser.add_argument(
     "info_url",
     type=URL(schemes=["http", "https"]),
@@ -693,6 +691,21 @@ If the widget name contains only valid characters, it will be converted to lower
     required=True,
     nullable=False,
 ){{< /highlight >}}
+
+The `info_url` attribute can be parsed using the pre-defined `URL` type from the `inputs` module, which can be configured in numerous ways. For example, it is possible to restrict the allowed values to a whitelist of domains and/or exclude a blacklist of domains. You can choose to perform a DNS lookup on the domain specified by the client and reject the value if the domain fails to resolve. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.URL" target="_blank">Check out the documentation for the <code>URL</code> type</a> for even more ways you can control the allowed URL range/format.
+
+The only restriction on `info_url` that we will employ is that the URL scheme must be either `http` or `https`. This can be more useful than you may think. Imagine if the `Widget` class had `git_url` and `ssh_url` attributes in addition to `info_url`. By simply changing the value of the `schemes` parameter from `schemes=['http', 'https']` to `schemes=['git']` and `schemes=['ssh']`, we could easily and effectively prevent clients from inserting values into the database that would cause errors if an application blindly tried to use those URLs to access a git repository or login to a server.
+
+<div class="alert alert-flex">
+  <div class="alert-icon">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+  </div>
+  <div class="alert-message">
+    <p>The value of the <code>schemes</code> parameter must always be a list or tuple, even if you intend to limit the allowed URL values to a single scheme.</p>
+  </div>
+</div>
+
+There really isn't anything else to say about how the `info_url` attribute is parsed since we already covered using a pre-defined `input` type when we used the `email` type in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser). Don't worry, the next item that we need to parse is more complex than any we have encountered thus far.
 
 #### `deadline` Argument
 
