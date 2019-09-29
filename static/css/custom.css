@@ -968,6 +968,8 @@ div.requirements {
     line-height: 1.5;
     margin: 10px 0 20px;
     border-radius: 4px;
+    overflow-wrap: normal;
+    overflow-x: auto;
 }
 
 span.requirements {
@@ -1117,6 +1119,11 @@ ul.tool-list {
 
 .code-details pre code {
     font-size: 0.85em;
+}
+
+.content ul .note pre {
+    background-color: #323232;
+    margin: 10px 0;
 }
 
 .code-details-wrapper .code-details {
@@ -2624,7 +2631,7 @@ ul .table-wrapper {
     margin: 1em auto;
 }
 
-div.responsive {
+.responsive {
     overflow-x: auto;
     overflow-y: hidden;
     width: auto;

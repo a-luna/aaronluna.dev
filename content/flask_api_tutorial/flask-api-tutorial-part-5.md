@@ -532,7 +532,7 @@ Create a new file named `dto.py` in `app/api/widgets` and enter the content belo
 
 {{< highlight python "linenos=table" >}}"""Parsers and serializers for /widgets API endpoints."""
 import re
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timezone
 from dateutil import parser
 
 from flask_restplus.inputs import URL
@@ -542,22 +542,17 @@ from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
 
 def widget_name(name):
-    """Return name if valid, raise an excaption if validation fails."""
-    if re.compile(r"^[\w-]+$").match(name):
-        return name
-    else:
+    """Validation method for a string containing only a-z, A-Z, 0-9, '-' and '_'."""
+    if not re.compile(r"^[\w-]+$").match(name):
         raise ValueError(
             f"'{name}' contains one or more invalid characters. Widget name must contain "
             "only letters, numbers, hyphen and/or underscore characters."
         )
+    return name
 
 
 def future_date(date_str):
-    """Validation logic for future_date.
-
-    Return datetime value if dateutil.parser correctly parsed input string AND if parsed_date is
-    greater than or equal to today's date, raise an excaption if validation fails.
-    """
+    """Validation method for a date formatted as a string, the date must NOT be in the past."""
     try:
         parsed_date = parser.parse(date_str)
     except ValueError:
@@ -570,7 +565,7 @@ def future_date(date_str):
     if parsed_date.date() < date.today():
         raise ValueError(
             f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. However, "
-            f"this value must be a date in the future and "
+            "this value must be a date in the future and "
             f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}"
         )
@@ -606,23 +601,48 @@ Let's break this down by looking at how each of the attributes are validated by 
 
 #### `name` Argument
 
-None of <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank">the pre-defined types in the <code>flask_restplus.inputs</code> module</a> perform input validation that satisfies the requirements of the `name` attribute. Thankfully, <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#advanced-types-handling" target="_blank">Flask-RESTPlus provides a way to create custom types</a> that can be used in the same way.
+None of <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank">the pre-defined types in the <code>flask_restplus.inputs</code> module</a> perform input validation that satisfies the requirements of the `name` attribute. Thankfully, <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#advanced-types-handling" target="_blank">Flask-RESTPlus provides a way to create custom types</a> that can be used in the same way. The example of a custom type shown below is taken from the documentation:
 
-The term "type" is (IMO) misleading since we only need to create a function (NOT a class). The function must accept a single parameter &mdash; the value provided by the client. If the value is successfully validated, the function must convert the value to the expected data type before returning it (in the case of the `name` attribute, the expected type is a string so no conversion is necessary). If the value provided by the client is invalid, the method must raise a `ValueError`.
+{{< highlight python >}}def my_type(value):
+    '''Parse my type'''
+    if not condition:
+        raise ValueError('This is not my type')
+    return parse(value){{< /highlight >}}
 
-Remember, the `name` attribute can **ONLY** contain lowercase-letters, numbers, '-' (hyphen character) or '_' (underscore character). With that in mind, let's talk through how the `widget_name` function fulfills these requirements:
+The term "type" is (IMO) misleading since we only need to create a function (not a class). The function must accept at least one parameter &mdash; the value provided by the client. If the value is successfully validated, the function must convert the value to the expected data type before returning it (in the case of the `name` attribute, the expected type is a string so no conversion is necessary). If the value provided by the client is invalid, the method must raise a `ValueError`.
 
-{{< highlight python "linenos=table,linenostart=15" >}}def widget_name(name):
-    """Return name if valid, raise an excaption if validation fails."""
-    if re.compile(r"^[\w-]+$").match(name):
-        return name
-    else:
+The `widget_name` function is adapted directly from the example shown above to satisfy the project requirements:
+
+{{< highlight python "linenos=table,linenostart=12" >}}def widget_name(name):
+    """Validation method for a string containing only a-z, A-Z, 0-9, '-' and '_'."""
+    if not re.compile(r"^[\w-]+$").match(name):
         raise ValueError(
             f"'{name}' contains one or more invalid characters. Widget name must contain "
             "only letters, numbers, hyphen and/or underscore characters."
-        ){{< /highlight >}}
+        )
+    return name{{< /highlight >}}
 
-The simplist way to implement our custom type is with a regular expression. The regex `^[\w-]+$` will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and/or the hyphen character. If the value passed to this function matches the regex, the value is returned. If the values does not match the regex, a `ValueError` is raised.
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 14: </strong>The simplist way to implement our custom type is with a regular expression. The regex <code>^[\w-]+$</code> will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and the hyphen character.</p>
+        <p>The syntax of regular expressions is extremely dense. To make our regex easier to understand, we can compile it with the <code>re.VERBOSE</code> flag which allows us to deconstruct and add comments to each part of the expression. If you are interested in knowing how <code>^[\w-]+$</code> actually does what we need it to do:</p>
+        <pre><code style="color: #f8f8f2">NAME_REGEX = re.compile(<span style="color: #ed9d13">r"""
+    ^        # Matches the beginning of the string
+    [\w-]    # Character set: \w matches all alphanumeric characters (including underscore), - matches the hyphen character
+    +        # Match one or more instances of the preceding character set
+    $        # Matches the end of the string
+"""</span>, re.VERBOSE)</code></pre>
+        <p>Teaching regular expressions is beyond the scope of this tutorial. However, if you are looking for a good introduction to the topic I recommend reading the <a href="https://docs.python.org/3/howto/regex.html" target="_blank">Regular Expression HOWTO</a> document from the official Python docs.</p>
+      </li>
+      <li>
+        <p><strong>Line 15: </strong>If the values does not match the regex, a <code>ValueError</code> is raised with a message explaining why the value is not a valid <code>widget_name</code>.</p>
+      </li>
+      <li>
+        <p><strong>Line 19: </strong>If the value passed to this function matches the regex, the value is a valid <code>widget_name</code> and is returned.</p>
+      </li>
+    </ul>
+</div>
 
 We can see how this function works by testing it in the `flask shell`:
 
@@ -653,9 +673,9 @@ Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
     f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
 <span class="cmd-warning">ValueError: 't**&*&' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span></code></pre>
 
-The first test passes since 'test' consists of only letters. The second test passes because it contains one of each of the allowed character types (letter, number, hyphen, underscore) and no other characters. The third and fourth tests fail because they both contain one or more forbidden characters (space, asterisk, ampersand).
+The first test passes since **test** consists of only letters. The second test passes because it contains one of each of the allowed character types (letter, number, hyphen, underscore) and no other characters. The third and fourth tests fail because they both contain one or more forbidden characters (space, asterisk, ampersand).
 
-Wait, let's back up. Didn't the requirement for the `name` attribute say that only **lowercase** letters were allowed? Yep, you got me. I kinda sort-of lied about **(test_1-AZ)** being a valid `widget_name`. But there is a reason why I did this, which will be revealed by the configuration of the argument object for the `name` attribute:
+Wait, let's back up. Didn't the requirement for the `name` attribute say that only **lowercase** letters were allowed? Yep, you got me. I kinda sort-of lied about **test_1-AZ** being a valid `widget_name`. But there is a reason why I did this, which will be revealed by the configuration of the argument object for the `name` attribute:
 
 {{< highlight python "linenos=table,linenostart=50" >}}widget_reqparser.add_argument(
     "name",
@@ -707,16 +727,12 @@ The only restriction on `info_url` that we will employ is that the URL scheme mu
   </div>
 </div>
 
-There really isn't anything else to say about how the `info_url` attribute is parsed since we already covered using a pre-defined `input` type when we used the `email` type in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser). Don't worry, the next item that we need to parse is more complex than any we have encountered thus far.
+There really isn't anything else to say about how the `info_url` attribute is parsed since we already covered using a pre-defined `input` type when we used the `email` type as part of the `auth_reqparser` in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser). Let's move on to the final attribute that we need to parse from the request data.
 
 #### `deadline` Argument
 
 {{< highlight python "linenos=table,linenostart=23" >}}def future_date(date_str):
-    """Validation logic for future_date.
-
-    Return datetime value if dateutil.parser correctly parsed input string AND if parsed_date is
-    greater than or equal to today's date, raise an excaption if validation fails.
-    """
+    """Validate a string is formatted correctly as a datetime value that is not in the past."""
     try:
         parsed_date = parser.parse(date_str)
     except ValueError:
