@@ -606,11 +606,13 @@ Let's break this down by looking at how each of the attributes are validated by 
 
 #### `name` Argument
 
-In order to fulfull the requirements for the `name` attribute, we must define our own custom type. This is a fairly trivial process. We need to create a method that validates the value provided by the client and returns it. Optionally, if the attribute expects a data type other than a string the custom type function must also convert the validated value to the expected type. If the value provided by the client is invalid, the method must raise a `ValueError`.
+None of <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank">the pre-defined types in the <code>flask_restplus.inputs</code> module</a> perform input validation that satisfies the requirements of the `name` attribute. Thankfully, <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#advanced-types-handling" target="_blank">Flask-RESTPlus provides a way to create custom types</a> that can be used in the same way.
 
-Remember, the `name` attribute must consist of **ONLY** lowercase-letters, numbers, '-' (hyphen character) or '_' (underscore character). With that in mind, let's talk through how the `widget_name` function fulfills these requirements:
+The term "type" is (IMO) misleading since we only need to create a function (NOT a class). The function must accept a single parameter &mdash; the value provided by the client. If the value is successfully validated, the function must convert the value to the expected data type before returning it (in the case of the `name` attribute, the expected type is a string so no conversion is necessary). If the value provided by the client is invalid, the method must raise a `ValueError`.
 
-{{< highlight python "linenos=tabl4,linenostart=15" >}}def widget_name(name):
+Remember, the `name` attribute can **ONLY** contain lowercase-letters, numbers, '-' (hyphen character) or '_' (underscore character). With that in mind, let's talk through how the `widget_name` function fulfills these requirements:
+
+{{< highlight python "linenos=table,linenostart=15" >}}def widget_name(name):
     """Return name if valid, raise an excaption if validation fails."""
     if re.compile(r"^[\w-]+$").match(name):
         return name
@@ -620,7 +622,7 @@ Remember, the `name` attribute must consist of **ONLY** lowercase-letters, numbe
             "only letters, numbers, hyphen and/or underscore characters."
         ){{< /highlight >}}
 
-The simplist way to implement our custom type is with a regular expression. The regex `^[\w-]+$` will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and/or the hyphen character. If a value is passed to this function that does not match this regex, a `ValueError` is raised.
+The simplist way to implement our custom type is with a regular expression. The regex `^[\w-]+$` will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and/or the hyphen character. If the value passed to this function matches the regex, the value is returned. If the values does not match the regex, a `ValueError` is raised.
 
 We can see how this function works by testing it in the `flask shell`:
 
@@ -653,7 +655,7 @@ Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
 
 The first test passes since 'test' consists of only letters. The second test passes because it contains one of each of the allowed character types (letter, number, hyphen, underscore) and no other characters. The third and fourth tests fail because they both contain one or more forbidden characters (space, asterisk, ampersand).
 
-Wait, let's back up. Didn't the requirement for the `name` attribute say that only **lowercase** letters were allowed? Yep, you got me. I kinda sort-of lied about the second example **(test_1-AZ)** being a valid `widget_name`. But there is a reason why I did this, which will be revealed by the configuration of the argument object for the `name` attribute:
+Wait, let's back up. Didn't the requirement for the `name` attribute say that only **lowercase** letters were allowed? Yep, you got me. I kinda sort-of lied about **(test_1-AZ)** being a valid `widget_name`. But there is a reason why I did this, which will be revealed by the configuration of the argument object for the `name` attribute:
 
 {{< highlight python "linenos=table,linenostart=50" >}}widget_reqparser.add_argument(
     "name",
@@ -667,7 +669,7 @@ Wait, let's back up. Didn't the requirement for the `name` attribute say that on
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 52: </strong>To use our custom type, we simply specify the name of the function that we created as the <code>type</code>.</p>
+        <p><strong>Line 52: </strong>All we need to do to use our custom type is set the value of the <code>type</code> parameter to the <code>widget_name</code> function.</p>
       </li>
       <li>
         <p><strong>Lines 53-55: </strong>The <code>location</code>, <code>required</code> and <code>nullable</code> parameters should be familiar since we explained their purpose in <a href="/series/flask_api_tutorial/part-3/#request-parser-configuration">Part 3</a>.</p>
