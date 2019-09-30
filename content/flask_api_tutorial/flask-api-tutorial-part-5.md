@@ -516,10 +516,10 @@ owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
         <p><span class="bold-text">created_at: </span>When a <code>Widget</code> object is created, the expression specified in the <code>default</code> parameter is evaluated and stored as the value for <code>created_at</code>. <code>utc_now</code> returns the current date and time as a <code>datetime</code> value that is timezone-aware and localized to UTC.</p>
       </li>
       <li>
-        <p><span class="bold-text">owner_id: </span>This value is a foreign-key, which is specified by the second argument to <code>db.Column</code> being <code>db.ForeignKey("site_user.id")</code>. <span class="bold-text">site_user</span> is the name of the actual database table where <code>User</code> objects are stored, and <span class="bold-text">site_user.id</span> is the primary-key that the <code>owner_id</code> column is referencing.</p>
+        <p><span class="bold-text">owner_id: </span>This value is a foreign-key, which is specified by the second argument to <code>db.Column</code> being <code>db.ForeignKey("site_user.id")</code>. <span class="bold-text">site_user</span> is the name of the database table where <code>User</code> objects are stored, and <span class="bold-text">site_user.id</span> is the primary-key that the <code>owner_id</code> column is referencing.</p>
       </li>
       <li>
-        <p><span class="bold-text">owner: </span>It is important to note that <code>owner</code> is <span class="emphasis">NOT</span> an instance of <code>db.Column</code> (i.e., this is not a column that exists in the <code>widget</code> database table). Instead, this is a relationship object that demonstates one of the main features of the SQLAlchemy ORM (<a href="https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many" target="_blank">Click here</a> for more information).</p>
+        <p><span class="bold-text">owner: </span>It is important to note that <code>owner</code> is <span class="emphasis">NOT</span> an instance of <code>db.Column</code> (i.e., unlike the other <code>Widget</code> class attributes, <code>owner</code> is not a column that exists in the <code>widget</code> database table). Instead, this is a relationship object that demonstates one of the main features of the SQLAlchemy ORM (<a href="https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many" target="_blank">Click here</a> for more information).</p>
         <p>When processing a request to create a new <code>Widget</code>, the business logic will set the value of the <code>owner_id</code> attribute to the <code>id</code> of the <code>User</code> who sent the request. After the <code>Widget</code> is created and committed to the database, the <code>owner</code> attribute will contain a <code>User</code> object that represents the <code>User</code> who created it.</p>
         <p>Another interesting feature is achieved by <code>backref=db.backref("widgets")</code>. This creates a new attribute on all <code>User</code> objects named <span class="bold-text">widgets</span> (without modifying the <code>User</code> class at all), which is a list of all <code>Widget</code> objects in the database where <code>User.id</code> is equal to <code>owner_id</code>.</p>
       </li>
@@ -542,11 +542,11 @@ from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
 
 def widget_name(name):
-    """Validation method for a string containing only a-z, A-Z, 0-9, '-' and '_'."""
+    """Validation method for a string containing only letters, numbers, '-' and '_'."""
     if not re.compile(r"^[\w-]+$").match(name):
         raise ValueError(
             f"'{name}' contains one or more invalid characters. Widget name must contain "
-            "only letters, numbers, hyphen and/or underscore characters."
+            "only letters, numbers, hyphen and underscore characters."
         )
     return name
 
@@ -614,11 +614,11 @@ The term "type" is (IMO) misleading since we only need to create a function (not
 The `widget_name` function is adapted directly from the example shown above to satisfy the project requirements:
 
 {{< highlight python "linenos=table,linenostart=12" >}}def widget_name(name):
-    """Validation method for a string containing only a-z, A-Z, 0-9, '-' and '_'."""
+    """Validation method for a string containing only letters, numbers, '-' and '_'."""
     if not re.compile(r"^[\w-]+$").match(name):
         raise ValueError(
             f"'{name}' contains one or more invalid characters. Widget name must contain "
-            "only letters, numbers, hyphen and/or underscore characters."
+            "only letters, numbers, hyphen and underscore characters."
         )
     return name{{< /highlight >}}
 
@@ -626,17 +626,17 @@ The `widget_name` function is adapted directly from the example shown above to s
     <ul>
       <li>
         <p><strong>Line 14: </strong>The simplist way to implement our custom type is with a regular expression. The regex <code>^[\w-]+$</code> will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and the hyphen character.</p>
-        <p>The syntax of regular expressions is extremely dense. To make our regex easier to understand, we can compile it with the <code>re.VERBOSE</code> flag which allows us to deconstruct and add comments to each part of the expression. If you are interested in knowing how <code>^[\w-]+$</code> actually does what we need it to do:</p>
+        <p>The syntax of regular expressions is extremely dense. To make our regex easier to understand, we can compile it with the <code>re.VERBOSE</code> flag. This causes whitespace <span class="bold-italics">that is not within a character class</span> to be ignored, allowing us to insert comments within the regex to document the design and intended use of the expression. For example, we could document our regex as shown below:</p>
         <pre><code style="color: #f8f8f2">NAME_REGEX = re.compile(<span style="color: #ed9d13">r"""
     ^        # Matches the beginning of the string
-    [\w-]    # Character set: \w matches all alphanumeric characters (including underscore), - matches the hyphen character
-    +        # Match one or more instances of the preceding character set
+    [\w-]    # Character class: \w matches all alphanumeric characters (including underscore), - matches the hyphen character
+    +        # Match one or more instances of the preceding character class
     $        # Matches the end of the string
 """</span>, re.VERBOSE)</code></pre>
         <p>Teaching regular expressions is beyond the scope of this tutorial. However, if you are looking for a good introduction to the topic I recommend reading the <a href="https://docs.python.org/3/howto/regex.html" target="_blank">Regular Expression HOWTO</a> document from the official Python docs.</p>
       </li>
       <li>
-        <p><strong>Line 15: </strong>If the values does not match the regex, a <code>ValueError</code> is raised with a message explaining why the value is not a valid <code>widget_name</code>.</p>
+        <p><strong>Line 15: </strong>If the value does not match the regex, a <code>ValueError</code> is raised with a message explaining why the value is not a valid <code>widget_name</code>.</p>
       </li>
       <li>
         <p><strong>Line 19: </strong>If the value passed to this function matches the regex, the value is a valid <code>widget_name</code> and is returned.</p>
