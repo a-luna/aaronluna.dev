@@ -1,41 +1,17 @@
 {
-  "name": "mainroad",
-  "version": "1.0.0",
-  "description": "Responsive, simple, clean and content-focused Hugo theme based on the MH Magazine lite WordPress theme",
-  "license": "GPL-2.0",
-  "dependencies": {
-    "css-doodle": "^0.7.2",
-    "netlify-lambda": "^1.6.3"
-  },
-  "devDependencies": {
-    "autoprefixer": "^9.2.1",
-    "eclint": "^2.8.0",
-    "eslint": "^5.7.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^7.0.1",
-    "postcss-cli": "^6.0.1",
-    "stylelint": "^9.6.0",
-    "stylelint-order": "^1.0.0"
-  },
-  "scripts": {
-    "lint:css": "stylelint static/css/*.css",
-    "lint:js": "eslint static/js/*.js",
-    "lint:editorconfig": "eclint check '**/*.{html,css,js,json,md,toml,yaml,yml}'",
-    "lint": "npm run lint:css && npm run lint:js && npm run lint:editorconfig",
-    "fix:prefixes": "postcss -r static/css/*.css",
-    "fix:css": "stylelint static/css/*.css --fix",
-    "fix:js": "eslint static/js/*.js --fix",
-    "fix:editorconfig": "eclint fix '**/*.{html,css,js,json,md,toml,yaml,yml}'",
-    "fix": "npm run fix:prefixes && npm run fix:css && npm run fix:js && npm run fix:editorconfig",
-    "test": "npm run lint"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Vimux/Mainroad.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Vimux/Mainroad/issues"
-  },
-  "homepage": "https://github.com/Vimux/Mainroad"
+    "name": "aaronluna.dev",
+    "version": "0.1.0",
+    "description": "Aaron Luna's Blog",
+    "dependencies": {
+        "css-doodle": "^0.7.2",
+        "netlify-lambda": "^1.6.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/a-luna/aaronluna.dev.git"
+    },
+    "bugs": {
+        "url": "https://github.com/a-luna/aaronluna.dev/issues"
+    },
+    "homepage": "https://github.com/a-luna/aaronluna.dev"
 }

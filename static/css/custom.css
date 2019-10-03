@@ -1314,6 +1314,11 @@ li code {
     color: #A9FB68;
 }
 
+.post__content p code {
+    background: inherit;
+    padding: 2px 0;
+}
+
 li.alert code {
     color: #D8D8D8;
 }
@@ -2631,17 +2636,65 @@ table code {
     background-color: inherit;
 }
 
-table.tutorial thead th.column-header {
+table.tutorial thead th.column-header,
+table.tutorial thead th.column-header:first-child,
+table.tutorial thead th.column-header:last-child {
     font-size: 0.9em;
-    vertical-align: middle;
+    vertical-align: bottom;
+}
+
+table.tutorial thead th.column-header sup,
+table.tutorial tbody td sup,
+table.tutorial tfoot td sup {
+    font-size: 0.75em;
 }
 
 table.tutorial tbody td {
     font-size: 0.85em;
 }
 
+table.tutorial tbody td,
+table.tutorial thead th.column-header {
+    padding: 3px 5px;
+}
+
+table.tutorial tbody td:first-child,
+table.tutorial thead th.column-header:first-child {
+    padding: 3px 3px 3px 5px;
+}
+
+table.tutorial tbody td:last-child,
+table.tutorial thead th.column-header:last-child {
+    padding: 3px 5px 3px 3px;
+}
+
 table.tutorial tbody td code {
     font-size: 0.8em;
+}
+
+table tfoot td p:first-child {
+    margin: 0;
+}
+
+table tfoot td p {
+    margin: 0 0 0 10px;
+}
+
+table tfoot code {
+    color: #A9FB68;
+}
+
+.tutorial .table-wrapper {
+    margin: 0em auto 1em;
+}
+
+.tutorial tr:first-child td.table-footer {
+    padding: 10px 0 5px;
+}
+
+.tutorial tr td.table-footer {
+    font-weight: 400;
+    padding: 0 0 5px;
 }
 
 .table-wrapper {
