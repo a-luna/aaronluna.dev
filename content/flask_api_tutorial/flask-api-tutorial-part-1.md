@@ -435,7 +435,6 @@ from datetime import datetime, timedelta, timezone
 DT_AWARE = "%m/%d/%y %I:%M:%S %p %Z"
 DT_NAIVE = "%m/%d/%y %I:%M:%S %p"
 DATE_MONTH_NAME = "%b %d %Y"
-DATE_ISO = "%Y-%m-%d"
 
 timespan = namedtuple(
     "timespan",

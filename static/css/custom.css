@@ -1900,8 +1900,16 @@ abbr[title] {
 .toc__menu ul ul ul,
 .toc__menu ul ul ul ul {
     font-size: 0.9em;
-    list-style: circle;
     margin: 5px 0 0 15px;
+}
+
+#widgets .toc__menu ul ul ul,
+.toc__menu ul ul ul {
+    list-style: circle;
+}
+
+.toc__menu ul ul ul ul {
+    list-style: square;
 }
 
 #widgets .toc__menu ul ul ul a,
@@ -2617,6 +2625,24 @@ svg.widget-social__link-icon.icon-mail {
 
 
 /* Tables */
+
+table code {
+    color: #D8DBD8;
+    background-color: inherit;
+}
+
+table.tutorial thead th.column-header {
+    font-size: 0.9em;
+    vertical-align: middle;
+}
+
+table.tutorial tbody td {
+    font-size: 0.85em;
+}
+
+table.tutorial tbody td code {
+    font-size: 0.8em;
+}
 
 .table-wrapper {
     font-size: 0.95em;

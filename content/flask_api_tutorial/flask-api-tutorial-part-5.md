@@ -81,9 +81,9 @@ The chart below shows the folder structure for this section of the tutorial. In 
 
 ## Introduction
 
-In the previous section, we created four API endpoints to perform basic user registration and authentication operations. However, these API endpoints <span class="emphasis">are not</span> designed as RESTful resources (I explained [my reasoning for this choice in Part 3](/series/flask_api_tutorial/part-3/#user-authentication-in-a-restful-system)).
+In the previous section, we created four API endpoints to perform basic user registration and authentication functions. However, these API endpoints are not designed as RESTful resources (I explained [my reasoning for this choice in Part 3](/series/flask_api_tutorial/part-3/#user-authentication-in-a-restful-system)).
 
-In this section of the tutorial, we will create a resource that is REST-like. I am deliberately <span class="emphasis">NOT</span> describing it as RESTful, because <strong>designing a truly RESTful system is</strong> <span class="emphasis">HARD</span>. Check out <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" target="_blank">this blog post from Roy Fielding</a> and the discussion in the comments to get an idea of what I mean.
+In this section of the tutorial, we will create a resource that is <span class="bold-text">REST-like</span> (<span class="bold-text">REST-faux</span>? <span class="bold-text">REST-adjacent</span>?). I am deliberately not describing it as <span class="bold-text">RESTful</span>, because <span class="emphasis">designing a truly RESTful system is HARD</span>. Check out <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" target="_blank">this blog post from Roy Fielding</a> and the discussion in the comments to get an idea of what I mean.
 
 The only features of this resource that I am willing to state are 100% bona fide REST-compliant are:
 
@@ -95,7 +95,7 @@ The only features of this resource that I am willing to state are 100% bona fide
 
 The resource we will create is a collection of **widgets**. I decided to model something generic rather than the cliche "to-do list" project that you encounter in every introductory programming tutorial. I feel safe assuming that you are not reading this because you have a burning desire to create the next, great API-driven  to-do list.
 
-The `Widget` model will contain custom validators for parsing request data and custom field types for marshalling `Widget` objects to JSON. . Whatever project you have in mind, the widget implementation can easily be adapted to any object in your domain model.
+The main purpose of this section is to learn more advanced techniques for request parsing and response marshalling. The `Widget` model will contain attributes that require creating custom input types for parsing request data. The `Widget` model also contains hybrid properties that will require rendering various data types in JSON. Whatever project you have in mind, the techniques demonstrated with the `Widget` model and associated `RequestParser` and API model instances can easily be adapted to any object in your domain.
 
 ## `widget_ns` Endpoints
 
@@ -113,11 +113,9 @@ The proper way to name resources is one of the (many) hotly debated topics regar
     </li>
 </ul>
 
-<a href="https://phauer.com/2015/restful-api-design-best-practices/#use-consistently-plural-nouns" target="_blank">The accepted best practice for naming resources</a> is to use plural nouns when constructing a URI for a resource. <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-two-urls-per-resource" target="_blank">Another widely accepted standard</a> is to create two endpoints (i.e., URIs) per resource &mdash; one for operations that apply to the entire collection (e.g., <code>/api/v1/widgets</code>) and one for operations that apply only to a single resource (e.g., <code>/api/v1/widgets/&lt;name&gt;</code>).
+<a href="https://phauer.com/2015/restful-api-design-best-practices/#use-consistently-plural-nouns" target="_blank">The accepted best practice for naming resources</a> is to use plural nouns when constructing a URI for a resource. <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-two-urls-per-resource" target="_blank">Another widely accepted standard</a> is to create two endpoints (i.e., URIs) per resource &mdash; one for operations that apply to the entire collection (e.g., `/api/v1/widgets`) and one for operations that apply only to a single resource (e.g., `/api/v1/widgets/<name>`).
 
-
-
-These endpoints allow the client to perform CRUD operations on the resource (<strong>C</strong>reate, <strong>R</strong>etrieve, <strong>U</strong>pdate, <strong>D</strong>elete) by defining the set of HTTP methods that each endpoint supports. The full set of HTTP methods that we will implement in the `widget_ns` namespace are explained in the table below:
+These endpoints/URIs are **where** clients interact with a resource, while HTTP methods determine **how** they interact with it. The table below is a common pattern in RESTful architecture, where each HTTP method is mapped to a single CRUD operation (**C**reate, **R**etrieve, **U**pdate, **D**elete). The remainder of this section of the tutorial will cover implementing the API routes, the handlers for supported HTTP method types and the business logic for each CRUD process:
 
 <div class="table-wrapper">
     <div class="responsive">
@@ -125,7 +123,7 @@ These endpoints allow the client to perform CRUD operations on the resource (<st
             <thead>
             <tr>
                 <th scope="col" class="first-column column-header">Endpoint Name</th>
-                <th scope="col" class="column-header">URL Path</th>
+                <th scope="col" class="column-header">URI</th>
                 <th scope="col"  class="column-header">HTTP Method</th>
                 <th scope="col" class="column-header">CRUD Operation</th>
                 <th scope="col" class="last-column column-header">Required Token</th>
@@ -564,13 +562,14 @@ def future_date(date_str):
 
     if parsed_date.date() < date.today():
         raise ValueError(
-            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. However, "
-            "this value must be a date in the future and "
+            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. "
+            "However, this value must be a date in the future and "
             f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}"
         )
     deadline = datetime.combine(parsed_date.date(), time.max)
-    return make_tzaware(deadline, use_tz=timezone.utc)
+    deadline_utc = make_tzaware(deadline, use_tz=timezone.utc)
+    return deadline_utc
 
 
 widget_reqparser = RequestParser(bundle_errors=True)
@@ -633,7 +632,14 @@ The `widget_name` function is adapted directly from the example shown above to s
     +        # Match one or more instances of the preceding character class
     $        # Matches the end of the string
 """</span>, re.VERBOSE)</code></pre>
-        <p>Teaching regular expressions is beyond the scope of this tutorial. However, if you are looking for a good introduction to the topic I recommend reading the <a href="https://docs.python.org/3/howto/regex.html" target="_blank">Regular Expression HOWTO</a> document from the official Python docs.</p>
+        <div class="note note-flex">
+            <div class="note-icon">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </div>
+            <div class="note-message" style="flex-flow: column wrap">
+                <p>Teaching regular expressions is beyond the scope of this tutorial. However, if you are looking for a good introduction to the topic I recommend reading the <a href="https://docs.python.org/3/howto/regex.html" target="_blank">Regular Expression HOWTO</a> document from the official Python docs.</p>
+            </div>
+        </div>
       </li>
       <li>
         <p><strong>Line 15: </strong>If the value does not match the regex, a <code>ValueError</code> is raised with a message explaining why the value is not a valid <code>widget_name</code>.</p>
@@ -731,6 +737,82 @@ There really isn't anything else to say about how the `info_url` attribute is pa
 
 #### `deadline` Argument
 
+`deadline` is the last piece of data that we must receive from the client in order to create a new widget. Utlimately, this value must be converted to a `datetime` since the `Widget` class has several `hybrid_properties` that perform comparisons or calculations that assume this is the case.
+
+The `inputs` module provides several pre-defined types that can convert request data to either a `date` or a `datetime` value. I've summarized the requirements for these types in the table below:
+
+<div class="table-wrapper">
+    <div class="responsive">
+        <table class="tutorial">
+            <thead>
+            <tr>
+              <td colspan="4" class="table-number">Table 1</td>
+            </tr>
+            <tr>
+              <td colspan="4" class="table-title">Pre-defined Input Types for <code>date</code> and <code>datetime</code> Values</td>
+            </tr>
+            <tr>
+                <th scope="col" class="first-column column-header">Pre-defined Type <sup>1</sup></th>
+                <th scope="col" class="column-header">Required Format <sup>2</sup></th>
+                <th scope="col" class="column-header">Example</th>
+                <th scope="col" class="last-column column-header">Reference</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="first-column"><code>date</code></td>
+                <td><code class="green">YYYY<span class="pink">-</span>MM<span class="pink">-</span>DD</code></td>
+                <td>2019-10-02</td>
+                <td class="last-column">N/A</td>
+            </tr>
+            <tr>
+                <td class="first-column"><code>date_from_iso8601</code></td>
+                <td><code class="green">YYYY<span class="pink">-</span>MM<span class="pink">-</span>DD</code></td>
+                <td>2019-10-02</td>
+                <td class="last-column"><a href="https://www.iso.org/iso-8601-date-and-time-format.html" target="_blank">ISO 8601</a></td>
+            </tr>
+            <tr>
+                <td class="first-column"><code>datetime_from_iso8601</code></td>
+                <td><code class="green">YYYY<span class="pink">-</span>MM<span class="pink">-</span>DD<span class="pink">T</span>hh<span class="pink">:</span>mm<span class="pink">:</span>ss<span class="pink">(+/-)</span>zh<span class="pink">:</span>zm</code></td>
+                <td>2019-10-02T15:05:06-07:00</td>
+                <td class="last-column"><a href="https://www.iso.org/iso-8601-date-and-time-format.html" target="_blank">ISO 8601</a></td>
+            </tr>
+            <tr>
+                <td class="first-column"><code>datetime_from_rfc822</code></td>
+                <td><code class="green">DayName<span class="pink">, </span>DD MonthName YYYY hh<span class="pink">:</span>mm<span class="pink">:</span>ss <span class="pink">(+/-)</span>zh<span class="pink">:</span>zm</code></td>
+                <td>Wed, 02 Oct 2019 15:05:06 -0700</td>
+                <td class="last-column"><a href="https://tools.ietf.org/html/rfc5322#section-3.3" target="_blank">RFC 5322</a> <sup>3</sup></td>
+            </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" class="table-footer"><sup>1</sup> Pre-defined types are located in the <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank"><code class="light-blue">flask_restplus.inputs</code></a> module.</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="table-footer"><sup>2</sup> <code>YYYY</code> = 4-digit year, <code>MM</code> = 2-digit month, <code>DD</code> = 2-digit day</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="table-footer"><code>hh</code> = 2-digit hour, <code>mm</code> = 2-digit minutes, <code>ss</code> = 2-digit seconds</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="table-footer"><code>zh</code> = 2-digit UTC offset hours, <code>zm</code> = 2-digit UTC offset minutes</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="table-footer"><code>DayName</code> = "Mon" / "Tue" / "Wed" / "Thu" / "Fri" / "Sat" / "Sun"</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="table-footer"><code>MonthName</code> = "Jan" / "Feb" / "Mar" / "Apr" / "May" / "Jun" / "Jul" / "Aug" / "Sep" / "Oct" / "Nov" / "Dec"</td>
+              </tr>
+              <tr>
+                <td colspan="4" class="table-footer"><sup>3</sup> RFC 5322 is a revision of <a href="https://tools.ietf.org/html/rfc2822" target="_blank">RFC 2822</a>, which itself obsoleted <a href="https://tools.ietf.org/html/rfc822" target="_blank">RFC 822</a></td>
+              </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+We will create a custom type since none of the pre-defined `input` types are robust enough for my preferenes. Ultimately
+
 {{< highlight python "linenos=table,linenostart=23" >}}def future_date(date_str):
     """Validate a string is formatted correctly as a datetime value that is not in the past."""
     try:
@@ -744,13 +826,14 @@ There really isn't anything else to say about how the `info_url` attribute is pa
 
     if parsed_date.date() < date.today():
         raise ValueError(
-            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. However, "
-            f"this value must be a date in the future and "
+            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. "
+            "However, this value must be a date in the future and "
             f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}"
         )
     deadline = datetime.combine(parsed_date.date(), time.max)
-    return make_tzaware(deadline, use_tz=timezone.utc){{< /highlight >}}
+    deadline_utc = make_tzaware(deadline, use_tz=timezone.utc)
+    return deadline_utc{{< /highlight >}}
 
 {{< highlight python "linenos=table,linenostart=65" >}}widget_reqparser.add_argument(
     "deadline",
