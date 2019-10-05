@@ -184,6 +184,7 @@ ol li p {
     background-color: #252525;
     margin: 0 auto;
     padding: 10px 15px;
+    border: 1px solid #08C3A7;
     border-radius: 4px;
 }
 
@@ -2636,21 +2637,30 @@ table code {
     background-color: inherit;
 }
 
+table.tutorial thead .table-number,
+table.tutorial thead .table-title {
+    font-size: 0.95em;
+}
+
 table.tutorial thead th.column-header,
 table.tutorial thead th.column-header:first-child,
 table.tutorial thead th.column-header:last-child {
-    font-size: 0.9em;
+    font-size: 0.95em;
     vertical-align: bottom;
 }
 
 table.tutorial thead th.column-header sup,
 table.tutorial tbody td sup,
 table.tutorial tfoot td sup {
-    font-size: 0.75em;
+    font-size: 0.8em;
 }
 
 table.tutorial tbody td {
-    font-size: 0.85em;
+    font-size: 0.875em;
+}
+
+table.tutorial code {
+    font-size: 0.875em;
 }
 
 table.tutorial tbody td,
@@ -2668,16 +2678,12 @@ table.tutorial thead th.column-header:last-child {
     padding: 3px 5px 3px 3px;
 }
 
-table.tutorial tbody td code {
-    font-size: 0.8em;
-}
-
 table tfoot td p:first-child {
     margin: 0;
 }
 
 table tfoot td p {
-    margin: 0 0 0 10px;
+    margin: 0 0 3px 9px;
 }
 
 table tfoot code {

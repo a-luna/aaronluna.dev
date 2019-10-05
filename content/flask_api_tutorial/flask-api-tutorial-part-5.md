@@ -46,8 +46,8 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |
 |   |- <span class="project-folder">util</span>
 |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">result.py</span>
-|   |   |- <span class="work-file">datetime_util.py</span>
+|   |-  |- <span class="unmodified-file">datetime_util.py</span>
+|   |-  |- <span class="unmodified-file">result.py</span>
 |   |
 |   |- <span class="unmodified-file">__init__.py</span>
 |   |- <span class="unmodified-file">config.py</span>
@@ -806,13 +806,15 @@ There really isn't anything else to say about how the `info_url` attribute is pa
     </div>
 </div>
 
-It would absolutely be possible to satisfy the project requirements using the pre-defined types in **Table 1**, but (IMO) they all have one big limitation &mdash; there is only one valid format for the value provided by the client. Dates are expressed in so many different ways via text, so my preference is to design a parser that can accomodate a variety of date formats.
+It would absolutely be possible to satisfy the project requirements using the pre-defined types in **Table 1**, but (IMO) they all have one big limitation &mdash; there is only a single valid format for the value provided by the client. Dates are expressed in so many different ways via text, so my preference is to design a parser that can accomodate a variety of date formats.
 
 There is also a problem that arises from the project requirements for the `deadline` attribute: the value must not be a date in the past. Since the pre-defined types only validate that the value provided by the client is in the proper format to be converted to a `datetime` value, we would have to perform the task of checking if the date provided by the client is in the past in the business logic.
 
-This second issue is another matter of opinion, since you could easily object by pointing out that the `name` attribute has a requirement to be unique and the task of querying the database for widgets with the same name is not performed in the `wiget_name` function we just created
+This second issue is another matter of opinion, since you could easily object by pointing out that the `name` attribute has a requirement to be unique and the task of querying the database for widgets with the same name is not performed in the `wiget_name` function we just created.
 
-My answer to that requires a hypothetical situation: if a `Widget` exists with `name=test` and a client sends a request to create a new widget with `name=test`, **that is a valid value**, but the request must still be rejected. When the hypothetical `Widget` was first created, the client sent the same value for `name` and the request succeeded. OTOH, creating a new widget with a `deadline` in the past **is an invalid value** and the request must always be rejected.
+I'll explain the distinction between these two requirements with a hypothetical situation: A request is received to create a new widget with `name="test"`. This is avalid widget name, so the request is passed to the business logic and since no widget already exists in the database with `name="test"`, a new widget is created. Then, an identical request is recieved to create a widget with `name="test"`. IMO, from the point-of-view of the `widget_reqparser`, `test` is a valid widget name, so the requst is again passed to the business logic. However, since a widget alredy exists with `name="test"`, the request is aborted with a message indicating that a widget already exists in the database with `name="test"`.
+
+OTOH, consider this scenario: A request is received to create a new widget with `deadline="1923-05-18"`. This string is in a valid format but since the date is obviously in the past, the `widget_reqparser` raises a `ValueError` and the request is aborted. A request to create a widget with a `deadline` in the past is always an invalid value and the request must always be rejected.
 
 The job our custom type functions should be performing is filtering out invalid values and allowing valid values to proceed to the business logic. Hopefully my reasoning makes sense to you.
 
