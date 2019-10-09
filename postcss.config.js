@@ -4,7 +4,7 @@ module.exports = {
             grid: true,
         }),
         require('postcss-uncss')({
-            html: ['public/**/*.html']
+            html: ['./public/**/*.html']
         })
     ]
 }
