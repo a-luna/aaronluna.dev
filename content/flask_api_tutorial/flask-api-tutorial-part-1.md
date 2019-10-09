@@ -258,6 +258,7 @@ setup(
         "flask-restplus",
         "Flask-SQLAlchemy",
         "PyJWT",
+        "python-dateutil",
         "python-dotenv",
         "requests",
         "urllib3",
@@ -266,18 +267,9 @@ setup(
 
 Next, open the `requirements.txt` file and add the content below. Then, save and close the file:
 
-{{< highlight python >}}Flask
-Flask-Bcrypt
-Flask-Cors
-Flask-Migrate
-flask-restplus
-Flask-SQLAlchemy
-PyJWT
-python-dotenv
-pytz
-requests
-tzlocal
-urllib3{{< /highlight >}}
+{{< highlight python >}}# install flask-api-design application in editable mode
+-e .
+{{< /highlight >}}
 
 Finally, open the `requirements_dev.txt` file and add the content below. Then, save and close the file:
 

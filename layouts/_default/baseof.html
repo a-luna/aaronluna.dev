@@ -26,46 +26,57 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,300,400,600,700,800" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" type="text/css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
-    {{ range .Site.Params.customCSS -}}
-        <link rel="stylesheet" href="{{ . | relURL }}">
-    {{- end }}
+    {{ partial "styles" . }}
     <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}"> 
     {{- if not .Site.IsServer }}
         {{ template "_internal/google_analytics_async.html" . }}
     {{- end }}
 </head>
 
-<body class="body">
+{{ if eq .Section "blog" }}
+	{{ .Scratch.Set "body_classes" "body blog-list" }}
+{{ else if or (eq .Section "series") (eq .Section "flask_api_tutorial") }}
+	{{ .Scratch.Set "body_classes" "body tutorial" }}
+{{ else }}
+  {{ .Scratch.Set "body_classes" "body" }}
+{{ end }}
+
+<body class="{{ .Scratch.Get "body_classes" }}">
     <div class="container container--outer">
         {{ partial "header" . }}
         <div class="wrapper flex">
             <div class="primary">
-                {{ block "main" . }} {{ with .Content }}
+                {{ block "main" . }}
+                {{ with .Content }}
                 <div class="content main__content clearfix">
                     {{ . }}
                 </div>
-                {{ end }} {{ end }}
+                {{ end }}
+                {{ end }}
             </div>
             {{ partial "sidebar.html" . }}
         </div>
         {{ partial "footer" . }}
     </div>
     <script>
-      const toggleActive = function(link) {
-          if (location.href == link.href) {
-              link.classList.add("active");
-          }
-      };
-      document.querySelectorAll('.site-menu-link').forEach(link => toggleActive(link));
+        const toggleActive = function(link) {
+            if (location.href == link.href) {
+                link.classList.add("active");
+            }
+        };
+        document.querySelectorAll('.site-menu-link').forEach(link => toggleActive(link));
     </script>
     <script>
-      const postTitle = document.querySelector('h1.post__title');
-      if (postTitle) {
-          postTitle.id = "top-of-page"
-      }
-      const headings = document.querySelectorAll('article h2[id], article h3[id], article h4[id]');
-      headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#${h.id}" class="hanchor hanchor-self" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`));
-      headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#top-of-page" class="hanchor hanchor-top" title="Return to top of page"><i class="fa fa-angle-double-up"></i></a></a>`));
+        const headings = document.querySelectorAll('article h2[id], article h3[id], article h4[id]');
+        headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#${h.id}" class="hanchor hanchor-self" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`));
+        headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#menu" class="hanchor hanchor-top" title="Return to top of page"><i class="fa fa-angle-double-up"></i></a></a>`));
+    </script>
+    <script>
+        document.querySelectorAll('.accordian-button').forEach(
+            ac_button => ac_button.addEventListener('click', function(e) {
+                this.parentElement.classList.toggle("ac_hidden");
+            })
+        );
     </script>
 </body>
 </html>

@@ -182,9 +182,9 @@ ol li p {
 #showcase {
     color: #C4C4C4;
     background-color: #252525;
+    font-weight: 400;
     margin: 0 auto;
     padding: 10px 15px;
-    border: 1px solid #08C3A7;
     border-radius: 4px;
 }
 
@@ -239,7 +239,7 @@ ol li p {
 }
 
 #showcase strong {
-    color: #C4C4C4;
+    color: #E2E2E2;
     font-weight: 700;
 }
 
@@ -341,7 +341,7 @@ li.tags__item .btn:focus {
 
 .main__header h1 {
     color: #D8D8D8;
-    font-size: 2em;
+    font-size: 1.25rem;
     font-weight: 400;
     letter-spacing: 1px;
     margin: 0 0 10px;
@@ -605,22 +605,22 @@ h1.post__title {
     color: #D8D8D8;
     background-color: #252525;
     font-size: 0.8em;
+    font-weight: 500;
     padding: 3px 5px;
     text-transform: uppercase;
     border-radius: 4px;
 }
 
 #showcase .badge {
-    background-color: #323232;
-    border: 1px solid #444444;
+    background-color: #AE81FF;
+    font-weight: 700;
+    padding: 3px 6px;
+    font-size: 0.9em;
 }
 
+.new-badge,
 .tutorial-series-badge {
-    color: #6FC1FF;
-}
-
-.new-badge {
-    color: #FFC107;
+    color: #252525;
 }
 
 h3,
@@ -2734,7 +2734,7 @@ ul .table-wrapper {
 }
 
 .responsive th {
-    font-weight: 400;
+    font-weight: 700;
     border: none;
     background-color: #323232;
     color: #D8D8D8;
@@ -3296,7 +3296,7 @@ header,
         font-size: 1em;
     }
     h1.post__title {
-        font-size: 1.4em;
+        font-size: 1.25rem;
     }
     .post__lead,
     .tutorial .post__lead {
@@ -3413,7 +3413,7 @@ header,
         margin-left: 15px;
     }
     .main__header h1 {
-        font-size: 1.5em;
+        font-size: 1.25rem;
     }
     .flex-row {
         justify-content: center;

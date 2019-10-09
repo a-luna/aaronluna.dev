@@ -552,7 +552,7 @@ def widget_name(name):
     return name
 
 
-def future_date(date_str):
+def future_date_from_string(date_str):
     """Validation method for a date formatted as a string, the date must NOT be in the past."""
     try:
         parsed_date = parser.parse(date_str)
@@ -593,7 +593,7 @@ widget_reqparser.add_argument(
 )
 widget_reqparser.add_argument(
     "deadline",
-    type=future_date,
+    type=future_date_from_string,
     location="form",
     required=True,
     nullable=False,
@@ -812,13 +812,19 @@ There is also a problem that arises from the project requirements for the `deadl
 
 This second issue is another matter of opinion, since you could easily object by pointing out that the `name` attribute has a requirement to be unique and the task of querying the database for widgets with the same name is not performed in the `wiget_name` function we just created.
 
-I'll explain the distinction between these two requirements with a hypothetical situation: A request is received to create a new widget with `name="test"`. This is avalid widget name, so the request is passed to the business logic and since no widget already exists in the database with `name="test"`, a new widget is created. Then, an identical request is recieved to create a widget with `name="test"`. IMO, from the point-of-view of the `widget_reqparser`, `test` is a valid widget name, so the requst is again passed to the business logic. However, since a widget alredy exists with `name="test"`, the request is aborted with a message indicating that a widget already exists in the database with `name="test"`.
+I'll explain the distinction between these two requirements with a hypothetical situation: A request is received to create a new widget with `name="test"`. This is a valid widget name, so the request is passed to the business logic and since no widget already exists in the database with `name="test"`, a new widget is created. Then, an identical request is recieved to create a widget with `name="test"`. IMO, from the point-of-view of the `widget_reqparser`, `test` is a valid widget name, so the requst is again passed to the business logic. However, since a widget alredy exists with `name="test"`, the request is aborted with a message indicating that a widget already exists in the database with `name="test"`.
 
-OTOH, consider this scenario: A request is received to create a new widget with `deadline="1923-05-18"`. This string is in a valid format but since the date is obviously in the past, the `widget_reqparser` raises a `ValueError` and the request is aborted. A request to create a widget with a `deadline` in the past is always an invalid value and the request must always be rejected.
+OTOH, consider this scenario: A request is received to create a new widget with `deadline="1923-03-28"`. This string is in a valid format but since the date is obviously in the past, the `widget_reqparser` raises a `ValueError` and the request is aborted. A `deadline` in the past is always invalid and a request to create a widget containing an invalid value for a required parameter must always be rejected. Hopefully my reasoning makes sense to you.
 
-The job our custom type functions should be performing is filtering out invalid values and allowing valid values to proceed to the business logic. Hopefully my reasoning makes sense to you.
+So, since the pre-defined types are adequate but inflexible, what can we use to parse a `date` value from a string? If we wanted to restrict ourselves to the Python standard library, we would need to create a complicated function that uses the `strptime` method of either the `date` or `datetime` class. This would involve testing as many format strings as possible and would quickly become a nightmare.
 
-{{< highlight python "linenos=table,linenostart=23" >}}def future_date(date_str):
+Luckily, I see no reason to impose such a restriction for this project. IMO, the most robust and usable way to parse `datetime` values from a string is the `parse` function in the `dateutil.parser` module (this was listed as a requirement in the `setup.py` file, so it is already installed). Unlike `strptime`, this method does not require you to provide a format string.
+
+`dateutil.parser.parse` recognizes a wide variety of `date` and `datetime` formats. The locale setting of the machine where the function is executed is taken into consideration, which is extremely helpful in situations where the order of the month and day values are transposed (e.g., US date format vs. European). You can find more information in <a href="https://dateutil.readthedocs.io/en/stable/parser.html" target="_blank">the official documentation for the `dateutil.parser` module</a>.
+
+Since `deadline` must be either the current date or a date in the future, I decided to name the custom type function for this attribute `future_date_from_string`. This function is more complex than `widget_name` since two separate validations must be peformed &mdash; parsing the input string to a `date` value and checking that the parsed date is not in the past:
+
+{{< highlight python "linenos=table,linenostart=23" >}}def future_date_from_string(date_str):
     """Validate a string is formatted correctly as a datetime value that is not in the past."""
     try:
         parsed_date = parser.parse(date_str)
@@ -840,9 +846,34 @@ The job our custom type functions should be performing is filtering out invalid 
     deadline_utc = make_tzaware(deadline, use_tz=timezone.utc)
     return deadline_utc{{< /highlight >}}
 
+There are a few things about the `future_date_from_string` function that are worth pointing out:
+
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 26: </strong></p>
+      </li>
+      <li>
+        <p><strong>Lines 27-32: </strong></p>
+      </li>
+      <li>
+        <p><strong>Line 34: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 35-40: </strong></p>
+      </li>
+      <li>
+        <p><strong>Line 41: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 42-43: </strong></p>
+      </li>
+    </ul>
+</div>
+
 {{< highlight python "linenos=table,linenostart=65" >}}widget_reqparser.add_argument(
     "deadline",
-    type=future_date,
+    type=future_date_from_string,
     location="form",
     required=True,
     nullable=False,

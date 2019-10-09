@@ -1,0 +1,8 @@
+{{ $allCSS := slice (resources.Get "css/style.css") (resources.Get "css/syntax.css") (resources.Get "css/custom.css") }}
+{{ if .Site.IsServer }}
+    {{ $CSS := $allCSS | resources.Concat "css/main.css" | postCSS }}
+    <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" media="screen">
+{{ else }}
+    {{ $CSS := $allCSS | resources.Concat "css/main.css" | postCSS | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" integrity="{{ $CSS.Data.Integrity }}" media="screen">
+{{ end }}

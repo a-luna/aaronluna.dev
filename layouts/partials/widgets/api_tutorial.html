@@ -1,6 +1,6 @@
 {{ if isset .Site.Taxonomies "series" }} {{ if not (eq (len .Site.Taxonomies.series.flask_api_tutorial) 0) }}
 <div id="api-tutorial" class="widget-api-tutorial widget">
-    <h4 class="widget__title">Tutorial Sections</h4>
+    <h4 class="widget__title">{{ .Site.Params.widgets.flask_api_tutorials_title }}</h4>
     <div class="widget__content">
         <ul>
             {{ range .Site.Taxonomies.series.flask_api_tutorial }}
