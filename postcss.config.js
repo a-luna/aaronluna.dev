@@ -4,7 +4,7 @@ module.exports = {
             grid: true,
         }),
         require('postcss-uncss')({
-            html: ['public/**/*.html']
+            html: ['https://aaronlunadev.netlify.com/']
         })
     ]
 }
