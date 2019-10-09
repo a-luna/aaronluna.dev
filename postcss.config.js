@@ -1,7 +1,10 @@
 module.exports = {
-    plugins: {
-        autoprefixer: {
+    plugins: [
+        require('autoprefixer')({
             grid: true,
-        },
-    }
+        }),
+        require('postcss-uncss')({
+            html: ['public/**/*.html']
+        })
+    ]
 }
