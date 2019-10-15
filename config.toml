@@ -1,5 +1,4 @@
-baseurl = "https://aaronlunadev.netlify.com/"
-#baseurl = "https://aaronluna.dev/"
+baseurl = "https://aaronluna.dev/"
 title = "Aaron Luna"
 languageCode = "en-us"
 paginate = "3" # Number of posts per page
