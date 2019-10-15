@@ -1,0 +1,2 @@
+# Redirect default Netlify subdomain to primary domain
+https://aaronlunadev.netlify.com/* https://aaronluna.dev/:splat 301!
