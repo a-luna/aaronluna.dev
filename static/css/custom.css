@@ -46,8 +46,7 @@ body {
 }
 
 pre,
-code,
-.tutorial-series-badge {
+code {
     font-family: "Roboto Mono", SFMono-Regular, Menlo, "Courier New", monospace;
 }
 
@@ -192,7 +191,7 @@ ol li p {
 #showcase h2 {
     color: #19F6D6;
     font-size: 1.25rem;
-    margin: 0 0 10px;
+    margin: 0 0 7px;
 }
 
 #showcase strong {
@@ -344,7 +343,7 @@ h1.post__title {
 }
 
 .article-badges {
-    margin: 0 0 10px;
+    margin: 0 0 7px;
 }
 
 .article-badges .badge {
@@ -373,7 +372,7 @@ h1.post__title {
     background-color: #AE81FF;
     font-weight: 700;
     padding: 3px 6px;
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 .new-badge,

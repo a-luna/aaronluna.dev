@@ -20,3 +20,13 @@
   HUGO_VERSION = "0.58.3"
 [context.next.environment]
   HUGO_ENABLEGITINFO = "false"
+[[redirects]]
+  from = "/base64"
+  to = "https://aaronlunadev-sapper.netlify.com/base64/"
+  status = 200
+  force = false
+[[redirects]]
+  from = "https://aaronlunadev.netlify.com/*"
+  to = "https://aaronluna.dev/:splat"
+  status = 301
+  force = true
