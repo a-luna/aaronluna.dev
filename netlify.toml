@@ -23,10 +23,5 @@
 [[redirects]]
   from = "https://aaronlunadev.netlify.com/*"
   to = "https://aaronluna.dev/:splat"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/base64"
-  to = "https://aaronlunadev-sapper.netlify.com/base64"
-  status = 200
+  status = 301
   force = true
