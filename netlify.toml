@@ -25,3 +25,8 @@
   to = "https://aaronluna.dev/:splat"
   status = 301
   force = true
+[[redirects]]
+  from ="/base64"
+  to = "https://aaronlunadev-sapper.netlify.com/base64"
+  status = 200
+  force = true
