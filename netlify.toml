@@ -21,7 +21,7 @@
 [context.next.environment]
   HUGO_ENABLEGITINFO = "false"
 [[redirects]]
-  from = "https://aaronlunadev.netlify.com/*"
-  to = "https://aaronluna.dev/:splat"
-  status = 301
+  from ="/base64"
+  to = "https://aaronlunadev-sapper.netlify.com/base64"
+  status = 200
   force = true
