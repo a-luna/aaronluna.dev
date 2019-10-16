@@ -23,5 +23,5 @@
 [[redirects]]
   from ="/base64"
   to = "https://aaronlunadev-sapper.netlify.com/base64"
-  status = 301
+  status = 200
   force = true
