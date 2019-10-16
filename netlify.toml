@@ -21,7 +21,17 @@
 [context.next.environment]
   HUGO_ENABLEGITINFO = "false"
 [[redirects]]
+  from ="/service-worker.js"
+  to = "https://aaronlunadev-sapper.netlify.com/service-worker.js"
+  status = 200
+  force = true
+[[redirects]]
   from ="/base64/*"
   to = "https://aaronlunadev-sapper.netlify.com/base64/:splat"
+  status = 200
+  force = true
+[[redirects]]
+  from ="/client/*"
+  to = "https://aaronlunadev-sapper.netlify.com/client/:splat"
   status = 200
   force = true
