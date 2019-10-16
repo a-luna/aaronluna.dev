@@ -26,6 +26,11 @@
   status = 200
   force = true
 [[redirects]]
+  from ="/global.css"
+  to = "https://aaronlunadev-sapper.netlify.com/global.css"
+  status = 200
+  force = true
+[[redirects]]
   from ="/base64/*"
   to = "https://aaronlunadev-sapper.netlify.com/base64/:splat"
   status = 200
