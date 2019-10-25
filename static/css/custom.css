@@ -692,12 +692,12 @@ p .fa,
 
 #sourcerer .initial {
     display: inline-block;
-    margin: 5px 0 7px 0;
+    margin: 5px 0 8px 0;
 }
 
 #sourcerer .initial img,
 #sourcerer:hover .hover img {
-    height: 19px;
+    height: 18px;
 }
 
 #sourcerer:hover .initial {
@@ -706,7 +706,7 @@ p .fa,
 
 #sourcerer:hover .hover {
     display: inline-block;
-    margin: 5px 0 7px 0;
+    margin: 5px 0 8px 0;
 }
 
 #sourcerer .hover {
