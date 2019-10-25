@@ -130,10 +130,6 @@ ol li p {
     padding: 7px 10px;
 }
 
-#widgets div:last-child {
-    margin: 0;
-}
-
 #widgets .widget__content {
     margin: 0;
 }
@@ -343,7 +339,7 @@ h1.post__title {
 }
 
 .article-badges {
-    margin: 0 0 7px;
+    margin: 0 0 15px;
 }
 
 .article-badges .badge {
@@ -369,7 +365,7 @@ h1.post__title {
 }
 
 #showcase .badge {
-    background-color: #AE81FF;
+    background-color: hsl(171, 92%, 40%);
     font-weight: 700;
     padding: 3px 6px;
     font-size: 0.8em;
@@ -685,31 +681,71 @@ p .fa,
     font-size: 24px;
 }
 
-#sourcerer {
+#sourcerer-header {
     display: inline-block;
-    margin: 0 0 0 4px;
+    margin: 1px 0;
 }
 
-#sourcerer .initial {
-    display: inline-block;
-    margin: 5px 0 8px 0;
+#sourcerer-header a {
+    padding: 0 4px;
 }
 
-#sourcerer .initial img,
-#sourcerer:hover .hover img {
+#sourcerer-sidebar {
+    display: inline-block;
+    margin: 3px 0 0 0;
+    padding: 0;
+}
+
+#sourcerer-sidebar a {
+    padding: 0 3px;
+}
+
+#sourcerer-header a.no-border,
+#sourcerer-sidebar a.no-border {
+    border: none;
+}
+
+#sourcerer-header .initial {
+    display: inline-block;
+    margin: 3px 0 6px 0;
+}
+
+#sourcerer-sidebar div.initial {
+    display: inline-block;
+    background-color: #323232;
+    padding: 0;
+    margin: 0;
+}
+
+#sourcerer-header .initial img,
+#sourcerer-header:hover .hover img {
     height: 18px;
 }
 
-#sourcerer:hover .initial {
+#sourcerer-sidebar .initial img,
+#sourcerer-sidebar:hover .hover img {
+    height: 24px;
+}
+
+#sourcerer-header:hover .initial,
+#sourcerer-sidebar:hover .initial {
     display: none;
 }
 
-#sourcerer:hover .hover {
+#sourcerer-header:hover .hover {
     display: inline-block;
-    margin: 5px 0 8px 0;
+    margin: 3px 0 6px 0;
 }
 
-#sourcerer .hover {
+#sourcerer-sidebar:hover div.hover {
+    display: inline-block;
+    background-color: #323232;
+    padding: 0;
+    margin: 0;
+}
+
+#sourcerer-header .hover,
+#sourcerer-sidebar .hover {
     display: none;
 }
 
@@ -1173,13 +1209,14 @@ figcaption {
     box-shadow: inset 0 0 1px 3px #202020;
 }
 
-.wrapper #social {
+.wrapper #social,
+#sourcerer-sidebar {
     display: none;
 }
 
 #social {
     display: flex;
-    flex-flow: column nowrap;
+    flex-flow: row nowrap;
     align-self: flex-start;
     margin: 0 0 0 20px;
 }
@@ -1820,7 +1857,7 @@ input[type=submit]:hover {
 
 /* Search widget */
 
-#search-site,
+#search,
 #search-field {
     background-color: #202020;
     border: none;
@@ -2368,22 +2405,25 @@ header,
 
 .recent-post {
     width: 250px;
-    background-color: #292929;
+    background-color: #202020;
     margin: 0 10px;
     padding: 10px;
+    border: 1px solid #202020;
+    border-radius: 4px;
 }
 
 .recent-post .post-meta-date {
-    font-size: 1.6em;
+    color: #C4C4C4;
+    font-size: 1.5em;
     line-height: 14px;
     margin: 0 0 5px 0;
 }
 
 .recent-post .post-title {
     display: block;
-    font-size: 1.6em;
+    font-size: 1.4em;
     line-height: 22px;
-    margin: 0 0 5px 0;
+    margin: 0 0 10px 0;
 }
 
 .recent-post .post-categories {
@@ -2394,13 +2434,14 @@ header,
 
 .recent-post .post-category {
     font-size: 1.2em;
+    font-weight: 700;
     color: #202020;
-    background-color: #6FC1FF;
-    margin: 5px 10px 5px 0;
-    padding: 3px 5px;
-    white-space: nowrap;
-    border: 1px solid #6FC1FF;
+    background-color: #3f90cf;
+    border: 1px solid #3f90cf;
     border-radius: 4px;
+    margin: 3px 7px 3px 0;
+    padding: 1px 5px;
+    white-space: nowrap;
 }
 
 #home-blog-link {
@@ -2518,7 +2559,8 @@ header,
     }
     #social,
     .site-social,
-    #sourcerer {
+    #sourcerer-header,
+    #sourcerer-sidebar {
         display: none;
     }
     .site-menu ul {
@@ -2555,6 +2597,12 @@ header,
     .recent-post {
         width: 80%;
         margin: 10px auto;
+    }
+    div#sourcerer-sidebar {
+        display: inline-block;
+        background-color: #323232;
+        padding: 0;
+        margin: 3px 0 0 0;
     }
     #home-blog-link {
         margin: 5px auto;
@@ -2598,7 +2646,8 @@ header,
         font-weight: 500;
     }
     .wrapper #social {
-        display: block;
+        display: flex;
+        flex-flow: row nowrap;
         background-color: #323232;
         margin: 0 auto;
         padding: 7px 10px;
@@ -2608,9 +2657,6 @@ header,
     }
     #widgets {
         margin: 1em 0 0;
-    }
-    #widgets div:last-child {
-        margin: 0 auto;
     }
     #widgets .widget-search {
         display: none;

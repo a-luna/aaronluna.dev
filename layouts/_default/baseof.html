@@ -64,19 +64,26 @@
                 link.classList.add("active");
             }
         };
-        document.querySelectorAll('.site-menu-link').forEach(link => toggleActive(link));
+        const menuLinks = document.querySelectorAll('.site-menu-link');
+        menuLinks.forEach(link => toggleActive(link));
     </script>
     <script>
+        const addAnchorLinkToDocumentHeader = function(h) {
+            h.insertAdjacentHTML('beforeend', `<a href="#${h.id}" class="hanchor hanchor-self" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`)
+        };
+        const addNavigationLinkToDocumentHeader = function(h) {
+            h.insertAdjacentHTML('beforeend', `<a href="#menu" class="hanchor hanchor-top" title="Return to top of page"><i class="fa fa-angle-double-up"></i></a></a>`)
+        };
         const headings = document.querySelectorAll('article h2[id], article h3[id], article h4[id]');
-        headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#${h.id}" class="hanchor hanchor-self" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`));
-        headings.forEach(h => h.insertAdjacentHTML('beforeend', `<a href="#menu" class="hanchor hanchor-top" title="Return to top of page"><i class="fa fa-angle-double-up"></i></a></a>`));
+        headings.forEach(h => addAnchorLinkToDocumentHeader(h));
+        headings.forEach(h => addNavigationLinkToDocumentHeader(h));
     </script>
     <script>
-        document.querySelectorAll('.accordian-button').forEach(
-            ac_button => ac_button.addEventListener('click', function(e) {
-                this.parentElement.classList.toggle("ac_hidden");
-            })
-        );
+        const toggleAccordian = function(event) {
+            event.target.parentElement.classList.toggle("ac_hidden");
+        };
+        const accordianButtons = document.querySelectorAll('.accordian-button');
+        accordianButtons.forEach(ac_button => ac_button.addEventListener('click', toggleAccordian));
     </script>
 </body>
 </html>
