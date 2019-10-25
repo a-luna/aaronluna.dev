@@ -2336,7 +2336,7 @@ header,
     font-size: 3em;
     margin: 0 0 10px 0;
 }
-.home .post__lead {
+.home header p {
     font-size: 2.2em;
     color: #D8D8D8;
     font-style: normal;
@@ -2350,6 +2350,7 @@ header,
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
+    max-width: 750px;
 }
 
 #recent-posts-wrapper h4 {
@@ -2535,6 +2536,12 @@ header,
     .site-menu-link:last-child {
         margin: 0 0 0 9px;
         padding: 8px 0 8px 0;
+    }
+    .home h1 {
+        font-size: 2.5em;
+    }
+    .home header p {
+        font-size: 1.8em;
     }
     #recent-posts {
         display: flex;
