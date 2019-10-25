@@ -1,10 +1,7 @@
-<div class="widget-search widget">
-    <form class="widget-search__form" role="search" method="get" action="https://google.com/search">
-        <i class="fa fa-lg fa-search" aria-hidden="true"></i>
-        <label for="search-site">
-			<input id="search" name="q" class="widget-search__field" type="search" placeholder="{{ T "search_placeholder" }}" value="" name="q" aria-label="{{ T "search_placeholder" }}">
-		</label>
-        <input class="widget-search__submit" type="submit" value="Search">
-        <input type="hidden" name="sitesearch" value="{{ .Site.BaseURL }}" />
-    </form>
-</div>
+<form id="search-form" role="form">
+    <div class="search-container">
+        <span class="fa fa-search"></span>
+        <input autocomplete="off" id="search" class="search-input" aria-label="Search blog" type="text" name="q">
+        <button id="search-button" type="submit">Search</button>
+    </div>
+</form>

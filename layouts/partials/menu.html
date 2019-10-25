@@ -5,16 +5,13 @@
             <div class="site-name">{{ .Site.Title }}</div>
         </a>
         {{ partial "social.html" . }}
-        <div class="site-search">
-            <form class="search-form" role="search" method="get" action="https://google.com/search">
-                <label for="search-field">
-                    <input id="search-field" name="search-field" class="search-field" type="search" placeholder="search" value="" aria-label="search">
-                </label>
-                <i class="fa fa-lg fa-fw fa-search"></i>
-                <input class="search-submit-btn" type="submit" value="Search">
-                <input type="hidden" name="sitesearch" value="{{ .Site.BaseURL }}" />
-            </form>
-        </div>
+        <form id="search-form" role="form">
+            <div class="search-container">
+                <span class="fa fa-search"></span>
+                <input autocomplete="off" id="search" class="search-input" aria-label="Search blog" type="text" name="q">
+                <button id="search-button" type="submit">Search</button>
+            </div>
+        </form>
     </div>
     <nav class="site-menu">
         <ul>

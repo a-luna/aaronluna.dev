@@ -9,6 +9,9 @@ pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsUseClasses = true
 
+[outputs]
+    home = ["HTML", "JSON"]
+    page = ["HTML"]
 
 [permalinks]
   post = "/blog/:slug/"
