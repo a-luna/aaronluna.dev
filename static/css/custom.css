@@ -1458,7 +1458,6 @@ a.pagination__item--next {
 .fa-bullet-list {
     margin: 0 0 0 0.5em;
     padding: 0 0 10px 0;
-    border-bottom: 1px solid #999999;
 }
 
 .requirements .fa-bullet-list {
@@ -2333,17 +2332,18 @@ header,
 }
 .home h1 {
     color: #F2F2F2;
-    font-size: 3em;
+    font-size: 2.6em;
     margin: 0 0 10px 0;
 }
 .home header p {
-    font-size: 2.2em;
+    font-size: 1.8em;
     color: #D8D8D8;
     font-style: normal;
     margin: 0 0 20px 0;
 }
 .home p {
-    font-size: 1.6em;
+    font-size: 1.5em;
+    line-height: 22px;;
 }
 
 #recent-posts-wrapper {
@@ -2351,12 +2351,13 @@ header,
     flex-flow: column nowrap;
     justify-content: center;
     max-width: 750px;
+    margin: 0 auto;
 }
 
 #recent-posts-wrapper h4 {
     color: #F2F2F2;
-    font-size: 2em;
-    margin: 10px auto;
+    font-size: 2.2em;
+    margin: 10px auto 15px;
 }
 
 #recent-posts {
@@ -2403,10 +2404,10 @@ header,
 }
 
 #home-blog-link {
-    font-size: 1.6em;
+    font-size: 2em;
     color: #6FC1FF;
     padding: 5px 7px;
-    margin: 10px auto;
+    margin: 15px auto;
     line-height: 16px;
 }
 
@@ -2543,6 +2544,9 @@ header,
     .home header p {
         font-size: 1.8em;
     }
+    #recent-posts-wrapper h4 {
+        margin: 5px auto;
+    }
     #recent-posts {
         display: flex;
         flex-flow: column nowrap;
@@ -2551,6 +2555,9 @@ header,
     .recent-post {
         width: 80%;
         margin: 10px auto;
+    }
+    #home-blog-link {
+        margin: 5px auto;
     }
     .wrapper {
         padding: 1em;
@@ -2561,7 +2568,6 @@ header,
     .about-me .post {
         margin: 0 0 1.25rem;
         padding: 0 0 1.25rem;
-        border-bottom: 2px dotted #7F7F7F;
     }
     .main__header h1 {
         font-size: 1.7em;
