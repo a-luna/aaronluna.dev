@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" type="text/css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     {{ partial "styles" . }}
-    <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}"> 
+    <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
     {{- if not .Site.IsServer }}
         {{ template "_internal/google_analytics_async.html" . }}
     {{- end }}
@@ -77,6 +77,17 @@
                 this.parentElement.classList.toggle("ac_hidden");
             })
         );
+    </script>
+    <script>
+        function hover(element) {
+            element.setAttribute('src', '/img/sourcerer_hov.jpg');
+        }
+
+        function unhover(element) {
+        element.setAttribute('src', '/img/sourcerer.jpg');
+        }
+        document.getElementById('sourcerer').addEventListener('onmouseover', hover);
+        document.getElementById('sourcerer').addEventListener('onmouseout', unhover);
     </script>
 </body>
 </html>

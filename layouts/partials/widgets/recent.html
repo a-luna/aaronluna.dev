@@ -1,4 +1,6 @@
-{{- $recent := where .Site.RegularPages "Section" "in" (slice "post") }} {{- $recent_num := (.Site.Params.widgets.recent_num | default 10) }} {{- if $recent }}
+{{- $recent := where .Site.RegularPages "Section" "in" (slice "post") }}
+{{- $recent_num := (.Site.Params.widgets.recent_num | default 10) }}
+{{- if $recent }}
 <div id="recent" class="widget-recent widget">
     <h4 class="widget__title">{{ .Site.Params.widgets.recent_title }}</h4>
     <div class="widget__content">

@@ -1,0 +1,30 @@
+{{- $recent := where .Site.RegularPages "Section" "in" (slice "post") }}
+{{- $recent_num := (.Site.Params.widgets.recent_num_home | default 10) }}
+{{- if $recent }}
+<div id="recent-posts-wrapper">
+    <h4>Most recent blog posts</h4>
+    <div id="recent-posts">
+        {{- range first $recent_num $recent }}
+        <div class="recent-post">
+            <div class="post-meta-date">
+                {{- if not .Date.IsZero }}
+                <div class="meta__item-datetime meta__item">
+                    <time class="meta__text" datetime="{{ .Date.Format " 2006-01-02T15:04:05 " }}">{{.Date.Format ( .Site.Params.dateformat | default "January 02, 2006")}}</time> {{- if ne .Date .Lastmod }}
+                    <time class="meta__text" datetime="{{ .Lastmod.Format " 2006-01-02T15:04:05 " }}"> ({{ T "meta_lastmod" }}: {{.Lastmod.Format ( .Site.Params.dateformat | default "January 02, 2006")}})</time> {{- end }}
+                </div>
+                {{ end -}}
+            </div>
+            <a class="post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{- if .Params.categories }}
+                <div class="post-categories">
+                    {{ range $index, $category := .Params.categories }}
+                    <a class="post-category" href="{{ "categories/" | relLangURL }}{{ . | urlize | lower }}" rel="category">{{ . }}</a>
+                    {{ end }}
+                </div>
+            {{ end -}}
+        </div>
+        {{- end }}
+    </div>
+    <a id="home-blog-link" href="/blog">Go to blog <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+</div>
+{{- end }}

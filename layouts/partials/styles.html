@@ -1,7 +1,13 @@
 {{ $allCSS := slice (resources.Get "css/style.css") (resources.Get "css/syntax.css") (resources.Get "css/custom.css") }}
 {{ if .Site.IsServer }}
-    {{ $CSS := $allCSS | resources.Concat "css/main.css" | postCSS }}
-    <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" media="screen">
+    {{ if .Site.Params.process_dev_css }}
+        {{ $CSS := $allCSS | resources.Concat "css/main.css" | postCSS }}
+        <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" media="screen">
+    {{ else }}
+        {{ range .Site.Params.customCSS -}}
+            <link rel="stylesheet" href="{{ . | relURL }}">
+        {{- end }}
+    {{ end }}
 {{ else }}
     {{ $CSS := $allCSS | resources.Concat "css/main.css" | postCSS | minify | fingerprint }}
     <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" integrity="{{ $CSS.Data.Integrity }}" media="screen">

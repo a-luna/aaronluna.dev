@@ -124,7 +124,7 @@ ol li p {
 }
 
 #widgets div {
-    background-color: #252525;
+    background-color: #202020;
     border-radius: 4px;
     margin: 0 0 1em;
     padding: 7px 10px;
@@ -165,7 +165,7 @@ ol li p {
 
 #showcase {
     color: #C4C4C4;
-    background-color: #252525;
+    background-color: #202020;
     font-weight: 400;
     margin: 0 auto;
     padding: 10px 15px;
@@ -360,7 +360,7 @@ h1.post__title {
 
 .badge {
     color: #D8D8D8;
-    background-color: #252525;
+    background-color: #202020;
     font-size: 0.8em;
     font-weight: 500;
     padding: 3px 5px;
@@ -377,7 +377,7 @@ h1.post__title {
 
 .new-badge,
 .tutorial-series-badge {
-    color: #252525;
+    color: #202020;
 }
 
 h3,
@@ -675,13 +675,42 @@ span.italics.requirements {
     color: #F92672;
 }
 
-p .fa {
+p .fa,
+.about-me div .fa {
     font-size: 12px;
     margin: 0 2px;
 }
 
-.about-me .fa-bullet-list p .fa {
+.about-me .fa-bullet-list .fa {
     font-size: 24px;
+}
+
+#sourcerer {
+    display: inline-block;
+    margin: 0 0 0 4px;
+}
+
+#sourcerer .initial {
+    display: inline-block;
+    margin: 5px 0 7px 0;
+}
+
+#sourcerer .initial img,
+#sourcerer:hover .hover img {
+    height: 19px;
+}
+
+#sourcerer:hover .initial {
+    display: none;
+}
+
+#sourcerer:hover .hover {
+    display: inline-block;
+    margin: 5px 0 7px 0;
+}
+
+#sourcerer .hover {
+    display: none;
 }
 
 div.alert,
@@ -701,7 +730,7 @@ span.requirements {
 
 div.note-flex {
     border: 1px solid #2196F3;
-    background-color: #252525;
+    background-color: #202020;
 }
 
 .alert p,
@@ -744,7 +773,7 @@ div.note-flex {
 
 div.alert {
     border: 1px solid #FFC107;
-    background-color: #252525;
+    background-color: #202020;
 }
 
 div.alert,
@@ -758,14 +787,14 @@ div.note {
 }
 
 div.command {
-    background: #252525;
+    background: #202020;
     padding: 2px 5px;
     margin: 0 0 20px;
 }
 
 div.requirements {
     border: 1px solid #FFC107;
-    background: #252525;
+    background: #202020;
     padding: 10px 10px 5px;
 }
 
@@ -817,7 +846,7 @@ div.requirements {
 
 .command code {
     color: #A9FB68;
-    background: #252525;
+    background: #202020;
     border: none;
 }
 
@@ -900,7 +929,7 @@ pre {
     padding: 10px;
     border: none;
     border-radius: 4px;
-    background-color: #252525;
+    background-color: #202020;
     white-space: pre;
     overflow-wrap: normal;
     overflow-x: auto;
@@ -912,7 +941,7 @@ li pre code {
     display: block;
     font-size: 0.85em;
     color: #BFBFBF;
-    background-color: #252525;
+    background-color: #202020;
     padding: 0;
     white-space: pre;
 }
@@ -921,7 +950,7 @@ code,
 p code,
 li code {
     font-size: .75em;
-    background-color: #252525;
+    background-color: #202020;
     border: none;
     padding: 2px 4px;
     border-radius: 4px;
@@ -946,7 +975,7 @@ li code {
 
 pre.chroma {
     margin: 0;
-    background-color: #252525;
+    background-color: #202020;
 }
 
 div.chroma {
@@ -992,11 +1021,11 @@ pre.chroma code {
     margin: 0;
     padding: 0;
     color: #7F7F7F;
-    background-color: #252525;
+    background-color: #202020;
 }
 
 .chroma .lntd:first-child .hl {
-    background-color: #252525;
+    background-color: #202020;
 }
 
 .chroma .hl {
@@ -1005,7 +1034,7 @@ pre.chroma code {
 
 .chroma .hl .lnt {
     color: #FFC107;
-    background-color: #252525;
+    background-color: #202020;
     font-weight: 700;
 }
 
@@ -1037,7 +1066,7 @@ blockquote {
     font-weight: 300;
     font-style: italic;
     color: #A9FB68;
-    background: #252525;
+    background: #202020;
     border-left: 3px solid #A9FB68;
     padding: 5px 15px;
     margin: 0 0 1em;
@@ -1080,7 +1109,7 @@ blockquote.rfc .bold-text {
 
 .code-details blockquote code {
     color: #D8D8D8;
-    background: #252525;
+    background: #202020;
 }
 
 .code-details blockquote p {
@@ -1112,7 +1141,7 @@ figcaption {
 .warning {
     color: #F92672;
     border: none;
-    background-color: #252525;
+    background-color: #202020;
 }
 
 .warning__code {
@@ -1151,7 +1180,6 @@ figcaption {
 #social {
     display: flex;
     flex-flow: column nowrap;
-    background-color: #202020;
     align-self: flex-start;
     margin: 0 0 0 20px;
 }
@@ -1320,7 +1348,7 @@ figcaption {
 }
 
 .toc {
-    background: #252525;
+    background: #202020;
     border: none;
     width: auto;
     padding: 7px 10px;
@@ -1338,7 +1366,7 @@ figcaption {
     line-height: 1.3;
     border-bottom: 1px solid #19F6D6;
     border-radius: 0;
-    background-color: #252525;
+    background-color: #202020;
     padding: 0 0 5px 0px;
     margin: 0;
 }
@@ -1424,21 +1452,39 @@ a.pagination__item--next {
 }
 
 .about-me .content {
-    margin: 0 2em 3em;
+    margin: 0 4em 3em;
 }
 
 .fa-bullet-list {
     margin: 0 0 0 0.5em;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #999999;
 }
 
 .requirements .fa-bullet-list {
     margin: 0 0 15px 10px;
 }
 
-.fa-bullet-list-item,
 .fa-bullet-list p {
     position: relative;
     margin: 0 0 2em 2em;
+}
+
+div.fa-bullet-list-item {
+    margin: 0 0 0 2em;
+}
+
+.about-me .footnote {
+    font-size: 0.85em;
+    font-style: italic;
+    color: #6FC1FF;
+    font-weight: 400;
+    margin: 10px 0 0 2em;
+}
+
+.fa-bullet-list-item sup {
+    color: #6FC1FF;
+    font-weight: 700;;
 }
 
 .about-me .fa-bullet-list-item:last-child {
@@ -1725,7 +1771,7 @@ input[type=submit]:hover {
 
 #api-tutorial {
     padding: 7px 10px;
-    background-color: #252525
+    background-color: #202020
 }
 
 #api-tutorial ul {
@@ -1777,20 +1823,20 @@ input[type=submit]:hover {
 
 #search-site,
 #search-field {
-    background-color: #252525;
+    background-color: #202020;
     border: none;
     padding: 0;
 }
 
 .widget-search__form {
-    background-color: #252525;
-    border: 1px solid #252525;
+    background-color: #202020;
+    border: 1px solid #202020;
     padding: 0;
     border-radius: 4px;
 }
 
 #widgets .widget-search {
-    background-color: #252525;
+    background-color: #202020;
     text-align: left;
     margin: 0 0 1em;
     padding: 7px 10px 7px 0;
@@ -1800,7 +1846,7 @@ input[type=submit]:hover {
     font-size: 1.5em;
     font-weight: 100;
     color: #7F7F7F;
-    background-color: #252525;
+    background-color: #202020;
     padding: 0 10px;
 }
 
@@ -1808,8 +1854,8 @@ input[type=submit]:hover {
     display: inline-block;
     font-size: 1em;
     color: #D8DBD8;
-    background-color: #252525;
-    border-left: 1px solid #252525;
+    background-color: #202020;
+    border-left: 1px solid #202020;
     border-right: none;
     border-top: none;
     border-bottom: none;
@@ -2106,7 +2152,7 @@ th.last-column,
 }
 
 tr:nth-child(even) {
-    background-color: #252525;
+    background-color: #202020;
 }
 
 tr:nth-child(odd) {
@@ -2174,7 +2220,7 @@ table.aws-hosting-costs {
 }
 
 .accordian section h2 {
-    background-color: #252525;
+    background-color: #202020;
 }
 
 .accordian section:not(.ac_hidden) h2 {
@@ -2191,7 +2237,7 @@ table.aws-hosting-costs {
 header,
 #menu {
     color: #999999;
-    background-color: #202020;
+    background-color: #171717;
 }
 
 .menu-bar {
@@ -2207,8 +2253,8 @@ header,
 #menu a {
     color: #999999;
     text-decoration: none;
-    border-top: 1px solid #202020;
-    border-bottom: 1px solid #202020;
+    border-top: 1px solid #171717;
+    border-bottom: 1px solid #171717;
 }
 
 #menu a:hover,
@@ -2274,6 +2320,103 @@ header,
     text-align: center;
     text-transform: lowercase;
     text-decoration: none;
+}
+
+/* Home Page */
+
+.home {
+    color: #B3B3B3;
+    font-size: 10px;
+}
+.home header {
+    margin: 0;
+}
+.home h1 {
+    color: #F2F2F2;
+    font-size: 3em;
+    margin: 0 0 10px 0;
+}
+.home .post__lead {
+    font-size: 2.2em;
+    color: #D8D8D8;
+    font-style: normal;
+    margin: 0 0 20px 0;
+}
+.home p {
+    font-size: 1.6em;
+}
+
+#recent-posts-wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+
+#recent-posts-wrapper h4 {
+    color: #F2F2F2;
+    font-size: 2em;
+    margin: 10px auto;
+}
+
+#recent-posts {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+}
+
+.recent-post {
+    width: 250px;
+    background-color: #292929;
+    margin: 0 10px;
+    padding: 10px;
+}
+
+.recent-post .post-meta-date {
+    font-size: 1.6em;
+    line-height: 14px;
+    margin: 0 0 5px 0;
+}
+
+.recent-post .post-title {
+    display: block;
+    font-size: 1.6em;
+    line-height: 22px;
+    margin: 0 0 5px 0;
+}
+
+.recent-post .post-categories {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+
+.recent-post .post-category {
+    font-size: 1.2em;
+    color: #202020;
+    background-color: #6FC1FF;
+    margin: 5px 10px 5px 0;
+    padding: 3px 5px;
+    white-space: nowrap;
+    border: 1px solid #6FC1FF;
+    border-radius: 4px;
+}
+
+#home-blog-link {
+    font-size: 1.6em;
+    color: #6FC1FF;
+    padding: 5px 7px;
+    margin: 10px auto;
+    line-height: 16px;
+}
+
+#home-blog-link:hover,
+.recent-post .post-category:hover {
+    text-decoration: none;
+}
+
+#home-blog-link .fa {
+    font-size: 0.8em;
+    margin: 0 0 3px 3px;
 }
 
 @media screen and (min-width: 767px) {
@@ -2364,12 +2507,16 @@ header,
     }
     #menu .search-form {
         display: block;
-        background-color: #202020;
+        background-color: #171717;
         padding: 0;
         margin: 0 auto;
     }
+    #search-field {
+        background-color: #171717;
+    }
     #social,
-    .site-social {
+    .site-social,
+    #sourcerer {
         display: none;
     }
     .site-menu ul {
@@ -2388,6 +2535,15 @@ header,
     .site-menu-link:last-child {
         margin: 0 0 0 9px;
         padding: 8px 0 8px 0;
+    }
+    #recent-posts {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+    }
+    .recent-post {
+        width: 80%;
+        margin: 10px auto;
     }
     .wrapper {
         padding: 1em;

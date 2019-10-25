@@ -4,7 +4,7 @@ slug: "packer-template-aws-ec2-ubuntu-nginx"
 aliases:
     - /2018/03/30/packer-template-aws-ec2-ubuntu-nginx/
 date: "2018-03-30"
-categories: ["Amazon Web Services", "DevOps", "Linux System Admin"]
+categories: ["Amazon Web Services", "DevOps"]
 ---
 
 Build automation is a foundational concept within the culture of Continuous Delivey and DevOps. Implementing a successful build automation strategy can dramatically improve product quality and produce time savings in several areas. Packer is a powerful build automation tool that is relatively simple to integrate with your team's workflow. The [official website](https://www.packer.io/intro/index.html) describes packer as follows:
