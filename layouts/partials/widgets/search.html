@@ -1,7 +1,10 @@
-<form id="search-form" role="form">
+<form id="search-form-sidebar" role="form" onsubmit="return false">
     <div class="search-container">
-        <span class="fa fa-search"></span>
-        <input autocomplete="off" id="search" class="search-input" aria-label="Search blog" type="text" name="q">
-        <button id="search-button" type="submit">Search</button>
+        <div class="search-inner-wrapper">
+            <span class="fa fa-search"></span>
+            <input autocomplete="off" id="search" class="search-input" aria-label="Search blog" type="text" name="q">
+            <button id="search-button-sidebar" type="submit">Search</button>
+        </div>
+        <div class="search-error hide-element"><span class="search-error-message"></span></div>
     </div>
 </form>
