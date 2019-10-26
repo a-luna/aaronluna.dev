@@ -32,7 +32,7 @@ const toggleTocAccordian = function(event) {
     .classList.toggle("ac_hidden");
 };
 
-const menuLinks = document.querySelectorAll(".site-menu-link");
+const menuLinks = document.querySelectorAll(".menu-link");
 menuLinks.forEach(link => toggleActiveMenuLink(link));
 const headings = document.querySelectorAll(
     "article h2[id], article h3[id], article h4[id]"

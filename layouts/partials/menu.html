@@ -4,7 +4,6 @@
         <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
             <div class="site-name">{{ .Site.Title }}</div>
         </a>
-        {{ partial "social.html" . }}
         <form id="search-form-header" role="form">
             <div class="search-container">
                 <div class="search-inner-wrapper">
@@ -21,7 +20,7 @@
     <nav class="site-menu">
         <ul>
             {{- $currentNode := . }} {{- range sort .Site.Menus.main }} {{- if .Name }}
-            <a id="{{ .Identifier }}" href="{{ .URL }}" class="site-menu-link">
+            <a id="{{ .Identifier }}" href="{{ .URL }}" class="menu-link">
                 <li>{{ .Name }}</li>
             </a>
             {{- end }} {{- end }}

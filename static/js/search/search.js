@@ -113,9 +113,15 @@ function removeAnimation() {
 }
 
 initSearchIndex();
-const searchButtonSidebar = document.getElementById("search-button-sidebar");
-searchButtonSidebar.addEventListener("click", handleSearchButtonSidebarClicked);
-const searchButtonHeader = document.getElementById("search-button-header");
-searchButtonHeader.addEventListener("click", handleSearchButtonHeaderClicked);
-document.querySelectorAll('.search-error')
-  .forEach(div => div.addEventListener("animationend", removeAnimation))
+document.addEventListener("DOMContentLoaded", function() {
+  const searchButtonSidebar = document.getElementById("search-button-sidebar");
+  if (searchButtonSidebar != null) {
+    searchButtonSidebar.addEventListener("click", handleSearchButtonSidebarClicked);
+  }
+  const searchButtonHeader = document.getElementById("search-button-header");
+  if (searchButtonHeader != null) {
+    searchButtonHeader.addEventListener("click", handleSearchButtonHeaderClicked);
+  }
+  document.querySelectorAll('.search-error')
+    .forEach(div => div.addEventListener("animationend", removeAnimation))
+});

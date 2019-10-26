@@ -711,7 +711,7 @@ p .fa,
 
 #sourcerer-header .initial {
     display: inline-block;
-    margin: 3px 0 6px 0;
+    margin: 6px 0 6px 0;
 }
 
 #sourcerer-sidebar div.initial {
@@ -1267,6 +1267,7 @@ figcaption {
 
 #social ul li {
     float: left;
+    padding: 3px 0;
 }
 
 .wrapper #social ul li {
@@ -1798,7 +1799,7 @@ input[type=submit]:hover {
     display: flex;
     width: 100%;
     flex-flow: column nowrap;
-    margin: 1.5em 0 2em;
+    margin: 1.5em 0 0;
     padding: 0;
 }
 
@@ -1862,17 +1863,20 @@ input[type=submit]:hover {
 /* Site Search */
 
 #search-form-header {
-    flex: 1 0 50%;
+    flex: 0 0 150px;
+    margin: 0 10px;
 }
 
 #widgets .search-container,
 header .search-container {
     position: relative;
     z-index: 0;
+    height: 26px;
     width: 100%;
     line-height: 15px;
-    margin: 0 0 1em 0;
     padding: 0;
+    margin: 5px 0;
+
 }
 
 #widgets .search-container {
@@ -2369,6 +2373,66 @@ table.aws-hosting-costs {
 
 /* New Menu */
 
+#menu {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.site-search {
+    font-size: 1.3em;
+    text-align: left;
+    margin: auto 0;
+}
+
+#search {
+    color: #999999;
+    background-color: #171717;
+    font-size: 0.9em;
+}
+
+.search-container .fa {
+    font-size: 1em;
+    margin: auto 5px auto 2px;
+}
+
+.search-box {
+    display: flex;
+    flex-flow: row nowrap;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    padding: 2px 5px;
+}
+
+#search-button-sidebar {
+    display: none;
+}
+
+#menu .search-submit-btn {
+    display: none;
+}
+
+#menu .search-form {
+    display: block;
+    background-color: #171717;
+    padding: 0;
+    margin: 0 auto;
+}
+
+#search-field {
+    background-color: #171717;
+}
+
+#social,
+.site-social,
+#sourcerer-header,
+#sourcerer-sidebar {
+    display: none;
+}
+
+site-menu a {
+    font-size: 1em;
+}
+
 header,
 #menu {
     color: #999999;
@@ -2378,11 +2442,20 @@ header,
 .menu-bar {
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-between;
+    justify-content: flex-start;
+    padding: 0 0 0 25px;
 }
 
 .site-name {
     margin: auto 0;
+}
+
+.menu-bar,
+.site-menu {
+    flex: 0 0 50%;
+    line-height: 1;
+    min-height: 35px;
+    white-space: nowrap;
 }
 
 #menu a {
@@ -2414,6 +2487,9 @@ header,
     color: #F2F2F2;
     border: none;
     text-decoration: none;
+    margin: auto 0;
+
+
 }
 
 .site-social,
@@ -2428,11 +2504,16 @@ header,
     letter-spacing: 0.5px;
 }
 
+.site-menu {
+    padding: 0 25px 0 0;
+}
+
 .site-social ul,
 .site-menu ul {
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
+    font-size: 0.9em;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -2447,6 +2528,11 @@ header,
 
 .site-social a {
     padding: 0 8px;
+}
+
+.site-menu a {
+    font-size: 1.1em;
+    padding: 10px;
 }
 
 .site-social a,
@@ -2465,7 +2551,7 @@ header,
 }
 
 .home .post {
-    margin: 0 5em;
+    margin: 0 2em;
 }
 
 .home header {
@@ -2626,54 +2712,13 @@ header,
     100%{opacity: 0.2}
 }
 
-@media screen and (min-width: 767px) {
-    #menu {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-    }
-    .menu-bar {
-        padding: 0 0 0 25px;
-    }
-    #menu .site-name-link {
-        flex-grow: 0;
-        font-size: 1.35em;
-        letter-spacing: 1.1px;
-        line-height: 1.35;
-        margin: auto 0;
-    }
-    .site-social {
-        flex-grow: 0;
-    }
-    #search-form-header,
-    #search-button-header {
-        display: none;
-    }
-    .site-menu {
-        align-self: flex-start;
-        flex-grow: 1;
-        padding: 0 25px 0 0;
-    }
-    .site-menu ul {
-        justify-content: flex-end;
-    }
-    .site-menu-link {
-        font-size: 1.1em;
-        letter-spacing: 0.7px;
-        margin: 0 15px;
-        padding: 9px 0;
-    }
-    .site-menu-link:first-child {
-        margin: 0 15px 0 0;
-        padding: 9px 0 9px 0;
-    }
-    .site-menu-link:last-child {
-        margin: 0 0 0 15px;
-        padding: 9px 0 9px 0;
+@media screen and (max-width: 767px) {
+    .pagination {
+        justify-content: center;
     }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 620px) {
     main {
         margin: 0 0 10px;
     }
@@ -2681,83 +2726,6 @@ header,
         border-top: 1px dotted #7F7F7F;
         margin: 0 0 2em 0;
         padding: 1em 0;
-    }
-    #menu {
-        display: flex;
-        flex-flow: column nowrap;
-    }
-    .menu-bar,
-    .site-menu {
-        flex: 1 0 100%;
-    }
-    .menu-bar {
-        line-height: 1;
-        min-height: 35px;
-        padding: 0.5em 1em 0 1em;
-        white-space: nowrap;
-    }
-    .site-name-link {
-        font-size: 1.4em;
-        margin: auto 0;
-    }
-    .site-search {
-        font-size: 1.3em;
-        text-align: left;
-        margin: auto 0;
-    }
-    #search {
-        color: #999999;
-        background-color: #171717;
-        font-size: 0.9em;
-    }
-    .search-container .fa {
-        font-size: 1em;
-        margin: auto 5px auto 2px;
-    }
-    .search-box {
-        display: flex;
-        flex-flow: row nowrap;
-        border: 1px solid #555555;
-        border-radius: 4px;
-        padding: 2px 5px;
-    }
-    #search-button-sidebar {
-        display: none;
-    }
-    #menu .search-submit-btn {
-        display: none;
-    }
-    #menu .search-form {
-        display: block;
-        background-color: #171717;
-        padding: 0;
-        margin: 0 auto;
-    }
-    #search-field {
-        background-color: #171717;
-    }
-    #social,
-    .site-social,
-    #sourcerer-header,
-    #sourcerer-sidebar {
-        display: none;
-    }
-    .site-menu ul {
-        justify-content: space-between;
-        padding: 0.25em 1em 0 1em;
-    }
-    .site-menu-link {
-        font-size: 1.2em;
-        margin: 0 9px;
-        padding: 8px 0;
-    }
-    .site-menu-link:first-child {
-        margin: 0 9px 0 0;
-        padding: 8px 0 8px 0;
-    }
-    .site-menu-link:last-child {
-        margin: 0 0 0 9px;
-        padding: 8px 0 8px 0;
     }
     .home h1 {
         font-size: 2.5em;
@@ -2856,9 +2824,6 @@ header,
     .about-me .content {
         margin: 0 0.5em 0 1em;
     }
-}
-
-@media screen and (max-width: 620px) {
     body,
     .content p {
         line-height: 1.4;
@@ -2910,6 +2875,51 @@ header,
     }
 }
 
+@media screen and (max-width: 620px) {
+    #menu {
+        font-size: 13px;
+        min-height: 30px;
+    }
+    #site-name {
+        font-size: 14px;
+    }
+    .site-menu {
+        margin: 0;
+        padding: 0 1em 0 0;
+    }
+    .menu-bar {
+        padding: 0 0 0 1em;
+    }
+    .site-menu a {
+        padding: 8px;
+        margin: 5px 0 0 0;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    #menu {
+        font-size: 14px;
+        flex-flow: column nowrap;
+    }
+    #site-name {
+        font-size: 16px;
+    }
+    #site-name,
+    #search-form-header {
+        flex: 1 0 45%;
+    }
+    .site-menu,
+    .menu-bar {
+        padding: 0 1em;
+    }
+    .menu-bar {
+        justify-content: space-between;
+    }
+    .site-menu ul {
+        justify-content: space-between;
+    }
+}
+
 @media screen and (max-width: 500px) {
     .post-nav-flex-item-prev,
     .post-nav-flex-item-next {
@@ -2930,8 +2940,5 @@ header,
     }
     .search-field {
         font-size: 1em;
-    }
-    .site-menu-link {
-        font-size: 1.1em;
     }
 }
