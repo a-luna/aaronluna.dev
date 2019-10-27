@@ -66,11 +66,8 @@
         </div>
         {{ partial "footer" . }}
     </div>
-    {{ $lunr := resources.Get "js/vendor/lunr.min.js" }}
-    {{ $search := resources.Get "js/search/search.js" }}
-    <script type="text/javascript" src="{{ $lunr.Permalink }}"></script>
-    <script type="text/javascript" src="{{ $search.Permalink }}"></script>
-    {{ $main := resources.Get "js/main.js" }}
-    <script type="text/javascript" src="{{ $main.Permalink }}"></script>
+    {{ partial "search_scripts.html" . }}
+    {{ $mainjs := resources.Get "js/main.js" | minify | fingerprint }}
+    <script type="text/javascript" src="{{ $mainjs.Permalink }}" integrity="{{ $mainjs.Data.Integrity }}"></script>
 </body>
 </html>

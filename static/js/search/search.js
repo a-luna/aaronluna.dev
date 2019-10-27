@@ -18,10 +18,17 @@ async function initSearchIndex() {
   }
 }
 
+function interceptSearchInput(event) {
+  if (event.keyCode == 13) {
+    handleSearchButtonClicked();
+  }
+}
+
 function handleSearchButtonClicked() {
   event.preventDefault();
-  const form = document.getElementById("search-form");
-  const query = form.elements["search"].value;
+  //const form = document.getElementById("search-form");
+  //const query = form.elements["search"].value;
+  const query = document.getElementById("search").value;
   if (query === "") {
     const errorDiv = document.getElementById('search-form').querySelector('.search-error');
     const errorMessage = document.getElementById('search-form').querySelector('.search-error-message');
@@ -98,6 +105,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const searchButton = document.getElementById("search-button");
   if (searchButton != null) {
     searchButton.addEventListener("click", handleSearchButtonClicked);
+  }
+  const searchInput = document.getElementById("search");
+  if (searchInput != null) {
+    searchInput.addEventListener('keydown', interceptSearchInput)
   }
   document.querySelectorAll('.search-error')
     .forEach(div => div.addEventListener("animationend", removeAnimation))
