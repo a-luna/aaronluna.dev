@@ -12,6 +12,27 @@
   display: none;
 }
 
+.content a.hanchor {
+  color: #C4C4C4;
+  font-size: 0.75em;
+  opacity: 0.4;
+}
+
+.content a.hanchor:hover,
+.content a.hanchor:hover {
+  color: #C4C4C4;
+  opacity: 1;
+}
+
+.content a.hanchor-self {
+  margin: 0 0 0 7px;
+}
+
+.content a.hanchor-top {
+  font-size: 1em;
+  margin: 0 0 0 6px;
+}
+
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
