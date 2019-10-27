@@ -1737,7 +1737,7 @@ input {
 }
 
 #search-form {
-  margin: 0 0 1em;
+  margin: 0;
 }
 
 #widgets .search-container {
