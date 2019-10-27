@@ -18,48 +18,23 @@ async function initSearchIndex() {
   }
 }
 
-function handleSearchButtonHeaderClicked() {
+function handleSearchButtonClicked() {
   event.preventDefault();
-  const form = document.getElementById("search-form-header");
+  const form = document.getElementById("search-form");
   const query = form.elements["search"].value;
   if (query === "") {
-    const errorDiv = document.getElementById('search-form-header').querySelector('.search-error');
-    const errorMessage = document.getElementById('search-form-header').querySelector('.search-error-message');
-    errorMessage.innerHTML = "Enter a search term";
-    errorDiv.classList.remove("hide-element");
-    errorDiv.classList.add("fade");
-    return;
-  }
-  document.querySelector(".search-query").innerHTML = `Search Results for ${query}`;
-  const searchResults = searchSite(query);
-  if (!searchResults.length) {
-    const errorDiv = document.getElementById('search-form-header').querySelector('.search-error');
-    const errorMessage = document.getElementById('search-form-header').querySelector('.search-error-message');
-    errorMessage.innerHTML = "Your search returned no results";
-    errorDiv.classList.remove("hide-element");
-    errorDiv.classList.add("fade");
-    return;
-  }
-  renderResults(searchResults);
-}
-
-function handleSearchButtonSidebarClicked() {
-  event.preventDefault();
-  const form = document.getElementById("search-form-sidebar");
-  const query = form.elements["search"].value;
-  if (query === "") {
-    const errorDiv = document.getElementById('search-form-sidebar').querySelector('.search-error');
-    const errorMessage = document.getElementById('search-form-sidebar').querySelector('.search-error-message');
+    const errorDiv = document.getElementById('search-form').querySelector('.search-error');
+    const errorMessage = document.getElementById('search-form').querySelector('.search-error-message');
     errorMessage.innerHTML = "Please enter a search term";
     errorDiv.classList.remove("hide-element");
     errorDiv.classList.add("fade");
     return;
   }
-  document.querySelector(".search-query").innerHTML = `Search Results for ${query}`;
+  document.getElementById("query").innerHTML = query;
   const searchResults = searchSite(query);
   if (!searchResults.length) {
-    const errorDiv = document.getElementById('search-form-sidebar').querySelector('.search-error');
-    const errorMessage = document.getElementById('search-form-sidebar').querySelector('.search-error-message');
+    const errorDiv = document.getElementById('search-form').querySelector('.search-error');
+    const errorMessage = document.getElementById('search-form').querySelector('.search-error-message');
     errorMessage.innerHTML = "Your search returned no results";
     errorDiv.classList.remove("hide-element");
     errorDiv.classList.add("fade");
@@ -89,6 +64,7 @@ function searchSite(queryString) {
 }
 
 function renderResults(searchResults) {
+  clearSearchResults();
   searchResults.slice(0, 10).forEach(function(hit) {
     let resultTitle = document.createElement("a");
     resultTitle.setAttribute("href", hit.href);
@@ -96,15 +72,20 @@ function renderResults(searchResults) {
     let resultContent = document.createElement("p");
     resultContent.innerHTML = hit.content.slice(0, 250) + "...";
     let result = document.createElement("li");
-    const results = document.querySelector(".search-results ul");
     result.appendChild(resultTitle);
     result.appendChild(resultContent);
+    const results = document.querySelector(".search-results ul");
     results.appendChild(result);
   });
   const primary = document.querySelector(".primary");
   primary.classList.add("hide-element");
   const search = document.querySelector(".search-results");
   search.classList.remove("hide-element");
+}
+
+function clearSearchResults() {
+  const results = document.querySelector(".search-results ul");
+  while(results.firstChild) results.removeChild(results.firstChild)
 }
 
 function removeAnimation() {
@@ -114,13 +95,9 @@ function removeAnimation() {
 
 initSearchIndex();
 document.addEventListener("DOMContentLoaded", function() {
-  const searchButtonSidebar = document.getElementById("search-button-sidebar");
-  if (searchButtonSidebar != null) {
-    searchButtonSidebar.addEventListener("click", handleSearchButtonSidebarClicked);
-  }
-  const searchButtonHeader = document.getElementById("search-button-header");
-  if (searchButtonHeader != null) {
-    searchButtonHeader.addEventListener("click", handleSearchButtonHeaderClicked);
+  const searchButton = document.getElementById("search-button");
+  if (searchButton != null) {
+    searchButton.addEventListener("click", handleSearchButtonClicked);
   }
   document.querySelectorAll('.search-error')
     .forEach(div => div.addEventListener("animationend", removeAnimation))

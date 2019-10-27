@@ -55,10 +55,14 @@
                 {{ end }}
             </div>
             <div class="search-results hide-element">
-                <h1 class="search-query"></h1>
+                <h1 class="search-query">Search results for: <span id="query"></span></h1>
                 <ul></ul>
             </div>
-            {{ partial "sidebar.html" . }}
+            {{ if eq .Section "blog" }}
+                {{ partial "sidebar_blog.html" . }}
+            {{ else }}
+                {{ partial "sidebar.html" . }}
+            {{ end }}
         </div>
         {{ partial "footer" . }}
     </div>

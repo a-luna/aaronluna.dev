@@ -4,18 +4,7 @@
         <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
             <div class="site-name">{{ .Site.Title }}</div>
         </a>
-        <form id="search-form-header" role="form">
-            <div class="search-container">
-                <div class="search-inner-wrapper">
-                    <div class="search-box">
-                        <span class="fa fa-search"></span>
-                        <input autocomplete="off" id="search" class="search-input" aria-label="Search blog" type="text" name="q">
-                    </div>
-                    <button id="search-button-header" class="hide-element" type="submit">Search</button>
-                </div>
-                <div class="search-error hide-element"><span class="search-error-message"></span></div>
-            </div>
-        </form>
+        {{ partial "social.html" . }}
     </div>
     <nav class="site-menu">
         <ul>
