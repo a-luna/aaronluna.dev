@@ -2798,9 +2798,6 @@ header,
     #widgets {
         margin: 1em 0 0;
     }
-    #widgets .search-container {
-        display: none;
-    }
     .sidebar {
         padding: 0.5em 0 0;
         margin: 0;

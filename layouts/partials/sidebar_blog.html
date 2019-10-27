@@ -18,8 +18,7 @@
     {{- partial $p $root }}
   {{- end }}
 {{- else }}
-   <p class="sidebar__warning"><strong>{{ T "sidebar_warning" }}:</strong><br>{{ T "sidebar_recommendation" }}</p>
+  <p class="sidebar__warning"><strong>{{ T "sidebar_warning" }}:</strong><br>{{ T "sidebar_recommendation" }}</p>
 {{- end }}
-{{ partial "social.html" . }}
 </aside>
 {{- end }}
