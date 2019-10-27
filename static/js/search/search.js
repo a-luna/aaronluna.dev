@@ -92,12 +92,21 @@ function renderResults(searchResults) {
 
 function clearSearchResults() {
   const results = document.querySelector(".search-results ul");
-  while(results.firstChild) results.removeChild(results.firstChild)
+  while(results.firstChild) results.removeChild(results.firstChild);
 }
 
 function removeAnimation() {
   this.classList.remove('fade');
   this.classList.add('hide-element');
+}
+
+function handleClearSearchResultsButtonClicked(event) {
+  const search = document.querySelector(".search-results");
+  search.classList.add("hide-element");
+  clearSearchResults();
+  const primary = document.querySelector(".primary");
+  primary.classList.remove("hide-element");
+  document.getElementById("search").value = "";
 }
 
 initSearchIndex();
@@ -110,6 +119,8 @@ document.addEventListener("DOMContentLoaded", function() {
   if (searchInput != null) {
     searchInput.addEventListener('keydown', interceptSearchInput)
   }
+  document.getElementById("clear-search-results")
+    .addEventListener('click', handleClearSearchResultsButtonClicked);
   document.querySelectorAll('.search-error')
     .forEach(div => div.addEventListener("animationend", removeAnimation))
 });

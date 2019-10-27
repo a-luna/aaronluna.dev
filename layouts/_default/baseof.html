@@ -55,19 +55,21 @@
                 {{ end }}
             </div>
             <div class="search-results hide-element">
-                <h1 class="search-query">Search results for: <span id="query"></span></h1>
+                <div id="search-header">
+                    <span class="search-query">Search results for: <span id="query"></span></span>
+                    <div id="clear-search-results" class="button">Clear Search Results</div>
+                </div>
                 <ul></ul>
             </div>
-            {{ if eq .Section "blog" }}
-                {{ partial "sidebar_blog.html" . }}
-            {{ else }}
-                {{ partial "sidebar.html" . }}
-            {{ end }}
+            {{ partial "sidebar.html" . }}
         </div>
         {{ partial "footer" . }}
     </div>
-    {{ partial "search_scripts.html" . }}
-    {{ $mainjs := resources.Get "js/main.js" | minify | fingerprint }}
-    <script type="text/javascript" src="{{ $mainjs.Permalink }}" integrity="{{ $mainjs.Data.Integrity }}"></script>
+    {{ $lunr := resources.Get "js/vendor/lunr.min.js" }}
+    {{ $search := resources.Get "js/search/search.js" }}
+    <script type="text/javascript" src="{{ $lunr.Permalink }}"></script>
+    <script type="text/javascript" src="{{ $search.Permalink }}"></script>
+    {{ $main := resources.Get "js/main.js" }}
+    <script type="text/javascript" src="{{ $main.Permalink }}"></script>
 </body>
 </html>

@@ -1,8 +1,15 @@
 {{ define "main" }}
 <main class="main list blog-list" role="main">
     <div class="content main__content clearfix">
-        {{- with .Content }} {{ . }} {{- end }} {{ partial "api_tutorial_preview.html" . }}
+        {{- with .Content }}
+            {{ . }}
+        {{- end }}
+        {{ partial "api_tutorial_preview.html" . }}
     </div>
-    {{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "post")) }} {{ range $paginator.Pages }} {{- .Render "summary" }} {{- end }}
+    {{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "post")) }}
+    {{ range $paginator.Pages }}
+        {{- .Render "summary" }}
+    {{- end }}
 </main>
-{{ partial "pagination.html" . }} {{ end }}
+    {{ partial "pagination.html" . }}
+{{ end }}

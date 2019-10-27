@@ -1867,7 +1867,6 @@ header .search-container {
     width: 100%;
     line-height: 15px;
     padding: 0;
-    margin: 5px 0;
 
 }
 
@@ -2379,7 +2378,7 @@ table.aws-hosting-costs {
 #search {
     color: #999999;
     background-color: #202020;
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 .search-container .fa {
@@ -2655,8 +2654,9 @@ header,
 }
 
 .search-query {
+    color: #B3B3B3;
     font-size: 1.8em;
-    margin: 0 0 1em 0;
+    line-height: 25px;
 }
 
 .search-results ul {
@@ -2674,6 +2674,39 @@ header,
 .search-results li p {
     font-size: 0.9em;
 }
+
+#search-header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    margin: 0 0 2em 0;
+}
+
+#query {
+    color: #F2F2F2;
+}
+
+#search-header .button {
+    cursor: pointer;
+    font-size: 13px;
+    color: #323232;
+    background-color: #F92672;
+    border: 1px solid #F92672;
+    border-radius: 4px;
+    line-height: 13px;
+    margin: 0;
+    padding: 6px;
+    box-sizing: border-box;
+}
+#search-header .button:hover,
+#search-header .button:active,
+#search-header .button:focus,
+#search-header .button:active:hover {
+    color: #F92672;
+    background-color: #323232;
+    border: 1px solid #F92672;
+}
+
 .fade {
     -webkit-animation: fade 4s;
     animation: fade 4s;
