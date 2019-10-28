@@ -2337,11 +2337,13 @@ header,
 .home h1 {
   color: #f2f2f2;
   font-size: 2.6em;
+  font-weight: 400;
   margin: 0 0 10px;
 }
 
 .home header p {
   font-size: 1.8em;
+  font-weight: 100;
   color: #909090;
   font-style: normal;
   margin: 0 0 20px;
@@ -2350,7 +2352,7 @@ header,
 .home p {
   color: #c4c4c4;
   font-size: 1.5em;
-  font-weight: 500;
+  font-weight: 100;
   line-height: 22px;
 }
 
@@ -2365,8 +2367,8 @@ header,
 
 #recent-posts-wrapper h4,
 #featured-projects-wrapper h4 {
-  color: #f2f2f2;
-  font-size: 2.2em;
+  color: #909090;
+  font-size: 2.3em;
   margin: 10px auto 15px 0;
 }
 
@@ -2379,6 +2381,9 @@ header,
 
 .recent-post,
 .github-repo {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
   width: 250px;
   background-color: #202020;
   margin: 0 10px;
@@ -2399,26 +2404,27 @@ header,
 
 .recent-post .post-meta-date {
   color: #c4c4c4;
-  font-size: 1.5em;
-  line-height: 14px;
+  font-size: 15px;
+  line-height: 15px;
   margin: 0 0 5px;
 }
 
 .recent-post .post-title {
   display: block;
-  font-size: 1.4em;
-  line-height: 22px;
-  margin: 0 0 10px;
+  font-size: 16px;
+  line-height: 23px;
+  margin: 0 0 auto 0;
 }
 
 .recent-post .post-categories {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  margin: 10px 0 0 0;
 }
 
 .recent-post .post-category {
-  font-size: 1.2em;document.body.scrollTop = document.documentElement.scrollTop = 0;
+  font-size: 12px;
   color: #202020;
   background-color: #3f90cf;
   border: 1px solid #3f90cf;
@@ -2426,6 +2432,14 @@ header,
   margin: 3px 7px 3px 0;
   padding: 1px 5px;
   white-space: nowrap;
+}
+
+.recent-post .post-category:hover,
+.recent-post .post-category:focus,
+.recent-post .post-category:active,
+.recent-post .post-category:active:hover {
+  background-color: #ffffff;
+  border: 1px solid #f2f2f2;
 }
 
 #home-blog-link,
@@ -2447,13 +2461,6 @@ header,
   margin: 0 0 3px 3px;
 }
 
-.github-repo {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  font-size: 14px;
-}
-
 .repo-top,
 .repo-bottom {
   display: flex;
@@ -2462,18 +2469,29 @@ header,
 }
 
 .repo-top {
+  font-size: 16px;
   margin: 0 0 5px 0;
 }
 
 .repo-top .fa {
-  font-size: 16px;
+  font-size: 18px;
+}
+
+.repo-top .fa:hover,
+.repo-top .fa:active,
+.repo-top .fa:focus,
+.repo-top .fa:active:hover {
+  color: #f2f2f2;
 }
 
 .repo-middle {
+  font-size: 13px;
+  line-height: 20px;
   margin: 0 0 auto 0;
 }
 
 .repo-bottom {
+  font-size: 14px;
   margin: 10px 0 0 0;
 }
 
@@ -2584,22 +2602,35 @@ header,
     font-size: 1.8em;
   }
 
-  #recent-posts-wrapper h4 {
+  #recent-posts-wrapper,
+  #featured-projects-wrapper{
+    margin: 0 auto 25px auto;
+  }
+
+  #recent-posts-wrapper h4,
+  #featured-projects-wrapper h4 {
     margin: 5px auto;
   }
 
-  #recent-posts {
+  #recent-posts,
+  #featured-projects {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
   }
 
-  .recent-post {
+  .recent-post,
+  .recent-post:first-child,
+  .recent-post:last-child,
+  .github-repo,
+  .github-repo:first-child,
+  .github-repo:last-child   {
     width: 80%;
     margin: 10px auto;
   }
 
-  #home-blog-link {
+  #home-blog-link,
+  #view-on-github-link {
     margin: 5px auto;
   }
 

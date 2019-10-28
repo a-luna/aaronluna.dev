@@ -1,0 +1,11 @@
+{{ if .Site.IsServer }}
+    {{ $lunr := resources.Get "js/vendor/lunr.min.js" }}
+    {{ $search := resources.Get "js/search/search.js" }}
+    {{ $mainjs := resources.Get "js/main.js" }}
+    <script type="text/javascript" src="{{ $lunr.Permalink }}"></script>
+    <script type="text/javascript" src="{{ $search.Permalink }}"></script>
+    <script type="text/javascript" src="{{ $mainjs.Permalink }}"></script>
+{{ else }}
+    {{ $alljs := slice (resources.Get "js/vendor/lunr.min.js") (resources.Get "js/search/search.js") (resources.Get "js/main.js") }}
+    <script type="text/javascript" src="{{ $alljs.Permalink }}" integrity="{{ $alljs.Data.Integrity }}"></script>
+{{ end }}

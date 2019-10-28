@@ -1,4 +1,0 @@
-{{ $lunr := resources.Get "js/vendor/lunr.min.js" }}
-{{ $search := resources.Get "js/search/search.js" }}
-{{ $js := slice $lunr $search | resources.Concat "search.js" | minify | fingerprint }}
-<script type="text/javascript" src="{{ $js.Permalink }}" integrity="{{ $js.Data.Integrity }}"></script>

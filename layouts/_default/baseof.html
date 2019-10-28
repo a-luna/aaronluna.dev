@@ -65,8 +65,6 @@
         </div>
         {{ partial "footer" . }}
     </div>
-        {{ partial "search_scripts.html" . }}
-        {{ $mainjs := resources.Get "js/main.js" | minify | fingerprint }}
-        <script type="text/javascript" src="{{ $mainjs.Permalink }}" integrity="{{ $mainjs.Data.Integrity }}"></script>
+        {{ partial "js_bundle.html" . }}
 </body>
 </html>
