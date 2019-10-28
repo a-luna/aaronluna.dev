@@ -2572,6 +2572,37 @@ header,
   border: 1px solid #f92672;
 }
 
+.fade {
+  -webkit-animation: fade 4s;
+  animation: fade 4s;
+  -moz-animation: fade 4s;
+  -o-animation: fade 4s;
+}
+
+@-webkit-keyframes fade {
+  0% {opacity: 0.2}
+  50% {opacity: 1}
+  100% {opacity:0.2}
+}
+
+@-moz-keyframes fade{
+  0% {opacity: 0.2}
+  50% {opacity: 1}
+  100% {opacity:0}
+}
+
+@keyframes fade {
+  0% {opacity: 0.2}
+  50% {opacity: 1}
+  100%{opacity: 0.2}
+}
+
+@-o-keyframes fade {
+  0% {opacity: 0.2}
+  50% {opacity: 1}
+  100%{opacity: 0.2}
+}
+
 @media screen and (max-width: 767px) {
 
   #recent-posts-wrapper h4,
