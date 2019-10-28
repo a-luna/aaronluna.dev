@@ -13,14 +13,14 @@
 }
 
 .content a.hanchor {
-  color: #C4C4C4;
+  color: #c4c4c4;
   font-size: 0.75em;
   opacity: 0.4;
 }
 
 .content a.hanchor:hover,
 .content a.hanchor:hover {
-  color: #C4C4C4;
+  color: #c4c4c4;
   opacity: 1;
 }
 
@@ -2256,7 +2256,6 @@ header,
   text-decoration: none;
 }
 
-
 #menu .site-menu a.active {
   color: #f2f2f2;
   border-bottom: 1px solid #f2f2f2;
@@ -2518,15 +2517,15 @@ header,
 }
 
 .orange {
-  color: #FD971F;
+  color: #fd971f;
 }
 
 .purple {
-  color: #AE81FF;
+  color: #ae81ff;
 }
 
 .green {
-  color: #A6E22E;
+  color: #a6e22e;
 }
 
 .search-results {
@@ -2576,6 +2575,61 @@ header,
   border: 1px solid #f92672;
 }
 
+.fade {
+  -webkit-animation: fade 4s;
+  animation: fade 4s;
+  -moz-animation: fade 4s;
+  -o-animation: fade 4s;
+}
+
+@-webkit-keyframes fade {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@-moz-keyframes fade {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
+@-o-keyframes fade {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .pagination {
     justify-content: center;
@@ -2607,7 +2661,7 @@ header,
   }
 
   #recent-posts-wrapper,
-  #featured-projects-wrapper{
+  #featured-projects-wrapper {
     margin: 0 auto 25px auto;
   }
 
@@ -2628,7 +2682,7 @@ header,
   .recent-post:last-child,
   .github-repo,
   .github-repo:first-child,
-  .github-repo:last-child   {
+  .github-repo:last-child {
     width: 80%;
     margin: 10px auto;
   }
