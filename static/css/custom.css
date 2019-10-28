@@ -2379,10 +2379,6 @@ header,
 
 .recent-post,
 .github-repo {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  font-size: 14px;
   width: 250px;
   background-color: #202020;
   margin: 0 10px;
@@ -2403,25 +2399,26 @@ header,
 
 .recent-post .post-meta-date {
   color: #c4c4c4;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 1.5em;
+  line-height: 14px;
   margin: 0 0 5px;
 }
 
 .recent-post .post-title {
-  font-size: 16px;
+  display: block;
+  font-size: 1.4em;
   line-height: 22px;
+  margin: 0 0 10px;
 }
 
 .recent-post .post-categories {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
-  margin: 10px 0 0 0;
 }
 
 .recent-post .post-category {
-  font-size: 12px;
+  font-size: 1.2em;document.body.scrollTop = document.documentElement.scrollTop = 0;
   color: #202020;
   background-color: #3f90cf;
   border: 1px solid #3f90cf;
@@ -2429,15 +2426,6 @@ header,
   margin: 3px 7px 3px 0;
   padding: 1px 5px;
   white-space: nowrap;
-}
-
-.recent-post .post-category:hover,
-.recent-post .post-category:active,
-.recent-post .post-category:focus,
-.recent-post .post-category:active:hover {
-  color: #202020;
-  background-color: #f2f2f2;
-  border: 1px solid #f2f2f2;
 }
 
 #home-blog-link,
@@ -2450,15 +2438,20 @@ header,
 }
 
 #home-blog-link:hover,
-#view-on-github-link:hover,
 .recent-post .post-category:hover {
   text-decoration: none;
 }
 
-#home-blog-link .fa,
-#view-on-github-link .fa {
+#home-blog-link .fa {
   font-size: 0.8em;
   margin: 0 0 3px 3px;
+}
+
+.github-repo {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  font-size: 14px;
 }
 
 .repo-top,
@@ -2469,23 +2462,14 @@ header,
 }
 
 .repo-top {
-  font-size: 16px;
   margin: 0 0 5px 0;
 }
 
 .repo-top .fa {
-  font-size: 18px;
+  font-size: 16px;
 }
 
-.repo-top .fa:hover,
-.repo-top .fa:active,
-.repo-top .fa:focus,
-.repo-top .fa:active:hover {
-  color: #f2f2f2;
-}
-
-.repo-middle,
-.post-title {
+.repo-middle {
   margin: 0 0 auto 0;
 }
 
@@ -2508,9 +2492,12 @@ header,
   margin: 0 3px;
 }
 
-.repo-language .fa,
-.repo-stats .fa {
+.repo-language .fa {
   margin: 0 5px;
+}
+
+.repo-stats .fa {
+  margin: 0 3px;
 }
 
 .orange {
@@ -2572,66 +2559,7 @@ header,
   border: 1px solid #f92672;
 }
 
-.fade {
-  -webkit-animation: fade 4s;
-  animation: fade 4s;
-  -moz-animation: fade 4s;
-  -o-animation: fade 4s;
-}
-
-@-webkit-keyframes fade {
-  0% {opacity: 0.2}
-  50% {opacity: 1}
-  100% {opacity:0.2}
-}
-
-@-moz-keyframes fade{
-  0% {opacity: 0.2}
-  50% {opacity: 1}
-  100% {opacity:0}
-}
-
-@keyframes fade {
-  0% {opacity: 0.2}
-  50% {opacity: 1}
-  100%{opacity: 0.2}
-}
-
-@-o-keyframes fade {
-  0% {opacity: 0.2}
-  50% {opacity: 1}
-  100%{opacity: 0.2}
-}
-
 @media screen and (max-width: 767px) {
-
-  #recent-posts-wrapper h4,
-  #featured-projects-wrapper h4 {
-    margin: 5px auto;
-  }
-
-  #recent-posts,
-  #featured-projects {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-  }
-
-  .recent-post,
-  .recent-post:first-child,
-  .recent-post:last-child,
-  .github-repo,
-  .github-repo:first-child,
-  .github-repo:last-child {
-    width: 80%;
-    margin: 10px auto;
-  }
-
-  #home-blog-link,
-  #view-on-github-link {
-    margin: 5px auto;
-  }
-
   .pagination {
     justify-content: center;
   }
@@ -2654,6 +2582,25 @@ header,
 
   .home header p {
     font-size: 1.8em;
+  }
+
+  #recent-posts-wrapper h4 {
+    margin: 5px auto;
+  }
+
+  #recent-posts {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+  }
+
+  .recent-post {
+    width: 80%;
+    margin: 10px auto;
+  }
+
+  #home-blog-link {
+    margin: 5px auto;
   }
 
   .wrapper {
@@ -2859,6 +2806,17 @@ header,
 
   .post-nav-flex-item-next {
     margin: 5px 0 0;
+  }
+}
+
+@media screen and (max-width: 475px) {
+  #search-header {
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin: 0 0 1em;
+  }
+  #search-header .button {
+    margin: 10px auto 10px 0;
   }
 }
 
