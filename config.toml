@@ -92,26 +92,6 @@ pygmentsUseClasses = true
     name = "linkedin"
     weight = 4
 
-  [[menu.projects]]
-    url = "/project/newestversion-api/"
-    name = "Newest Version API"
-    weight = 1
-
-  [[menu.projects]]
-    url = "/project/vigorish/"
-    name = "Vigorish"
-    weight = 2
-
-  [[menu.projects]]
-    url = "/project/responsive-web-design/"
-    name = "Responsive Web Design"
-    weight = 3
-
-  [[menu.projects]]
-    url = "/project/async-file-server/"
-    name = "Async File Server"
-    weight = 4
-
 [Params.sidebar]
   home = "right"   # Configure layout for home page
   list = "right"   # Configure layout for list pages

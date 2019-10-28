@@ -2354,7 +2354,8 @@ header,
   line-height: 22px;
 }
 
-#recent-posts-wrapper {
+#recent-posts-wrapper,
+#featured-projects-wrapper {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -2362,19 +2363,26 @@ header,
   margin: 0 auto;
 }
 
-#recent-posts-wrapper h4 {
+#recent-posts-wrapper h4,
+#featured-projects-wrapper h4 {
   color: #f2f2f2;
   font-size: 2.2em;
-  margin: 10px auto 15px;
+  margin: 10px auto 15px 0;
 }
 
-#recent-posts {
+#recent-posts,
+#featured-projects {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-evenly;
 }
 
-.recent-post {
+.recent-post,
+.github-repo {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  font-size: 14px;
   width: 250px;
   background-color: #202020;
   margin: 0 10px;
@@ -2383,29 +2391,37 @@ header,
   border-radius: 4px;
 }
 
+.recent-post:first-child,
+.github-repo:first-child {
+  margin: 0 10px 0 0;
+}
+
+.recent-post:last-child,
+.github-repo:last-child {
+  margin: 0 0 0 10px;
+}
+
 .recent-post .post-meta-date {
   color: #c4c4c4;
-  font-size: 1.5em;
-  line-height: 14px;
+  font-size: 16px;
+  line-height: 16px;
   margin: 0 0 5px;
 }
 
 .recent-post .post-title {
-  display: block;
-  font-size: 1.4em;
+  font-size: 16px;
   line-height: 22px;
-  margin: 0 0 10px;
 }
 
 .recent-post .post-categories {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  margin: 10px 0 0 0;
 }
 
 .recent-post .post-category {
-  font-size: 1.2em;
-  font-weight: 700;
+  font-size: 12px;
   color: #202020;
   background-color: #3f90cf;
   border: 1px solid #3f90cf;
@@ -2415,7 +2431,17 @@ header,
   white-space: nowrap;
 }
 
-#home-blog-link {
+.recent-post .post-category:hover,
+.recent-post .post-category:active,
+.recent-post .post-category:focus,
+.recent-post .post-category:active:hover {
+  color: #202020;
+  background-color: #f2f2f2;
+  border: 1px solid #f2f2f2;
+}
+
+#home-blog-link,
+#view-on-github-link {
   font-size: 2em;
   color: #6fc1ff;
   padding: 5px 7px;
@@ -2424,13 +2450,79 @@ header,
 }
 
 #home-blog-link:hover,
+#view-on-github-link:hover,
 .recent-post .post-category:hover {
   text-decoration: none;
 }
 
-#home-blog-link .fa {
+#home-blog-link .fa,
+#view-on-github-link .fa {
   font-size: 0.8em;
   margin: 0 0 3px 3px;
+}
+
+.repo-top,
+.repo-bottom {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.repo-top {
+  font-size: 16px;
+  margin: 0 0 5px 0;
+}
+
+.repo-top .fa {
+  font-size: 18px;
+}
+
+.repo-top .fa:hover,
+.repo-top .fa:active,
+.repo-top .fa:focus,
+.repo-top .fa:active:hover {
+  color: #f2f2f2;
+}
+
+.repo-middle,
+.post-title {
+  margin: 0 0 auto 0;
+}
+
+.repo-bottom {
+  margin: 10px 0 0 0;
+}
+
+.repo-language {
+  line-height: 14px;
+}
+
+.repo-stats-wrapper,
+.repo-stats {
+  display: flex;
+  flex-flow: row nowrap;
+  line-height: 14px;
+}
+
+.repo-stats {
+  margin: 0 3px;
+}
+
+.repo-language .fa,
+.repo-stats .fa {
+  margin: 0 5px;
+}
+
+.orange {
+  color: #FD971F;
+}
+
+.purple {
+  color: #AE81FF;
+}
+
+.green {
+  color: #A6E22E;
 }
 
 .search-results {
@@ -2481,6 +2573,34 @@ header,
 }
 
 @media screen and (max-width: 767px) {
+
+  #recent-posts-wrapper h4,
+  #featured-projects-wrapper h4 {
+    margin: 5px auto;
+  }
+
+  #recent-posts,
+  #featured-projects {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+  }
+
+  .recent-post,
+  .recent-post:first-child,
+  .recent-post:last-child,
+  .github-repo,
+  .github-repo:first-child,
+  .github-repo:last-child {
+    width: 80%;
+    margin: 10px auto;
+  }
+
+  #home-blog-link,
+  #view-on-github-link {
+    margin: 5px auto;
+  }
+
   .pagination {
     justify-content: center;
   }
@@ -2503,25 +2623,6 @@ header,
 
   .home header p {
     font-size: 1.8em;
-  }
-
-  #recent-posts-wrapper h4 {
-    margin: 5px auto;
-  }
-
-  #recent-posts {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-  }
-
-  .recent-post {
-    width: 80%;
-    margin: 10px auto;
-  }
-
-  #home-blog-link {
-    margin: 5px auto;
   }
 
   .wrapper {
