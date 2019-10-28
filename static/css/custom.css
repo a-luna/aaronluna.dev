@@ -2352,7 +2352,6 @@ header,
 .home p {
   color: #c4c4c4;
   font-size: 1.5em;
-  font-weight: 100;
   line-height: 22px;
 }
 
@@ -2367,7 +2366,7 @@ header,
 
 #recent-posts-wrapper h4,
 #featured-projects-wrapper h4 {
-  color: #909090;
+  color: #b3b3b3;
   font-size: 2.3em;
   margin: 10px auto 15px 0;
 }
@@ -2404,8 +2403,8 @@ header,
 
 .recent-post .post-meta-date {
   color: #c4c4c4;
-  font-size: 15px;
-  line-height: 15px;
+  font-size: 16px;
+  line-height: 16px;
   margin: 0 0 5px;
 }
 
