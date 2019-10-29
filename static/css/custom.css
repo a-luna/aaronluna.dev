@@ -1412,9 +1412,14 @@ a.pagination__item--next {
   margin: 0 0 15px 10px;
 }
 
-.fa-bullet-list p {
+.fa-bullet-list p.fa-bullet-list-item {
   position: relative;
   margin: 0 0 2em 2em;
+}
+
+.fa-bullet-list p {
+  position: relative;
+  margin: 0 0 1em 2em;
 }
 
 .about-me .fa-bullet-list-item:last-child {
