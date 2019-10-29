@@ -41,6 +41,16 @@
   status = 200
   force = true
 [[redirects]]
+  from ="/logo-192.png"
+  to = "https://aaronlunadev-sapper.netlify.com/logo-192.png"
+  status = 200
+  force = true
+[[redirects]]
+  from ="/logo-512.png"
+  to = "https://aaronlunadev-sapper.netlify.com/logo-512.png"
+  status = 200
+  force = true
+[[redirects]]
   from ="/base64/*"
   to = "https://aaronlunadev-sapper.netlify.com/base64/:splat"
   status = 200
