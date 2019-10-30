@@ -20,7 +20,7 @@ const BASE_CACHE_FILES = [
 ];
 
 const OFFLINE_CACHE_FILES = [
-  "../index.json",
+  "/index.json",
   "/css/custom.css",
   "/css/font-awesome.min.css",
   "/css/style.css",
