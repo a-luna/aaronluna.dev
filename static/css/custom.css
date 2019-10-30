@@ -2368,6 +2368,10 @@ header,
   margin: 0 auto;
 }
 
+#featured-projects-wrapper {
+  margin: 0 auto 15px auto;
+}
+
 #recent-posts-wrapper h4,
 #featured-projects-wrapper h4 {
   color: #d8d8d8;

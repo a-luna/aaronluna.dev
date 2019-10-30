@@ -115,56 +115,62 @@ The proper way to name resources is one of the (many) hotly debated topics regar
 
 <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-consistently-plural-nouns" target="_blank">The accepted best practice for naming resources</a> is to use plural nouns when constructing a URI for a resource. <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-two-urls-per-resource" target="_blank">Another widely accepted standard</a> is to create two endpoints (i.e., URIs) per resource &mdash; one for operations that apply to the entire collection (e.g., `/api/v1/widgets`) and one for operations that apply only to a single resource (e.g., `/api/v1/widgets/<name>`).
 
-These endpoints/URIs are **where** clients interact with a resource, while HTTP methods determine **how** they interact with it. The table below is a common pattern in RESTful architecture, where each HTTP method is mapped to a single CRUD operation (**C**reate, **R**etrieve, **U**pdate, **D**elete). The remainder of this section of the tutorial will cover implementing the API routes, the handlers for supported HTTP method types and the business logic for each CRUD process:
+These endpoints/URIs are **where** clients interact with a resource, while HTTP methods determine **how** they interact with it. The table below is a common pattern in RESTful architecture, where each HTTP method is mapped to a single CRUD operation (**C**reate, **R**etrieve, **U**pdate, **D**elete). The remainder of this section of the tutorial will cover implementing the API routes, the handlers for supported HTTP method types and the business logic for each CRUD process as specified in **Table 1**:
 
-<div class="table-wrapper">
+<div id="table-1" class="table-wrapper">
     <div class="responsive">
-        <table>
+        <table class="tutorial">
             <thead>
-            <tr>
-                <th scope="col" class="first-column column-header">Endpoint Name</th>
-                <th scope="col" class="column-header">URI</th>
-                <th scope="col"  class="column-header">HTTP Method</th>
-                <th scope="col" class="column-header">CRUD Operation</th>
-                <th scope="col" class="last-column column-header">Required Token</th>
-            </tr>
+                <tr>
+                    <td colspan="4" class="table-number">Table 1</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="table-title">Endpoint specifications for <code>Widget</code> resource</td>
+                </tr>
+                <tr>
+                    <th scope="col" class="first-column column-header">Endpoint Name</th>
+                    <th scope="col" class="column-header">URI</th>
+                    <th scope="col"  class="column-header">HTTP Method</th>
+                    <th scope="col" class="column-header">CRUD Operation</th>
+                    <th scope="col" class="last-column column-header">Required Token</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td class="first-column">api.widget_list</td>
-                <td>/api/v1/widgets</td>
-                <td>POST</td>
-                <td>Create a new widget</td>
-                <td class="last-column">Admin user</td>
-            </tr>
-            <tr>
-                <td class="first-column">api.widget_list</td>
-                <td>/api/v1/widgets</td>
-                <td>GET</td>
-                <td>Retrieve a list of widgets</td>
-                <td class="last-column">Regular user</td>
-            </tr>
-            <tr>
-                <td class="first-column">api.widget</td>
-                <td>/api/v1/widgets/&lt;name&gt;</td>
-                <td>GET</td>
-                <td>Retrieve a single widget</td>
-                <td class="last-column">Regular user</td>
-            </tr>
-            <tr>
-                <td class="first-column">api.widget</td>
-                <td>/api/v1/widgets/&lt;name&gt;</td>
-                <td>PUT</td>
-                <td>Update an existing widget</td>
-                <td class="last-column">Admin user</td>
-            </tr>
-            <tr>
-                <td class="first-column">api.widget</td>
-                <td>/api/v1/widgets/&lt;name&gt;</td>
-                <td>DELETE</td>
-                <td>Delete a single widget</td>
-                <td class="last-column">Admin user</td>
-            </tr>
+                <tr>
+                    <td class="first-column">api.widget_list</td>
+                    <td>/api/v1/widgets</td>
+                    <td>POST</td>
+                    <td>Create a new widget</td>
+                    <td class="last-column">Admin user</td>
+                </tr>
+                <tr>
+                    <td class="first-column">api.widget_list</td>
+                    <td>/api/v1/widgets</td>
+                    <td>GET</td>
+                    <td>Retrieve a list of widgets</td>
+                    <td class="last-column">Regular user</td>
+                </tr>
+                <tr>
+                    <td class="first-column">api.widget</td>
+                    <td>/api/v1/widgets/&lt;name&gt;</td>
+                    <td>GET</td>
+                    <td>Retrieve a single widget</td>
+                    <td class="last-column">Regular user</td>
+                </tr>
+                <tr>
+                    <td class="first-column">api.widget</td>
+                    <td>/api/v1/widgets/&lt;name&gt;</td>
+                    <td>PUT</td>
+                    <td>Update an existing widget</td>
+                    <td class="last-column">Admin user</td>
+                </tr>
+                <tr>
+                    <td class="first-column">api.widget</td>
+                    <td>/api/v1/widgets/&lt;name&gt;</td>
+                    <td>DELETE</td>
+                    <td>Delete a single widget</td>
+                    <td class="last-column">Admin user</td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -387,25 +393,25 @@ Most of the interesting things about the `Widget` model were previously discusse
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 23: </strong>Since the URI that allows clients to interact with a single widget will contain the <code>name</code> attribute (<code>/api/v1/widgets/&lt;name&gt;</code>), we should reject values that contain chracters that are not URL-safe. To accomplish this, we will design a <code>RequestParser</code> that rejects values unless they contain only lowercase-letters, numbers, underscore and/or hyphen characters. Also, since the widget <code>name</code> is used as an identifier this value must be unique.</p>
+        <p><strong>Line 23: </strong><span class="bold-text">Table 1</span> specifies that the value of the <code>name</code> attribute will be embedded in the URI for each <code>Widget</code>. Obviously, this means that this value must be unique which is ensured by setting <code>unique=True</code>. Additionally, it would be ideal to prevent the user from creating a new <code>widget</code> if the <code>name</code> contains characters that are not URL-safe (/, +, & etc.). To accomplish this, we will design a custom <code>RequestParser</code> data type that only considers a string value to be valid if it contains <span class="emphasis">ONLY</span> lowercase-letters, numbers, underscore and/or hyphen characters.</p>
       </li>
       <li>
-        <p><strong>Line 24: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not recognized as a valid URL must be rejected without adding the widget to the database.</p>
+        <p><strong>Line 24: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not recognized as a valid URL must be rejected without adding the widget to the database. The validation logic will be implemented using a built-in <code>RequestParser</code> data type for URL values.</p>
       </li>
       <li>
-        <p><strong>Line 26: </strong>The purpose of the <code>deadline</code> attribute is to demonstrate how to implement input validation for <code>datetime</code> values. Additionally, only <code>datetime</code> values that are either the same as or greater than the current date are allowed. Values not recognized as valid <code>datetime</code> values <span class="emphasis">AND</span> valid <code>datetime</code> values in the past must be rejected without adding the widget to the database.</p>
+        <p><strong>Line 26: </strong>The purpose of the <code>deadline</code> attribute is to demonstrate how to implement input validation for <code>datetime</code> values. Additionally, only <code>datetime</code> values that are either the same as or greater than the current date are considered valid. Values not recognized as valid <code>datetime</code> values <span class="emphasis">AND</span> valid <code>datetime</code> values in the past must be rejected without adding the widget to the database.</p>
       </li>
       <li>
         <p><strong>Lines 28-29: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
       </li>
       <li>
-        <p><strong>Lines 34-42: </strong>Both of these hybrid properties convert the datetime value stored in the database to the timezone of the machine executing the code and formats the datetime a string value.</p>
+        <p><strong>Lines 34-42: </strong>Both of these hybrid properties convert the datetime value stored in the database to the timezone of the machine executing the code and formats the datetime as a string value.</p>
       </li>
       <li>
-        <p><strong>Lines 44-46: </strong><code>deadline_passed</code> is a bool value, this has been included as part of the <code>Widget</code> model solely to increase the number of data types that are serialized when <code>Widget</code> objects are included in an HTTP response.</p>
+        <p><strong>Lines 44-46: </strong><code>deadline_passed</code> is a bool value, this has been included as part of the <code>Widget</code> model solely to increase the number of data types that are serialized when <code>Widget</code> objects are included in an HTTP response. This attribute should return <code>True</code> if the curent date is greater than the date stored in <code>deadline</code>, and should return <code>False</code> if the current date is less than or the same as the date stored in <code>deadline</code>.</p>
       </li>
       <li>
-        <p><strong>Lines 48-51: </strong><code>time_remaining</code> is a <code>timedelta</code> value that represents the time remaining until the <code>deadline</code> is passed.</p>
+        <p><strong>Lines 48-51: </strong><code>time_remaining</code> is a <code>timedelta</code> value that represents the time remaining until the <code>deadline</code> is passed. If the curent date is greater than the date stored in <code>deadline</code>, then this attribute should return <code>timedelta(0)</code>.</p>
       </li>
       <li>
         <p><strong>Lines 53-56: </strong><code>time_remaining_str</code> converts the <code>timedelta</code> object returned by <code>time_remaining</code> to a formatted string if the <code>deadline</code> has not been passed. If the <code>deadline</code> has passed, <span class="bold-text">"No time remaining"</span> is returned.</p>
@@ -423,12 +429,12 @@ Also, the requirements for the `name`, `info_url` and `deadline` attributes come
 
 <ul class="alert italics" style="font-size: 0.9em">
     <li>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
-    <li>The widget model contains fields with URL and datetime data types, along with normal text fields.</li>
+    <li>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</li>
 </ul>
 
-Next, we need to update `run.py` in order for the Flask-Migrate extension to recognize it and create a migration script that adds the new table to the database (this is the same process performed for the User class in [Part 2](/series/flask_api_tutorial/part-2/#user-db-model) and for the BlacklistedToken class in [Part 4](/series/flask_api_tutorial/part-4/#blacklistedtoken-db-model)).
+Next, we need to update `run.py` in order for the Flask-Migrate extension to recognize the <code>Widget</code> class and create a migration script that adds the new table to the database (this is the same process we previously performed for the User class in [Part 2](/series/flask_api_tutorial/part-2/#user-db-model) and for the BlacklistedToken class in [Part 4](/series/flask_api_tutorial/part-4/#blacklistedtoken-db-model)).
 
-Open run.py in the project root folder and update the import statements to include the `Widget` class **(Line 9)**. Then add the `Widget` class to the `dict` object that is returned by the `make_shell_context` function **(Line 16)**:
+Open `run.py` in the project root folder and update the import statements to include the `Widget` class **(Line 9)**. Then add the `Widget` class to the `dict` object that is returned by the `make_shell_context` function **(Line 16)**:
 
 {{< highlight python "linenos=table,hl_lines=9 16" >}}"""Flask CLI/Application entry point."""
 import os
@@ -447,7 +453,7 @@ app = create_app(os.getenv("FLASK_ENV", "development"))
 def make_shell_context():
     return {"db": db, "User": User, "BlacklistedToken": BlacklistedToken, "Widget": Widget}{{< /highlight >}}
 
-Next, run <code>flask db migrate</code> and add a message explaining that after applying this migration the `widget` table will be added to the database:
+Next, run <code>flask db migrate</code> and add a message explaining the changes that will be made by executing this migration script (the `widget` table will be added to the database):
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget table"</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
@@ -455,40 +461,47 @@ INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'widget'
   Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/fdd8ca8d8666_add_widget_table.py ... done</span></code></pre>
 
-Next, run <code>flask db upgrade</code> to run the migration script on the local dev database:
+<div class="note note-flex">
+    <div class="note-icon">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+    </div>
+    <div class="note-message" style="flex-flow: column wrap">
+        <p>You can verify that the <code>widget</code> table was detected by the Flask Migrate extension from the output of the <code>flask db migrate</code> command. You should see a message similar to the example above, which states <strong>"Detected added table <code>widget</code>"</strong>, followed by a statement indicating the migration script was successfully generated.</p>
+    </div>
+</div>
+
+Next, run <code>flask db upgrade</code> to run the migration script on the database in your development environment:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade 8fa4b4909211 -> fdd8ca8d8666, add widget table</span></code></pre>
 
-With the `widget` table created, we can start implementing the [Widget API endpoints](#widget-ns-endpoints).
+After the `widget` table has been added to the database, we can begin implementing the API endpoints specified in [Table 1](#table-1).
 
 ## Create Widget
 
-It makes the most sense (to me) to start with the endpoint responsible for creating `Widget` objects. Obviously, without `Widget` objects there's nothing to be retrieved, updated or deleted. So, what do we need to do in order to allow clients to create a `Widget`? If you answered "the same thing we did for the `auth_ns` endpoints", you would be correct.
-
-In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints), we followed the process below for each API endpoint:
+In my opinion, the endpoint that should be implemented first is the endpoint responsible for creating `Widget` objects. Why? Well, without `Widget` objects there's nothing to be retrieved, updated or deleted. So, what do we need to do in order to allow clients to create a `Widget`? In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints) we followed the process below for each endpoint in the `auth_ns` namespace. These steps apply to any operation performed by a single endpoint:
 
 <div class="steps">
-  <ol>
-    <li>Create request parsers/API models to validate request data and serialize response data.</li>
-    <li>Define the business logic necessary to process the request if validation succeeds.</li>
-    <li>Create a class that inherits from <code>Resource</code> and bind it to the API endpoint/URL route.</li>
-    <li>Define the set of HTTP methods that the API endpoint will support and expose methods on the concrete <code>Resource</code> class for each. Methods named <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> or <code>head</code> will be called when the API endpoint receives a request of the same HTTP method type.
-    <div class="alert alert-flex">
-      <div class="alert-icon">
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-      </div>
-      <div class="alert-message">
-        <p>If the API endpoint does not support the HTTP method, do not expose a method with the name of the HTTP method and the client will receive a response with status code 405 <code>HTTPStatus.METHOD_NOT_ALLOWED</code></p>
-      </div>
-    </div>
-    </li>
-    <li>Document the <code>Resource</code> class and all methods <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">as explained in the Flask-RESTPlus docs</a>. Most of the content on the Swagger UI page is generated by decorating your concrete <code>Resource</code> classes and their methods.</li>
-    <li>Utilize the business logic created in Step 2 within the approprate HTTP methods to process the request.</li>
-    <li>Create unit tests to verify that the input validation provided by the request parsers/API models is working correctly, and verify the endpoint behaves as expected.</li>
-  </ol>
+    <ol>
+        <li>Create request parsers/API models to validate request data and serialize response data.</li>
+        <li>Define the business logic necessary to process the request if validation succeeds.</li>
+        <li>Create a class that inherits from <code>Resource</code> and bind it to the API endpoint/URL route.</li>
+        <li>Define the set of HTTP methods that the API endpoint will support and expose methods on the concrete <code>Resource</code> class for each. Methods named <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> or <code>head</code> will be called when the API endpoint receives a request of the same HTTP method type.
+            <div class="alert alert-flex">
+                <div class="alert-icon">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                </div>
+                <div class="alert-message">
+                    <p>If the API endpoint does not support the HTTP method, do not expose a method with the name of the HTTP method and the client will receive a response with status code 405 <code>HTTPStatus.METHOD_NOT_ALLOWED</code></p>
+                </div>
+            </div>
+        </li>
+      <li>Document the <code>Resource</code> class and methods which handle HTTP requests <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">as explained in the Flask-RESTPlus docs</a>. Most of the content on the Swagger UI page is generated by decorating the concrete <code>Resource</code> classes created in <strong>Step 3</strong> and the handler methods in <strong>Step 4</strong>.</li>
+      <li>Import and call the business logic created in <strong>Step 2</strong> within the HTTP method that corresponds to the operation performed by the business logic.</li>
+      <li>Create unit tests to verify that the input validation provided by the request parsers/API models is working correctly, and verify the endpoint behaves as expected.</li>
+    </ol>
 </div>
 
 Step 1 says <span class="bold-italics">create request parsers/API models to validate request data and serialize response data</span>. So let's dive into it!
@@ -740,14 +753,14 @@ There really isn't anything else to say about how the `info_url` attribute is pa
 
 #### `deadline` Argument
 
-`deadline` is the last piece of data that we must receive from the client in order to create a new widget. Utlimately, this value must be converted to a `datetime` since the `Widget` class has several `hybrid_properties` that perform comparisons or calculations that assume this is the case. The `inputs` module provides several pre-defined types that can convert request data to either a `date` or a `datetime` value. I've summarized the requirements for these types in **Table 1** below:
+`deadline` is the last piece of data that we must receive from the client in order to create a new widget. Utlimately, this value must be converted to a `datetime` since the `Widget` class has several `hybrid_properties` that perform comparisons or calculations that assume this is the case. The `inputs` module provides several pre-defined types that can convert request data to either a `date` or a `datetime` value. I've summarized the requirements for these types in **Table 2** below:
 
 <div class="table-wrapper">
     <div class="responsive">
         <table class="tutorial">
             <thead>
                 <tr>
-                    <td colspan="4" class="table-number">Table 1</td>
+                    <td colspan="4" class="table-number">Table 2</td>
                 </tr>
                 <tr>
                     <td colspan="4" class="table-title">Pre-defined Input Types for <code>date</code> and <code>datetime</code> Values</td>
@@ -806,7 +819,7 @@ There really isn't anything else to say about how the `info_url` attribute is pa
     </div>
 </div>
 
-It would absolutely be possible to satisfy the project requirements using the pre-defined types in **Table 1**, but (IMO) they all have one big limitation &mdash; there is only a single valid format for the value provided by the client. Dates are expressed in so many different ways via text, so my preference is to design a parser that can accomodate a variety of date formats.
+It would absolutely be possible to satisfy the project requirements using the pre-defined types in **Table 2**, but (IMO) they all have one big limitation &mdash; there is only a single valid format for the value provided by the client. Dates are expressed in so many different ways via text, so my preference is to design a parser that can accomodate a variety of date formats.
 
 There is also a problem that arises from the project requirements for the `deadline` attribute: the value must not be a date in the past. Since the pre-defined types only validate that the value provided by the client is in the proper format to be converted to a `datetime` value, we would have to perform the task of checking if the date provided by the client is in the past in the business logic.
 

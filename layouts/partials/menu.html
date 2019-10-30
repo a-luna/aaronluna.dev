@@ -1,21 +1,26 @@
-{{- if .Site.Menus.main }}
-<div id="menu">
-    <div class="menu-bar">
-        <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
-            <div class="site-name">{{ .Site.Title }}</div>
-        </a>
-        {{ partial "social.html" . }}
-    </div>
-    <nav class="site-menu">
-        <ul>
-            {{- $currentNode := . }} {{- range sort .Site.Menus.main }} {{- if .Name }}
-            <a id="{{ .Identifier }}" href="{{ .URL }}" class="menu-link">
-                <li>{{ .Name }}</li>
-            </a>
-            {{- end }} {{- end }}
-        </ul>
-    </nav>
-</div>
-{{ else -}}
-<div class="divider"></div>
-{{- end }}
+<header class="header">
+    {{- if .Site.Menus.main }}
+        <div id="menu">
+            <div class="menu-bar">
+                <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
+                    <div class="site-name">{{ .Site.Title }}</div>
+                </a>
+                {{ partial "social.html" . }}
+            </div>
+            <nav class="site-menu">
+                <ul>
+                    {{- $currentNode := . }}
+                    {{- range sort .Site.Menus.main }}
+                        {{- if .Name }}
+                            <a id="{{ .Identifier }}" href="{{ .URL }}" class="menu-link">
+                                <li>{{ .Name }}</li>
+                            </a>
+                        {{- end }}
+                    {{- end }}
+                </ul>
+            </nav>
+        </div>
+    {{ else -}}
+        <div class="divider"></div>
+    {{- end }}
+</header>

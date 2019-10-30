@@ -1,0 +1,22 @@
+{
+  "name": "aaronluna.dev",
+  "short_name": "aaronluna.dev",
+  "description": "This is the personal blog of Aaron Luna, where you, deal reader, can find guides and tutorials for C#, Python, JavaScript and more!",
+  "lang": "en-US",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#202020",
+  "background_color": "#323232",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
