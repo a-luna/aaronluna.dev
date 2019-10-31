@@ -163,27 +163,63 @@ function cleanupLegacyCache() {
 }
 
 function precacheUrl(url) {
-  if (!isBlacklisted(url)) {
-    caches.open(CACHE_VERSIONS.content).then(cache => {
-      cache
-        .match(url)
-        .then(response => {
-          if (!response) {
-            return fetch(url);
-          } else {
-            // already in cache, nothing to do.
-            return null;
-          }
-        })
-        .then(response => {
-          if (response) {
-            return cache.put(url, response.clone());
-          } else {
-            return null;
-          }
-        });
-    });
+  if (isBlacklisted(url)) {
+    return null;
   }
+  let cachedResponse = await caches.open(CACHE_VERSIONS.content).match(url);
+  if (cachedResponse) {
+    return null;
+  }
+  let response = await fetch(url);
+  if (response) {
+    return cache.put(url, response.clone());
+  } else {
+    return null;
+  }
+}
+
+async function fetchUrl(request) {
+  let response = null;
+  try {
+    response = await fetch(request);
+  } catch (e) {
+    return await caches.open(CACHE_VERSIONS.offline)
+      .match(OFFLINE_PAGE);
+  }
+  if (!response) {
+    return await caches.open(CACHE_VERSIONS.offline)
+      .match(OFFLINE_PAGE);
+  }
+  if (response.status >= 400) {
+    return await caches.open(CACHE_VERSIONS.notFound)
+      .match(NOT_FOUND_PAGE);
+  }
+  if (
+    ~SUPPORTED_METHODS.indexOf(event.request.method) &&
+    !isBlacklisted(event.request.url)
+  ) {
+    cache.put(event.request, response.clone());
+  }
+  return response;
+}
+
+function isCachedResponseExpired(response, ttl) {
+  const date = getRequestDateFromCachedResponse(response);
+  if (!date) {
+    return false;
+  }
+  let age = parseInt((new Date().getTime() - date.getTime()) / 1000);
+  return ttl && age > ttl;
+}
+
+function getRequestDateFromCachedResponse(response) {
+  let headers = response.headers.entries();
+  for (let pair of headers) {
+    if (pair[0] === "date") {
+      return new Date(pair[1]);
+    }
+  }
+  return null;
 }
 
 self.addEventListener("install", event => {
@@ -204,94 +240,28 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.open(CACHE_VERSIONS.content).then(cache => {
-      return cache
-        .match(event.request)
-        .then(response => {
-          if (response) {
-            let headers = response.headers.entries();
-            let date = null;
-
-            for (let pair of headers) {
-              if (pair[0] === "date") {
-                date = new Date(pair[1]);
-              }
-            }
-
-            if (date) {
-              let age = parseInt(
-                (new Date().getTime() - date.getTime()) / 1000
-              );
-              let ttl = getTTL(event.request.url);
-
-              if (ttl && age > ttl) {
-                return new Promise(resolve => {
-                  return fetch(event.request.clone())
-                    .then(updatedResponse => {
-                      if (updatedResponse) {
-                        cache.put(event.request, updatedResponse.clone());
-                        resolve(updatedResponse);
-                      } else {
-                        resolve(response);
-                      }
-                    })
-                    .catch(() => {
-                      resolve(response);
-                    });
-                }).catch(err => {
-                  return response;
-                });
-              } else {
-                return response;
-              }
-            } else {
-              return response;
-            }
-          } else {
-            return null;
-          }
-        })
-        .then(response => {
-          if (response) {
-            return response;
-          } else {
-            return fetch(event.request.clone())
-              .then(response => {
-                if (response.status < 400) {
-                  if (
-                    ~SUPPORTED_METHODS.indexOf(event.request.method) &&
-                    !isBlacklisted(event.request.url)
-                  ) {
-                    cache.put(event.request, response.clone());
-                  }
-                  return response;
-                } else {
-                  return caches.open(CACHE_VERSIONS.notFound).then(cache => {
-                    return cache.match(NOT_FOUND_PAGE);
-                  });
-                }
-              })
-              .then(response => {
-                if (response) {
-                  return response;
-                }
-              })
-              .catch(() => {
-                return caches
-                  .open(CACHE_VERSIONS.offline)
-                  .then(offlineCache => {
-                    return offlineCache.match(OFFLINE_PAGE);
-                  });
-              });
-          }
-        })
-        .catch(error => {
-          console.error("  Error in fetch handler:", error);
-          throw error;
-        });
-    })
-  );
+  event.respondWith(async function() {
+    let cachedResponse = await caches.open(CACHE_VERSIONS.content)
+      .match(event.request);
+    if (!cachedResponse) {
+      return await fetchUrl(event.request.clone());
+    }
+    const cachedResponseExpired = isCachedResponseExpired(cachedResponse, getTTL(event.request.url));
+    if (!cachedResponseExpired) {
+      return cachedResponse;
+    }
+    try {
+      let updatedResponse = await fetch(event.request.clone());
+      if (updatedResponse) {
+        cache.put(event.request, updatedResponse.clone());
+        return updatedResponse;
+      } else {
+        return cachedResponse;
+      }
+    } catch (e) {
+      return cachedResponse;
+    }
+  });
 });
 
 self.addEventListener("message", event => {
