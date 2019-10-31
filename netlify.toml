@@ -31,11 +31,6 @@
   status = 200
   force = true
 [[redirects]]
-  from ="/manifest.json"
-  to = "https://aaronlunadev-sapper.netlify.com/manifest.json"
-  status = 200
-  force = true
-[[redirects]]
   from ="/favicon.png"
   to = "https://aaronlunadev-sapper.netlify.com/favicon.png"
   status = 200
