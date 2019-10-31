@@ -2648,11 +2648,9 @@ header,
     padding: 0 0 15px 0;
     border-bottom: 2px dotted #7f7f7f;
   }
-}
 
-@media screen and (max-width: 620px) {
   main {
-    margin: 0 0 10px;
+    margin: 0;
   }
 
   .post-nav {
@@ -2747,7 +2745,7 @@ header,
   }
 
   #widgets {
-    margin: 1em 0 0;
+    margin: 20px 0 0;
   }
 
   .sidebar {
@@ -2759,9 +2757,13 @@ header,
     margin: 0 0 15px;
   }
 
+  .list__item:last-child {
+    margin: 0;
+  }
+
   .pagination {
     margin: 0;
-    padding: 0 0 15px;
+    padding: 20px 0;
     justify-content: center;
     border-bottom: 2px dotted #7e7f7f;
   }

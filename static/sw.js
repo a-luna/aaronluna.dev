@@ -1,36 +1,34 @@
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 
 const BASE_CACHE_FILES = [
   "/css/font-awesome.min.css",
-  "/css/main.min.f3397ad1f1952db2eca097968ac84ebab32c02845a2176d9eda554f2a22ce616.css",
+  "/css/main.min.css",
   "/fonts/fontawesome-webfont.eot",
   "/fonts/fontawesome-webfont.svg",
-  "/fonts/fontawesome-webfont.ttf",,
+  "/fonts/fontawesome-webfont.ttf",
   "/fonts/fontawesome-webfont.woff",
   "/fonts/fontawesome-webfont.woff2",
-  "/index.json",
-  "/favicon.ico",
   "/apple-touch-icon.png",
-  "/bundle.min.d43f3e23b9438018c6d81de7cbdaa7b02dc3f5b485aac4ed1a254afc059b2a68.js"
+  "/bundle.min.js",
+  "/favicon.ico",
+  "/index.json",
 ];
 
 const OFFLINE_CACHE_FILES = [
   "/css/font-awesome.min.css",
-  "/css/main.min.f3397ad1f1952db2eca097968ac84ebab32c02845a2176d9eda554f2a22ce616.css",
-  "/fonts/fontawesome-webfont.eot",
-  "/fonts/fontawesome-webfont.svg",
-  "/fonts/fontawesome-webfont.ttf",,
-  "/fonts/fontawesome-webfont.woff",
-  "/fonts/fontawesome-webfont.woff2",
-  "/index.json",
-  "/favicon.ico",
-  "/apple-touch-icon.png",
-  "/bundle.min.d43f3e23b9438018c6d81de7cbdaa7b02dc3f5b485aac4ed1a254afc059b2a68.js"
+  "/css/main.min.css",
+  "/offline/index.html",
+  "/bundle.min.js",
 ];
 
-const NOT_FOUND_CACHE_FILES = ["/404.html"];
+const NOT_FOUND_CACHE_FILES = [
+  "/css/font-awesome.min.css",
+  "/css/main.min.css",
+  "/404.html",
+  "/bundle.min.js",
+];
 
-const OFFLINE_PAGE = "/index.html";
+const OFFLINE_PAGE = "/offline/index.html";
 const NOT_FOUND_PAGE = "/404.html";
 
 const CACHE_VERSIONS = {
@@ -50,9 +48,9 @@ const MAX_TTL = {
 };
 
 const CACHE_BLACKLIST = [
-  (str) => {
-    return !str.startsWith('http://localhost') ;
-  },
+  str => {
+    return !str.startsWith("http://localhost");
+  }
 ];
 
 const SUPPORTED_METHODS = ["GET"];

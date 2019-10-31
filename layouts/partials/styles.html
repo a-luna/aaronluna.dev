@@ -9,6 +9,6 @@
         {{- end }}
     {{ end }}
 {{ else }}
-    {{ $CSS := $allCSS | resources.Concat "css/main.css" | minify | fingerprint }}
-    <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" integrity="{{ $CSS.Data.Integrity }}" media="screen">
+    {{ $CSS := $allCSS | resources.Concat "css/main.css" | minify }}
+    <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" media="screen">
 {{ end }}

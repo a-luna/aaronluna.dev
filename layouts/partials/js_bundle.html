@@ -7,8 +7,8 @@
     <script type="text/javascript" src="{{ $mainjs.RelPermalink }}"></script>
 {{ else }}
     {{ $alljs := slice (resources.Get "js/vendor/lunr.min.js") (resources.Get "js/search/search.js") (resources.Get "js/main.js") }}
-    {{ $bundlejs := $alljs | resources.Concat "bundle.js" | minify | fingerprint}}
-    <script type="text/javascript" src="{{ $bundlejs.RelPermalink }}" integrity="{{ $bundlejs.Data.Integrity }}"></script>
+    {{ $bundlejs := $alljs | resources.Concat "bundle.js" | minify }}
+    <script type="text/javascript" src="{{ $bundlejs.RelPermalink }}"></script>
 {{ end }}
 <script>
     if('serviceWorker' in navigator) {

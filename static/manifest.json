@@ -1,10 +1,9 @@
 {
   "name": "aaronluna.dev",
   "short_name": "aaronluna.dev",
-  "description": "This is the personal blog of Aaron Luna, where you, deal reader, can find guides and tutorials for C#, Python, JavaScript and more!",
+  "description": "This is the personal blog of Aaron Luna, where you, dear reader, can find guides and tutorials for C#, Python, JavaScript and more!",
   "lang": "en-US",
   "start_url": "/blog?source=pwa",
-  "scope": "/",
   "display": "standalone",
   "theme_color": "#202020",
   "background_color": "#323232",
