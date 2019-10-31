@@ -1,31 +1,29 @@
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 4;
 
 const BASE_CACHE_FILES = [
   "/css/font-awesome.min.css",
   "/css/main.min.css",
-  "/fonts/fontawesome-webfont.eot",
-  "/fonts/fontawesome-webfont.svg",
-  "/fonts/fontawesome-webfont.ttf",
-  "/fonts/fontawesome-webfont.woff",
   "/fonts/fontawesome-webfont.woff2",
   "/apple-touch-icon.png",
   "/bundle.min.js",
   "/favicon.ico",
-  "/index.json",
+  "/index.json"
 ];
 
 const OFFLINE_CACHE_FILES = [
   "/css/font-awesome.min.css",
   "/css/main.min.css",
+  "/fonts/fontawesome-webfont.woff2",
   "/offline/index.html",
-  "/bundle.min.js",
+  "/bundle.min.js"
 ];
 
 const NOT_FOUND_CACHE_FILES = [
   "/css/font-awesome.min.css",
   "/css/main.min.css",
+  "/fonts/fontawesome-webfont.woff2",
   "/404.html",
-  "/bundle.min.js",
+  "/bundle.min.js"
 ];
 
 const OFFLINE_PAGE = "/offline/index.html";
@@ -162,64 +160,25 @@ function cleanupLegacyCache() {
   });
 }
 
-async function precacheUrl(url) {
-  if (isBlacklisted(url)) {
-    return null;
+function preCacheUrl(url) {
+  if (!isBlacklisted(url)) {
+    return caches.match(url).then(cachedResponse => {
+      return (
+        cachedResponse ? null :
+        fetch(url).then(response => {
+          if (response) {
+            return event.waitUntil(
+              caches
+                .open(CACHE_VERSIONS.content)
+                .then(cache => cache.put(url, response.clone()))
+            );
+          } else {
+            return null;
+          }
+        })
+      );
+    });
   }
-  let cachedResponse = await caches.open(CACHE_VERSIONS.content).match(url);
-  if (cachedResponse) {
-    return null;
-  }
-  let response = await fetch(url);
-  if (response) {
-    return cache.put(url, response.clone());
-  } else {
-    return null;
-  }
-}
-
-async function fetchUrl(request) {
-  let response = null;
-  try {
-    response = await fetch(request);
-  } catch (e) {
-    return await caches.open(CACHE_VERSIONS.offline)
-      .match(OFFLINE_PAGE);
-  }
-  if (!response) {
-    return await caches.open(CACHE_VERSIONS.offline)
-      .match(OFFLINE_PAGE);
-  }
-  if (response.status >= 400) {
-    return await caches.open(CACHE_VERSIONS.notFound)
-      .match(NOT_FOUND_PAGE);
-  }
-  if (
-    ~SUPPORTED_METHODS.indexOf(event.request.method) &&
-    !isBlacklisted(event.request.url)
-  ) {
-    cache.put(event.request, response.clone());
-  }
-  return response;
-}
-
-function isCachedResponseExpired(response, ttl) {
-  const date = getRequestDateFromCachedResponse(response);
-  if (!date) {
-    return false;
-  }
-  let age = parseInt((new Date().getTime() - date.getTime()) / 1000);
-  return ttl && age > ttl;
-}
-
-function getRequestDateFromCachedResponse(response) {
-  let headers = response.headers.entries();
-  for (let pair of headers) {
-    if (pair[0] === "date") {
-      return new Date(pair[1]);
-    }
-  }
-  return null;
 }
 
 self.addEventListener("install", event => {
@@ -239,29 +198,28 @@ self.addEventListener("activate", event => {
   );
 });
 
-self.addEventListener("fetch", event => {
-  event.respondWith(async function() {
-    let cachedResponse = await caches.open(CACHE_VERSIONS.content)
-      .match(event.request);
-    if (!cachedResponse) {
-      return await fetchUrl(event.request.clone());
-    }
-    const cachedResponseExpired = isCachedResponseExpired(cachedResponse, getTTL(event.request.url));
-    if (!cachedResponseExpired) {
-      return cachedResponse;
-    }
-    try {
-      let updatedResponse = await fetch(event.request.clone());
-      if (updatedResponse) {
-        cache.put(event.request, updatedResponse.clone());
-        return updatedResponse;
-      } else {
-        return cachedResponse;
-      }
-    } catch (e) {
-      return cachedResponse;
-    }
+function defaultResponse() {
+  return caches.match(new Request(OFFLINE_PAGE).clone());
+}
+
+function cacheRequest(request, event) {
+  return caches.match(request.clone()).then(cachedResponse => {
+    return (
+      cachedResponse ||
+      fetch(request.clone()).then(response => {
+        event.waitUntil(
+          caches
+            .open(CACHE_VERSIONS.content)
+            .then(cache => cache.put(request, response))
+        );
+        return response.clone();
+      })
+    );
   });
+}
+
+self.addEventListener("fetch", function fetchHandler(event) {
+  event.respondWith(cacheRequest(event.request, event).catch(defaultResponse));
 });
 
 self.addEventListener("message", event => {
