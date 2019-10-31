@@ -1,46 +1,36 @@
-const CACHE_VERSION = 1;
+const CACHE_VERSION = 2;
 
 const BASE_CACHE_FILES = [
-  "/index.json",
-  "/css/custom.css",
   "/css/font-awesome.min.css",
-  "/css/style.css",
-  "/css/syntax.css",
+  "/css/main.min.f3397ad1f1952db2eca097968ac84ebab32c02845a2176d9eda554f2a22ce616.css",
   "/fonts/fontawesome-webfont.eot",
   "/fonts/fontawesome-webfont.svg",
   "/fonts/fontawesome-webfont.ttf",,
   "/fonts/fontawesome-webfont.woff",
   "/fonts/fontawesome-webfont.woff2",
-  "/js/search/search.js",
-  "/js/vendor/css-doodle.min.js",
-  "/js/vendor/lunr.min.js",
-  "js/main.js",
+  "/index.json",
   "/favicon.ico",
-  "/apple-touch-icon.png"
+  "/apple-touch-icon.png",
+  "/bundle.min.d43f3e23b9438018c6d81de7cbdaa7b02dc3f5b485aac4ed1a254afc059b2a68.js"
 ];
 
 const OFFLINE_CACHE_FILES = [
-  "/index.json",
-  "/css/custom.css",
   "/css/font-awesome.min.css",
-  "/css/style.css",
-  "/css/syntax.css",
+  "/css/main.min.f3397ad1f1952db2eca097968ac84ebab32c02845a2176d9eda554f2a22ce616.css",
   "/fonts/fontawesome-webfont.eot",
   "/fonts/fontawesome-webfont.svg",
   "/fonts/fontawesome-webfont.ttf",,
   "/fonts/fontawesome-webfont.woff",
   "/fonts/fontawesome-webfont.woff2",
-  "/js/search/search.js",
-  "/js/vendor/css-doodle.min.js",
-  "/js/vendor/lunr.min.js",
-  "js/main.js",
+  "/index.json",
   "/favicon.ico",
-  "/apple-touch-icon.png"
+  "/apple-touch-icon.png",
+  "/bundle.min.d43f3e23b9438018c6d81de7cbdaa7b02dc3f5b485aac4ed1a254afc059b2a68.js"
 ];
 
 const NOT_FOUND_CACHE_FILES = ["/404.html"];
 
-const OFFLINE_PAGE = "/offline/index.html";
+const OFFLINE_PAGE = "/index.html";
 const NOT_FOUND_PAGE = "/404.html";
 
 const CACHE_VERSIONS = {

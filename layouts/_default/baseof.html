@@ -8,10 +8,10 @@
 {{ end }}
 
 <html class="no-js" lang="{{ .Site.LanguageCode | default "en-us" }}">
-{{ partial "head" . }}
+{{ partialCached "head" . }}
 <body class="{{ .Scratch.Get "body_classes" }}">
     <div class="container container--outer">
-        {{ partial "menu" . }}
+        {{ partialCached "menu" . }}
         <div class="wrapper flex">
             <div class="primary">
                 {{ block "main" . }}
@@ -21,10 +21,10 @@
                 {{ end }}
             </div>
             {{ partial "search_results"}}
-            {{ partial "sidebar" . }}
+            {{ partialCached "sidebar" . }}
         </div>
-        {{ partial "footer" . }}
+        {{ partialCached "footer" . }}
     </div>
-    {{ partial "js_bundle" . }}
+    {{ partialCached "js_bundle" . }}
 </body>
 </html>

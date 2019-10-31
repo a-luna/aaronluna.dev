@@ -24,7 +24,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,300,400,600,700,800" type="text/css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" type="text/css">
   <link rel="stylesheet" href="/css/font-awesome.min.css">
-  {{ partial "styles" . }}
+  {{ partialCached "styles" . }}
   <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
   {{- if not .Site.IsServer }}
       {{ template "_internal/google_analytics_async.html" . }}

@@ -1,12 +1,12 @@
 <header class="header">
-    {{- if .Site.Menus.main }}
-        <div id="menu">
-            <div class="menu-bar">
-                <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
-                    <div class="site-name">{{ .Site.Title }}</div>
-                </a>
-                {{ partial "social.html" . }}
-            </div>
+    <div id="menu">
+        <div class="menu-bar">
+            <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
+                <div class="site-name">{{ .Site.Title }}</div>
+            </a>
+            {{ partialCached "social" . }}
+        </div>
+        {{- if .Site.Menus.main }}
             <nav class="site-menu">
                 <ul>
                     {{- $currentNode := . }}
@@ -19,8 +19,8 @@
                     {{- end }}
                 </ul>
             </nav>
-        </div>
-    {{ else -}}
-        <div class="divider"></div>
+        {{ else -}}
+    </div>
+    <div class="divider"></div>
     {{- end }}
 </header>
