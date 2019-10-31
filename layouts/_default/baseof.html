@@ -11,7 +11,7 @@
 {{ partialCached "head" . }}
 <body class="{{ .Scratch.Get "body_classes" }}">
     <div class="container container--outer">
-        {{ partialCached "menu" . }}
+        {{ partial "menu" . }}
         <div class="wrapper flex">
             <div class="primary">
                 {{ block "main" . }}
@@ -21,9 +21,9 @@
                 {{ end }}
             </div>
             {{ partial "search_results"}}
-            {{ partialCached "sidebar" . }}
+            {{ partial "sidebar" . }}
         </div>
-        {{ partialCached "footer" . }}
+        {{ partial "footer" . }}
     </div>
     {{ partialCached "js_bundle" . }}
 </body>

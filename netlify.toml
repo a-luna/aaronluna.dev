@@ -21,11 +21,6 @@
 [context.next.environment]
   HUGO_ENABLEGITINFO = "false"
 [[redirects]]
-  from ="/service-worker.js"
-  to = "https://aaronlunadev-sapper.netlify.com/service-worker.js"
-  status = 200
-  force = true
-[[redirects]]
   from ="/global.css"
   to = "https://aaronlunadev-sapper.netlify.com/global.css"
   status = 200
@@ -43,11 +38,6 @@
 [[redirects]]
   from ="/logo-512.png"
   to = "https://aaronlunadev-sapper.netlify.com/logo-512.png"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/service-worker-index.html"
-  to = "https://aaronlunadev-sapper.netlify.com/service-worker-index.html"
   status = 200
   force = true
 [[redirects]]

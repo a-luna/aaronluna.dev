@@ -8,17 +8,17 @@
 {{ end }}
 {{- $sidebar := $s.Get "sb" }}
 
+{{- if $sidebar -}}
 <aside id="widgets" class="sidebar{{ if eq $sidebar "left" }} sidebar--left{{ end }}">
-    {{- if $sidebar -}}
-        {{ partialCached "search.html" . }}
-        {{- $root := . }}
-        {{- with (default .Site.Params.sidebar.widgets .Params.widgets) -}}
-            {{- range $widget := . }}
-                {{- $p := printf "widgets/%s.html" $widget }}
-                {{- partial $p $root }}
-            {{- end }}
-    {{- else }}
-        <p class="sidebar__warning"><strong>{{ T "sidebar_warning" }}:</strong><br>{{ T "sidebar_recommendation" }}</p>
-    {{- end }}
+{{ partial "search.html" . }}
+{{- $root := . }}
+{{- with (default .Site.Params.sidebar.widgets .Params.widgets) -}}
+  {{- range $widget := . }}
+    {{- $p := printf "widgets/%s.html" $widget }}
+    {{- partial $p $root }}
+  {{- end }}
+{{- else }}
+   <p class="sidebar__warning"><strong>{{ T "sidebar_warning" }}:</strong><br>{{ T "sidebar_recommendation" }}</p>
+{{- end }}
 </aside>
 {{- end }}
