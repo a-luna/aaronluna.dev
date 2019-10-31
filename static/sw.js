@@ -162,7 +162,7 @@ function cleanupLegacyCache() {
   });
 }
 
-function precacheUrl(url) {
+async function precacheUrl(url) {
   if (isBlacklisted(url)) {
     return null;
   }
