@@ -1,4 +1,4 @@
-const CACHE_VERSION = 4;
+const CACHE_VERSION = 5;
 
 const BASE_CACHE_FILES = [
   "/css/font-awesome.min.css",
@@ -10,22 +10,8 @@ const BASE_CACHE_FILES = [
   "/index.json"
 ];
 
-const OFFLINE_CACHE_FILES = [
-  "/css/font-awesome.min.css",
-  "/css/main.min.css",
-  "/fonts/fontawesome-webfont.woff2",
-  "/offline/index.html",
-  "/bundle.min.js"
-];
-
-const NOT_FOUND_CACHE_FILES = [
-  "/css/font-awesome.min.css",
-  "/css/main.min.css",
-  "/fonts/fontawesome-webfont.woff2",
-  "/404.html",
-  "/bundle.min.js"
-];
-
+const OFFLINE_CACHE_FILES = ["/offline/index.html"];
+const NOT_FOUND_CACHE_FILES = ["/404.html"];
 const OFFLINE_PAGE = "/offline/index.html";
 const NOT_FOUND_PAGE = "/404.html";
 
@@ -163,20 +149,19 @@ function cleanupLegacyCache() {
 function preCacheUrl(url) {
   if (!isBlacklisted(url)) {
     return caches.match(url).then(cachedResponse => {
-      return (
-        cachedResponse ? null :
-        fetch(url).then(response => {
-          if (response) {
-            return event.waitUntil(
-              caches
-                .open(CACHE_VERSIONS.content)
-                .then(cache => cache.put(url, response.clone()))
-            );
-          } else {
-            return null;
-          }
-        })
-      );
+      return cachedResponse
+        ? null
+        : fetch(url).then(response => {
+            if (response) {
+              return event.waitUntil(
+                caches
+                  .open(CACHE_VERSIONS.content)
+                  .then(cache => cache.put(url, response.clone()))
+              );
+            } else {
+              return null;
+            }
+          });
     });
   }
 }
