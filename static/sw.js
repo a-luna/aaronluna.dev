@@ -1,8 +1,10 @@
-const CACHE_VERSION = 5;
+const CACHE_VERSION = 6;
 
 const BASE_CACHE_FILES = [
   "/css/font-awesome.min.css",
   "/css/main.min.css",
+  "/img/sourcerer.jpg",
+  "/img/sourcerer_hov.jpg",
   "/fonts/fontawesome-webfont.woff2",
   "/apple-touch-icon.png",
   "/bundle.min.js",
