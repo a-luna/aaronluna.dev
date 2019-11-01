@@ -7,7 +7,8 @@ const BASE_CACHE_FILES = [
   "/apple-touch-icon.png",
   "/bundle.min.js",
   "/favicon.ico",
-  "/index.json"
+  "/index.json",
+  "/manifest.json",
 ];
 
 const OFFLINE_CACHE_FILES = ["/offline/index.html"];
@@ -19,7 +20,7 @@ const CACHE_VERSIONS = {
   assets: "assets-v" + CACHE_VERSION,
   content: "content-v" + CACHE_VERSION,
   offline: "offline-v" + CACHE_VERSION,
-  notFound: "404-v" + CACHE_VERSION
+  notFound: "404-v" + CACHE_VERSION,
 };
 
 // Define MAX_TTL's in SECONDS for specific file extensions
@@ -195,7 +196,7 @@ function cacheRequest(request, event) {
         event.waitUntil(
           caches
             .open(CACHE_VERSIONS.content)
-            .then(cache => cache.put(request, response))
+            .then(cache => cache.put(request.clone(), response.clone()))
         );
         return response.clone();
       })
