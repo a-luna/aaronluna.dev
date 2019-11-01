@@ -1,29 +1,22 @@
-const CACHE_VERSION = 6;
-
-const BASE_CACHE_FILES = [
+const CACHE_VERSION = 7;
+const CACHE_NAME = `content-v${CACHE_VERSION}`;
+const CACHE_FILES = [
   "/css/font-awesome.min.css",
   "/css/main.min.css",
   "/img/sourcerer.jpg",
   "/img/sourcerer_hov.jpg",
   "/fonts/fontawesome-webfont.woff2",
+  "/offline/index.html",
+  "/404.html",
   "/apple-touch-icon.png",
   "/bundle.min.js",
   "/favicon.ico",
   "/index.json",
-  "/manifest.json",
+  "/manifest.json"
 ];
 
-const OFFLINE_CACHE_FILES = ["/offline/index.html"];
-const NOT_FOUND_CACHE_FILES = ["/404.html"];
 const OFFLINE_PAGE = "/offline/index.html";
 const NOT_FOUND_PAGE = "/404.html";
-
-const CACHE_VERSIONS = {
-  assets: "assets-v" + CACHE_VERSION,
-  content: "content-v" + CACHE_VERSION,
-  offline: "offline-v" + CACHE_VERSION,
-  notFound: "404-v" + CACHE_VERSION,
-};
 
 // Define MAX_TTL's in SECONDS for specific file extensions
 const MAX_TTL = {
@@ -94,19 +87,14 @@ function getTTL(url) {
  * @returns {Promise}
  */
 function installServiceWorker() {
-  return Promise.all([
-    caches.open(CACHE_VERSIONS.assets).then(cache => {
-      return cache.addAll(BASE_CACHE_FILES);
-    }),
-    caches.open(CACHE_VERSIONS.offline).then(cache => {
-      return cache.addAll(OFFLINE_CACHE_FILES);
-    }),
-    caches.open(CACHE_VERSIONS.notFound).then(cache => {
-      return cache.addAll(NOT_FOUND_CACHE_FILES);
+  return caches
+    .open(CACHE_NAME)
+    .then(cache => {
+      return cache.addAll(CACHE_FILES);
     })
-  ]).then(() => {
-    return self.skipWaiting();
-  });
+    .then(() => {
+      return self.skipWaiting();
+    });
 }
 
 /**
@@ -114,10 +102,7 @@ function installServiceWorker() {
  * @returns {Promise}
  */
 function cleanupLegacyCache() {
-  let currentCaches = Object.keys(CACHE_VERSIONS).map(key => {
-    return CACHE_VERSIONS[key];
-  });
-
+  let currentCaches = [CACHE_NAME];
   return new Promise((resolve, reject) => {
     caches
       .keys()
@@ -158,7 +143,7 @@ function preCacheUrl(url) {
             if (response) {
               return event.waitUntil(
                 caches
-                  .open(CACHE_VERSIONS.content)
+                  .open(CACHE_NAME)
                   .then(cache => cache.put(url, response.clone()))
               );
             } else {
@@ -197,7 +182,7 @@ function cacheRequest(request, event) {
       fetch(request.clone()).then(response => {
         event.waitUntil(
           caches
-            .open(CACHE_VERSIONS.content)
+            .open(CACHE_NAME)
             .then(cache => cache.put(request.clone(), response.clone()))
         );
         return response.clone();
