@@ -2266,14 +2266,14 @@ header,
 }
 
 #menu .site-name-link {
-  color: #f2f2f2;
+  color: #999;
   border: none;
   text-decoration: none;
   margin: auto 0;
 }
 
 #site-name {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .site-social,

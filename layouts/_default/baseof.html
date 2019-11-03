@@ -8,7 +8,7 @@
 {{ end }}
 
 <html class="no-js" lang="{{ .Site.LanguageCode | default "en-us" }}">
-{{ partialCached "head" . }}
+{{ partial "head" . }}
 <body class="{{ .Scratch.Get "body_classes" }}">
     <div class="container container--outer">
         {{ partial "menu" . }}
@@ -25,6 +25,6 @@
         </div>
         {{ partial "footer" . }}
     </div>
-    {{ partialCached "js_bundle" . }}
+    {{ partial "js_bundle" . }}
 </body>
 </html>
