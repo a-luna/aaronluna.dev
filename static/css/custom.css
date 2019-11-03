@@ -1795,7 +1795,6 @@ input {
 
 #search {
   font-size: 15px;
-  font-weight: 100;
   color: #999;
   background-color: #202020;
   border: none;
@@ -2364,7 +2363,7 @@ header,
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  max-width: 750px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -2376,7 +2375,7 @@ header,
 #featured-projects-wrapper h4 {
   color: #d8d8d8;
   font-size: 2.3em;
-  margin: 10px auto 15px 0;
+  margin: 10px auto 10px 0;
 }
 
 #recent-posts,
@@ -2410,7 +2409,7 @@ header,
 }
 
 .recent-post .post-meta-date {
-  color: #c4c4c4;
+  color: #b3b3b3;
   font-size: 16px;
   line-height: 16px;
   margin: 0 0 5px;
@@ -2432,9 +2431,9 @@ header,
 
 .recent-post .post-category {
   font-size: 12px;
-  color: #202020;
-  background-color: #3f90cf;
-  border: 1px solid #3f90cf;
+  color: #b3b3b3;
+  background-color: #202020;
+  border: 1px solid #b3b3b3;
   border-radius: 4px;
   margin: 3px 7px 3px 0;
   padding: 1px 5px;
@@ -2445,8 +2444,9 @@ header,
 .recent-post .post-category:focus,
 .recent-post .post-category:active,
 .recent-post .post-category:active:hover {
-  background-color: #ffffff;
-  border: 1px solid #f2f2f2;
+  color: #202020;
+  background-color: #b3b3b3;
+  border: 1px solid #b3b3b3;
 }
 
 #home-blog-link,
@@ -2463,7 +2463,8 @@ header,
   text-decoration: none;
 }
 
-#home-blog-link .fa {
+#home-blog-link .fa,
+#view-on-github-link .fa {
   font-size: 0.8em;
   margin: 0 0 3px 3px;
 }
@@ -2538,7 +2539,8 @@ header,
 }
 
 .search-results {
-  margin: 1.5em 1em 3em;
+  flex: 1 0 68%;
+  margin: 1.5em 0 3em 0;
 }
 
 .search-query {
@@ -2549,13 +2551,18 @@ header,
 
 .search-results ul {
   list-style: none;
+  margin: 0 2em 0 0;
+}
+
+.search-results p {
+  line-height: 1.4;
 }
 
 #search-header {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  margin: 0 0 2em;
+  margin: 0 2em 2em 0;
 }
 
 #query {
@@ -2644,7 +2651,7 @@ header,
     justify-content: center;
   }
   .search-results {
-    margin: 1.5em 1em 1em 1em;
+    margin: 1.5em 0 1em 0;
     padding: 0 0 15px 0;
     border-bottom: 2px dotted #7f7f7f;
   }
@@ -2835,7 +2842,6 @@ header,
   }
 
   #menu {
-    font-size: 13px;
     min-height: 30px;
   }
 
@@ -2850,6 +2856,15 @@ header,
 
   .site-menu a {
     padding: 8px;
+    margin: 5px 5px 0;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  #menu {
+    font-size: 13px;
+  }
+  .site-menu a {
     margin: 5px 2px 0;
   }
 }
@@ -2907,9 +2922,6 @@ header,
   .post-nav-flex-item-next {
     margin: 5px 0 0;
   }
-}
-
-@media screen and (max-width: 475px) {
   #search-header {
     flex-flow: column nowrap;
     justify-content: center;

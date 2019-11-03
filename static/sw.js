@@ -172,27 +172,27 @@ self.addEventListener("activate", event => {
 });
 
 function defaultResponse() {
-  return caches.match(new Request(OFFLINE_PAGE).clone());
+  return caches.match(OFFLINE_PAGE);
 }
 
-function cacheRequest(request, event) {
-  return caches.match(request.clone()).then(cachedResponse => {
-    return (
-      cachedResponse ||
-      fetch(request.clone()).then(response => {
-        event.waitUntil(
-          caches
-            .open(CACHE_NAME)
-            .then(cache => cache.put(request.clone(), response.clone()))
-        );
-        return response.clone();
-      })
-    );
+function cacheRequest(event) {
+  const { request } = event;
+  return caches.open(CACHE_NAME).then(cache => {
+    return cache.match(request).then(cachedResponse => {
+      return (
+        cachedResponse ||
+        fetch(request).then(response => {
+          cache.put(request, response.clone());
+          return response;
+        })
+      );
+    });
   });
 }
 
 self.addEventListener("fetch", function fetchHandler(event) {
-  event.respondWith(cacheRequest(event.request, event).catch(defaultResponse));
+  if (!SUPPORTED_METHODS.includes(event.request.method)) return;
+  event.respondWith(cacheRequest(event).catch(defaultResponse));
 });
 
 self.addEventListener("message", event => {
