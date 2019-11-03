@@ -179,18 +179,22 @@ function cacheRequest(event) {
   const { request } = event;
   return caches.open(CACHE_NAME).then(cache => {
     return cache.match(request).then(cachedResponse => {
-      return (
-        cachedResponse ||
-        fetch(request).then(response => {
-          cache.put(request, response.clone());
-          return response;
-        })
-      );
+      if (cachedResponse != undefined) {
+        console.log("Returning item from cache");
+        return cachedResponse;
+      }
+      console.log("Cache contains no match, requesting URL");
+      fetch(request).then(response => {
+        cache.put(request, response.clone());
+        console.log("Successfully requested URL and put response in cache.")
+        return response;
+      })
     });
   });
 }
 
 self.addEventListener("fetch", function fetchHandler(event) {
+  console.log(`Intercepted request for URL: ${event.request.url}`);
   if (!SUPPORTED_METHODS.includes(event.request.method)) return;
   event.respondWith(cacheRequest(event).catch(defaultResponse));
 });
