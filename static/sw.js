@@ -30,9 +30,6 @@ const MAX_TTL = {
 const CACHE_BLACKLIST = [
   str => {
     return !str.startsWith("http://localhost");
-  },
-  str => {
-    return !str.startsWith("https://fonts.googleapis.com");
   }
 ];
 
