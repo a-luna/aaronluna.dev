@@ -34,6 +34,7 @@ const CACHE_BLACKLIST = [
 ];
 
 const SUPPORTED_METHODS = ["GET"];
+const SUPPORTED_URL_SCHEMES = ["http:", "https:"];
 
 /**
  * isBlackListed
@@ -175,28 +176,60 @@ function defaultResponse() {
   return caches.match(OFFLINE_PAGE);
 }
 
-function cacheRequest(event) {
-  const { request } = event;
+function isCachedResponseExpired(response, ttl) {
+  const date = getRequestDateFromCachedResponse(response);
+  if (!date) {
+    return false;
+  }
+  let age = parseInt((new Date().getTime() - date.getTime()) / 1000);
+  return ttl && age > ttl;
+}
+
+function getRequestDateFromCachedResponse(response) {
+  let headers = response.headers.entries();
+  for (let pair of headers) {
+    if (pair[0] === "date") {
+      return new Date(pair[1]);
+    }
+  }
+  return null;
+}
+
+function cacheRequest(request, url) {
   return caches.open(CACHE_NAME).then(cache => {
     return cache.match(request).then(cachedResponse => {
       if (cachedResponse != undefined) {
-        console.log("Returning item from cache");
-        return cachedResponse;
+        const cachedResponseExpired = isCachedResponseExpired(
+          cachedResponse,
+          getTTL(url)
+        );
+        if (!cachedResponseExpired) {
+          return cachedResponse;
+        }
       }
-      console.log("Cache contains no match, requesting URL");
-      fetch(request).then(response => {
-        cache.put(request, response.clone());
-        console.log("Successfully requested URL and put response in cache.")
-        return response;
-      })
+      fetch(request)
+        .then(response => {
+          if (!response) {
+            return cache.match(OFFLINE_PAGE);
+          }
+          if (response.status >= 400) {
+            return cache.match(NOT_FOUND_PAGE);
+          }
+          cache.put(request, response.clone());
+          return response;
+        })
+        .catch(defaultResponse);
     });
   });
 }
 
 self.addEventListener("fetch", function fetchHandler(event) {
-  console.log(`Intercepted request for URL: ${event.request.url}`);
-  if (!SUPPORTED_METHODS.includes(event.request.method)) return;
-  event.respondWith(cacheRequest(event).catch(defaultResponse));
+  const { request } = event;
+  const url = new URL(request.url);
+  if (isBlacklisted(url)) return;
+  if (!SUPPORTED_METHODS.includes(request.method)) return;
+  if (!SUPPORTED_URL_SCHEMES.includes(url.protocol)) return;
+  event.respondWith(cacheRequest(request, url).catch(defaultResponse));
 });
 
 self.addEventListener("message", event => {
