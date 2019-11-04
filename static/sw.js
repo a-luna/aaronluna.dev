@@ -226,7 +226,6 @@ function cacheRequest(request, url) {
 self.addEventListener("fetch", function fetchHandler(event) {
   const { request } = event;
   const url = new URL(request.url);
-  if (isBlacklisted(url)) return;
   if (!SUPPORTED_METHODS.includes(request.method)) return;
   if (!SUPPORTED_URL_SCHEMES.includes(url.protocol)) return;
   event.respondWith(cacheRequest(request, url).catch(defaultResponse));
