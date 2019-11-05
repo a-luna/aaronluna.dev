@@ -143,26 +143,6 @@ function cleanupLegacyCache() {
   });
 }
 
-function preCacheUrl(url) {
-  if (!isBlacklisted(url)) {
-    return caches.match(url).then(cachedResponse => {
-      return cachedResponse
-        ? null
-        : fetch(url).then(response => {
-            if (response) {
-              return event.waitUntil(
-                caches
-                  .open(CACHE_NAME)
-                  .then(cache => cache.put(url, response.clone()))
-              );
-            } else {
-              return null;
-            }
-          });
-    });
-  }
-}
-
 self.addEventListener("install", event => {
   event.waitUntil(Promise.all([installServiceWorker(), self.skipWaiting()]));
 });
@@ -203,30 +183,21 @@ function getRequestDateFromCachedResponse(response) {
   return null;
 }
 
-function cacheRequest(request, url) {
+function getFromCache(request, url) {
   return caches.open(CACHE_NAME).then(cache => {
     return cache.match(request).then(cachedResponse => {
-      if (cachedResponse != undefined) {
-        const cachedResponseExpired = isCachedResponseExpired(
-          cachedResponse,
-          getTTL(url)
-        );
-        if (!cachedResponseExpired) {
-          return cachedResponse;
-        }
+      if (cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))) {
+        return cachedResponse;
       }
-      fetch(request)
-        .then(response => {
-          if (!response) {
-            return cache.match(OFFLINE_PAGE);
-          }
-          if (response.status >= 400) {
-            return cache.match(NOT_FOUND_PAGE);
-          }
-          cache.put(request, response.clone());
-          return response;
-        })
-        .catch(defaultResponse);
+    });
+  });
+}
+
+function updateCache(request) {
+  return caches.open(CACHE_NAME).then(cache => {
+    return fetch(request).then(response => {
+      if (!response || response.status >= 400) return;
+      return cache.put(request, response);
     });
   });
 }
@@ -234,20 +205,12 @@ function cacheRequest(request, url) {
 self.addEventListener("fetch", function fetchHandler(event) {
   const { request } = event;
   const url = new URL(request.url);
-  if (!SUPPORTED_METHODS.includes(request.method)) return;
-  if (!SUPPORTED_URL_SCHEMES.includes(url.protocol)) return;
-  event.respondWith(cacheRequest(request, url).catch(defaultResponse));
-});
-
-self.addEventListener("message", event => {
-  if (typeof event.data === "object" && typeof event.data.action === "string") {
-    switch (event.data.action) {
-      case "cache":
-        precacheUrl(event.data.url);
-        break;
-      default:
-        console.log("Unknown action: " + event.data.action);
-        break;
-    }
+  if (!SUPPORTED_METHODS.includes(request.method)) {
+    return Promise.reject(`Unsupported request type: ${request.method}`);
   }
+  if (!SUPPORTED_URL_SCHEMES.includes(url.protocol)) {
+    return Promise.reject(`Unsupported URL scheme: ${url.protocol}`);
+  }
+  event.respondWith(getFromCache(request, url));
+  event.waitUntil(updateCache(request).catch(defaultResponse));
 });
