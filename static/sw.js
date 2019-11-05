@@ -1,25 +1,10 @@
 const CACHE_VERSION = 8;
 const CACHE_NAME = `content-v${CACHE_VERSION}`;
 const CACHE_FILES = [
-  "/css/font-awesome.min.css",
-  "/css/main.min.css",
-  "/img/sourcerer.jpg",
-  "/img/sourcerer_hov.jpg",
-  "/fonts/fontawesome-webfont.woff2",
-  "/fonts/Roboto-Bold.woff2",
-  "/fonts/Roboto-BoldItalic.woff2",
-  "/fonts/Roboto-Italic.woff2",
-  "/fonts/Roboto-Light.woff2",
-  "/fonts/Roboto-LightItalic.woff2",
-  "/fonts/Roboto-Regular.woff2",
-  "/fonts/RobotoMono-Bold.woff2",
-  "/fonts/RobotoMono-Regular.woff2",
   "/offline/index.html",
   "/404.html",
   "/apple-touch-icon.png",
-  "/bundle.min.js",
   "/favicon.ico",
-  "/index.json",
   "/manifest.json"
 ];
 
@@ -186,9 +171,9 @@ function getRequestDateFromCachedResponse(response) {
 function getFromCache(request, url) {
   return caches.open(CACHE_NAME).then(cache => {
     return cache.match(request).then(cachedResponse => {
-      if (cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))) {
-        return cachedResponse;
-      }
+      return cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))
+      ? cachedResponse
+      : Promise.reject("no-match")
     });
   });
 }
@@ -206,10 +191,10 @@ self.addEventListener("fetch", function fetchHandler(event) {
   const { request } = event;
   const url = new URL(request.url);
   if (!SUPPORTED_METHODS.includes(request.method)) {
-    return Promise.reject(`Unsupported request type: ${request.method}`);
+    return Promise.reject("unsupported-request-type");
   }
   if (!SUPPORTED_URL_SCHEMES.includes(url.protocol)) {
-    return Promise.reject(`Unsupported URL scheme: ${url.protocol}`);
+    return Promise.reject("unsupported-url-scheme");
   }
   event.respondWith(getFromCache(request, url));
   event.waitUntil(updateCache(request).catch(defaultResponse));
