@@ -24,13 +24,9 @@
         {{ template "_internal/twitter_cards.html" . }}
     {{ end }}
     <link rel="manifest" href="/manifest.json">
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
     {{ with .OutputFormats.Get "rss" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{ end -}}
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300italic,400italic,600italic,700italic,800italic,300,400,600,700,800" type="text/css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" type="text/css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     {{ partial "styles" . }}
     <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">

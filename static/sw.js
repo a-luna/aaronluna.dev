@@ -1,4 +1,4 @@
-const CACHE_VERSION = 7;
+const CACHE_VERSION = 8;
 const CACHE_NAME = `content-v${CACHE_VERSION}`;
 const CACHE_FILES = [
   "/css/font-awesome.min.css",
@@ -6,6 +6,14 @@ const CACHE_FILES = [
   "/img/sourcerer.jpg",
   "/img/sourcerer_hov.jpg",
   "/fonts/fontawesome-webfont.woff2",
+  "/fonts/Roboto-Bold.woff2",
+  "/fonts/Roboto-BoldItalic.woff2",
+  "/fonts/Roboto-Italic.woff2",
+  "/fonts/Roboto-Light.woff2",
+  "/fonts/Roboto-LightItalic.woff2",
+  "/fonts/Roboto-Regular.woff2",
+  "/fonts/RobotoMono-Bold.woff2",
+  "/fonts/RobotoMono-Regular.woff2",
   "/offline/index.html",
   "/404.html",
   "/apple-touch-icon.png",
