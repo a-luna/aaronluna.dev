@@ -982,7 +982,6 @@ div.chroma .lntable pre.chroma {
 .highlight {
   position: relative;
   z-index: 0;
-  width: 100%;
   padding: 0;
   margin: 0;
 }
@@ -990,11 +989,6 @@ div.chroma .lntable pre.chroma {
 .highlight > .chroma {
   position: static;
   z-index: 1;
-  width: inherit;
-  height: inherit;
-  margin: 0;
-  top: 0;
-  left: 0;
 }
 
 .copy-code-button {
