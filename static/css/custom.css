@@ -2404,7 +2404,7 @@ header,
 #featured-projects-wrapper h4 {
   color: #d8d8d8;
   font-size: 2.3em;
-  margin: 10px auto 10px 0;
+  margin: 10px auto 15px 0;
 }
 
 #recent-posts,
@@ -2487,13 +2487,13 @@ header,
 }
 
 .recent-post .post-category.devops {
-  --cat-color1: var(--magenta1);
-  --cat-color2: var(--magenta2);
+  --cat-color1: var(--orange1);
+  --cat-color2: var(--orange2);
 }
 
 .recent-post .post-category.amazon-web-services {
-  --cat-color1: var(--pink1);
-  --cat-color2: var(--pink2);
+  --cat-color1: var(--green1);
+  --cat-color2: var(--green2);
 }
 
 #home-blog-link,
