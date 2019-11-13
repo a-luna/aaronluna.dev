@@ -418,7 +418,8 @@ If you've spent anytime programming in Python, there is a 100% chance that you h
 
 Create a new file in `app/util` named `datetime_util.py` and add the content below:
 
-{{< highlight python >}}"""Helper functions for datetime, timezone and timedelta objects."""
+```python
+"""Helper functions for datetime, timezone and timedelta objects."""
 import time
 from collections import namedtuple
 from datetime import datetime, timedelta, timezone
@@ -427,6 +428,7 @@ from datetime import datetime, timedelta, timezone
 DT_AWARE = "%m/%d/%y %I:%M:%S %p %Z"
 DT_NAIVE = "%m/%d/%y %I:%M:%S %p"
 DATE_MONTH_NAME = "%b %d %Y"
+ONE_DAY_IN_SECONDS = 86400
 
 timespan = namedtuple(
     "timespan",
@@ -505,7 +507,10 @@ def format_timespan_str(ts):
     """Format a timespan namedtuple as a readable string."""
     if ts.days:
         day_or_days = "days" if ts.days > 1 else "day"
-        return f"{ts.days} {day_or_days} {ts.hours:.0f} hours {ts.minutes:.0f} minutes {ts.seconds} seconds"
+        return (
+            f"{ts.days} {day_or_days} "
+            f"{ts.hours:.0f} hours {ts.minutes:.0f} minutes {ts.seconds} seconds"
+        )
     if ts.hours:
         return f"{ts.hours:.0f} hours {ts.minutes:.0f} minutes {ts.seconds} seconds"
     if ts.minutes:
@@ -525,6 +530,7 @@ def get_timespan(td):
     (milliseconds, microseconds) = divmod(td.microseconds, 1000)
     (minutes, seconds) = divmod(td.seconds, 60)
     (hours, minutes) = divmod(minutes, 60)
+    total_seconds = td.seconds + (td.days * ONE_DAY_IN_SECONDS)
     return timespan(
         td.days,
         hours,
@@ -532,10 +538,11 @@ def get_timespan(td):
         seconds,
         milliseconds,
         microseconds,
-        td.seconds,
-        (td.seconds * 1000 + milliseconds),
-        (td.seconds * 1000 * 1000 + milliseconds * 1000 + microseconds),
-    ){{< /highlight >}}
+        total_seconds,
+        (total_seconds * 1000 + milliseconds),
+        (total_seconds * 1000 * 1000 + milliseconds * 1000 + microseconds),
+    )
+```
 
 ## Environment Configuration
 

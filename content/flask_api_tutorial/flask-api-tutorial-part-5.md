@@ -113,9 +113,11 @@ The proper way to name resources is one of the (many) hotly debated topics regar
     </li>
 </ul>
 
-<a href="https://phauer.com/2015/restful-api-design-best-practices/#use-consistently-plural-nouns" target="_blank">The accepted best practice for naming resources</a> is to use plural nouns when constructing a URI for a resource. <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-two-urls-per-resource" target="_blank">Another widely accepted standard</a> is to create two endpoints (i.e., URIs) per resource &mdash; one for operations that apply to the entire collection (e.g., `/api/v1/widgets`) and one for operations that apply only to a single resource (e.g., `/api/v1/widgets/<name>`).
+<a href="https://phauer.com/2015/restful-api-design-best-practices/#use-consistently-plural-nouns" target="_blank">The accepted best practice for naming resources</a> is to use plural nouns when constructing a URI for a resource (e.g. <code>/widgets</code> instead of `/widget`). <a href="https://phauer.com/2015/restful-api-design-best-practices/#use-two-urls-per-resource" target="_blank">Another widely accepted standard</a> is to create two endpoints per resource &mdash; one for operations that apply to the entire collection (e.g., `/api/v1/widgets`) and one for operations that apply only to a single instance (e.g., `/api/v1/widgets/<name>`).
 
-These endpoints/URIs are **where** clients interact with a resource, while HTTP methods determine **how** they interact with it. The table below is a common pattern in RESTful architecture, where each HTTP method is mapped to a single CRUD operation (**C**reate, **R**etrieve, **U**pdate, **D**elete). The remainder of this section of the tutorial will cover implementing the API routes, the handlers for supported HTTP method types and the business logic for each CRUD process as specified in **Table 1**:
+Another common architectural pattern is to expose methods which allow the client to perform CRUD operations on the resource. CRUD (**C**reate, **R**etrieve, **U**pdate, **D**elete) is a term that usually refers to relational database systems, but it is also valid for any dataset that can be manipulated by a client, including RESTful resources.
+
+Now, you might be wondering how this can be accomplished if we only expose two endpoints per resource, and CRUD defines (at leat) four different operations. Table 1 shows how we will structure the API for our `Widget` resource:
 
 <div id="table-1" class="table-wrapper">
     <div class="responsive">
@@ -125,7 +127,7 @@ These endpoints/URIs are **where** clients interact with a resource, while HTTP 
                     <td colspan="4" class="table-number">Table 1</td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="table-title">Endpoint specifications for <code>Widget</code> resource</td>
+                    <td colspan="4" class="table-title"><code>Widget</code> API endpoint specifications</td>
                 </tr>
                 <tr>
                     <th scope="col" class="first-column column-header">Endpoint Name</th>
@@ -176,22 +178,24 @@ These endpoints/URIs are **where** clients interact with a resource, while HTTP 
     </div>
 </div>
 
+Each endpoint can be configured to respond to a unique set of HTTP method types. Per **Table 1**, the `api.widget_list` endpoint will support `GET` and `POST` requests, and the `api.widget` endpoint will suport `GET`, `PUT`, and `DELETE` requests. Each combination of endpoint and method type are mapped to a CRUD operation. The remainder of this section (and the entire next section) are devoted to implementing the `Widget` API.
+
 <div class="alert alert-flex">
   <div class="alert-icon">
     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
   </div>
   <div class="alert-message">
-    <p>Operations that create, modify or delete widgets are restricted to users with the administrator role. Regular (non-admin) users can only retrieve individual widgets and lists of widgets from the database.</p>
+    <p>Operations that create, modify or delete widgets are restricted to users with the administrator role. Regular (non-admin) users can only retrieve individual widgets and/or lists of widgets from the database.</p>
   </div>
 </div>
 
 ## `flask add-user` Command
 
-[Way back in Part 1](/series/flask_api_tutorial/part-1/#flask-cli-application-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a>. Click can create powerful CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
+[Way back in Part 1](/series/flask_api_tutorial/part-1/#flask-cli-application-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a> which can be used to create powerful Python CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
 
 Currently, the `api/v1/auth/register` endpoint can only create regular (non-admin) users. We want to leave it this way since this endpoint is publically-accessible. However, we also need a way to create admin users since regular users cannot create, update or delete widget objects.
 
-There are a few different methods we could use to create admin users. Using the `flask shell` command, we can execute arbitrary statements to create admin users. Or, we could create a function and store it in a file in our project, then run the function through the command-line. However, both of these methods are cumbersome and would require documentation if anyone else needed to create an admin user.
+There are a few different methods we could use to create admin users. Using the `flask shell` command, we can execute arbitrary Python code to create admin users. Or, we could create a function and store it in a file in our project, then run the function through the command-line. However, both of these methods are cumbersome and would require documentation if anyone else needed to create an admin user.
 
 My preferred solution is to expose a command in the Flask CLI that can create both regular and admin users. To do so, open `run.py` in the project root folder. First, update the import statements to include `click` (**Line 4** below):
 
@@ -207,9 +211,9 @@ from app.models.user import User{{< /highlight >}}
 Then, add the content below and save the file:
 
 {{< highlight python "linenos=table,linenostart=18" >}}@app.cli.command("add-user", short_help="add a new user")
+@click.argument("email")
 @click.option("--admin", is_flag=True, default=False, help="New user has administrator role")
 @click.password_option(help="Do not set password on the command line!")
-@click.argument("email")
 def add_user(email, admin, password):
     """Add a new user to the database with email address = EMAIL."""
     if User.find_by_email(email):
@@ -302,7 +306,7 @@ Repeat for confirmation:
   </li>
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Create admin user</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user --admin admin@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user admin@test.com --admin</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="light-blue bold-text">Successfully added new admin user:
@@ -320,6 +324,8 @@ Repeat for confirmation:
 As you can see, after running the command, the user is immediately prompted to create a password and to confirm the password for the new user. Before proceeding, please create an admin user with the `flask add-user` command since creating, modifying and deleting widgets cannot be performed otherwise.
 
 ## `Widget` DB Model
+
+Before we can begin implementing the API endpoints given in **Table 1**, we need to create a `Widget` class that fulfills the project requirements. `Widget` objects need to be persistent, so our class must extend `db.Model` which
 
 Create a new file `widget.py` in `/app/models` and add the content below:
 

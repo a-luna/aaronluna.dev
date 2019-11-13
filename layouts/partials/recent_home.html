@@ -18,7 +18,7 @@
             {{- if .Params.categories }}
                 <div class="post-categories">
                     {{ range $index, $category := .Params.categories }}
-                    <a class="post-category" href="{{ "categories/" | relLangURL }}{{ . | urlize | lower }}" rel="category">{{ . }}</a>
+                    <a class="post-category {{ . | urlize | lower }}" href="{{ "categories/" | relLangURL }}{{ . | urlize | lower }}" rel="category">{{ . }}</a>
                     {{ end }}
                 </div>
             {{ end -}}

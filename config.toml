@@ -35,7 +35,7 @@ pygmentsUseClasses = true
   menu_label = "Menu"
   read_more = "Read More"
   process_dev_css = false
-  customCSS = ["css/syntax.css", "css/style.css", "css/custom.css", ]
+  customCSS = ["css/syntax.css", "css/style.css", "css/fonts.css", "css/variables.css", "css/custom.css", ]
 
 [taxonomies]
   series = "series"

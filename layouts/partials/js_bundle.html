@@ -1,12 +1,12 @@
 {{ if .Site.IsServer }}
     {{ $lunr := resources.Get "js/vendor/lunr.min.js" }}
-    {{ $search := resources.Get "js/search/search.js" }}
+    {{ $search := resources.Get "js/search.js" }}
     {{ $mainjs := resources.Get "js/main.js" }}
     <script type="text/javascript" src="{{ $lunr.RelPermalink }}"></script>
     <script type="text/javascript" src="{{ $search.RelPermalink }}"></script>
     <script type="text/javascript" src="{{ $mainjs.RelPermalink }}"></script>
 {{ else }}
-    {{ $alljs := slice (resources.Get "js/vendor/lunr.min.js") (resources.Get "js/search/search.js") (resources.Get "js/main.js") }}
+    {{ $alljs := slice (resources.Get "js/vendor/lunr.min.js") (resources.Get "js/search.js") (resources.Get "js/main.js") }}
     {{ $bundlejs := $alljs | resources.Concat "bundle.js" | minify }}
     <script type="text/javascript" src="{{ $bundlejs.RelPermalink }}"></script>
 {{ end }}
