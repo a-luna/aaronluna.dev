@@ -4,7 +4,7 @@ slug: "aws-free-usage-tier"
 aliases:
     - /2018/01/13/aws-free-usage-tier/
 date: "2018-01-13"
-categories: ["Amazon Web Services"]
+categories: ["AWS"]
 ---
 
 For the past 2 months, I have been learning Linux server administration, PHP/JavaScript and other skills such as DevOps tools/processes. By far, the most valuable resource I have used to develop these skills is the Amazon Web Services (AWS) Free Usage Tier that is offered to anyone for a period of one year. Well, anyone with a credit card to be more precise.

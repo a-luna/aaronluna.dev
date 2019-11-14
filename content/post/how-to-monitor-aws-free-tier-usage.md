@@ -4,7 +4,7 @@ slug: "how-to-monitor-aws-free-tier-usage"
 aliases:
     - /2018/01/15/how-to-monitor-aws-free-tier-usage/
 date: "2018-01-15"
-categories: ["Amazon Web Services"]
+categories: ["AWS"]
 ---
 
 With Amazon&#39;s Free Usage Tier, it&#39;s very easy to generate overage charges even with the best intentions of operating entirely within the offer's limits (this is why Amazon requires a credit card when you create your account). For each individual service (EC2, RDS, S2, etc.), your usage for the month is tabulated in extremely fine detail. At first, the sheer number of items on your invoice can be intimidating. In this post, I will show what a typical bill contains for running a small Wordpress site and how to avoid overage charges and other unnecesary costs.

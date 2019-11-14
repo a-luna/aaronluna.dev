@@ -127,7 +127,7 @@ Now, you might be wondering how this can be accomplished if we only expose two e
                     <td colspan="4" class="table-number">Table 1</td>
                 </tr>
                 <tr>
-                    <td colspan="4" class="table-title"><code>Widget</code> API endpoint specifications</td>
+                    <td colspan="4" class="table-title">Widget API endpoint specifications</td>
                 </tr>
                 <tr>
                     <th scope="col" class="first-column column-header">Endpoint Name</th>
@@ -325,9 +325,7 @@ As you can see, after running the command, the user is immediately prompted to c
 
 ## `Widget` DB Model
 
-Before we can begin implementing the API endpoints given in **Table 1**, we need to create a `Widget` class that fulfills the project requirements. `Widget` objects need to be persistent, so our class must extend `db.Model` which
-
-Create a new file `widget.py` in `/app/models` and add the content below:
+Before we can begin implementing the API endpoints in **Table 1**, we need to create a database table to store `Widget` instances. To do so, we extend `db.Model` (just like we did for the `User` and `BlacklistedToken` classes). Create a new file `widget.py` in `/app/models` and add the content below:
 
 {{< highlight python "linenos=table" >}}"""Class definition for Widget model."""
 from datetime import datetime, timezone, timedelta
@@ -394,7 +392,7 @@ class Widget(db.Model):
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first(){{< /highlight >}}
 
-Most of the interesting things about the `Widget` model were previously discussed when introducing other classes, but there are a couple new things worth calling out:
+
 
 <div class="code-details">
     <ul>

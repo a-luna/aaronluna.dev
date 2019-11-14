@@ -2,6 +2,13 @@
   display: none;
 }
 
+.copyable-text-area {
+  position: absolute;
+  height: 0;
+  z-index: -1;
+  opacity: .01;
+}
+
 .content a.hanchor {
   color: #c4c4c4;
   font-size: 0.75em;
@@ -208,7 +215,7 @@ ol li p {
 }
 
 .tutorial .series__title a {
-  color: var(--tutorial-link)
+  color: var(--tut-link-color)
 }
 
 .blog-list .main__content {
@@ -387,8 +394,8 @@ h4 {
 .content h3 code,
 .content h4 code {
   background-color: initial;
-  font-size: 0.85em;
-  padding: 4px 0;
+  font-size: 0.9em;
+  padding: 0 2px;
 }
 
 .content h4 {
@@ -513,13 +520,6 @@ a:active:hover {
 .content ul .note p,
 .content ol .note p {
   margin: 0;
-}
-
-.content ul .alert code,
-.content ol .alert code,
-.content ul .note code,
-.content ol .note code {
-  background-color: #323232;
 }
 
 .content ul div.alert,
@@ -935,8 +935,8 @@ li pre code {
 code,
 p code,
 li code {
-  font-size: 0.75em;
-  background-color: #202020;
+  font-size: 0.85em;
+  background-color: inherit;
   border: none;
   padding: 2px 4px;
   border-radius: 4px;
@@ -951,7 +951,8 @@ li code {
 
 .post__content p code {
   background: inherit;
-  padding: 2px 0;
+  padding: 0 2px;
+  font-size: 0.85em;
 }
 
 .toc code {
@@ -991,30 +992,43 @@ div.chroma .lntable pre.chroma {
   z-index: 1;
 }
 
+.tutorial .copy-code-button {
+  background-color: var(--teal1);
+  border: 1px solid var(--teal1);
+}
+
+.tutorial .copy-code-button:hover,
+.tutorial .copy-code-button:focus,
+.tutorial .copy-code-button:active,
+.tutorial .copy-code-button:active:hover {
+  background-color: var(--teal2);
+  border: 1px solid var(--teal2);
+}
+
 .copy-code-button {
   position: absolute;
   z-index: 2;
   right: 0;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: #202020;
-  background-color: var(--purple1);
-  border: 1px solid var(--purple1);
+  background-color: var(--blue1);
+  border: 1px solid var(--blue1);
   border-radius: 4px;
   white-space: nowrap;
-  padding: 2px 5px;
+  padding: 2px 7px;
   margin: 5px 5px 0 0;
-  line-height: 12px;
+  line-height: 14px;
   cursor: pointer;
+  opacity: 0.8;
 }
 
 .copy-code-button:hover,
 .copy-code-button:focus,
 .copy-code-button:active,
 .copy-code-button:active:hover {
-  color: #202020;
-  background-color: var(--purple2);
-  border: 1px solid var(--purple2);
+  background-color: var(--blue2);
+  border: 1px solid var(--blue2);
 }
 
 pre.chroma code {
@@ -1261,6 +1275,7 @@ figcaption {
 }
 
 .warning a {
+  font-weight: 400;
   color: #6fc1ff;
 }
 
@@ -1517,7 +1532,7 @@ a.pagination__item--next {
 .post-nav__link,
 a.post-nav__link {
   display: inline;
-  color: #19f6d6;
+  color: var(--blog-link-color);
   background-color: #323232;
   border: none;
   border-radius: 4px;
@@ -1531,8 +1546,24 @@ a.post-nav__link:hover,
 a.post-nav__link:active,
 a.post-nav__link:active:hover,
 a.post-nav__link:focus {
-  color: #19f6d6;
+  color: var(--blog-link-color);
   text-decoration: underline;
+}
+
+.tutorial .post-nav__link,
+.tutorial a.post-nav__link {
+  color: var(--tut-link-color);
+}
+
+.tutorial .post-nav__link:hover,
+.tutorial .post-nav__link:active,
+.tutorial .post-nav__link:active:hover,
+.tutorial .post-nav__link:focus,
+.tutorial a.post-nav__link:hover,
+.tutorial a.post-nav__link:active,
+.tutorial a.post-nav__link:active:hover,
+.tutorial a.post-nav__link:focus {
+  color: var(--tut-link-color);
 }
 
 #header-nav {
@@ -1837,6 +1868,7 @@ input {
   border: 1px #909090;
   border-radius: 4px;
   margin: 0 5px 0 10px;
+  outline: 0;
 }
 
 .search-container .fa {
@@ -2366,6 +2398,12 @@ header,
   margin: 0;
 }
 
+.home .content {
+  margin: var(--no-margin);
+  padding: var(--bot-padding-10);
+  border-bottom: 2px dotted #7f7f7f;
+}
+
 .home h1 {
   color: #f2f2f2;
   font-size: 2.6em;
@@ -2387,6 +2425,11 @@ header,
   line-height: 22px;
 }
 
+.home hr {
+  border: 2px dotted var(--home-hr-color);
+  margin: var(--top-bottom-10);
+}
+
 #recent-posts-wrapper,
 #featured-projects-wrapper {
   display: flex;
@@ -2402,9 +2445,10 @@ header,
 
 #recent-posts-wrapper h4,
 #featured-projects-wrapper h4 {
-  color: #d8d8d8;
+  color: var(--home-h4-color);
   font-size: 2.3em;
-  margin: 10px auto 15px 0;
+  text-transform: lowercase;
+  margin: 20px auto 10px 1px;
 }
 
 #recent-posts,
@@ -2422,7 +2466,7 @@ header,
   width: 250px;
   background-color: #202020;
   margin: 0 10px;
-  padding: 10px;
+  padding: 7px 10px;
   border: 1px solid #202020;
   border-radius: 4px;
 }
@@ -2437,10 +2481,10 @@ header,
   margin: 0 0 0 10px;
 }
 
-.recent-post .post-meta-date {
+.recent-post .post-meta-date .meta__text {
   color: #b3b3b3;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 23px;
   margin: 0 0 5px;
 }
 
@@ -2463,7 +2507,7 @@ header,
   --cat-color2: #808080;
   font-size: 12px;
   font-weight: 700;
-  color: #202020;
+  color: var(--black2);
   background-color: var(--cat-color1);
   border: 1px solid var(--cat-color1);
   border-radius: 4px;
@@ -2476,24 +2520,34 @@ header,
 .recent-post .post-category:focus,
 .recent-post .post-category:active,
 .recent-post .post-category:active:hover {
-  color: #202020;
-  background-color: var(--cat-color2);
+  color: var(--cat-color2);
+  background-color: var(--black2);
   border: 1px solid var(--cat-color2);
 }
 
 .recent-post .post-category.python {
-  --cat-color1: var(--purple1);
-  --cat-color2: var(--purple2);
+  --cat-color1: var(--green1);
+  --cat-color2: var(--green2);
 }
 
 .recent-post .post-category.devops {
+  --cat-color1: var(--pink1);
+  --cat-color2: var(--pink2);
+}
+
+.recent-post .post-category.aws {
   --cat-color1: var(--orange1);
   --cat-color2: var(--orange2);
 }
 
-.recent-post .post-category.amazon-web-services {
-  --cat-color1: var(--green1);
-  --cat-color2: var(--green2);
+.recent-post .post-category.hugo {
+  --cat-color1: var(--magenta1);
+  --cat-color2: var(--magenta2);
+}
+
+.recent-post .post-category.javascript {
+  --cat-color1: var(--teal1);
+  --cat-color2: var(--teal2);
 }
 
 #home-blog-link,
@@ -2501,7 +2555,7 @@ header,
   font-size: 2em;
   color: #6fc1ff;
   padding: 5px 7px;
-  margin: 15px auto;
+  margin: 15px auto 5px auto;
   line-height: 16px;
 }
 

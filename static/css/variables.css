@@ -1,4 +1,5 @@
 :root {
+  /* Color Pallette */
   --black1: #171717;
   --black2: #202020;
   --dark-gray1: #323232;
@@ -12,20 +13,39 @@
   --white1: #e2e2e2;
   --white2: #f2f2f2;
   --teal1: #08c4a8;
-  --teal2: #19f6d6;
-  --blue1: #2196f3;
+  --teal2: #19f5d4;
+  --blue1: #57b6ff;
   --blue2: #6fc1ff;
   --green1: #73f906;
-  --green2: #a9fb68;
-  --purple1: #8b4dff;
-  --purple2: #ae81ff;
-  --orange1: #fd971f;
-  --orange2: #e5b965;
-  --goldenrod: #ffc107;
-  --pink1: #f92672;
-  --pink2: #fb5692;
+  --green2: #98fa47;
+  --purple1: #600aff;
+  --purple2: #8b4dff;
+  --orange1: #d97502;
+  --orange2: #fd9621;
+  --goldenrod1: #ffc105;
+  --goldenrod2: #ffd147;
+  --pink1: #d60552;
+  --pink2: #f92472;
   --magenta1: #f60ef2;
   --magenta2: #fa72f8;
 
-  --tutorial-link: var(--teal2)
+  /* Spacing */
+  --no-margin: 0;
+  --top-bot-margin-10: 10px 0;
+
+  /* Padding */
+  --bot-padding-10: 0 0 10px 0;
+
+  /* Header Menu */
+  --menu-bg: var(--black2);
+
+  /* Home Page */
+  --home-hr-color: var(--mid-gray2);
+  --home-h4-color: var(--light-gray2);
+
+  /* Section: Blog Posts */
+  --blog-link-color: var(--blue2);
+
+  /* Section: Tutorial */
+  --tut-link-color: var(--teal2);
 }

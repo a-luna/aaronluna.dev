@@ -5,7 +5,7 @@
         <h1 class="warning__headline">{{ T "404_title" }}</h1>
         <p class="warning__text">{{ T "404_text" }}
             <br>
-            <a href="{{ " " | relLangURL }}">{{  T "404_linktext" }}</a>
+            <a href="{{.Site.BaseURL}}">{{  T "404_linktext" }}</a>
         </p>
     </div>
 </main>

@@ -4,7 +4,7 @@ slug: "aws-hosting-cost-examples-linux-windows-ec2-rds"
 aliases:
     - /2018/01/18/aws-hosting-cost-examples-linux-windows-ec2-rds/
 date: "2018-01-18"
-categories: ["Amazon Web Services"]
+categories: ["AWS"]
 ---
 
 In previous posts, I provided [an overview of what the AWS Free Usage Tier contains](/2018/01/13/aws-free-usage-tier/) and some [basic guidelines for avoiding overage charges while using the free tier](/2018/01/15/how-to-monitor-aws-free-tier-usage/) to host a small website.
