@@ -975,6 +975,11 @@ div.chroma .lntable pre.chroma {
   border-radius: 0;
 }
 
+p code.chroma {
+  background-color: #202020;
+  padding: 2px;
+}
+
 .highlight-wrapper {
   display: block;
   margin: 0 0 1em 0;
@@ -1020,7 +1025,7 @@ div.chroma .lntable pre.chroma {
   margin: 5px 5px 0 0;
   line-height: 14px;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0.3;
 }
 
 .copy-code-button:hover,
@@ -1029,6 +1034,7 @@ div.chroma .lntable pre.chroma {
 .copy-code-button:active:hover {
   background-color: var(--blue2);
   border: 1px solid var(--blue2);
+  opacity: 0.8;
 }
 
 pre.chroma code {
@@ -2435,7 +2441,7 @@ header,
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  max-width: 800px;
+  max-width: 875px;
   margin: 0 auto;
 }
 
@@ -2463,22 +2469,22 @@ header,
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
-  width: 250px;
+  width: 275px;
   background-color: #202020;
-  margin: 0 10px;
-  padding: 7px 10px;
+  margin: 0 15px;
+  padding: 10px 15px;
   border: 1px solid #202020;
   border-radius: 4px;
 }
 
 .recent-post:first-child,
 .github-repo:first-child {
-  margin: 0 10px 0 0;
+  margin: 0 15px 0 0;
 }
 
 .recent-post:last-child,
 .github-repo:last-child {
-  margin: 0 0 0 10px;
+  margin: 0 0 0 15px;
 }
 
 .recent-post .post-meta-date .meta__text {

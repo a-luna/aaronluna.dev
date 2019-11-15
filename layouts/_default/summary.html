@@ -18,7 +18,7 @@
         {{- end }}
     </header>
     <div class="content list__excerpt post__content clearfix">
-        {{ .Summary }}... <a class="summary-read-more" href="{{ .RelPermalink }}">Read More</a>
+        {{ .Summary }}{{- if .Truncated }}... {{- end }}
     </div>
     {{- if .Site.Params.readmore }}
         {{- if .Truncated }}

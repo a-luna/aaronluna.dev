@@ -16,16 +16,16 @@ Creating a project in Azure DevOps gives you more than a private git repository.
 <div class="flex-row">
     <div class="flex-item">
         <figure>
-            <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_01_new_build_pipeline_02.jpg">
-                <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_01_new_build_pipeline_02.jpg" style="height:250px" alt="First build pipeline">
+            <a href="/img/devops/azure_build_pipeline_01_new_build_pipeline_02.jpg">
+                <img src="/img//devops/azure_build_pipeline_01_new_build_pipeline_02.jpg" style="height:250px" alt="First build pipeline">
             </a>
             <figcaption><p>Figure 1 - First build pipeline</p></figcaption>
         </figure>
     </div>
     <div class="flex-item">
         <figure>
-            <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_00_new_build_pipeline_01.jpg">
-                <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_00_new_build_pipeline_01.jpg" style="height:250px" alt="New build pipeline">
+            <a href="/img/devops/azure_build_pipeline_00_new_build_pipeline_01.jpg">
+                <img src="/img//devops/azure_build_pipeline_00_new_build_pipeline_01.jpg" style="height:250px" alt="New build pipeline">
             </a>
             <figcaption><p>Figure 2 - New build pipeline</p></figcaption>
         </figure>
@@ -35,8 +35,8 @@ Creating a project in Azure DevOps gives you more than a private git repository.
 First, you must select the repository that contains your heroku app. Leave **Azure Repos Git** selected and choose the repo from the dropdown list. Then, click **Continue** (**Figure 3**):
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_02_select_source.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_02_select_source.jpg" style="width:700px" alt="Select a source repository">
+    <a href="/img/devops/azure_build_pipeline_02_select_source.jpg">
+        <img src="/img//devops/azure_build_pipeline_02_select_source.jpg" style="width:700px" alt="Select a source repository">
     </a>
     <figcaption><p>Figure 3 - Select a source repository</p></figcaption>
 </figure>
@@ -44,8 +44,8 @@ First, you must select the repository that contains your heroku app. Leave **Azu
 Next, you are asked to select a template. You can find templates for many technologies/tools, but since we are creating a simple CD process, scroll to the bottom and select **Empty pipeline** (**Figure 4**):
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_03_select_template.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_03_select_template.jpg" style="width:700px" alt="Select a templete">
+    <a href="/img/devops/azure_build_pipeline_03_select_template.jpg">
+        <img src="/img//devops/azure_build_pipeline_03_select_template.jpg" style="width:700px" alt="Select a templete">
     </a>
     <figcaption><p>Figure 4 - Select a Template</p></figcaption>
 </figure>
@@ -53,8 +53,8 @@ Next, you are asked to select a template. You can find templates for many techno
 You should see the empty pipeline shown in **Figure 5**. Notice that you are currently viewing the **Tasks** section of the pipeline. Change the name to "Deploy to Heroku" or anything else you like. You can leave the value for **Agent pool** as **Hosted VS2017**:
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_04_blank_template.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_04_blank_template.jpg" style="width:700px" alt="Empty pipeline">
+    <a href="/img/devops/azure_build_pipeline_04_blank_template.jpg">
+        <img src="/img//devops/azure_build_pipeline_04_blank_template.jpg" style="width:700px" alt="Empty pipeline">
     </a>
     <figcaption><p>Figure 5 - Empty pipeline</p></figcaption>
 </figure>
@@ -64,8 +64,8 @@ You should see the empty pipeline shown in **Figure 5**. Notice that you are cur
 Currently, this pipeline is not configured to run in response to any trigger. In fact, it will never run unless you setup a schedule or enable continuous integration. To do so, Click **Triggers** and select the checkbox for **Enable continuous integration** as shown in Figure 6.
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_05_build_triggers.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_05_build_triggers.jpg" style="width:700px" alt="Trigger settings">
+    <a href="/img/devops/azure_build_pipeline_05_build_triggers.jpg">
+        <img src="/img//devops/azure_build_pipeline_05_build_triggers.jpg" style="width:700px" alt="Trigger settings">
     </a>
     <figcaption><p>Figure 6 - Trigger settings</p></figcaption>
 </figure>
@@ -102,15 +102,15 @@ Ok, back at the Azure Build Pipeline, click **Variables** and create a new Pipel
 </div>
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_06_pipeline_variables_1.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_06_pipeline_variables_1.jpg" style="width:700px" alt="Create pipeline variable for API token">
+    <a href="/img/devops/azure_build_pipeline_06_pipeline_variables_1.jpg">
+        <img src="/img//devops/azure_build_pipeline_06_pipeline_variables_1.jpg" style="width:700px" alt="Create pipeline variable for API token">
     </a>
     <figcaption><p>Figure 7 - Create pipeline variable for API token</p></figcaption>
 </figure>
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_07_pipeline_variables_2.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_07_pipeline_variables_2.jpg" style="width:700px" alt="Make pipeline variable secret">
+    <a href="/img/devops/azure_build_pipeline_07_pipeline_variables_2.jpg">
+        <img src="/img//devops/azure_build_pipeline_07_pipeline_variables_2.jpg" style="width:700px" alt="Make pipeline variable secret">
     </a>
     <figcaption><p>Figure 8 - Make pipeline variable secret</p></figcaption>
 </figure>
@@ -120,8 +120,8 @@ Ok, back at the Azure Build Pipeline, click **Variables** and create a new Pipel
 It might seem like we've done a lot of work up to this point, but right now our pipeline doesn't actually do anything. Click on **Tasks** to return to the empty build template. Click on the <i class="fa fa-plus"></i> symbol to add a task to Agent job 1 as shown in **Figure 9**:
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_08_add_task_01.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_08_add_task_01.jpg" style="width:700px" alt="Add a build task to Agent job 1">
+    <a href="/img/devops/azure_build_pipeline_08_add_task_01.jpg">
+        <img src="/img//devops/azure_build_pipeline_08_add_task_01.jpg" style="width:700px" alt="Add a build task to Agent job 1">
     </a>
     <figcaption><p>Figure 9 - Add a build task to Agent job 1</p></figcaption>
 </figure>
@@ -129,8 +129,8 @@ It might seem like we've done a lot of work up to this point, but right now our 
 The list of tasks is pretty huge, so filter it by typing **"power"** or **"powershell"** into the search box as shown in **Figure 10**. Then, click the **Add** button to add a blank Powershell task to Agent job 1:
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_09_add_task_02.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_09_add_task_02.jpg" style="width:700px" alt="Add a Powershell task">
+    <a href="/img/devops/azure_build_pipeline_09_add_task_02.jpg">
+        <img src="/img//devops/azure_build_pipeline_09_add_task_02.jpg" style="width:700px" alt="Add a Powershell task">
     </a>
     <figcaption><p>Figure 10 - Add a Powershell task</p></figcaption>
 </figure>
@@ -138,8 +138,8 @@ The list of tasks is pretty huge, so filter it by typing **"power"** or **"power
 This task requires either a filepath to a Powershell script or an inline Powershell script that executes when the build is triggered. Click the radio button for **Inline** as shown in **Figure 11**:
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_10_new_task.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_10_new_task.jpg" style="width:700px" alt="Select inline for script type">
+    <a href="/img/devops/azure_build_pipeline_10_new_task.jpg">
+        <img src="/img//devops/azure_build_pipeline_10_new_task.jpg" style="width:700px" alt="Select inline for script type">
     </a>
     <figcaption><p>Figure 11 - Select inline for script type</p></figcaption>
 </figure>
@@ -170,8 +170,8 @@ git remote add heroku https://heroku:$(pat)@git.heroku.com/test_app.git
 git push heroku $(Build.SourceBranchName){{< /highlight >}}
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_12_powershell_script.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_12_powershell_script.jpg" style="width:500px" alt="Inline Powershell script to push changes to Heroku">
+    <a href="/img/devops/azure_build_pipeline_12_powershell_script.jpg">
+        <img src="/img//devops/azure_build_pipeline_12_powershell_script.jpg" style="width:500px" alt="Inline Powershell script to push changes to Heroku">
     </a>
     <figcaption><p>Figure 12 - Inline Powershell script to push changes to Heroku</p></figcaption>
 </figure>
@@ -179,8 +179,8 @@ git push heroku $(Build.SourceBranchName){{< /highlight >}}
 It's a good idea to doublecheck your work at this point. When you are confident that everyting is configured correctly, **Save & queue** your build as shown in **Figure 13**:
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_13_save_pipeline.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_13_save_pipeline.jpg" style="width:700px" alt="Save pipeline and queue build">
+    <a href="/img/devops/azure_build_pipeline_13_save_pipeline.jpg">
+        <img src="/img//devops/azure_build_pipeline_13_save_pipeline.jpg" style="width:700px" alt="Save pipeline and queue build">
     </a>
     <figcaption><p>Figure 13 - Save pipeline and queue build</p></figcaption>
 </figure>
@@ -190,8 +190,8 @@ It's a good idea to doublecheck your work at this point. When you are confident 
 After the build is queued, click the link that appears, This will take you to build logs which update live as the deployment is running. If everything was configured correctly, you should eventually see that every step of the build pupeline succeeded as shown in **Figure 14**:
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_14_build_log.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_14_build_log.jpg" style="width:700px" alt="Successful build logs">
+    <a href="/img/devops/azure_build_pipeline_14_build_log.jpg">
+        <img src="/img//devops/azure_build_pipeline_14_build_log.jpg" style="width:700px" alt="Successful build logs">
     </a>
     <figcaption><p>Figure 14 - Successful build logs</p></figcaption>
 </figure>
@@ -199,8 +199,8 @@ After the build is queued, click the link that appears, This will take you to bu
 To see detailed logs for the Heroku deployment process, click on **Powershell Script**. Scroll to the bottom of the log in the popup that appears and you should see something similar to **Figure 15**:
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_15_heroku_deploy_log.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_15_heroku_deploy_log.jpg" style="width:700px" alt="Heroku deployment logs">
+    <a href="/img/devops/azure_build_pipeline_15_heroku_deploy_log.jpg">
+        <img src="/img//devops/azure_build_pipeline_15_heroku_deploy_log.jpg" style="width:700px" alt="Heroku deployment logs">
     </a>
     <figcaption><p>Figure 15 - Heroku deployment logs</p></figcaption>
 </figure>
@@ -208,8 +208,8 @@ To see detailed logs for the Heroku deployment process, click on **Powershell Sc
 Note the revision number (``v60``) and commit ID (``3cced9be``) in the Powershell logs. You can confirm these same details in the Activity stream for your Heroku app (**Figure 16**):
 
 <figure>
-    <a href="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_16_heroku_activity.jpg">
-        <img src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/azure_build_pipeline_16_heroku_activity.jpg" style="width:400px" alt="Heroku activity stream">
+    <a href="/img/devops/azure_build_pipeline_16_heroku_activity.jpg">
+        <img src="/img//devops/azure_build_pipeline_16_heroku_activity.jpg" style="width:400px" alt="Heroku activity stream">
     </a>
     <figcaption><p>Figure 16 - Heroku activity stream</p></figcaption>
 </figure>

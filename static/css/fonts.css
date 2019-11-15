@@ -1,60 +1,115 @@
 @font-face {
-  font-family: fontawesome;
-  src: url(/fonts/fontawesome-webfont.eot);
-  src: url(/fonts/fontawesome-webfont.eot?#iefix) format("embedded-opentype"),
-    url(/fonts/fontawesome-webfont.woff2) format("woff2"),
-    url(/fonts/fontawesome-webfont.woff) format("woff"),
-    url(/fonts/fontawesome-webfont.ttf) format("truetype"),
-    url(/fonts/fontawesome-webfont.svg#svgFontName) format("svg");
+  font-family: "FontAwesome";
+  src: url(/fonts/fontawesome-webfont-subset.woff2) format("woff2"),
+    url(/fonts/fontawesome-webfont-subset.woff) format("woff"),
+    url(/fonts/fontawesome-webfont-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-5B, U+5D, U+5F, U+61-7E, U+A9,
+    U+2014, U+2019, U+201C, U+201D, U+F002, U+F005, U+F006, U+F023, U+F040,
+    U+F053, U+F054, U+F060, U+F061, U+F067, U+F071, U+F081, U+F08C, U+F092,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F123, U+F126, U+F13E, U+F178, U+F199, U+F2B5;
 }
+
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  src: url(/fonts/Roboto-Bold-subset.woff2) format("woff2"),
+    url(/fonts/Roboto-Bold-subset.woff) format("woff"),
+    url(/fonts/Roboto-Bold-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 700;
+  src: url(/fonts/Roboto-BoldItalic-subset.woff2) format("woff2"),
+    url(/fonts/Roboto-BoldItalic-subset.woff) format("woff"),
+    url(/fonts/Roboto-BoldItalic-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 400;
+  src: url(/fonts/Roboto-Italic-subset.woff2) format("woff2"),
+    url(/fonts/Roboto-Italic-subset.woff) format("woff"),
+    url(/fonts/Roboto-Italic-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
+}
+
+@font-face {
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 300;
-  src: url(/fonts/Roboto-Light.woff2) format("woff2");
-}
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: url(/fonts/Roboto-Regular.woff2) format("woff2");
-}
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 700;
-  src: url(/fonts/Roboto-Bold.woff2) format("woff2");
+  src: url(/fonts/Roboto-Light-subset.woff2) format("woff2"),
+    url(/fonts/Roboto-Light-subset.woff) format("woff"),
+    url(/fonts/Roboto-Light-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: italic;
   font-weight: 300;
-  src: url(/fonts/Roboto-LightItalic.woff2) format("woff2");
-}
-@font-face {
-  font-family: 'Roboto';
-  font-style: italic;
-  font-weight: 400;
-  src: url(/fonts/Roboto-Italic.woff2) format("woff2");
-}
-@font-face {
-  font-family: 'Roboto';
-  font-style: italic;
-  font-weight: 700;
-  src: url(/fonts/Roboto-BoldItalic.woff2) format("woff2");
+  src: url(/fonts/Roboto-LightItalic-subset.woff2) format("woff2"),
+    url(/fonts/Roboto-LightItalic-subset.woff) format("woff"),
+    url(/fonts/Roboto-LightItalic-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
 }
 
 @font-face {
-  font-family: 'Roboto Mono';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 400;
-  src: url(/fonts/RobotoMono-Regular.woff2) format("woff2");
+  src: url(/fonts/Roboto-Regular-subset.woff2) format("woff2"),
+    url(/fonts/Roboto-Regular-subset.woff) format("woff"),
+    url(/fonts/Roboto-Regular-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
 }
 
 @font-face {
-  font-family: 'Roboto Mono';
+  font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 700;
-  src: url(/fonts/RobotoMono-Bold.woff2) format("woff2");
+  src: url(/fonts/RobotoMono-Bold-subset.woff2) format("woff2"),
+    url(/fonts/RobotoMono-Bold-subset.woff) format("woff"),
+    url(/fonts/RobotoMono-Bold-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
+}
+
+@font-face {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/RobotoMono-Regular-subset.woff2) format("woff2"),
+    url(/fonts/RobotoMono-Regular-subset.woff) format("woff"),
+    url(/fonts/RobotoMono-Regular-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-3A, U+3C-5B, U+5D, U+5F, U+61-7E,
+    U+A9, U+2019, U+201C, U+201D, U+F002, U+F005, U+F053, U+F054, U+F067, U+F071,
+    U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F102, U+F111, U+F11C, U+F121,
+    U+F126, U+F178, U+F2B5;
 }

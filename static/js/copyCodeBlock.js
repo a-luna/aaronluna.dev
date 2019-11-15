@@ -1,35 +1,37 @@
-function createCopyButton(code, chroma) {
-  let button = document.createElement("button");
+function createCopyButton(highlight) {
+  const button = document.createElement("button");
   button.className = "copy-code-button";
   button.type = "button";
   button.innerText = "Copy";
-  button.addEventListener("click", () => copyCodeBlock(button, code, chroma));
-  return button;
+  button.addEventListener("click", () => copyCodeToClipboard(button, highlight));
+  addCopyButtonToDom(button, highlight);
 }
 
-async function copyCodeBlock(button, code, chroma) {
+async function copyCodeToClipboard(button, highlight) {
+  const codeElement = highlight.querySelector(":last-child > .chroma > code");
+  const codeToCopy = codeElement.innerText;
   try {
     result = await navigator.permissions.query({ name: "clipboard-write" });
     if (result.state == "granted" || result.state == "prompt") {
-      await navigator.clipboard.writeText(code.innerText);
+      await navigator.clipboard.writeText(codeToCopy);
     } else {
-      copyCodeBlockExecCommand(code, chroma);
+      copyCodeBlockExecCommand(codeToCopy, highlight);
     }
     codeWasCopied(button);
   } catch (_) {
-    copyCodeBlockExecCommand(code, chroma);
+    copyCodeBlockExecCommand(codeToCopy, highlight);
     codeWasCopied(button);
   }
 }
 
-function copyCodeBlockExecCommand(code, chroma) {
-  let textArea = document.createElement("textArea");
+function copyCodeBlockExecCommand(codeToCopy, highlight) {
+  const textArea = document.createElement("textArea");
   textArea.className = "copyable-text-area";
-  textArea.value = code.innerText;
-  chroma.parentNode.insertBefore(textArea, chroma);
+  textArea.value = codeToCopy;
+  highlight.insertBefore(textArea, highlight.firstChild);
   textArea.select();
   document.execCommand("copy");
-  chroma.parentNode.removeChild(textArea);
+  highlight.removeChild(textArea);
 }
 
 function codeWasCopied(button) {
@@ -40,19 +42,13 @@ function codeWasCopied(button) {
   }, 2000);
 }
 
-function addCopyButtonToDom(button, chroma, highlight) {
-  chroma.parentNode.insertBefore(button, chroma);
-  let wrapper = document.createElement("div");
+function addCopyButtonToDom(button, highlight) {
+  highlight.insertBefore(button, highlight.firstChild);
+  const wrapper = document.createElement("div");
   wrapper.className = "highlight-wrapper";
   highlight.parentNode.insertBefore(wrapper, highlight);
   wrapper.appendChild(highlight);
 }
 
-document.querySelectorAll(".highlight").forEach(
-  highlight => {
-      let code = highlight.querySelector('code[class^="language"]');
-      let chroma = highlight.firstChild;
-      let button = createCopyButton(code, chroma);
-      addCopyButtonToDom(button, chroma, highlight);
-    }
-);
+document.querySelectorAll(".highlight")
+  .forEach(highlight => createCopyButton(highlight));
