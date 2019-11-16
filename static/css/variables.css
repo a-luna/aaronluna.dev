@@ -48,4 +48,7 @@
 
   /* Section: Tutorial */
   --tut-link-color: var(--teal2);
+
+  /* Comments */
+  --comments-bg: #232326;
 }

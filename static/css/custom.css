@@ -2754,7 +2754,10 @@ header,
 }
 
 .comments {
-  margin: 0 2em 2em 0;
+  margin: 1.5em 2em 2em 0;
+  padding: 0 1em 0 0.5em;
+  background-color: #232326;
+  border-radius: 4px;
 }
 
 @media screen and (max-width: 767px) {
