@@ -1559,7 +1559,7 @@ a.post-nav__link:focus {
 
 .tutorial .post-nav__link,
 .tutorial a.post-nav__link {
-  color: var(--tut-link-color);
+  color: var(--tut-link-color2);
 }
 
 .tutorial .post-nav__link:hover,
@@ -1570,7 +1570,7 @@ a.post-nav__link:focus {
 .tutorial a.post-nav__link:active,
 .tutorial a.post-nav__link:active:hover,
 .tutorial a.post-nav__link:focus {
-  color: var(--tut-link-color);
+  color: var(--tut-link-color2);
 }
 
 #header-nav {
@@ -2461,7 +2461,7 @@ header,
 #recent-posts,
 #featured-projects {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   justify-content: space-evenly;
 }
 
@@ -2469,23 +2469,12 @@ header,
 .github-repo {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: space-between;
-  width: 275px;
+  flex: 0 1 30%;
   background-color: #202020;
-  margin: 0 15px;
+  margin: 10px 0;
   padding: 10px 15px;
   border: 1px solid #202020;
   border-radius: 4px;
-}
-
-.recent-post:first-child,
-.github-repo:first-child {
-  margin: 0 15px 0 0;
-}
-
-.recent-post:last-child,
-.github-repo:last-child {
-  margin: 0 0 0 15px;
 }
 
 .recent-post .post-meta-date .meta__text {
@@ -2513,8 +2502,6 @@ header,
   display: flex;
   flex-flow: row wrap;
   justify-content: stretch;
-  margin: 0.5em;
-  padding: 0;
 }
 
 .post-category {
@@ -2647,7 +2634,7 @@ header,
 }
 
 .repo-middle {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 20px;
   margin: 0 0 auto 0;
 }
@@ -2843,7 +2830,7 @@ header,
 
   #recent-posts-wrapper h4,
   #featured-projects-wrapper h4 {
-    margin: 5px auto;
+    margin: 20px auto 10px;
   }
 
   #recent-posts,

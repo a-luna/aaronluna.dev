@@ -2,7 +2,7 @@
 {{- $recent_num := (.Site.Params.widgets.recent_num_home | default 10) }}
 {{- if $recent }}
 <div id="recent-posts-wrapper">
-    <h4>Most recent blog posts</h4>
+    <h4>recent blog posts</h4>
     <div id="recent-posts">
         {{- range first $recent_num $recent }}
         <div class="recent-post">
