@@ -1,10 +1,7 @@
 {{- if isset .Site.Taxonomies "categories" }} {{- if not (eq (len .Site.Taxonomies.categories) 0) }}
-<div id="categories" class="widget-categories widget">
-    <h4 class="widget__title">{{ .Site.Params.widgets.categories_title }}</h4>
-    <div class="post-categories widget__content widget__list">
-        {{- range $name, $items := .Site.Taxonomies.categories }}
-            <a class="post-category {{ $name | urlize | lower }}" href="{{ "categories/" | relLangURL }}{{ $name | urlize | lower }}">{{ $name | urlize | lower }}</a>
-        {{- end }}
-    </div>
+<div class="post-categories widget__content widget__list">
+    {{- range $name, $items := .Site.Taxonomies.categories }}
+        <a class="post-category {{ $name | urlize | lower }}" href="{{ "categories/" | relLangURL }}{{ $name | urlize | lower }}">{{ $name | urlize | lower }}</a>
+    {{- end }}
 </div>
 {{- end }} {{- end }}

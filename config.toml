@@ -26,8 +26,8 @@ pygmentsUseClasses = true
 [Params]
   description = "Web development tutorials by Aaron Luna" # Description of your site
   copyright = "Aaron Luna"
-  opengraph = false
-  twitter_cards = false
+  opengraph = true
+  twitter_cards = true
   readmore = false
   authorbox = false
   post_navigation = true
@@ -97,7 +97,7 @@ pygmentsUseClasses = true
   list = "right"   # Configure layout for list pages
   single = "right" # Configure layout for single pages
   # Enable widgets in given order
-  widgets = ["categories","recent","tutorials"]
+  widgets = ["recent","tutorials","categories"]
 
 [Params.widgets]
   recent_num = 5 # Set the number of articles in the "Recent articles" widget

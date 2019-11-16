@@ -36,12 +36,26 @@
   /* Padding */
   --bot-padding-10: 0 0 10px 0;
 
-  /* Header Menu */
+  /* Theme Colors */
+  --page-bg-color: var(--dark-gray1);
+  --body-text-color: var(--off-white1);
   --menu-bg: var(--black2);
+  --link-color: var(--blue2);
+
+  /* Headers */
+  --h1-color: var(--white2);
+  --h2-color: var(--white1);
+  --h3-color: var(--white1);
+  --h4-color: var(--white1);
 
   /* Home Page */
+  --home-title-color: var(--white2);
+  --home-lead-color: var(--light-gray2);
+  --home-p-color: var(--off-white1);
   --home-hr-color: var(--mid-gray2);
-  --home-h4-color: var(--light-gray2);
+  --home-h4-color: var( --h1-color);
+  --home-recent-post-date-color: var(--off-white1);
+  --home-card-bg-color: var(--black2);
 
   /* Section: Blog Posts */
   --blog-link-color: var(--blue2);

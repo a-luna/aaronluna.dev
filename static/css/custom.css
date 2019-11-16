@@ -203,7 +203,7 @@ ol li p {
 }
 
 .main__header h1 {
-  color: #d8d8d8;
+  color: var(--h1-color);
   font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: 1px;
@@ -318,7 +318,7 @@ h4 {
 h1,
 h1.post__title {
   font-size: 1.5em;
-  color: #e2e2e2;
+  color: var(--h1-color);
   font-weight: 500;
 }
 
@@ -382,10 +382,21 @@ h4 {
   font-size: 1.25rem;
 }
 
+.content h2 {
+  color: var(--h2-color);
+}
+
+.content h3 {
+  color: var(--h2-color);
+}
+
+.content h4 {
+  color: var(--h2-color);
+}
+
 .content h2,
 .content h3,
 .content h4 {
-  color: #e2e2e2;
   font-weight: 400;
   margin: 1.5em 0 0.5em;
 }
@@ -396,10 +407,6 @@ h4 {
   background-color: initial;
   font-size: 0.9em;
   padding: 0 2px;
-}
-
-.content h4 {
-  font-size: 1em;
 }
 
 .content h4 code {
@@ -2381,7 +2388,7 @@ header,
 }
 
 .site-social a {
-  padding: 0 5px;
+  padding: 0 6px;
 }
 
 .site-social a,
@@ -2393,7 +2400,6 @@ header,
 }
 
 .home {
-  color: #b3b3b3;
   font-size: 10px;
 }
 
@@ -2412,7 +2418,7 @@ header,
 }
 
 .home h1 {
-  color: #f2f2f2;
+  color: var(--home-title-color);
   font-size: 2.6em;
   font-weight: 400;
   margin: 0 0 10px;
@@ -2421,13 +2427,13 @@ header,
 .home header p {
   font-size: 1.8em;
   font-weight: 100;
-  color: #909090;
+  color: var(--home-lead-color);
   font-style: normal;
   margin: 0 0 20px;
 }
 
 .home p {
-  color: #c4c4c4;
+  color: var(--home-p-color);
   font-size: 1.5em;
   line-height: 22px;
 }
@@ -2455,7 +2461,7 @@ header,
   color: var(--home-h4-color);
   font-size: 2.3em;
   text-transform: lowercase;
-  margin: 20px auto 10px 1px;
+  margin: 25px auto 10px 1px;
 }
 
 #recent-posts,
@@ -2470,15 +2476,15 @@ header,
   display: flex;
   flex-flow: column nowrap;
   flex: 0 1 30%;
-  background-color: #202020;
+  background-color: var(--home-card-bg-color);
   margin: 10px 0;
   padding: 10px 15px;
-  border: 1px solid #202020;
+  border: 1px solid var(--home-card-bg-color);
   border-radius: 4px;
 }
 
 .recent-post .post-meta-date .meta__text {
-  color: #b3b3b3;
+  color: var(--home-recent-post-date-color);
   font-size: 14px;
   line-height: 23px;
   margin: 0 0 5px;
@@ -2502,16 +2508,18 @@ header,
   display: flex;
   flex-flow: row wrap;
   justify-content: stretch;
+  background-color: var(--page-bg-color);
+  padding: 0;
+  margin: 0 0 2em 0
 }
 
 .post-category {
-  --cat-color1: var(--light-gray1);
-  --cat-color2: var(--light-gray2);
+  --cat-color: var(--light-gray2);
   font-size: 12px;
   font-weight: 700;
   color: var(--black2);
-  background-color: var(--cat-color1);
-  border: 1px solid var(--cat-color1);
+  background-color: var(--cat-color);
+  border: 1px solid var(--cat-color);
   border-radius: 4px;
   margin: 3px 7px 3px 0;
   padding: 1px 5px;
@@ -2538,62 +2546,53 @@ header,
 #widgets .post-category:focus,
 #widgets .post-category:active,
 #widgets .post-category:active:hover {
-  color: var(--cat-color2);
+  color: var(--cat-color);
   background-color: var(--black2);
-  border: 1px solid var(--cat-color2);
+  border: 1px solid var(--cat-color);
   text-decoration: none;
   font-weight: 700;
 }
 
 .post-category.python {
-  --cat-color1: var(--green1);
-  --cat-color2: var(--green1);
+  --cat-color: var(--green1);
 }
 
 .post-category.devops {
-  --cat-color1: var(--pink1);
-  --cat-color2: var(--pink1);
+  --cat-color: var(--pink1);
 }
 
 .post-category.aws {
-  --cat-color1: var(--purple2);
-  --cat-color2: var(--purple2);
+  --cat-color: var(--purple2);
 }
 
 .post-category.hugo {
-  --cat-color1: var(--magenta1);
-  --cat-color2: var(--magenta1);
+  --cat-color: var(--magenta1);
 }
 
 .post-category.javascript {
-  --cat-color1: var(--teal1);
-  --cat-color2: var(--teal1);
+  --cat-color: var(--teal1);
 }
 
 .post-category.dotnet {
-  --cat-color1: var(--blue1);
-  --cat-color2: var(--blue1);
+  --cat-color: var(--blue1);
 }
 
 .post-category.linux {
-  --cat-color1: var(--orange1);
-  --cat-color2: var(--orange1);
+  --cat-color: var(--orange1);
 }
 
 .post-category.flask {
-  --cat-color1: var(--goldenrod1);
-  --cat-color2: var(--goldenrod1);
+  --cat-color: var(--goldenrod1);
 }
 
 .post-category.virtualization {
-  --cat-color1: var(--orange2);
-  --cat-color2: var(--orange2);
+  --cat-color: var(--orange2);
 }
 
 #home-blog-link,
 #view-on-github-link {
   font-size: 2em;
-  color: #6fc1ff;
+  color: var(--link-color);
   padding: 5px 7px;
   margin: 15px auto 5px auto;
   line-height: 16px;
@@ -2630,7 +2629,7 @@ header,
 .repo-top .fa:active,
 .repo-top .fa:focus,
 .repo-top .fa:active:hover {
-  color: #f2f2f2;
+  color: var(--white2);
 }
 
 .repo-middle {
@@ -3012,6 +3011,12 @@ header,
 @media screen and (max-width: 560px) {
   #menu {
     font-size: 13px;
+  }
+  #site-name {
+    font-size: 16px;
+  }
+  .site-social a {
+    padding: 0 5px;
   }
   .site-menu a {
     margin: 5px 2px 0;

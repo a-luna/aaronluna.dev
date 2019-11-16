@@ -392,7 +392,7 @@ class Widget(db.Model):
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first(){{< /highlight >}}
 
-
+The `Widget` class is designed to include attributes as many different data types
 
 <div class="code-details">
     <ul>

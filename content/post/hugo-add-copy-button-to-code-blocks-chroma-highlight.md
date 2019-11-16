@@ -5,15 +5,17 @@ date: '2019-11-13'
 categories:
   - Hugo
   - JavaScript
-summary: >-
-  Hugo includes a built-in syntax-highlighter called Chroma. Chroma is extremely
-  fast since it is written in pure Go (like Hugo) and supports every language I
-  can think of. Chroma's speed is especially important since syntax highlighters
-  are notorious for causing slow page loads. However, it lacks one vital feature
-  — an easy way to copy the code to the clipboard. Since most syntax
-  highlighters provide a button to do this, I decided to add one myself. I
-  wanted to use only vanilla JS, unlike other solutions I found which require
-  jquery.
+summary: "Hugo includes a built-in syntax-highlighter called Chroma. Chroma is extremely fast since it is written
+in pure Go (like Hugo) and supports every language I can think of. Chroma's speed is especially important since
+syntax highlighters are notorious for causing slow page loads. However, it lacks one vital feature — an easy way
+to copy a code block to the clipboard. Check out my implementation that uses only vanilla JS (every blog post I
+found for this issue relied on jquery to parse the DOM, which makes me sick to my stomach)."
+twitter:
+  card: "summary"
+  creator: "@aaronlunadev"
+  title: "How To: Create a Flask API with JWT-Based Authentication"
+  description: "Step-by-step instructions and in-depth explanations to guide you through the process of creating a robust, production-quality REST API using Flask, Flask-RESTlus, pyjwt, SQLAlchemy and more."
+  image: "https://aaronluna.dev/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg"
 ---
 
 I am currently working on a multi-part tutorial series that demonstrates how to create a REST API using Flask, SQLAlchemy and various other tools/packages. After instructing the reader to <span class="bold-italics">"copy the text below and paste into file blah blah"</span> for the eightieth time I realized that asking someone to select an entire block of text from a `code` element, and then copy and paste it is an annoying and error-prone process. It's also unnecessary! Even the most rudimentary and humble of blog posts have code blocks with a button that copies the code to the clipboard.
