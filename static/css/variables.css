@@ -21,7 +21,7 @@
   --purple1: #600aff;
   --purple2: #8b4dff;
   --orange1: #d97502;
-  --orange2: #fd9621;
+  --orange2: #FFB86C;
   --goldenrod1: #ffc105;
   --goldenrod2: #ffd147;
   --pink1: #d60552;
@@ -47,8 +47,10 @@
   --blog-link-color: var(--blue2);
 
   /* Section: Tutorial */
-  --tut-link-color: var(--teal2);
+  --tut-link-color1: var(--teal2);
+  --tut-link-color2: var(--teal2);
 
   /* Comments */
   --comments-bg: #232326;
+  --comments-border: #38383d;
 }

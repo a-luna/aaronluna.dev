@@ -4,7 +4,7 @@ slug: "install-nginx-source-code-shell-script"
 aliases:
     - /2018/01/22/install-nginx-source-code-shell-script/
 date: "2018-01-22"
-categories: ["Linux System Admin"]
+categories: ["Linux"]
 ---
 
 Why would you want to install NGINX from source code rather than a pre-built package? The most important reason is that the libraries which NGINX depends on (PCRE, zlib, OpenSSL) are part of the pre-built package, and building from source allows you to use the latest versions which may contain vital security patches.
