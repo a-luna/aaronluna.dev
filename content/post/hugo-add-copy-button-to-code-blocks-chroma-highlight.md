@@ -13,8 +13,8 @@ found for this issue relied on jquery to parse the DOM, which makes me sick to m
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
-  title: "How To: Create a Flask API with JWT-Based Authentication"
-  description: "Step-by-step instructions and in-depth explanations to guide you through the process of creating a robust, production-quality REST API using Flask, Flask-RESTlus, pyjwt, SQLAlchemy and more."
+  title: "Hugo: Add Copy-to-Clipboard Button to Code Blocks with Vanilla JS"
+  description: 'Chroma, the syntax highlighting package built into Hugo, is extremely fast and supports every language I can think of. However, manually copying a code block quickly becomes tedious. This is my solution which adds a "Copy" button to each code block using only vanilla JavaScript'
   image: "https://aaronluna.dev/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg"
 ---
 
