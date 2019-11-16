@@ -2756,7 +2756,6 @@ header,
 .comments {
   margin: 0 2em 2em 0;
   padding: 1em;
-  background-color: var(--black2);
 }
 
 @media screen and (max-width: 767px) {
