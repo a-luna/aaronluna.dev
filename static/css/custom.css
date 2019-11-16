@@ -1531,7 +1531,7 @@ a.pagination__item--next {
   border-top: 1px dotted #7f7f7f;
   border-bottom: 1px dotted #7f7f7f;
   padding: 1em 0;
-  margin: 0 2em 2em 0;
+  margin: 0 2em 1em 0;
   background-color: #323232;
 }
 
@@ -2751,6 +2751,12 @@ header,
   100% {
     opacity: 0.2;
   }
+}
+
+.comments {
+  margin: 0 2em 2em 0;
+  padding: 1em;
+  background-color: var(--black2);
 }
 
 @media screen and (max-width: 767px) {
