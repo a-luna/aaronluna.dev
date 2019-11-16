@@ -21,7 +21,7 @@
         {{ template "_internal/opengraph.html" . }}
     {{ end }}
     {{ if .Site.Params.twitter_cards }}
-        {{ template "_internal/twitter_cards.html" . }}
+        {{ partial "twitter-card" . }}
     {{ end }}
     <link rel="manifest" href="/manifest.json">
     {{ with .OutputFormats.Get "rss" -}}
