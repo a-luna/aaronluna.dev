@@ -1359,7 +1359,8 @@ figcaption {
 }
 
 .toc__menu ul ul ul a,
-.toc__menu ul ul ul ul a {
+.toc__menu ul ul ul ul a,
+.toc__menu ul ul ul ul ul a {
   padding-left: 0;
 }
 

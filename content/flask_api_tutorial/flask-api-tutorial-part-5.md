@@ -833,11 +833,15 @@ I'll explain the distinction between these two requirements with a hypothetical 
 
 OTOH, consider this scenario: A request is received to create a new widget with `deadline="1923-03-28"`. This string is in a valid format but since the date is obviously in the past, the `widget_reqparser` raises a `ValueError` and the request is aborted. A `deadline` in the past is always invalid and a request to create a widget containing an invalid value for a required parameter must always be rejected. Hopefully my reasoning makes sense to you.
 
-So, since the pre-defined types are adequate but inflexible, what can we use to parse a `date` value from a string? If we wanted to restrict ourselves to the Python standard library, we would need to create a complicated function that uses the `strptime` method of either the `date` or `datetime` class. This would involve testing as many format strings as possible and would quickly become a nightmare.
+##### `dateutil.parser`
+
+Since the pre-defined types are adequate but inflexible, what can we use to parse a `date` value from a string? If we wanted to restrict ourselves to the Python standard library, we would need to create a complicated function that uses the `strptime` method of either the `date` or `datetime` class. This would involve testing as many format strings as possible and would quickly become a nightmare.
 
 Luckily, I see no reason to impose such a restriction for this project. IMO, the most robust and usable way to parse `datetime` values from a string is the `parse` function in the `dateutil.parser` module (this was listed as a requirement in the `setup.py` file, so it is already installed). Unlike `strptime`, this method does not require you to provide a format string.
 
 `dateutil.parser.parse` recognizes a wide variety of `date` and `datetime` formats. The locale setting of the machine where the function is executed is taken into consideration, which is extremely helpful in situations where the order of the month and day values are transposed (e.g., US date format vs. European). You can find more information in <a href="https://dateutil.readthedocs.io/en/stable/parser.html" target="_blank">the official documentation for the `dateutil.parser` module</a>.
+
+##### `future_date_from_string`
 
 Since `deadline` must be either the current date or a date in the future, I decided to name the custom type function for this attribute `future_date_from_string`. This function is more complex than `widget_name` since two separate validations must be peformed &mdash; parsing the input string to a `date` value and checking that the parsed date is not in the past:
 
