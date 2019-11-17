@@ -392,12 +392,19 @@ class Widget(db.Model):
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first(){{< /highlight >}}
 
-The `Widget` class is designed to include attributes as many different data types
+To demonstrate the process of serializing a complex object to/from JSON, the `Widget` class includes attributes with as many different data types as possible. Additionally, the project requirements include various rules restricting which values are considered valid for the `name` and `deadline` attributes:
+
+<ul class="alert italics" style="font-size: 0.9em">
+    <li>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
+    <li>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</li>
+</ul>
+
+Let's take a look at how these attributes are defined and how they fulfill the various project requirements:
 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 23: </strong><span class="bold-text">Table 1</span> specifies that the value of the <code>name</code> attribute will be embedded in the URI for each <code>Widget</code>. Obviously, this means that this value must be unique which is ensured by setting <code>unique=True</code>. Additionally, it would be ideal to prevent the user from creating a new <code>widget</code> if the <code>name</code> contains characters that are not URL-safe (/, +, & etc.). To accomplish this, we will design a custom <code>RequestParser</code> data type that only considers a string value to be valid if it contains <span class="emphasis">ONLY</span> lowercase-letters, numbers, underscore and/or hyphen characters.</p>
+        <p><strong>Line 23: </strong><span class="bold-text">Table 1</span> indicates that the value of the <code>name</code> attribute will be embedded in the URI for each <code>Widget</code>. Because of this, the value must be unique which is ensured by setting <code>unique=True</code>. Additionally, it would be ideal to prevent the user from creating a new <code>widget</code> if the <code>name</code> contains characters that are not URL-safe (/, +, & etc.). To accomplish this, we will design a custom <code>RequestParser</code> data type that considers a value to be valid if it contains <span class="emphasis">ONLY</span> lowercase-letters, numbers, underscore and/or hyphen characters.</p>
       </li>
       <li>
         <p><strong>Line 24: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not recognized as a valid URL must be rejected without adding the widget to the database. The validation logic will be implemented using a built-in <code>RequestParser</code> data type for URL values.</p>
@@ -429,13 +436,6 @@ The `Widget` class is designed to include attributes as many different data type
     </ul>
 </div>
 
-Also, the requirements for the `name`, `info_url` and `deadline` attributes come from the orginal project requirements (which we have been monitoring and marking complete at the end of each section):
-
-<ul class="alert italics" style="font-size: 0.9em">
-    <li>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
-    <li>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</li>
-</ul>
-
 Next, we need to update `run.py` in order for the Flask-Migrate extension to recognize the <code>Widget</code> class and create a migration script that adds the new table to the database (this is the same process we previously performed for the User class in [Part 2](/series/flask_api_tutorial/part-2/#user-db-model) and for the BlacklistedToken class in [Part 4](/series/flask_api_tutorial/part-4/#blacklistedtoken-db-model)).
 
 Open `run.py` in the project root folder and update the import statements to include the `Widget` class **(Line 9)**. Then add the `Widget` class to the `dict` object that is returned by the `make_shell_context` function **(Line 16)**:
@@ -457,7 +457,7 @@ app = create_app(os.getenv("FLASK_ENV", "development"))
 def make_shell_context():
     return {"db": db, "User": User, "BlacklistedToken": BlacklistedToken, "Widget": Widget}{{< /highlight >}}
 
-Next, run <code>flask db migrate</code> and add a message explaining the changes that will be made by executing this migration script (the `widget` table will be added to the database):
+Next, run <code>flask db migrate</code> and add a message explaining the changes that will be made by executing this migration script:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget table"</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
@@ -470,7 +470,7 @@ INFO  [alembic.autogenerate.compare] Detected added table 'widget'
         <i class="fa fa-pencil" aria-hidden="true"></i>
     </div>
     <div class="note-message" style="flex-flow: column wrap">
-        <p>You can verify that the <code>widget</code> table was detected by the Flask Migrate extension from the output of the <code>flask db migrate</code> command. You should see a message similar to the example above, which states <strong>"Detected added table <code>widget</code>"</strong>, followed by a statement indicating the migration script was successfully generated.</p>
+        <p>You can verify that the <code>widget</code> table was detected by the Flask Migrate extension from the output of the <code>flask db migrate</code> command. You should see a message similar to the example above (<strong>Detected added table 'widget'</strong>), followed by a statement indicating the migration script was successfully generated.</p>
     </div>
 </div>
 
@@ -485,7 +485,7 @@ After the `widget` table has been added to the database, we can begin implementi
 
 ## Create Widget
 
-In my opinion, the endpoint that should be implemented first is the endpoint responsible for creating `Widget` objects. Why? Well, without `Widget` objects there's nothing to be retrieved, updated or deleted. So, what do we need to do in order to allow clients to create a `Widget`? In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints) we followed the process below for each endpoint in the `auth_ns` namespace. These steps apply to any operation performed by a single endpoint:
+So where should we begin? In my opinion, the endpoint that should be implemented first is the endpoint responsible for the create operation, since without `Widget` objects there's nothing to be retrieved, updated or deleted. In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints) we followed the process below for each endpoint in the `auth_ns` namespace. We will follow the same process to implement the `widget_ns` endpoints in **Table 1**:
 
 <div class="steps">
     <ol>
@@ -512,7 +512,7 @@ Step 1 says <span class="bold-italics">create request parsers/API models to vali
 
 ### `widget_reqparser` Request Parser
 
-What exactly does a client need to provide to create a new `Widget`? Take a look at the attributes of the `Widget` class:
+When a client sends a request to create a new `Widget`, what data is required? Take a look at the attributes of the `Widget` class:
 
 {{< highlight python "linenos=table,linenostart=22,hl_lines=2-3 5" >}}id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 name = db.Column(db.String(100), unique=True, nullable=False)
@@ -534,17 +534,17 @@ owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
         <p><span class="bold-text">created_at: </span>When a <code>Widget</code> object is created, the expression specified in the <code>default</code> parameter is evaluated and stored as the value for <code>created_at</code>. <code>utc_now</code> returns the current date and time as a <code>datetime</code> value that is timezone-aware and localized to UTC.</p>
       </li>
       <li>
-        <p><span class="bold-text">owner_id: </span>This value is a foreign-key, which is specified by the second argument to <code>db.Column</code> being <code>db.ForeignKey("site_user.id")</code>. <span class="bold-text">site_user</span> is the name of the database table where <code>User</code> objects are stored, and <span class="bold-text">site_user.id</span> is the primary-key that the <code>owner_id</code> column is referencing.</p>
+        <p><span class="bold-text">owner_id: </span>This value is a foreign-key, which is indicated by <code>db.ForeignKey("site_user.id")</code>. <span class="bold-text">site_user</span> is the name of the database table where <code>User</code> objects are stored, and <span class="bold-text">site_user.id</span> is the primary-key that the <code>owner_id</code> column is referencing.</p>
       </li>
       <li>
-        <p><span class="bold-text">owner: </span>It is important to note that <code>owner</code> is <span class="emphasis">NOT</span> an instance of <code>db.Column</code> (i.e., unlike the other <code>Widget</code> class attributes, <code>owner</code> is not a column that exists in the <code>widget</code> database table). Instead, this is a relationship object that demonstates one of the main features of the SQLAlchemy ORM (<a href="https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many" target="_blank">Click here</a> for more information).</p>
+        <p><span class="bold-text">owner: </span>It is important to note that <code>owner</code> is <span class="emphasis">NOT</span> an instance of <code>db.Column</code>. This means that unlike the other <code>Widget</code> class attributes, <code>owner</code> is not a column that exists in the <code>widget</code> database table. Instead, this is a relationship object that demonstates one of the main features of the SQLAlchemy ORM (<a href="https://docs.sqlalchemy.org/en/13/orm/basic_relationships.html#one-to-many" target="_blank">Click here</a> for more information).</p>
         <p>When processing a request to create a new <code>Widget</code>, the business logic will set the value of the <code>owner_id</code> attribute to the <code>id</code> of the <code>User</code> who sent the request. After the <code>Widget</code> is created and committed to the database, the <code>owner</code> attribute will contain a <code>User</code> object that represents the <code>User</code> who created it.</p>
         <p>Another interesting feature is achieved by <code>backref=db.backref("widgets")</code>. This creates a new attribute on all <code>User</code> objects named <span class="bold-text">widgets</span> (without modifying the <code>User</code> class at all), which is a list of all <code>Widget</code> objects in the database where <code>User.id</code> is equal to <code>owner_id</code>.</p>
       </li>
     </ul>
 </div>
 
-When we created the `auth_reqparser` in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` and used this class to verify if a value provided by the client is a valid email address. Flask-RESTPlus includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
+Flask-RESTPlus includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. When we created the `auth_reqparser` in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` to verify if a value provided by the client is a valid email address. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
 
 Create a new file named `dto.py` in `app/api/widgets` and enter the content below:
 

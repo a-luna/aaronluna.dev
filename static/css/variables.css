@@ -1,7 +1,7 @@
 :root {
   /* Color Pallette */
-  --black1: #171717;
-  --black2: #202020;
+  --black1: #202020;
+  --black2: #232326;
   --dark-gray1: #323232;
   --dark-gray2: #444;
   --mid-gray1: #666;
@@ -39,8 +39,13 @@
   /* Theme Colors */
   --page-bg-color: var(--dark-gray1);
   --body-text-color: var(--off-white1);
-  --menu-bg: var(--black2);
+  --header-bg-color: var(--black1);
+  --header-link-color1: var(--light-gray-1);
+  --header-link-color2: var(--white2);
+  --widget-bg-color: var(--black2);
   --link-color: var(--blue2);
+  --accent-color1: var(--blue2);
+  --accent-color2: var(--mid-gray2);
 
   /* Headers */
   --h1-color: var(--white2);
@@ -49,22 +54,22 @@
   --h4-color: var(--white1);
 
   /* Home Page */
-  --home-title-color: var(--white2);
+  --home-title-color: var(--h1-color);
   --home-lead-color: var(--light-gray2);
-  --home-p-color: var(--off-white1);
-  --home-hr-color: var(--mid-gray2);
+  --home-p-color: var(--body-text-color);
+  --home-hr-color: var(--accent-color2);
   --home-h4-color: var( --h1-color);
-  --home-recent-post-date-color: var(--off-white1);
-  --home-card-bg-color: var(--black2);
+  --home-recent-post-date-color: var(--body-text-color);
+  --home-card-bg-color: var(--widget-bg-color);
 
   /* Section: Blog Posts */
-  --blog-link-color: var(--blue2);
+  --blog-link-color: var(--accent-color1);
 
   /* Section: Tutorial */
   --tut-link-color1: var(--teal2);
   --tut-link-color2: var(--teal2);
 
   /* Comments */
-  --comments-bg: #232326;
+  --comments-bg: var(--widget-bg-color);
   --comments-border: #38383d;
 }

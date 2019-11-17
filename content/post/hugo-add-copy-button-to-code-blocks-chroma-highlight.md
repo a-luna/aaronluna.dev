@@ -13,9 +13,9 @@ found for this issue relied on jquery to parse the DOM, which makes me sick to m
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
+  site: "https://aaronluna.dev"
   title: "Hugo: Add Copy-to-Clipboard Button to Code Blocks with Vanilla JS"
   description: 'Chroma, the syntax highlighting package built into Hugo, is extremely fast and supports every language I can think of. However, manually copying a code block quickly becomes tedious. This is my solution which adds a "Copy" button to each code block using only vanilla JavaScript'
-  image: "https://aaronluna.dev/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg"
 ---
 
 I am currently working on a multi-part tutorial series that demonstrates how to create a REST API using Flask, SQLAlchemy and various other tools/packages. After instructing the reader to <span class="bold-italics">"copy the text below and paste into file blah blah"</span> for the eightieth time I realized that asking someone to select an entire block of text from a `code` element, and then copy and paste it is an annoying and error-prone process. It's also unnecessary! Even the most rudimentary and humble of blog posts have code blocks with a button that copies the code to the clipboard.

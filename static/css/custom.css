@@ -123,7 +123,7 @@ ol li p {
 }
 
 #widgets div {
-  background-color: #202020;
+  background-color: var(--widget-bg-color);;
   border-radius: 4px;
   margin: 0 0 1em;
   padding: 7px 10px;
@@ -160,7 +160,7 @@ ol li p {
 
 #showcase {
   color: #c4c4c4;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   font-weight: 400;
   margin: 0 auto;
   padding: 10px 15px;
@@ -353,7 +353,7 @@ h1.post__title {
 
 .badge {
   color: #d8d8d8;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   font-size: 0.8em;
   font-weight: 500;
   padding: 3px 5px;
@@ -370,7 +370,7 @@ h1.post__title {
 
 .new-badge,
 .tutorial-series-badge {
-  color: #202020;
+  color: var(--widget-bg-color);
 }
 
 h3,
@@ -723,7 +723,7 @@ span.requirements {
 
 div.note-flex {
   border: 1px solid #2196f3;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
 }
 
 .alert p,
@@ -766,7 +766,7 @@ div.note-flex {
 
 div.alert {
   border: 1px solid #ffc107;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
 }
 
 div.alert,
@@ -780,14 +780,14 @@ div.note {
 }
 
 div.command {
-  background: #202020;
+  background: var(--widget-bg-color);
   padding: 2px 5px;
   margin: 0 0 20px;
 }
 
 div.requirements {
   border: 1px solid #ffc107;
-  background: #202020;
+  background: var(--widget-bg-color);
   padding: 10px 10px 5px;
 }
 
@@ -839,7 +839,7 @@ div.requirements {
 
 .command code {
   color: #a9fb68;
-  background: #202020;
+  background: var(--widget-bg-color);
   border: none;
 }
 
@@ -922,7 +922,7 @@ pre {
   padding: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   white-space: pre;
   overflow-wrap: normal;
   overflow-x: auto;
@@ -934,7 +934,7 @@ li pre code {
   display: block;
   font-size: 0.85em;
   color: #b3b3b3;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   padding: 0;
   white-space: pre;
 }
@@ -969,7 +969,7 @@ li code {
 
 pre.chroma {
   margin: 0;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
 }
 
 div.chroma {
@@ -983,7 +983,7 @@ div.chroma .lntable pre.chroma {
 }
 
 p code.chroma {
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   padding: 1px 2px;
   white-space: pre;
 }
@@ -1024,7 +1024,7 @@ p code.chroma {
   right: 0;
   font-size: 13px;
   font-weight: 700;
-  color: #202020;
+  color: var(--widget-bg-color);
   background-color: var(--blue1);
   border: 1px solid var(--blue1);
   border-radius: 4px;
@@ -1061,7 +1061,7 @@ pre.chroma code {
 }
 
 .chroma .lntable tr td:first-child pre {
-  padding: 7px 7px 7px 10px;
+  padding: 7px 0 7px 10px;
   margin: 0;
 }
 
@@ -1072,13 +1072,12 @@ pre.chroma code {
 
 .chroma .lnt {
   margin: 0;
-  padding: 0;
+  padding: 0 7px 0 3px;
   color: #7f7f7f;
-  background-color: #202020;
 }
 
 .chroma .lntd:first-child .hl {
-  background-color: #202020;
+  background-color: var(--page-bg-color);
 }
 
 .chroma .hl {
@@ -1087,7 +1086,6 @@ pre.chroma code {
 
 .chroma .hl .lnt {
   color: #ffc107;
-  background-color: #202020;
   font-weight: 700;
 }
 
@@ -1119,7 +1117,7 @@ blockquote {
   font-weight: 300;
   font-style: italic;
   color: #a9fb68;
-  background: #202020;
+  background: var(--widget-bg-color);
   border-left: 3px solid #a9fb68;
   padding: 5px 15px;
   margin: 0 0 1em;
@@ -1162,7 +1160,7 @@ blockquote.rfc .bold-text {
 
 .code-details blockquote code {
   color: #d8d8d8;
-  background: #202020;
+  background: var(--widget-bg-color);
 }
 
 .code-details blockquote p {
@@ -1194,7 +1192,7 @@ figcaption {
 .warning {
   color: #f92672;
   border: none;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
 }
 
 .warning__code {
@@ -1220,7 +1218,7 @@ figcaption {
 }
 
 :focus > .menu__btn-title {
-  box-shadow: inset 0 0 1px 3px #202020;
+  box-shadow: inset 0 0 1px 3px var(--widget-bg-color);
 }
 
 #social {
@@ -1366,7 +1364,7 @@ figcaption {
 }
 
 .toc {
-  background: #202020;
+  background: var(--widget-bg-color);
   border: none;
   width: auto;
   padding: 7px 10px;
@@ -1384,7 +1382,7 @@ figcaption {
   line-height: 1.3;
   border-bottom: 1px solid #19f6d6;
   border-radius: 0;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   padding: 0 0 5px 0;
   margin: 0;
 }
@@ -1768,7 +1766,7 @@ input {
 
 #api-tutorial {
   padding: 7px 10px;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
 }
 
 #api-tutorial ul {
@@ -1870,7 +1868,7 @@ input {
 #search {
   font-size: 15px;
   color: #909090;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   border: none;
   padding: 3px;
   margin: 0;
@@ -1894,7 +1892,7 @@ input {
 .search-container button {
   font-size: 0.9em;
   color: #909090;
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
   border: 1px solid #909090;
   border-radius: 4px;
   padding: 4px 5px;
@@ -1905,7 +1903,7 @@ input {
 #search-button:active,
 #search-button:focus,
 #search-button:active:hover {
-  color: #202020;
+  color: var(--widget-bg-color);
   background-color: #909090;
   border: 1px solid #909090;
 }
@@ -2193,7 +2191,7 @@ th.last-column,
 }
 
 tr:nth-child(even) {
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
 }
 
 tr:nth-child(odd) {
@@ -2258,7 +2256,7 @@ table.aws-hosting-costs {
 }
 
 .accordian section h2 {
-  background-color: #202020;
+  background-color: var(--widget-bg-color);
 }
 
 .accordian section:not(.ac_hidden) h2 {
@@ -2275,8 +2273,8 @@ table.aws-hosting-costs {
 }
 
 #search {
-  color: #909090;
-  background-color: #202020;
+  color: var(--header-link-color1);
+  background-color: var(--widget-bg-color);
   font-size: 1em;
 }
 
@@ -2297,8 +2295,8 @@ table.aws-hosting-costs {
 
 header,
 #menu {
-  color: #909090;
-  background-color: #171717;
+  color: var(--header-link-color1);
+  background-color: var(--header-bg-color);
 }
 
 .menu-bar {
@@ -2321,27 +2319,27 @@ header,
 }
 
 #menu a {
-  color: #909090;
+  color: var(--header-link-color1);
   text-decoration: none;
-  border-top: 1px solid #171717;
-  border-bottom: 1px solid #171717;
+  border-top: 1px solid var(--header-bg-color);
+  border-bottom: 1px solid var(--header-bg-color);
 }
 
 #menu a:hover,
 #menu a:focus,
 #menu a:active,
 #menu a:active:hover {
-  color: #f2f2f2;
+  color: var(--header-link-color2);
   text-decoration: none;
 }
 
 #menu .site-menu a.active {
-  color: #f2f2f2;
-  border-bottom: 1px solid #f2f2f2;
+  color: var(--header-link-color2);
+  border-bottom: 1px solid var(--header-link-color2);
 }
 
 #menu .site-name-link {
-  color: #909090;
+  color: var(--header-link-color1);
   border: none;
   text-decoration: none;
   margin: auto 0;
@@ -2414,7 +2412,7 @@ header,
 .home .content {
   margin: var(--no-margin);
   padding: var(--bot-padding-10);
-  border-bottom: 2px dotted #7f7f7f;
+  border-bottom: 2px dotted var(--home-hr-color);
 }
 
 .home h1 {
@@ -2907,7 +2905,7 @@ header,
     padding: 0.5em 0 0;
     margin: 0;
   }
-  
+
   .comments {
     margin: 1.5em 0;
   }
