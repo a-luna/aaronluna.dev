@@ -10,14 +10,20 @@
 }
 
 .content a.hanchor {
-  color: #c4c4c4;
+  color: var(--blog-link-color);
+}
+
+.tutorial .content a.hanchor {
+  color: var(--tut-link-color1);
+}
+
+.content a.hanchor {
   font-size: 0.75em;
   opacity: 0.4;
 }
 
 .content a.hanchor:hover,
 .content a.hanchor:hover {
-  color: #c4c4c4;
   opacity: 1;
 }
 
