@@ -2907,6 +2907,10 @@ header,
     padding: 0.5em 0 0;
     margin: 0;
   }
+  
+  .comments {
+    margin: 1.5em 0;
+  }
 
   .list__item {
     margin: 0 0 15px;
