@@ -62,6 +62,17 @@
   --home-recent-post-date-color: var(--body-text-color);
   --home-card-bg-color: var(--widget-bg-color);
 
+  /* Categories */
+  --aws: var(--purple2);
+  --devops: var(--pink1);
+  --dotnet: var(--blue1);
+  --flask: var(--goldenrod1);
+  --hugo: var(--magenta1);
+  --javascript: var(--teal1);
+  --linux: var(--orange1);
+  --python: var(--green1);
+  --virtualization: var(--orange2);
+
   /* Section: Blog Posts */
   --blog-link-color: var(--accent-color1);
 
