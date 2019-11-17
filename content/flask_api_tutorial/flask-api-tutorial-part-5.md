@@ -377,12 +377,12 @@ class Widget(db.Model):
     @hybrid_property
     def time_remaining(self):
         time_remaining = self.deadline.replace(tzinfo=timezone.utc) - utc_now()
-        return timedelta(0) if self.deadline_passed else time_remaining
+        return time_remaining if not self.deadline_passed else timedelta(0)
 
     @hybrid_property
     def time_remaining_str(self):
         timedelta_str = format_timedelta_str(self.time_remaining)
-        return "No time remaining" if self.deadline_passed else timedelta_str
+        return timedelta_str if not self.deadline_passed else "No time remaining"
 
     @hybrid_property
     def uri(self):
@@ -645,7 +645,7 @@ The `widget_name` function is adapted directly from the example shown above to s
     <ul>
       <li>
         <p><strong>Line 14: </strong>The simplist way to implement our custom type is with a regular expression. The regex <code>^[\w-]+$</code> will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and the hyphen character.</p>
-        <p>The syntax of regular expressions is extremely dense. To make our regex easier to understand, we can compile it with the <code>re.VERBOSE</code> flag. This causes whitespace <span class="bold-italics">that is not within a character class</span> to be ignored, allowing us to insert comments within the regex to document the design and intended use of the expression. For example, we could document our regex as shown below:</p>
+        <p>The syntax of regular expressions is extremely dense. To make any regex easier to understand, we could compile it with the <code>re.VERBOSE</code> flag. This causes whitespace that is not within a character class to be ignored, allowing us to place comments within the regex to document the design and the effect of each component of the expression. For example, we could document our regex as shown below (I am only showing this for demonstration purposes, and have not modified the code in <code>app/api/widgets/dto.py</code>):</p>
         <pre><code style="color: #f8f8f2">NAME_REGEX = re.compile(<span style="color: #ed9d13">r"""
     ^        # Matches the beginning of the string
     [\w-]    # Character class: \w matches all alphanumeric characters (including underscore), - matches the hyphen character
@@ -657,7 +657,7 @@ The `widget_name` function is adapted directly from the example shown above to s
                 <i class="fa fa-pencil" aria-hidden="true"></i>
             </div>
             <div class="note-message" style="flex-flow: column wrap">
-                <p>Teaching regular expressions is beyond the scope of this tutorial. However, if you are looking for a good introduction to the topic I recommend reading the <a href="https://docs.python.org/3/howto/regex.html" target="_blank">Regular Expression HOWTO</a> document from the official Python docs.</p>
+                <p>Teaching regular expressions is beyond the scope of this tutorial. However, if you are looking for a good introduction to the topic I recommend reading <a href="https://docs.python.org/3/howto/regex.html" target="_blank">Regular Expression HOWTO</a> from the official Python docs.</p>
             </div>
         </div>
       </li>
@@ -823,13 +823,13 @@ There really isn't anything else to say about how the `info_url` attribute is pa
     </div>
 </div>
 
-It would absolutely be possible to satisfy the project requirements using the pre-defined types in **Table 2**, but (IMO) they all have one big limitation &mdash; there is only a single valid format for the value provided by the client. Dates are expressed in so many different ways via text, so my preference is to design a parser that can accomodate a variety of date formats.
+It would absolutely be possible to satisfy the project requirements using the pre-defined types in **Table 2**, but (IMO) they all have one big limitation &mdash; there is only a single valid format for the value provided by the client. Dates are expressed in so many different ways via text, so my preference is to design a parser that can accommodate a variety of date formats.
 
 There is also a problem that arises from the project requirements for the `deadline` attribute: the value must not be a date in the past. Since the pre-defined types only validate that the value provided by the client is in the proper format to be converted to a `datetime` value, we would have to perform the task of checking if the date provided by the client is in the past in the business logic.
 
 This second issue is another matter of opinion, since you could easily object by pointing out that the `name` attribute has a requirement to be unique and the task of querying the database for widgets with the same name is not performed in the `wiget_name` function we just created.
 
-I'll explain the distinction between these two requirements with a hypothetical situation: A request is received to create a new widget with `name="test"`. This is a valid widget name, so the request is passed to the business logic and since no widget already exists in the database with `name="test"`, a new widget is created. Then, an identical request is recieved to create a widget with `name="test"`. IMO, from the point-of-view of the `widget_reqparser`, `test` is a valid widget name, so the requst is again passed to the business logic. However, since a widget alredy exists with `name="test"`, the request is aborted with a message indicating that a widget already exists in the database with `name="test"`.
+I'll explain the distinction between these two requirements with a hypothetical situation: A request is received to create a new widget with `name="test"`. This is a valid widget name, so the request is passed to the business logic and since no widget already exists in the database with `name="test"`, a new widget is created. Then, an identical request is received to create a widget with `name="test"`. IMO, from the point-of-view of the `widget_reqparser`, `test` is a valid widget name, so the request is again passed to the business logic. However, since a widget already exists with `name="test"`, the request is aborted with a message indicating that a widget already exists in the database with `name="test"`.
 
 OTOH, consider this scenario: A request is received to create a new widget with `deadline="1923-03-28"`. This string is in a valid format but since the date is obviously in the past, the `widget_reqparser` raises a `ValueError` and the request is aborted. A `deadline` in the past is always invalid and a request to create a widget containing an invalid value for a required parameter must always be rejected. Hopefully my reasoning makes sense to you.
 
