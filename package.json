@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "Aaron Luna's Blog",
     "dependencies": {
-        "css-doodle": "^0.7.3",
+        "css-doodle": "^0.7.4",
         "netlify-lambda": "^1.6.3"
     },
     "repository": {
