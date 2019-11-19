@@ -395,8 +395,9 @@ class Widget(db.Model):
 To demonstrate the process of serializing a complex object to/from JSON, the `Widget` class includes attributes with as many different data types as possible. Additionally, the project requirements include various rules restricting which values are considered valid for the `name` and `deadline` attributes:
 
 <ul class="alert italics" style="font-size: 0.9em">
-    <li>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
     <li>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</li>
+    <li>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</li>
+    <li>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</li>
 </ul>
 
 Let's take a look at how these attributes are defined and how they fulfill the various project requirements:
@@ -872,25 +873,27 @@ There are a few things about the `future_date_from_string` function that are wor
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 26: </strong></p>
+        <p><strong>Line 26: </strong>The value provided by the user is passed to the <code>dateutil.parser.parse</code> method. If the <code>parser</code> is able to convert the string value to a <code>datetime</code> value it is stored in the <code>parsed_date</code> variable.</p>
       </li>
       <li>
-        <p><strong>Lines 27-32: </strong></p>
+        <p><strong>Lines 27-32: </strong>If the <code>dateutil.parser.parse</code> method is unable to parse the value provided by the user, it raises a <code>ValueError</code>. Since the error message that is generated isn't very descriptive, the original error is suppressed and another value error is raised with an error message that clearly explains why the value provided by the user was rejected and provides examples of string values that would be considered valid.</p>
       </li>
       <li>
-        <p><strong>Line 34: </strong>.</p>
+        <p><strong>Line 34: </strong>Per the project requirements, the date value that was provided by the user is compared to the current date, without considering the time component of either date when making the comparison. If the date provided by the user is less than (i.e., before) the current date, the value is rejected since this means the deadline has passed.</p>
       </li>
       <li>
-        <p><strong>Lines 35-40: </strong></p>
+        <p><strong>Lines 35-40: </strong>If the deadline has passed, raise a ValueError explaining why the value is invalid.</p>
       </li>
       <li>
-        <p><strong>Line 41: </strong>.</p>
+        <p><strong>Line 41: </strong>Per the project requirements, the deadline value flips from "not passed" to "passed" at the stroke of midnight. To achieve this, we set the deadline by taking the date component of the value provided by the user and combining it with <code>time.max()</code>, which is a shortcut for a time value equal to midnight.</p>
       </li>
       <li>
-        <p><strong>Lines 42-43: </strong></p>
+        <p><strong>Lines 42-43: </strong>Since we need to ensure that any <code>datetime</code> value is timezone-aware before we add it to the database, we localize the value to UTC before returning it to the user. </p>
       </li>
     </ul>
 </div>
+
+We already know how to use a custom type, so the last thing we need to do is add an argument to our `widget_reqparser` with `type=future_date_from_string`;
 
 {{< highlight python "linenos=table,linenostart=65" >}}widget_reqparser.add_argument(
     "deadline",
@@ -900,7 +903,26 @@ There are a few things about the `future_date_from_string` function that are wor
     nullable=False,
 ){{< /highlight >}}
 
+Remember, we are [following the process](#create-widget) defined earlier to create each endpoint. We can now move on to step #2: **Define the business logic necessary to process the request if validation succeeds**.
+
 ### `create_widget` Method
+
+Next, we need to define a function that performs the following actions:
+
+* Add a new widget to the database
+* Associate the widget with the user who created it
+* Construct an HTTP response including a "Location" field in the header equal to the URI of the widget
+
+<a href="https://tools.ietf.org/html/rfc7231" target="_blank">RFC7231</a> defines the semantics of HTTP/1.1 messages. Specifically, it specifies when <a href="https://tools.ietf.org/html/rfc7231#section-7.1.2" target="_blank">the "Location" field</a> should be included in the header of an HTTP response:
+
+<blockquote class="rfc" cite="https://tools.ietf.org/html/rfc7231#section-7.1.2"><span class="bold-text">7.1.2.  Location</span>
+  <p style="margin: 1em 0 0 1em">The "Location" header field is used in some responses to refer to a specific resource in relation to the response.  The type of relationship is defined by the combination of request method and status code semantics.</p>
+   <p style="margin: 1em 0 0 2em">Location = URI-reference</p>
+   <p style="margin: 1em 0 0 1em">...</p>
+   <p style="margin: 1em 0 0 1em">For 201 (Created) responses, the Location value refers to the primary resource created by the request.</p>
+</blockquote>
+
+Create a new file named `business.py` in `app/api/widgets` and enter the content below:
 
 {{< highlight python "linenos=table" >}}"""Business logic for /widgets API endpoints."""
 from http import HTTPStatus
@@ -930,14 +952,71 @@ def create_widget(widget_dict):
     response.headers["Location"] = widget.uri
     return response{{< /highlight >}}
 
+Let's take a look at how the `create_widget` function performs the tasks listed above:
+
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 13: </strong>Per the specification in <span class="bold-text">Table 1</span>, the ability to create a widget object is limited to users with the administrator role. To enforce this, we decorate the <code>create_widget</code> method with <code>@admin_token_required</code>. If you would like to review how this decorator is implemented, <a href="/series/flask_api_tutorial/part-4/#decorators">click here</a>.</p>
+      </li>
+      <li>
+        <p><strong>Line 14: </strong>After the request data has been parsed and validated, it is passed to the <code>create_widget</code> function as a <code>dict</code> object named <code>widget_dict</code>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 15-18: </strong>The function starts by checking if a <code>widget</code> already exists with the same name provided in the request. If this is true, the request is aborted. The first argument to the <code>abort</code> function is the HTTP status code to include in the response. In this case, the appropriate response code is <code>HTTPStatus.CONFLICT</code> (409).</p>
+      </li>
+      <li>
+        <p><strong>Line 19: </strong><code>**</code> is the dictionary unpacking operator, you can find more info on it and the related list unpacking operator (<code>*</code>) in <a href="https://www.python.org/dev/peps/pep-0448/">PEP 448</a>. It is a concise way to pass the <code>name</code>, <code>info_url</code>, and <code>deadline</code> values to the <code>Widget</code> constructor.</p>
+      </li>
+      <li>
+        <p><strong>Lines 20-21: </strong>Thanks to the <code>@admin_token_required</code> decorator, the <code>public_id</code> of the user who sent the request is stored in <code>create_widget.public_id</code> (If you don't remember why this is is the case, review the last section where we broke down <a href="/series/flask_api_tutorial/part-4/#decorators">how the decorators are designed</a>).</p>
+        <p>We retrieve the <code>User</code> object that corresponds to the <code>public_id</code> of the user that sent the request and assign it to <code>owner</code>. Then, <code>owner.id</code> is set as the value of <code>widget.owner_id</code>.</p>
+        <div class="note note-flex">
+          <div class="note-icon">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </div>
+          <div class="note-message" style="flex-flow: column wrap">
+            <p>Why can't we just use <code>public_id</code> as the value of <code>widget.owner_id</code>, instead of going through the process of retrieving the <code>User</code> object and using the <code>id</code> attribute? Since <code>widget.owner_id</code> is defined as a foreign key referencing <code>site_user.id</code> (the primary key of the <code>site_user</code> table), we must store the value of the <code>id</code> attribute in order to correctly configure the relationship between the two tables.</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <p><strong>Lines 22-23: </strong>The new <code>widget</code> is added to the database and the changes are committed..</p>
+      </li>
+      <li>
+        <p><strong>Line 24: </strong>As we have seen previously, if we need to include a custom field in the header of a response, we must create the response object manually. One way to do this is with the <code>flask.jsonify</code> function.</p>
+      </li>
+      <li>
+        <p><strong>Line 25: </strong>Since the request to create a new widget was successful, the correct HTTP status code for the response is <code>HTTPStatus.CREATED</code> (201).</p>
+      </li>
+      <li>
+        <p><strong>Line 26: </strong><code>widget.uri</code> is a hybrid property that returns the URI for the specific <code>widget</code> resource.</p>
+        <div class="alert alert-flex">
+          <div class="alert-icon">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+          <div class="alert-message">
+            <p>The <code>uri</code> attribute calls the <code>url_for</code> function which relies on the <code>api.widget</code> endpoint being implemented. We haven't implemented either of the two endpoints defined in <span class="bold-text">Table 1</span> at this point, so this will result in an unhandled exception until both have have been fully implemented.</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <p><strong>Line 27: </strong>After ensuring that the response is configured with all required header fields, it is sent to the client.</p>
+      </li>
+    </ul>
+</div>
+
+Next, we need to create the API endpoint for the create operation and incorporate it with the <code>widget_reqparser</code> and the <code>create_widget</code> function.
+
 ### `WidgetList` Resource (HTTP POST)
+
+According to **Table 1**, the operation to create a <code>widget</code> is accessed by sending a <code>POST</code> request to the <code>api.widget_list</code> resource, located at <code>/api/v1/widgets</code>. To create this endpoint, create a new file <code>endpoints.py</code> in <code>app/api/widgets</code> and enter the content below:
 
 {{< highlight python "linenos=table" >}}"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.auth.decorator import admin_token_required
 from app.api.widget.dto import widget_reqparser
 from app.api.widget.business import create_widget
 
@@ -956,16 +1035,20 @@ class WidgetList(Resource):
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     @widget_ns.expect(widget_reqparser)
-    @admin_token_required
     def post(self):
         """Add new widget."""
-        request_data = widget_reqparser.parse_args()
-        widget_dict = {k: v for k, v in request_data.items()}
+        widget_dict = widget_reqparser.parse_args()
         return create_widget(widget_dict){{< /highlight >}}
+
+There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask_api_tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace`/`Resource` objects, `doc`, `response`, or `expect` decorators, etc.
+
+The important part is **Lines 26-27** where the `parse_args` method of `widget_reqparser` is used to validate the request data, which is then passed to the `create_widget` function which we just defined.
 
 ### Add `widget_ns` Namespace to `api`
 
-{{< highlight python "linenos=table,hl_lines=6 21" >}}"""API blueprint configuration."""
+In order to register the `widget_ns` namespace with the `api` object, open `app/api/__init__.py` and add the highlighted lines (**Line 6** and **Line 27**):
+
+{{< highlight python "linenos=table,hl_lines=6 27" >}}"""API blueprint configuration."""
 from flask import Blueprint
 from flask_restplus import Api
 
@@ -974,7 +1057,13 @@ from app.api.widget.endpoints import widget_ns
 
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
-authorizations = {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}}
+authorizations = {
+  "Bearer": {
+    "type": "apiKey",
+    "in": "header",
+    "name": "Authorization"
+  }
+}
 
 api = Api(
     api_bp,
@@ -987,4 +1076,66 @@ api = Api(
 api.add_namespace(auth_ns, path="/auth")
 api.add_namespace(widget_ns, path="/widgets"){{< /highlight >}}
 
-### Unit Tests: `test_create_widget.py`
+We can verify that the endpoint was created by running `flask routes`:
+
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
+<span class="cmd-results">Endpoint             Methods  Rule
+-------------------  -------  --------------------------
+api.auth_login       POST     /api/v1/auth/login
+api.auth_logout      POST     /api/v1/auth/logout
+api.auth_register    POST     /api/v1/auth/register
+api.auth_user        GET      /api/v1/auth/user
+api.doc              GET      /api/v1/ui
+api.root             GET      /api/v1/
+api.specs            GET      /api/v1/swagger.json
+<span class="highlite">api.widget_list      POST     /api/v1/widgets</span>
+restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
+static               GET      /static/&lt;path:filename&gt;</span></code></pre>
+
+As expected, a new endpoint has been created named `api.widget_list` that responds to requests sent to `/api/v1/widgets`. Currently, this endpoint only supports requests where the method type is `POST`.
+
+Normally, we would create unit tests to verify the endpoint does create `widget` objects correctly. However, it was noted while explaining the design of the `create_widget` function that currently an unhandled exception occurs when running this function since the `uri` attribute of the `Widget` class depends on the `api.widget` endpoint existing. We will create unit tests for both endpoints in the `widget_ns` namespace when both have been fully implemented.
+
+## Checkpoint
+
+Even though we only implemented one of the five CRUD operations specified in **Table 1**, we actually satisfied several of the remaining requirements. However, since we have not created any test coverage and confirmed that the process of creating a `widget` object is working correctly, these will be marked as only half-complete at this point:
+
+<div class="requirements">
+  <p class="title">User Management/JWT Authentication</p>
+  <div class="fa-bullet-list">
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
+  </div>
+  <p class="title">API Resource: Widget List</p>
+  <div class="fa-bullet-list">
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>All users can retrieve a list of all widgets</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>All users can retrieve individual widgets by name</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can edit existing widgets</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
+    <div class="note note-flex">
+      <div class="note-icon">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </div>
+      <div class="note-message" style="flex-flow: column wrap">
+        <p>What is the point of performing the comparison in this way? Imagine creating a widget and there's a blank field labeled "deadline". If hypothetical you had to provide a value for this field, and you entered today's date. How would you expect the widget to behave? I think the most logical design would be for the widget's deadline to change from "deadline has not passed" to "deadline passed" would be at the next stroke of midnight. For example, if you set deadline=today's date, and it's 10:00AM, you would have 16 hours until the deadline would be considered class. At 8:00PM, you would instead have 4 hours until it is considered passed.</p>
+      </div>
+    </div>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
+  </div>
+</div>
+
+In the next section, we will finish implementing the `Widget` API. If you have any questions/feedback, please leave a comment!

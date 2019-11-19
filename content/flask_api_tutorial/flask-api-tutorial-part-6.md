@@ -26,7 +26,7 @@ twitter:
 
 When a client sends a `GET` request to the `api.widget_list` endpoint, they are requesting every widget in the database. As the number of widgets increases, so does the size of the HTTP response. As the size of the response data increases, the time required to send and receive the data increases, resulting in a sluggish API.
 
-Obviously, returning every widget in the database at once would be foolish. Instead, REST APIs typically employ **pagination** to limit the number of items to the first 20, 50, etc database items (the naximum number of items per page is controlled by the server). Combining the ability to specify the number of items that the server should send per page as well as the page number, the client can retrieve any item from the database and avoid a sluggish response.
+Obviously, returning every widget in the database at once would be foolish. Instead, REST APIs typically employ **pagination** to limit the number of items to the first 20, 50, etc database items (the maximum number of items per page is controlled by the server). Combining the ability to specify the number of items that the server should send per page as well as the page number, the client can retrieve any item from the database and avoid a sluggish response.
 
 An example of a request/response pair containing paginated data is given below:
 
@@ -90,7 +90,7 @@ Typically in a pagination scheme, when a request is received that does not speci
     <i class="fa fa-pencil" aria-hidden="true"></i>
   </div>
   <div class="note-message">
-    <p>While Fielding defined HATEOAS and stipulated that it is a requirement for a REST API, he did not specify the format for doing so. Depending on the project, navigational links could be provided in either the response header or body (obviously I have provided both for this demonstration). The format of the <code>Link</code> header field is defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>, which is a Proposed Standard that is widely employed througout the internet (i.e., it's pretty safe to use it in your application, too).</p>
+    <p>While Fielding defined HATEOAS and stipulated that it is a requirement for a REST API, he did not specify the format for doing so. Depending on the project, navigational links could be provided in either the response header or body (obviously I have provided both for this demonstration). The format of the <code>Link</code> header field is defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>, which is a Proposed Standard that is widely employed throughout the internet (i.e., it's pretty safe to use it in your application, too).</p>
   </div>
 </div>
 
@@ -167,9 +167,11 @@ pagination_model = Model(
 from flask_restplus import abort, marshal
 
 from app import db
-from app.api.widget.dto import pagination_model{{< /highlight >}}
+from app.api.widget.dto import pagination_model
+from app.api.auth.decorator import token_required, admin_token_required{{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=14" >}}def retrieve_widget_list(page_num, per_page):
+{{< highlight python "linenos=table,linenostart=14" >}}@token_required
+def retrieve_widget_list(page_num, per_page):
     pagination = Widget.query.paginate(page_num, per_page, error_out=False)
     response_data = marshal(pagination, pagination_model)
     response_data["links"] = _pagination_nav_links(pagination)
@@ -213,8 +215,7 @@ def _pagination_url_dict(pagination):
 
 ### `WidgetList` Resource (HTTP GET)
 
-{{< highlight python >}}from app.api.auth.decorator import token_required, admin_token_required
-from app.api.widget.dto import (
+{{< highlight python >}}from app.api.widget.dto import (
     widget_reqparser,
     pagination_reqparser,
     widget_owner_model,
@@ -234,7 +235,6 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
     @widget_ns.response(HTTPStatus.OK, "Retrieved widget list.", pagination_model)
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.expect(pagination_reqparser)
-    @token_required
     def get(self):
         """Get a list of all widgets."""
         request_data = pagination_reqparser.parse_args()
@@ -248,7 +248,8 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
 
 ### `retrieve_widget` Method
 
-{{< highlight python "linenos=table,linenostart=24" >}}def retrieve_widget(name):
+{{< highlight python "linenos=table,linenostart=24" >}}@token_required
+def retrieve_widget(name):
     widget = Widget.find_by_name(name)
     if widget:
         return widget, HTTPStatus.OK
@@ -268,7 +269,6 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
     @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.marshal_with(widget_model)
-    @token_required
     def get(self, name):
         """Retrieve a widget."""
         return retrieve_widget(name){{< /highlight >}}
@@ -281,7 +281,8 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
 
 {{< highlight python "linenos=table,linenostart=2" >}}from datetime import datetime, timezone{{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=50" >}}def update_widget(name, widget_dict):
+{{< highlight python "linenos=table,linenostart=50" >}}@admin_token_required
+def update_widget(name, widget_dict):
     widget = Widget.find_by_name(name)
     if not widget:
         error = f"Widget name: {name} not found."
@@ -310,7 +311,6 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
     @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     @widget_ns.expect(widget_reqparser)
     @widget_ns.marshal_with(widget_model)
-    @admin_token_required
     def put(self, name):
         """Update an existing widget."""
         request_data = widget_reqparser.parse_args()
@@ -323,7 +323,8 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
 
 ### `delete_widget` Method
 
-{{< highlight python "linenos=table,linenostart=63" >}}def delete_widget(name):
+{{< highlight python "linenos=table,linenostart=63" >}}@admin_token_required
+def delete_widget(name):
     widget = Widget.find_by_name(name)
     if not widget:
         return "", HTTPStatus.NO_CONTENT
@@ -338,7 +339,6 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
     @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @admin_token_required
     def delete(self, name):
         """Delete a widget."""
         return delete_widget(name){{< /highlight >}}

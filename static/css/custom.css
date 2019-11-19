@@ -427,11 +427,13 @@ h4 {
 
 .cmd-prompt {
   color: #7f7f7f;
+  padding: 0 0 7px;
 }
 
 .cmd-input,
 .cmd-repl-input {
   color: #a9fb68;
+  padding: 0 0 7px;
 }
 
 .cmd-venv {
@@ -496,10 +498,20 @@ a:active:hover {
   text-decoration: underline;
 }
 
+.tutorial .widget a,
+.tutorial .widget a:hover {
+  color: var(--tut-link-color1);
+}
+
 .content a {
   font-weight: 400;
   color: #6fc1ff;
   text-decoration: none;
+}
+
+.tutorial .content a,
+.tutorial .content a:hover {
+  color: var(--tut-link-color1);
 }
 
 .content a:hover {
@@ -717,10 +729,14 @@ div.note,
 div.requirements {
   font-size: 0.9em;
   line-height: 1.5;
-  margin: 10px 0 20px;
+  margin: 10px 15px 15px 15px;
   border-radius: 4px;
   overflow-wrap: normal;
   overflow-x: auto;
+}
+
+.fa-bullet-list-item div.requirements {
+  margin: 10px 0 10px 25px;
 }
 
 span.requirements {
@@ -763,11 +779,20 @@ div.note-flex {
   margin: 0 5px;
 }
 
+.tutorial .alert-message a,
+.tutorial .note-message a {
+  color: var(--accent-color1);
+}
+
 .alert-message p,
 .note-message p,
 .content ul .alert .alert-message p {
   font-size: 1em;
   margin: auto 0;
+}
+
+.fa-bullet-list .note-message p {
+  margin: 0;
 }
 
 div.alert {
@@ -1064,6 +1089,10 @@ pre.chroma code {
 
 .list-of-links {
   color: #6fc1ff;
+}
+
+.tutorial .list-of-links {
+  color: var(--tut-link-color1);
 }
 
 .chroma .lntable tr td:first-child pre {
@@ -1475,6 +1504,10 @@ a.pagination__item--next {
   margin: 0 0 15px 10px;
 }
 
+.requirements .fa-bullet-list:last-child {
+  margin: 0 0 0 10px;
+}
+
 .fa-bullet-list p.fa-bullet-list-item {
   position: relative;
   margin: 0 0 2em 2em;
@@ -1489,7 +1522,7 @@ a.pagination__item--next {
   margin: 0 0 0 2em;
 }
 
-.requirements .fa-bullet-list-item {
+.requirements .fa-bullet-list p.fa-bullet-list-item {
   font-size: 0.9em;
   position: relative;
   margin: 0 0 5px 20px;
@@ -1769,6 +1802,10 @@ input {
   font-size: 1.45em;
   border-bottom: 1px solid #6fc1ff;
   text-transform: none;
+}
+
+.tutorial .widget__title {
+  border-bottom: 1px solid var(--tut-link-color1);
 }
 
 #api-tutorial {

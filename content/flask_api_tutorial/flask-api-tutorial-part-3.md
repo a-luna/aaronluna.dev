@@ -462,7 +462,7 @@ Next, we need to create a function that performs the following actions:
 * Issue an access token for the new user
 * Construct an HTTP response including the access token and send the response the client
 
-For any response containing sensitive information (e.g., access tokens, credentials, etc), <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">RFC6749 (OAuth 2.0)</a> defines the required and optional fields in both the response body and header:
+For any response containing sensitive information (e.g., access tokens, credentials, etc), <a href="https://tools.ietf.org/html/rfc6749" target="_blank">RFC6749 (OAuth 2.0)</a> defines the required and optional fields in both the response body and header:
 
 <blockquote class="rfc" cite="https://tools.ietf.org/html/rfc6749#section-5.1"><span class="bold-text">5.1 Successful Response</span>
   <p style="margin: 1em 0 0 1em">The authorization server issues an access token and optional refresh token, and constructs the response by adding the following parameters to the entity-body of the HTTP response:
@@ -493,7 +493,6 @@ Pragma: no-cache
  "example_parameter":"example_value"
 }</code></pre>
 </blockquote>
-
 
 Open `app/api/auth/business.py`, add the content below and save the file:
 
@@ -634,7 +633,7 @@ class RegisterUser(Resource):
       </li>
       <li>
         <p><strong>Line 16: </strong>The <code>expect</code> decorator is used to specify the data that the server expects the client to send in the HTTP request. The first argument can be either a request parser or an API model that defines the expected input model. The optional second argument is a bool value named <code>validate</code>. If <code>validate=True</code>, the request data will be checked to make sure it matches the expected input model.</p>
-        <p>You can also control validation behavior for an entire namespace, which we did when the <code>auth_ns</code> namespace was created in <strong>Line 9</strong>. You can also define this behavior for the entire API when instantiating the <code>api</code> object, or by setting the value of the app configuration setting <code>RESTPLUS_VALIDATE</code>. You can override the validation behavior for each method using the <code>expect</code> decorator.</p>
+        <p>You can also control validation behavior for an entire namespace, which we did when the <code>auth_ns</code> namespace was created in <span class="bold-text">Line 9</span>. You can also define this behavior for the entire API when instantiating the <code>api</code> object, or by setting the value of the app configuration setting <code>RESTPLUS_VALIDATE</code>. You can override the validation behavior for each method using the <code>expect</code> decorator.</p>
         <p>We are using the <code>auth_reqparser</code> we created in <code>app/api/auth/dto.py</code>. In the Swagger UI, this renders a form with textboxes for the email and password values and also enforces the rules we configured for each argument. If we had used an API model, the Swagger UI instead renders a single textbox and an example of the expected JSON.</p>
       </li>
       <li>
@@ -655,9 +654,9 @@ class RegisterUser(Resource):
     </ul>
 </div>
 
-### Add <code>auth_ns</code> Namespace to <code>api</code>
+### Add `auth_ns` Namespace to `api`
 
-In order to register the `auth_ns` namespae with the `api` object, open `app/api/__init__.py` and add the highlighted lines (<strong>Line 5</strong> and <strong>Line 25</strong>):
+In order to register the `auth_ns` namespace with the `api` object, open `app/api/__init__.py` and add the highlighted lines (<strong>Line 5</strong> and <strong>Line 25</strong>):
 
 {{< highlight python "linenos=table,hl_lines=5 25" >}}"""API blueprint configuration."""
 from flask import Blueprint
@@ -696,8 +695,8 @@ We can verify that our route has been correctly registered by running `flask rou
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json
-restplus_doc.static  GET      /swaggerui/<path:filename>
-static               GET      /static/<path:filename></span></code></pre>
+restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
+static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 The presence of the `api.auth_register` endpoint in the list of routes confirms a number of things:
 
@@ -782,7 +781,7 @@ Here's an example of a successful request using httpie. Note that on the command
 
 Everything appears to be working correctly for the `/register` endpoint. Next, we will figure out how to create unit tests that interact with the API.
 
-### Unit Tests: <code>test_auth_register.py</code>
+### Unit Tests: `test_auth_register.py`
 
 In the [previous post](/series/flask_api_tutorial/part-2/#global-test-fixtures-code-conftest-py-code), I explained the meaning and purpose of the `app` and `client` test fixtures. In order to make an HTTP request to the Flask application, you need to include `client` as a parameter of your test function.
 
@@ -1008,9 +1007,17 @@ Once again, we only implemented a small number of features from the requirements
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can edit existing widgets</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
+    <div class="note note-flex">
+      <div class="note-icon">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+      </div>
+      <div class="note-message" style="flex-flow: column wrap">
+        <p>What is the point of performing the comparison in this way? Imagine creating a widget and there's a blank field labeled "deadline". If hypothetical you had to provide a value for this field, and you entered today's date. How would you expect the widget to behave? I think the most logical design would be for the widget's deadline to change from "deadline has not passed" to "deadline passed" would be at the next stroke of midnight. For example, if you set deadline=today's date, and it's 10:00AM, you would have 16 hours until the deadline would be considered class. At 8:00PM, you would instead have 4 hours until it is considered passed.</p>
+      </div>
+    </div>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>
