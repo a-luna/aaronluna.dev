@@ -884,7 +884,7 @@ There are a few things about the `future_date_from_string` function that are wor
         <p><strong>Lines 35-40: </strong>If the deadline has passed, raise a ValueError explaining why the value is invalid.</p>
       </li>
       <li>
-        <p><strong>Line 41: </strong>Per the project requirements, the deadline value flips from "not passed" to "passed" at the stroke of midnight. To achieve this, we set the deadline by taking the date component of the value provided by the user and combining it with <code>time.max()</code>, which is a shortcut for a time value equal to midnight.</p>
+        <p><strong>Line 41: </strong>Per the project requirements, the deadline value flips from "not passed" to "passed" at the stroke of midnight. To achieve this, we set the deadline by taking the date component of the value provided by the user and combining it with <code>time.max()</code>, which is a shortcut for a time value equal to <code>11:59:59 PM</code>.</p>
       </li>
       <li>
         <p><strong>Lines 42-43: </strong>Since we need to ensure that any <code>datetime</code> value is timezone-aware before we add it to the database, we localize the value to UTC before returning it to the user. </p>
