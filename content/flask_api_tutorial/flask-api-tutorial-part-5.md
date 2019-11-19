@@ -53,14 +53,13 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |- <span class="unmodified-file">config.py</span>
 |
 |- <span class="project-folder">test</span>
-|   |- <span class="work-file">conftest.py</span>
+|   |- <span class="unmodified-file">conftest.py</span>
 |   |- <span class="unmodified-file">test_auth_login.py</span>
 |   |- <span class="unmodified-file">test_auth_logout.py</span>
 |   |- <span class="unmodified-file">test_auth_register.py</span>
 |   |- <span class="unmodified-file">test_auth_user.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>
 |   |- <span class="unmodified-file">test_user.py</span>
-|   |- <span class="work-file">test_widget.py</span>
 |
 |- <span class="unmodified-file">.env</span>
 |- <span class="unmodified-file">pytest.ini</span>
@@ -1125,14 +1124,6 @@ Even though we only implemented one of the five CRUD operations specified in **T
     <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
-    <div class="note note-flex">
-      <div class="note-icon">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
-      </div>
-      <div class="note-message" style="flex-flow: column wrap">
-        <p>What is the point of performing the comparison in this way? Imagine creating a widget and there's a blank field labeled "deadline". If hypothetical you had to provide a value for this field, and you entered today's date. How would you expect the widget to behave? I think the most logical design would be for the widget's deadline to change from "deadline has not passed" to "deadline passed" would be at the next stroke of midnight. For example, if you set deadline=today's date, and it's 10:00AM, you would have 16 hours until the deadline would be considered class. At 8:00PM, you would instead have 4 hours until it is considered passed.</p>
-      </div>
-    </div>
     <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>

@@ -878,7 +878,6 @@ div.requirements {
 .note code,
 blockquote p code,
 figcaption p code {
-  color: #d8d8d8;
   border-radius: 4px;
   font-size: 0.8em;
 }

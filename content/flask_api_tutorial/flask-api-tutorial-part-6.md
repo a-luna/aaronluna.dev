@@ -18,6 +18,67 @@ twitter:
 ---
 ## Project Structure
 
+The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
+
+<pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
+|- <span class="project-folder">app</span>
+|   |- <span class="project-folder">api</span>
+|   |   |- <span class="project-folder">auth</span>
+|   |   |   |- <span class="project-empty-file">__init__.py</span>
+|   |   |   |- <span class="unmodified-file">business.py</span>
+|   |   |   |- <span class="unmodified-file">decorator.py</span>
+|   |   |   |- <span class="unmodified-file">dto.py</span>
+|   |   |   |- <span class="unmodified-file">endpoints.py</span>
+|   |   |
+|   |   |- <span class="project-folder">widgets</span>
+|   |   |   |- <span class="project-empty-file">__init__.py</span>
+|   |   |   |- <span class="work-file">business.py</span>
+|   |   |   |- <span class="work-file">dto.py</span>
+|   |   |   |- <span class="work-file">endpoints.py</span>
+|   |   |
+|   |   |- <span class="unmodified-file">__init__.py</span>
+|   |
+|   |- <span class="project-folder">models</span>
+|   |   |- <span class="project-empty-file">__init__.py</span>
+|   |   |- <span class="unmodified-file">token_blacklist.py</span>
+|   |   |- <span class="unmodified-file">user.py</span>,
+|   |   |- <span class="unmodified-file">widget.py</span>
+|   |
+|   |- <span class="project-folder">util</span>
+|   |   |- <span class="project-empty-file">__init__.py</span>
+|   |-  |- <span class="unmodified-file">datetime_util.py</span>
+|   |-  |- <span class="unmodified-file">result.py</span>
+|   |
+|   |- <span class="unmodified-file">__init__.py</span>
+|   |- <span class="unmodified-file">config.py</span>
+|
+|- <span class="project-folder">test</span>
+|   |- <span class="work-file">conftest.py</span>
+|   |- <span class="unmodified-file">test_auth_login.py</span>
+|   |- <span class="unmodified-file">test_auth_logout.py</span>
+|   |- <span class="unmodified-file">test_auth_register.py</span>
+|   |- <span class="unmodified-file">test_auth_user.py</span>
+|   |- <span class="unmodified-file">test_config.py</span>
+|   |- <span class="unmodified-file">test_user.py</span>
+|   |- <span class="work-file">test_widget.py</span>
+|
+|- <span class="unmodified-file">.env</span>
+|- <span class="unmodified-file">pytest.ini</span>
+|- <span class="unmodified-file">run.py</span>
+|- <span class="unmodified-file">setup.py</span>
+|- <span class="unmodified-file">pyproject.toml</span>
+|- <span class="unmodified-file">requirements.txt</span>
+|- <span class="unmodified-file">requirements_dev.txt</span></div>
+<div class="project-structure-key-wrapper">
+<div class="project-structure-key">
+<div class="key-item key-label">KEY:</div>
+<div class="key-item project-folder">FOLDER</div>
+<div class="key-item work-file">NEW CODE</div>
+<div class="key-item unmodified-file">NO CHANGES</div>
+<div class="key-item project-empty-file">EMPTY FILE</div>
+</div>
+</div></pre>
+
 ## Introduction
 
 ## Retrieve Widget List
@@ -242,8 +303,6 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
         per_page = request_data.get("per_page")
         return retrieve_widget_list(page_num, per_page){{< /highlight >}}
 
-### Unit Tests: `test_get_widget_list.py`
-
 ## Retrieve Widget
 
 ### `retrieve_widget` Method
@@ -272,8 +331,6 @@ def retrieve_widget(name):
     def get(self, name):
         """Retrieve a widget."""
         return retrieve_widget(name){{< /highlight >}}
-
-### Unit Tests: `test_get_widget.py`
 
 ## Update Widget
 
@@ -317,8 +374,6 @@ def update_widget(name, widget_dict):
         widget_dict = {k: v for k, v in request_data.items()}
         return update_widget(name, widget_dict){{< /highlight >}}
 
-### Unit Tests: `test_update_widget.py`
-
 ## Delete Widget
 
 ### `delete_widget` Method
@@ -342,5 +397,13 @@ def delete_widget(name):
     def delete(self, name):
         """Delete a widget."""
         return delete_widget(name){{< /highlight >}}
+
+### Unit Tests: `test_create_widget.py`
+
+### Unit Tests: `test_get_widget_list.py`
+
+### Unit Tests: `test_get_widget.py`
+
+### Unit Tests: `test_update_widget.py`
 
 ### Unit Tests: `test_delete_widget.py`

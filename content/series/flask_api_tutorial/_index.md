@@ -69,4 +69,4 @@ The requirements for the API are listed below. At the end of each section, any r
   </div>
 </div>
 
-I hope this article series is useful and easy to follow, please give me your feedback in the comments!
+Click below to start the tutorial!
