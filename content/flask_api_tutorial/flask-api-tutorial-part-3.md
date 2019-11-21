@@ -40,8 +40,8 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |
 |   |- <span class="project-folder">util</span>
 |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |-  |- <span class="unmodified-file">datetime_util.py</span>
-|   |-  |- <span class="unmodified-file">result.py</span>
+|   |   |- <span class="unmodified-file">datetime_util.py</span>
+|   |   |- <span class="unmodified-file">result.py</span>
 |   |
 |   |- <span class="work-file">__init__.py</span>
 |   |- <span class="unmodified-file">config.py</span>

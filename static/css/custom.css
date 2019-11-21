@@ -465,6 +465,7 @@ h4 {
 
 .cmd-lineno-hl {
   color: #ffc107;
+  background-color: var(--page-bg-color);
   font-weight: 700;
 }
 
@@ -781,7 +782,7 @@ div.note-flex {
 
 .tutorial .alert-message a,
 .tutorial .note-message a {
-  color: var(--accent-color1);
+  color: var(--tut-link-color1);
 }
 
 .alert-message p,

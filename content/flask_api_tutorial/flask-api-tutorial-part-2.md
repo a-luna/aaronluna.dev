@@ -37,8 +37,8 @@ The chart below shows the folder structure that was created in [Part 1](/series/
 |   |
 |   |- <span class="project-folder">util</span>
 |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |-  |- <span class="unmodified-file">datetime_util.py</span>
-|   |-  |- <span class="unmodified-file">result.py</span>
+|   |   |- <span class="unmodified-file">datetime_util.py</span>
+|   |   |- <span class="unmodified-file">result.py</span>
 |   |
 |   |- <span class="unmodified-file">__init__.py</span>
 |   |- <span class="unmodified-file">config.py</span>

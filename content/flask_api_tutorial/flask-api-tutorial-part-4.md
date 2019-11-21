@@ -42,8 +42,8 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |
 |   |- <span class="project-folder">util</span>
 |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |-  |- <span class="unmodified-file">datetime_util.py</span>
-|   |-  |- <span class="unmodified-file">result.py</span>
+|   |   |- <span class="unmodified-file">datetime_util.py</span>
+|   |   |- <span class="unmodified-file">result.py</span>
 |   |
 |   |- <span class="unmodified-file">__init__.py</span>
 |   |- <span class="unmodified-file">config.py</span>
@@ -537,7 +537,7 @@ def get_logged_in_user():
         <p><strong>Line 54: </strong>Retrieve the <code>User</code> from the database with the same <code>public_id</code> that was decoded from the token.</p>
       </li>
       <li>
-        <p><strong>Lines 55-56: </strong>Here, we retrieve the <code>datetime</code> value equal to the time when the token expires and format the time remaining until the token expires as a string value. We store the formatted string in a new attribute named <code>token_expires_in</code>, which we defined as a field in the <code>user_model</code> API model that we created in the <code>app.api.auth.dto</code> module.</p>
+        <p><strong>Lines 55-56: </strong><code>get_logged_in_user.expires_at</code> contains<code>user_dict['expires_at']</code>, which is a timestamp stored as an integer. The timestamp is equal to the time when the token expires, and we use the <code>app.util.datetime_util.remaining_fromtimestamp</code> method to calculate the time remaining until the token expires. Finally, we format the time remaining as a string value using the <code>app.util.datetime_util.format_timespan_digits</code> method. We store the formatted string in a new attribute named <code>token_expires_in</code>, which we defined as a field in the <code>user_model</code> API model that we created in the <code>app.api.auth.dto</code> module.</p>
       </li>
     </ul>
 </div>
