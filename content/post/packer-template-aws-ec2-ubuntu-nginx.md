@@ -15,7 +15,7 @@ Installing packer is simple, visit [this page for instructions](https://www.pack
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>If your account is not elibigle for the free-tier or you have used the maximun number of EC2 hours for the current month, you can incur actual costs as a result of using these examples (The accumulated costs should be relatively minor, less than a dollar or a few dollars if you launch an instance and leave it running for a month).</p>
@@ -198,7 +198,7 @@ In order to build the machine image, you must provide your AWS authentication cr
 <span class="cmd-prompt">$</span> <span class="cmd-input">packer build nginx_ubuntu_from_source.json</span></code></pre>
     <div class="alert alert-flex">
       <div class="alert-icon">
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <i class="fa fa-exclamation-triangle"></i>
       </div>
       <div class="alert-message">
         <p>If credentials are provided through the command line, anyone who can see your environment variables (including programs you run) can see the credentials, and anyone that can view your processes can see the command line used to run them, including the parameters.</p>
@@ -498,7 +498,7 @@ Build 'amazon-ebs' finished.</span>
 us-west-1: ami-xxxxxxxx</span></code></pre>
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>Unless you want to be charged for storing the AMI that has been created, you should deregister it and delete the snapshot associated with the AMI immediately.</p>

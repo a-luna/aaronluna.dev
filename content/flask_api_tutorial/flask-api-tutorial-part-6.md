@@ -205,7 +205,7 @@ In this example, the database contains a total of 23 `widget` objects. If the cl
 
 ### HATEOAS
 
-If you've spent time reading about REST APIs, you have probably encountered the term <strong>HATEOAS</strong>, which stands for <strong>Hypertext As The Engine Of Application State</strong>. This is part of Roy Fielding's formal definition of REST, and the main takeaway is that clients shouldn't need to construct URLs in order to interact with a REST API, since this ties the client to an implementation. This is bad because any change to the structure/syntax of an existing URI is a breaking change for the client.
+If you've spent time reading about REST APIs, you have probably encountered the term <strong>HATEOAS</strong>, which stands for <a href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">Hypertext As The Engine Of Application State</a>. This is part of Roy Fielding's formal definition of REST, and the main takeaway is that clients shouldn't need to construct URLs in order to interact with a REST API, since this ties the client to an implementation. This is bad because any change to the structure/syntax of an existing URI is a breaking change for the client.
 
 Ideally, a REST API should provide links in the header or body of the response that direct the client to the next logical set of actions/resources based on the client's request. The navigational links in the header **(Lines 18-21)** and body of the response **(Lines 25-29)** above allow the client to browse through the collection of widgets.
 
@@ -217,7 +217,7 @@ If the client sends a `GET` request to `http://localhost:5000/api/v1/widgets` (i
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>While Fielding defined HATEOAS and stipulated that it is a requirement for a REST API, he did not specify the format for doing so. Depending on the project, navigational links could be provided in either the response header or body (obviously I have provided both for this demonstration). The format of the <code>Link</code> header field is defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>, which is a Proposed Standard that is widely employed throughout the internet (i.e., it's pretty safe to use it in your application, too).</p>
@@ -226,29 +226,170 @@ If the client sends a `GET` request to `http://localhost:5000/api/v1/widgets` (i
 
 ## Retrieve Widget List
 
-### `pagination_model` API Model
+With the background info regarding pagination and HATEOAS in mind, we are ready to begin implementing the API endpoint that responds to `GET` requests sent to `/api/v1/widgets`. Per **Table 1**, this endpoint and request type allows clients to retrieve a list of `widget` objects. As before, we start by creating request parsers/API models to validate request data and serialize response data.
 
-{{< highlight python >}}from datetime import date, datetime, timezone
+### `pagination_reqparser` Request Parser
 
-from flask_restplus import Model
-from flask_restplus.fields import String, DateTime, Integer, List, Nested{{< /highlight >}}
+When a client sends a request to retrieve a list of `widgets`, what data should we expect to be included with the request? The answer should be fairly obvious based on the information covered in the <a href="#pagination">Introduction</a>.
 
-{{< highlight python "linenos=table,linenostart=74" >}}pagination_reqparser = RequestParser(bundle_errors=True)
+The request to retrieve a list of `widget` objects should include two values: the page number and number of items per page. Luckily, both of these values are integers, and there are several pre-built types in the `flask_restplus.inputs` module that convert request data to integer values.
+
+Open `app/api/widgets/dto.py` and update the import statements to include the `flask_restplus.inputs.positive` class **(Line 6)**:
+
+{{< highlight python "linenos=table,linenostart=2,hl_lines=5" >}}import re
+from datetime import date, datetime, time, timezone
+
+from dateutil import parser
+from flask_restplus.inputs import positive, URL
+from flask_restplus.reqparse import RequestParser
+
+from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME{{< /highlight >}}
+
+Next, add the content below:
+
+{{< highlight python "linenos=table,linenostart=69" >}}pagination_reqparser = RequestParser(bundle_errors=True)
 pagination_reqparser.add_argument(
     "page",
-    type=int,
+    type=positive,
     required=False,
     default=1,
 )
 pagination_reqparser.add_argument(
     "per_page",
-    type=int,
+    type=positive,
     required=False,
     choices=[5, 10, 25, 50, 100],
     default=10,
-)
+){{< /highlight >}}
 
-widget_owner_model = Model(
+There are a couple of important things to note about how these arguments are configured:
+
+<div class="code-details">
+    <ul>
+        <li>
+            <p><strong>Lines 72, 78: </strong>By specifying <code>type=positive</code>, the value provided in the request data will be coerced to an integer. If the value represents a positive, non-zero integer, the request will succeed and the server will send the paginated list to the client. Otherwise, the server will reject the request with status code <code>HTTPStatus.BAD_REQUEST</code> (400).</p>
+            <div class="note note-flex">
+                <div class="note-icon">
+                    <i class="fa fa-pencil"></i>
+                </div>
+                <div class="note-message" style="flex-flow: column wrap">
+                    <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>page_num</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
+                </div>
+            </div>
+        </li>
+        <li>
+            <p><strong>Lines 73, 79: </strong>This is the first time that we have specified a <code>RequestParser</code> argument as <code>required=False</code>. This allows the client to send a request <span class="emphasis">without</span> either parameter and the request will still succeed (e.g., <code>GET /api/v1/widgets</code> will return the same response as <code>GET /api/v1/widgets?page=1&per_page=10</code>).</p>
+            <div class="note note-flex">
+                <div class="note-icon">
+                    <i class="fa fa-pencil"></i>
+                </div>
+                <div class="note-message" style="flex-flow: column wrap">
+                    <p>What would happen if <code>required=True</code> and the client sends a request without either parameter? Rather than using a default value, the server would reject the request with status code <code>HTTPStatus.BAD_REQUEST</code> (400) and include an error message indicating that one or more required values were missing.</p>
+                </div>
+            </div>
+        </li>
+        <li>
+            <p><strong>Lines 74, 81: </strong>The default value for each parameter can be configured with the keyword argument <code>default</code>.</p>
+        </li>
+        <li>
+            <p><strong>Line 80: </strong>The range of valid values for the <code>page</code> parameter is any positive integer. However, the <code>per_page</code> parameter must have an upper bound since the point of employing pagination is to prevent the API from becoming sluggish due to sending/receiving a large amount of data.</p>
+            <p>Flask-RESTPlus includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a customizable range of integers, but I think it makes more sense for the page size to be a fixed set of choices.</p>
+            <p>The list provided to the <code>choices</code> keyword defines the set of valid values. This has an additional benefit &mdash; on the Swagger UI page, the input form for <code>per_page</code> will render a select element containing the list of choices.</p>
+        </li>
+    </ul>
+</div>
+
+Implementing the request parser was trivial, but constructing a response containing a list of `widget` objects is significantly more complicated. Keep in mind, <span class="bold-italics">the response must be formatted as a paginated list</span>, including navigational links and values for the current page number, number of items per page, total number of items in the collection, etc.
+
+It is possible to create the paginated list manually from scratch and define API models to serialize the whole thing to JSON (it would also be tedious). Instead of needlessly wasting time, let's take a look at a method that will do most of the work for us.
+
+### Flask-SQLAlchemy `paginate` Method
+
+The Flask-SQLAlchemy extension has a <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate">`paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination">`Pagination` objects</a>. The pagination method is a member of the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object"><code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
+<span class="cmd-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
+[Clang 10.0.1 (clang-1001.0.46.4)] on darwin
+App: flask-api-tutorial [development]
+Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">len(Widget.query.all())</span>
+<span class="cmd-repl-results">6</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination = Widget.query.paginate(page=1, per_page=5)</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination</span>
+<span class="cmd-repl-results">&lt;flask_sqlalchemy.Pagination object at 0x10b44bf90&gt;</span></code></pre>
+
+I created six `Widget` instances in my test environment, which is verified by the first statement `len(Widget.query.all())` returning a result of 6. Next, we create a `Pagination` object for the first page of `Widget` objects with five items per page by calling `Widget.query.paginate(page=1, per_page=5)`. The last statement verifies that we did, in fact, create a `Pagination` object.
+
+<div class="note note-flex">
+  <div class="note-icon">
+    <i class="fa fa-pencil"></i>
+  </div>
+  <div class="note-message" style="flex-flow: column wrap">
+    <p>I recommend reading the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object">SQLAlchemy documentation for the Query object</a>, as well as the Flask-SQLAlchemy documentation for <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination">the <code>Pagination</code> object</a> and <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate">the <code>paginate</code> method</a>. </p>
+  </div>
+</div>
+
+<pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.page</span>
+<span class="cmd-repl-results">1</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.has_next</span>
+<span class="cmd-repl-results">True</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.has_prev</span>
+<span class="cmd-repl-results">False</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">len(pagination.items)</span>
+<span class="cmd-repl-results">5</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items</span>
+<span class="cmd-repl-results">[&lt;Widget name=first_widget, info_url=https://www.widgethost.net&gt;, &lt;Widget name=next, info_url=https://www.thisorthat.feh&gt;, &lt;Widget name=another, info_url=https://www.wontbelong.now&gt;, &lt;Widget name=foo, info_url=https://www.foo.bar&gt;, &lt;Widget name=baz, info_url=https://www.baz.bar&gt;]</span></code></pre>
+
+Next, we call `pagination.page` to verify that the page number matches the value specified in the `paginate` method. Since we specified `per_page=5` and there are six total items we know that there are two total pages, which is confirmed by the value of `pagination.has_next` being `True`. Also, since this is the first page we know that there is no previous page, which is why `pagination.has_prev` is `False`.
+
+`len(pagination.items)` verifies that this page contains five `widgets`. Finally, we inspect the `widget` list directly by executing `pagination.items`. As expected, a list containing five `Widget` instances is returned.
+
+<pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.pages</span>
+<span class="cmd-repl-results">2</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.per_page</span>
+<span class="cmd-repl-results">5</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.total</span>
+<span class="cmd-repl-results">6</span></code></pre>
+
+
+
+<pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items[0].name</span>
+<span class="cmd-repl-results">'first_widget'</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items[0].owner</span>
+<span class="cmd-repl-results">&lt;User email=admin@test.com, public_id=475807a4-8497-4c5c-8d70-109b429bb4ef, admin=True&gt;</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items[0].owner.email</span>
+<span class="cmd-repl-results">'admin@test.com'</span></code></pre>
+
+<pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination = Widget.query.paginate(page=2, per_page=5)</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.page</span>
+<span class="cmd-repl-results">2</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.has_next</span>
+<span class="cmd-repl-results">False</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.has_prev</span>
+<span class="cmd-repl-results">True</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">len(pagination.items)</span>
+<span class="cmd-repl-results">1</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items</span>
+<span class="cmd-repl-results">[&lt;Widget name=bim, info_url=http://www.baz.bar&gt;]</span></code></pre>
+
+### `pagination_model` API Model
+
+We need to update the import statements in `app/api/widgets/dto.py` to include Flask-RESTPlus classes that allow us to format various data types as JSON. Add **Line 6** and **Line 7** and save the file:
+
+{{< highlight python "linenos=table,linenostart=2,hl_lines=5-6" >}}import re
+from datetime import date, datetime, time, timezone
+
+from dateutil import parser
+from flask_restplus import Model
+from flask_restplus.fields import Boolean, Integer, List, Nested, String
+from flask_restplus.inputs import positive, URL
+from flask_restplus.reqparse import RequestParser
+
+from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME{{< /highlight >}}
+
+Next, add the content below:
+
+{{< highlight python "linenos=table,linenostart=86" >}}widget_owner_model = Model(
     "Widget Owner",
     {
         "email": String,
@@ -285,6 +426,63 @@ pagination_model = Model(
     "Pagination",
     {
         "links": Nested(pagination_links_model, skip_none=True),
+        "has_prev": Boolean,
+        "has_next": Boolean,
+        "page": Integer,
+        "total_pages": Integer(attribute="pages"),
+        "items_per_page": Integer(attribute="per_page"),
+        "total_items": Integer(attribute="total"),
+        "items": List(Nested(widget_model)),
+    },
+){{< /highlight >}}
+
+There is a lot to digest here. Let's take a look at how each API model is defined and how they interact with each other.
+
+#### `widget_model` and `widget_owner_model`
+
+{{< highlight python "linenos=table,linenostart=86" >}}widget_owner_model = Model(
+    "Widget Owner",
+    {
+        "email": String,
+        "public_id": String,
+    },
+)
+
+widget_model = Model(
+    "Widget",
+    {
+        "name": String,
+        "info_url": String,
+        "created_at": String(attribute="created_at_str"),
+        "deadline_passed": Boolean,
+        "deadline": String(attribute="deadline_str"),
+        "time_remaining": String(attribute="time_remaining_str"),
+        "owner": Nested(widget_owner_model),
+        "link": String(attribute="uri"),
+    },
+){{< /highlight >}}
+
+#### `pagination_links_model`
+
+{{< highlight python "linenos=table,linenostart=108" >}}pagination_links_model = Model(
+    "Nav Links",
+    {
+        "self": String,
+        "prev": String,
+        "next": String,
+        "first": String,
+        "last": String,
+    },
+){{< /highlight >}}
+
+#### `pagination_model`
+
+{{< highlight python "linenos=table,linenostart=119" >}}pagination_model = Model(
+    "Pagination",
+    {
+        "links": Nested(pagination_links_model, skip_none=True),
+        "has_prev": Boolean,
+        "has_next": Boolean,
         "page": Integer,
         "total_pages": Integer(attribute="pages"),
         "items_per_page": Integer(attribute="per_page"),
@@ -381,10 +579,12 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
 {{< highlight python "linenos=table,linenostart=24" >}}@token_required
 def retrieve_widget(name):
     widget = Widget.find_by_name(name)
-    if widget:
-        return widget, HTTPStatus.OK
-    error = f"{name} not found in database."
-    abort(HTTPStatus.NOT_FOUND, error, status="fail"){{< /highlight >}}
+    return (
+        widget,
+        HTTPStatus.OK
+        if widget
+        else abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail"),
+    ){{< /highlight >}}
 
 ### `Widget` Resource (HTTP GET)
 

@@ -28,7 +28,7 @@ VMWare only exposes a small number of settings through the UI. There are hundred
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>You should always make a backup of the .vmx file before modifying it. You can easily make changes that render the VM unusable or unable to boot!</p>

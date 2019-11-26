@@ -82,7 +82,7 @@ The PyJWT package trims all padding characters ("=") from the JWT components. Th
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>Base64-encoded strings may look like gibberish, but <strong><u>DO NOT</u></strong> make the mistake of assuming that the payload data has been encrypted. <strong><u>NEVER</u></strong> include any sensitive data (e.g., user password, payment info) in the JWT payload since it can be easily decoded by anyone.</p>
@@ -326,7 +326,7 @@ Successfully installed flask-api-tutorial</span>
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p><code>pip install -e .</code> installs the <code>flask-api-tutorial</code> application in the virtual environment in <span class="bold-italics">editable mode</span>. This allows our tests to be executed with the folder layout discussed previously, and also allows any changes made to app code or test code to be tested without needing to re-install the <code>flask-api-tutorial</code> application.</p>
@@ -694,7 +694,7 @@ As long as `python-dotenv` is installed, when the `flask` command is run any env
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>Never commit your <code>.env</code> file to your project's git repository. Doing so publicly exposes the <code>SECRET_KEY</code>, allowing anyone to issue authorization tokens for the API.</p>
@@ -738,7 +738,7 @@ You should recognize all of the Flask extensions from the first section of this 
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>By initializing the Flask-CORS extension as shown, CORS support for all domains and for all origins for all routes has been enabled.</p>
@@ -827,7 +827,7 @@ def test_config_production():
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>In order for the pytest runner to discover the tests, each test class and test case method must begin with "test" (or "Test").</p>
@@ -839,7 +839,7 @@ In the first line of each test case, the `create_app` function is called to crea
 For each configuration, we verify that the value of `SECRET_KEY` is not equal to the default value, which verifies that the value from the `.env` file was successfully retieved. We also check that each database URL is set correctly and that the `TOKEN_EXPIRE_HOURS` and `TOKEN_EXPIRE_MINUTES` settings are correct for each environment.
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>If you are using a different database for any environment and you retrieved the URL from the <code>.env</code> file, make sure you update the test case to verify that this value is retrieved correctly.</p>
@@ -888,7 +888,7 @@ One of the many neat features of Flask is that it comes with a built-in Command-
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>Make sure you have activated your virtual environment, you will not be able to use the Flask CLI otherwise.</p>
@@ -933,7 +933,7 @@ Commands:
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>Because we installed <code>python-dotenv</code>, the environment variables defined in <code>.env</code> are read from the file every time the <code>flask</code> command is executed (they can be accessed with the <code>os.getenv</code> method). Without this, we would need to set the value of <code>FLASK_APP</code> manually whenever we open a new terminal window.</p>

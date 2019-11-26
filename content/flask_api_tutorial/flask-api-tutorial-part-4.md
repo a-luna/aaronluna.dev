@@ -771,7 +771,7 @@ The two are in fact related. The lock icon indicates that the API endpoint requi
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>The unlocked lock icon indicates <span class="emphasis">two</span> things: the API method requires authorization,  <span class="emphasis">and</span> the access token is currently not being sent in the request header. After clicking the <strong>Authorize</strong> button and entering the access token, all unlocked icons will become locked icons. When the icon is locked, this indicates that the access token will be sent in the header of any request.</p>
@@ -780,7 +780,7 @@ The two are in fact related. The lock icon indicates that the API endpoint requi
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>There's one more thing to note about the Swagger UI page, the <code>User</code> model is shown at the bottom of the page (also on the <code>/auth/user</code> component under <strong>Responses</strong>). Any API model that you register with the API or an API namespcace will be rendered in this location (we registered <code>user_model</code> with the <code>auth_ns</code> namespace in <code>/app/api/auth/endpoints.py</code>).</p>
@@ -896,7 +896,7 @@ If you enter a URL without a domain, for example `:5000/api/v1/auth/user`, the <
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>The command above is assumed to be a <code>GET</code> request since that is the default used by httpie if the only argument in the command is a URL.</p>
@@ -937,7 +937,7 @@ We need to obtain an access token, so let's login and retrieve the token generat
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>The <code>-f</code> option is short for <code>--form</code> and tells httpie that this command is submitting a form. When this option is used, <code>POST</code> is used as the method type, the data fields are serialized as URL parameters and the <code>Content-Type</code> is set to <code>application/x-www-form-urlencoded; charset=utf-8</code>.</p>

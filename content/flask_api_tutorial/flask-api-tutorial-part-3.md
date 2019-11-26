@@ -196,7 +196,7 @@ There are a few important things to note about how we are configuring the `api` 
           <p><strong>Lines 6, 20: </strong>The API will implement <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer token authentication</a>. This dictionary value is passed to the Flask-RESTPlus <code>Api</code> constructor which adds the authorization to the Swagger UI page. This creates a "Authorize" button in the Swagger UI that prompts you to enter a Bearer token value (i.e., JWT value). After providing a token, all API methods that require authorization will automatically send the token in the Authorization field of the request header.</p>
           <div class="note note-flex">
             <div class="note-icon">
-              <i class="fa fa-pencil" aria-hidden="true"></i>
+              <i class="fa fa-pencil"></i>
             </div>
             <div class="note-message">
               <p>Currently, Flask-RESTPlus only supports OpenAPI 2.0, which lacks sufficient configuration settings to accurately describe Bearer token authentication as a security scheme object. This is not the case in OpenAPI 3.0. Defining an <code>apiKey</code> named <code>Bearer</code> which is located in the <code>Authorization</code> field of the request header achieves nearly the same behavior as Bearer Token Authentication, and provides a dialog window on the Swagger UI page to send requests with the access token in the header.</p>
@@ -404,7 +404,7 @@ We will implement each endpoint in the same way, following the steps listed belo
     <li>Define the set of HTTP methods that the API endpoint will support and expose methods on the concrete <code>Resource</code> class for each. Methods named <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> or <code>head</code> will be called when the API endpoint receives a request of the same HTTP method type.
     <div class="alert alert-flex">
       <div class="alert-icon">
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <i class="fa fa-exclamation-triangle"></i>
       </div>
       <div class="alert-message">
         <p>If the API endpoint does not support the HTTP method, do not expose a method with the name of the HTTP method and the client will receive a response with status code 405 <code>HTTPStatus.METHOD_NOT_ALLOWED</code></p>
@@ -538,7 +538,7 @@ def _get_token_expire_time():
       <p><strong>Lines 12-13: </strong>The first thing we do is verify that the email address provided by the user has not been registered. If a <code>User</code> already exists with the same email address, the request is aborted.</p>
       <div class="note note-flex">
         <div class="note-icon">
-          <i class="fa fa-pencil" aria-hidden="true"></i>
+          <i class="fa fa-pencil"></i>
         </div>
         <div class="note-message">
           <p>The <code>abort</code> function is provided by Flask-RESTPlus and is the correct way to abort a request received by an API endpoint. The first argument is the HTTP status code to include in the response. In this case, the appropriate response code is <code>HTTPStatus.CONFLICT</code> (409). The remaining arguments are included in the response body.</p>
@@ -745,7 +745,7 @@ You should receive a response with status code 201 `HTTPStatus.CREATED` if the e
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>The Swagger UI helpfully provides a <strong>Curl</strong> textbox that contains the exact request that was submitted to the server based on the values you provided. <code>cURL</code> is a ubiquitous tool and you can copy and paste the contents of the textbox into any terminal if you would like to test your API from the command-line.</p>
@@ -763,7 +763,7 @@ If you attempt to register with an email address that already exists in the data
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>The CLI examples I provide in this tutorial will <span class="emphasis">NOT</span> use <code>cURL</code>. I prefer <a href="https://httpie.org/" target="_blank">httpie</a> because the syntax is much cleaner and more intuitive. The options for styling and formatting the output are a huge plus as well.</p>
@@ -948,7 +948,7 @@ You might notice that none of the code we wrote for the `api.auth_register` endp
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>The response above <span class="emphasis">DOES NOT</span> have an attribute named <span class="bold-text">status</span>, because Flask-RESTPlus generated the response rather than any of the code that was written for this tutorial.</p>

@@ -142,7 +142,7 @@ The `User` class demonstrates several important concepts for creating database m
             <p><strong>Line 15: </strong>Flask-SQLAlchemy will automatically set the name of the database table by converting the class name (<code>User</code>) to lowercase. However, <code>user</code> is a reserved word in multiple SQL implementations (e.g., PostgreSQL, MySQL, MSSQL), and using any reserved word as a table name is a bad idea. You can override this default value by setting the <code>__tablename__</code> class attribute.</strong></p>
             <div class="note note-flex">
                 <div class="note-icon">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <i class="fa fa-pencil"></i>
                 </div>
                 <div class="note-message">
                     <p>Python class names in CamelCase will also create tablenames by converting to lowercase, with underscores inserted between each word (e.g., Python class <code>CamelCase</code> => Database table <code>camel_case</code>).</p>
@@ -165,7 +165,7 @@ The `User` class demonstrates several important concepts for creating database m
                     <p><strong>registered_on: </strong>This column will contain the date and time when the user account was created. <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#sqlalchemy.types.DateTime" target="_blank">SQLAlchemy provides many ways to store datetime values</a>, but the simplist method is to use <code>db.DateTime</code>.  Notice that we have specified a default value for this column, <code>default=utc_now</code>. This is a function in the <code>app.util.datetime_util</code> module that returns the current UTC date and time as an "aware" datetime object. When a new User is added to the database, the current UTC time will be evaluated and stored as the value for <code>registered_on</code>.</p>
                     <div class="alert alert-flex">
                         <div class="alert-icon">
-                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                            <i class="fa fa-exclamation-triangle"></i>
                         </div>
                         <div class="alert-message">
                             <p>In this project, all datetime values are assumed to be in UTC when written to the database.</p>
@@ -179,7 +179,7 @@ The `User` class demonstrates several important concepts for creating database m
                     <p><strong>public_id: </strong>This column will contain <a href="https://docs.python.org/3/library/uuid.html" target="_blank">UUID</a> (Universally Unique IDentifier) values. This column is defined in the same way as the email column since we are storing a string value that must be unique for all users. However, since this is a random value (i.e., not user-provided), we populate the column similarly to <code>registered_on</code>, with the result of a lambda function that is called when a new User is added to the database.</p>
                     <div class="note note-flex">
                         <div class="note-icon">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            <i class="fa fa-pencil"></i>
                         </div>
                         <div class="note-message">
                             <p>You may be wondering why we are using <code>default=lambda:str(uuid4())</code>, rather than <code>default=uuid4</code>. Calling <code>uuid.uuid4()</code> returns a UUID object, which must be converted to a string before it can be written to the database.</p>
@@ -192,7 +192,7 @@ The `User` class demonstrates several important concepts for creating database m
             <p><strong>Lines 27-30: </strong>The <code>@hybrid_property</code> decorator is <a href="https://docs.sqlalchemy.org/en/13/orm/extensions/hybrid.html?highlight=hybrid%20properties" target="_blank">another SQLAlchemy feature</a> that is capable of much more than what I am demonstrating here. Most often, this decorator is used to create "computed" or "virtual" columns whose value is computed from the values of one or more columns. In this instance, the <code>registered_on_str</code> column converts the datetime value stored in <code>registered_on</code> to a formatted string.</p>
             <div class="note note-flex">
                 <div class="note-icon">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <i class="fa fa-pencil"></i>
                 </div>
                 <div class="note-message" style="flex-flow: column wrap">
                     <p>I am using several of the functions from the <code>app.util.datetime_util</code> module here. The <code>registered_on</code> value (and all <code>datetime</code> values) is always converted to the UTC timezone when the value is written to the database. The <code>registered_on_str</code> value converts this value to the timezone of the machine executing this code and formats it as a string value.</p>
@@ -206,7 +206,7 @@ The `User` class demonstrates several important concepts for creating database m
             <p><strong>Lines 36-40: </strong>This is the setter function for the <code>password</code> <code>@property</code> which calculates the value stored in the <code>password_hash</code> column. This design only stores the hashed value and discards the actual password. Also, hashing the same password multiple times always produces a different value, so it is impossible to compare <code>password_hash</code> values to determine if multiple users have the same password.</p>
             <div class="note note-flex">
                 <div class="note-icon">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <i class="fa fa-pencil"></i>
                 </div>
                 <div class="note-message">
                     <p>We are using a value from the <code>Config</code> class, <code>BCRYPT_LOG_ROUNDS</code>. Since we have created our <code>app</code> object using the factory pattern, we must access the Flask application instance through the proxy object <code>current_app</code> (<a href="http://flask.pocoo.org/docs/1.0/appcontext/#purpose-of-the-context" target="_blank">Read this for more info</a>).</p>
@@ -274,7 +274,7 @@ def shell():
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>The changes we just made to <code>run.py</code> will be repeated whenever a new model is added. In general, whenever you add a new database model class to your project, you need to update your application entry point (in our case the <code>run.py</code> file to import the new model class before running the <code>flask db migrate</code> command.</p>
@@ -298,7 +298,7 @@ INFO  [alembic.runtime.migration] Running upgrade  -> 64e5bdaa9a49, add User mod
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message">
     <p>Each time the database schema changes, repeat the <code>flask db migrate</code> and <code>flask db upgrade</code> steps demonstrated above. <span class="emphasis">Remember to add a message</span> describing the schema changes when a new migration is created with <code>flask db migrate</code>.</p>
@@ -418,7 +418,7 @@ Let's breakdown how this method generates the access token:
             </ul>
             <div class="note note-flex">
                 <div class="note-icon">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    <i class="fa fa-pencil"></i>
                 </div>
                 <div class="note-message">
                     <p>Since this method is in the <code>User</code> class, the values <code>self.public_id</code> and <code>self.admin</code> refer to a User object. By including these values in the token, the server does not have to perform a database query to determine if a user has administrator access when handling a request.</p>
@@ -496,7 +496,7 @@ Here a few more things to note about the fixtures we defined in `conftest.py`:
             <p><strong>Line 19: </strong>The <code>db</code> fixture is using the <code>client</code> fixture from <code>pytest-flask</code>. The <code>request</code> parameter is another special <code>pytest</code> feature that can be used as a parameter in any fixture function. The <code>request</code> object gives access to the test context where the fixture was requested.</p>
             <div class="alert alert-flex">
                 <div class="alert-icon">
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    <i class="fa fa-exclamation-triangle"></i>
                 </div>
                 <div class="alert-message">
                     <p>Do not confuse the pytest <code>request</code> object and the global Flask <code>request</code> object. The former is used by a fixture to perform any teardown/destruct process on the test object created by the fixture. The latter represents an HTTP request received by the Flask application and contains the HTML body, headers, etc. sent by the client.</p>

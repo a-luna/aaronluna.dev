@@ -181,7 +181,7 @@ Each endpoint can be configured to respond to a unique set of HTTP method types.
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>Operations that create, modify or delete widgets are restricted to users with the administrator role. Regular (non-admin) users can only retrieve individual widgets and/or lists of widgets from the database.</p>
@@ -229,7 +229,7 @@ def add_user(email, admin, password):
 
 <div class="note note-flex">
   <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
+    <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message" style="flex-flow: column wrap">
     <p style="margin: 0 0 10px">Explaining how to create a command with click is beyond the scope of this tutorial. Thankfully, the click documentation is exceptional. If you are interested, you can find everything you need to understand the <code>add_user</code> function in the links below:</p>
@@ -467,7 +467,7 @@ INFO  [alembic.autogenerate.compare] Detected added table 'widget'
 
 <div class="note note-flex">
     <div class="note-icon">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
+        <i class="fa fa-pencil"></i>
     </div>
     <div class="note-message" style="flex-flow: column wrap">
         <p>You can verify that the <code>widget</code> table was detected by the Flask Migrate extension from the output of the <code>flask db migrate</code> command. You should see a message similar to the example above (<strong>Detected added table 'widget'</strong>), followed by a statement indicating the migration script was successfully generated.</p>
@@ -495,7 +495,7 @@ So where should we begin? In my opinion, the endpoint that should be implemented
         <li>Define the set of HTTP methods that the API endpoint will support and expose methods on the concrete <code>Resource</code> class for each. Methods named <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> or <code>head</code> will be called when the API endpoint receives a request of the same HTTP method type.
             <div class="alert alert-flex">
                 <div class="alert-icon">
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    <i class="fa fa-exclamation-triangle"></i>
                 </div>
                 <div class="alert-message">
                     <p>If the API endpoint does not support the HTTP method, do not expose a method with the name of the HTTP method and the client will receive a response with status code 405 <code>HTTPStatus.METHOD_NOT_ALLOWED</code></p>
@@ -551,8 +551,8 @@ Create a new file named `dto.py` in `app/api/widgets` and enter the content belo
 {{< highlight python "linenos=table" >}}"""Parsers and serializers for /widgets API endpoints."""
 import re
 from datetime import date, datetime, time, timezone
-from dateutil import parser
 
+from dateutil import parser
 from flask_restplus.inputs import URL
 from flask_restplus.reqparse import RequestParser
 
@@ -654,7 +654,7 @@ The `widget_name` function is adapted directly from the example shown above to s
 """</span>, re.VERBOSE)</code></pre>
         <div class="note note-flex">
             <div class="note-icon">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
+                <i class="fa fa-pencil"></i>
             </div>
             <div class="note-message" style="flex-flow: column wrap">
                 <p>Teaching regular expressions is beyond the scope of this tutorial. However, if you are looking for a good introduction to the topic I recommend reading <a href="https://docs.python.org/3/howto/regex.html" target="_blank">Regular Expression HOWTO</a> from the official Python docs.</p>
@@ -746,7 +746,7 @@ The only restriction on `info_url` that we will employ is that the URL scheme mu
 
 <div class="alert alert-flex">
   <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
     <p>The value of the <code>schemes</code> parameter must always be a list or tuple, even if you intend to limit the allowed URL values to a single scheme.</p>
@@ -972,7 +972,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
         <p>We retrieve the <code>User</code> object that corresponds to the <code>public_id</code> of the user that sent the request and assign it to <code>owner</code>. Then, <code>owner.id</code> is set as the value of <code>widget.owner_id</code>.</p>
         <div class="note note-flex">
           <div class="note-icon">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
+            <i class="fa fa-pencil"></i>
           </div>
           <div class="note-message" style="flex-flow: column wrap">
             <p>Why can't we just use <code>public_id</code> as the value of <code>widget.owner_id</code>, instead of going through the process of retrieving the <code>User</code> object and using the <code>id</code> attribute? Since <code>widget.owner_id</code> is defined as a foreign key referencing <code>site_user.id</code> (the primary key of the <code>site_user</code> table), we must store the value of the <code>id</code> attribute in order to correctly configure the relationship between the two tables.</p>
@@ -992,7 +992,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
         <p><strong>Line 26: </strong><code>widget.uri</code> is a hybrid property that returns the URI for the specific <code>widget</code> resource.</p>
         <div class="alert alert-flex">
           <div class="alert-icon">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <i class="fa fa-exclamation-triangle"></i>
           </div>
           <div class="alert-message">
             <p>The <code>uri</code> attribute calls the <code>url_for</code> function which relies on the <code>api.widget</code> endpoint being implemented. We haven't implemented either of the two endpoints defined in <span class="bold-text">Table 1</span> at this point, so this will result in an unhandled exception until both have have been fully implemented.</p>

@@ -111,7 +111,7 @@ Reading state information... Done
 <span class="cmd-prompt">/opt/src_files $</span></code></pre>
     <div class="alert alert-flex">
       <div class="alert-icon">
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        <i class="fa fa-exclamation-triangle"></i>
       </div>
       <div class="alert-message">
         <p><span class="bold-italics">PLEASE DO NOT USE A FOLDER IN YOUR USER'S HOME DIRECTORY</span>. If you plan on using the .deb file to install your custom version of NGINX on another system, the source files must be located in the same path on each system. If you store the source files in a directory in this user's home directory, you will only be able to use the .deb package on another system with a user who's name is exactly the same.</p>
@@ -145,7 +145,7 @@ Reading state information... Done
         <a href="https://www.pcre.org">https://www.pcre.org</a>
         <div class="alert alert-flex">
           <div class="alert-icon">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <i class="fa fa-exclamation-triangle"></i>
           </div>
           <div class="alert-message">
             <p>NGINX requires the original PCRE library, <span class="bold-italics">NOT PCRE2</span></p>
@@ -159,7 +159,7 @@ Reading state information... Done
         <a href="https://www.openssl.org/source/">https://www.openssl.org/source/</a>
         <div class="alert alert-flex">
           <div class="alert-icon">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <i class="fa fa-exclamation-triangle"></i>
           </div>
           <div class="alert-message">
             <p>NGINX can be built with any 1.x.x version of OpenSSL, but using the latest (1.1.1) is strongly recommended since this version includes suport for TLS 1.3, the latest and most secure version of the encryption protocol.</p>
@@ -205,7 +205,7 @@ drwxr-xr-x 14  501 staff 4096 Jan 15  2017 zlib-1.2.11</span>
     <p><strong>This is the most important step</strong>. With this <code>./configure</code> command, you enable/disable modules and manage all configuration settings:</p>
     <div class="note note-flex">
       <div class="note-icon">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
+        <i class="fa fa-pencil"></i>
       </div>
       <div class="note-message" style="flex-flow: column wrap">
         <p>The values below for OpenSSL, PCRE and zlib library folder paths (<strong>Line #18, 21 and 23</strong>, respectively)  are valid for the actions performed in <strong>Step 10</strong>. If you saved the source code somewhere besides <code>/opt/src_files</code>, modify the config arguments to use the correct location.</p>
@@ -394,7 +394,7 @@ Setting up nginx (1.15.6-1) ...</span></code></pre>
     <p>Move the .deb package to a new folder since we want to keep it separate from the source code files. Navigate to the location of the .deb file after you have moved it:</p>
     <div class="note note-flex">
       <div class="note-icon">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
+        <i class="fa fa-pencil"></i>
       </div>
       <div class="note-message" style="flex-flow: column wrap">
         <p>I created a new folder, <code>/opt/save</code>, and moved the .deb file to this location. Feel free to use any folder other than the directory containing the source files.</p>
