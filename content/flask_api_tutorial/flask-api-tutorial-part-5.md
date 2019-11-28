@@ -383,10 +383,6 @@ class Widget(db.Model):
         timedelta_str = format_timedelta_str(self.time_remaining)
         return timedelta_str if not self.deadline_passed else "No time remaining"
 
-    @hybrid_property
-    def uri(self):
-        return url_for("api.widget", name=self.name, _external=True)
-
     @classmethod
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first(){{< /highlight >}}
@@ -428,10 +424,7 @@ Let's take a look at how these attributes are defined and how they fulfill the v
         <p><strong>Lines 53-56: </strong><code>time_remaining_str</code> converts the <code>timedelta</code> object returned by <code>time_remaining</code> to a formatted string if the <code>deadline</code> has not been passed. If the <code>deadline</code> has passed, <span class="bold-text">"No time remaining"</span> is returned.</p>
       </li>
       <li>
-        <p><strong>Lines 58-60: </strong><code>uri</code> is the API endpoint where clients can interact with this specific widget. The <code>url_for</code> function is used to dynamically construct the URL path (we have previously used the <code>url_for</code> function in test cases for <code>auth_ns</code> endpoints).</p>
-      </li>
-      <li>
-        <p><strong>Lines 62-64: </strong><code>find_by_name</code> is a class method just like the <code>find_by_email</code> and <code>find_by_public_id</code> methods we previously created in the <code>User</code> class. Since the <code>name</code> attribute must be unique, we can use it to retrieve a specific <code>Widget</code>.</p>
+        <p><strong>Lines 58-60: </strong><code>find_by_name</code> is a class method just like the <code>find_by_email</code> and <code>find_by_public_id</code> methods we previously created in the <code>User</code> class. Since the <code>name</code> attribute must be unique, we can use it to retrieve a specific <code>Widget</code>.</p>
       </li>
     </ul>
 </div>
@@ -946,9 +939,9 @@ def create_widget(widget_dict):
     widget.owner_id = owner.id
     db.session.add(widget)
     db.session.commit()
-    response = jsonify(status="success", message=f"New widget added: {widget.name}.")
+    response = jsonify(status="success", message=f"New widget added: {name}.")
     response.status_code = HTTPStatus.CREATED
-    response.headers["Location"] = widget.uri
+    response.headers["Location"] = url_for("api.widget", name=name)
     return response{{< /highlight >}}
 
 Let's take a look at how the `create_widget` function performs the tasks listed above:
@@ -989,20 +982,17 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
         <p><strong>Line 25: </strong>Since the request to create a new widget was successful, the correct HTTP status code for the response is <code>HTTPStatus.CREATED</code> (201).</p>
       </li>
       <li>
-        <p><strong>Line 26: </strong><code>widget.uri</code> is a hybrid property that returns the URI for the specific <code>widget</code> resource.</p>
-        <div class="alert alert-flex">
-          <div class="alert-icon">
-            <i class="fa fa-exclamation-triangle"></i>
-          </div>
-          <div class="alert-message">
-            <p>The <code>uri</code> attribute calls the <code>url_for</code> function which relies on the <code>api.widget</code> endpoint being implemented. We haven't implemented either of the two endpoints defined in <span class="bold-text">Table 1</span> at this point, so this will result in an unhandled exception until both have have been fully implemented.</p>
-          </div>
-        </div>
-      </li>
-      <li>
         <p><strong>Line 27: </strong>After ensuring that the response is configured with all required header fields, it is sent to the client.</p>
       </li>
     </ul>
+</div>
+<div class="alert alert-flex">
+  <div class="alert-icon">
+    <i class="fa fa-exclamation-triangle"></i>
+  </div>
+  <div class="alert-message">
+    <p>The call to the <code>url_for</code> function in <strong>Line 26</strong> relies on the <code>api.widget</code> endpoint being implemented. We haven't implemented either of the two endpoints defined in <span class="bold-text">Table 1</span> at this point, so this will result in an unhandled exception until both have have been fully implemented.</p>
+  </div>
 </div>
 
 Next, we need to create the API endpoint for the create operation and incorporate it with the <code>widget_reqparser</code> and the <code>create_widget</code> function.

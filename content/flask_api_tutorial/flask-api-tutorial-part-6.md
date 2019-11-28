@@ -273,7 +273,7 @@ There are a couple of important things to note about how these arguments are con
                     <i class="fa fa-pencil"></i>
                 </div>
                 <div class="note-message" style="flex-flow: column wrap">
-                    <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>page_num</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
+                    <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive" target="_blank">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>page_num</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
                 </div>
             </div>
         </li>
@@ -293,8 +293,8 @@ There are a couple of important things to note about how these arguments are con
         </li>
         <li>
             <p><strong>Line 80: </strong>The range of valid values for the <code>page</code> parameter is any positive integer. However, the <code>per_page</code> parameter must have an upper bound since the point of employing pagination is to prevent the API from becoming sluggish due to sending/receiving a large amount of data.</p>
-            <p>Flask-RESTPlus includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a customizable range of integers, but I think it makes more sense for the page size to be a fixed set of choices.</p>
-            <p>The list provided to the <code>choices</code> keyword defines the set of valid values. This has an additional benefit &mdash; on the Swagger UI page, the input form for <code>per_page</code> will render a select element containing the list of choices.</p>
+            <p>Flask-RESTPlus includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range" target="_blank"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a range of integers. This would allow the client to request any number of items per page, but I think it makes more sense to restrict the page size to a small, fixed set of choices.</p>
+            <p>The list provided to the <code>choices</code> keyword defines the set of allowable values. This has an additional benefit &mdash; on the Swagger UI page, the input form for <code>per_page</code> will render a select element containing the list of choices.</p>
         </li>
     </ul>
 </div>
@@ -305,7 +305,7 @@ It is possible to create the paginated list manually from scratch and define API
 
 ### Flask-SQLAlchemy `paginate` Method
 
-The Flask-SQLAlchemy extension has a <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate">`paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination">`Pagination` objects</a>. The pagination method is a member of the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object"><code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
+The Flask-SQLAlchemy extension has a <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">`paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">`Pagination` objects</a>. The pagination method is a member of the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank"><code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
@@ -325,9 +325,18 @@ I created six `Widget` instances in my test environment, which is verified by th
     <i class="fa fa-pencil"></i>
   </div>
   <div class="note-message" style="flex-flow: column wrap">
-    <p>I recommend reading the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object">SQLAlchemy documentation for the Query object</a>, as well as the Flask-SQLAlchemy documentation for <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination">the <code>Pagination</code> object</a> and <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate">the <code>paginate</code> method</a>. </p>
+    <p>I recommend reading the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank">SQLAlchemy documentation for the Query object</a>, as well as the Flask-SQLAlchemy documentation for <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">the <code>Pagination</code> object</a> and <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">the <code>paginate</code> method</a>. </p>
   </div>
 </div>
+
+<pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.pages</span>
+<span class="cmd-repl-results">2</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.per_page</span>
+<span class="cmd-repl-results">5</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.total</span>
+<span class="cmd-repl-results">6</span></code></pre>
+
+These three attributes will remain the same for all pages with the same `per_page` value. `pages` is the total number of pages, `per_page` is (obviously) the number of items on a single page, and `total` is the total number of items in the collection.
 
 <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.page</span>
 <span class="cmd-repl-results">1</span>
@@ -344,21 +353,16 @@ Next, we call `pagination.page` to verify that the page number matches the value
 
 `len(pagination.items)` verifies that this page contains five `widgets`. Finally, we inspect the `widget` list directly by executing `pagination.items`. As expected, a list containing five `Widget` instances is returned.
 
-<pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.pages</span>
-<span class="cmd-repl-results">2</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.per_page</span>
-<span class="cmd-repl-results">5</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.total</span>
-<span class="cmd-repl-results">6</span></code></pre>
-
-
-
 <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items[0].name</span>
 <span class="cmd-repl-results">'first_widget'</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items[0].owner</span>
 <span class="cmd-repl-results">&lt;User email=admin@test.com, public_id=475807a4-8497-4c5c-8d70-109b429bb4ef, admin=True&gt;</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items[0].owner.email</span>
 <span class="cmd-repl-results">'admin@test.com'</span></code></pre>
+
+Let's take a look at `pagination.items[0]`, the first `widget` added to the database. First, the `name` attribute is checked, followed by `owner`. `owner` contains a `User` object that corresponds to the user that created this `Widget`. The `create_widget` function (which performs the process of creating a widget after the request has been fully validated) stores the `id` of the `User` that sent the request in the `Widget.owner_id` attribute.
+
+<a href="/series/flask_api_tutorial/part-5/#widget-db-model" target="_blank">`owner_id` is defined</a> as <a href="https://docs.sqlalchemy.org/en/13/core/metadata.html#sqlalchemy.schema.Column" target="_blank">a SQLAlchemy `Column`</a> to which <a href="https://docs.sqlalchemy.org/en/13/core/constraints.html#sqlalchemy.schema.ForeignKey" target="_blank">a `ForeignKey` construct</a> has been applied and this integer value is stored in the `widget` database table. `Widget.owner` is defined as <a href="https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship" target="_blank">a SQLAlchemy relationship</a> between the `Widget` table and the `User` table, and <span class="emphasis">is not</span> stored in the database. Whenever a `Widget` object is retrieved from the database, `owner` is populated with a `User` object thanks to the foreign-key relationship and the magic of the SQLAlchemy ORM.
 
 <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination = Widget.query.paginate(page=2, per_page=5)</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.page</span>
@@ -372,16 +376,22 @@ Next, we call `pagination.page` to verify that the page number matches the value
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.items</span>
 <span class="cmd-repl-results">[&lt;Widget name=bim, info_url=http://www.baz.bar&gt;]</span></code></pre>
 
+Finally, we retrieve the second (and final) page of `Widget` objects with five items per page by calling `Widget.query.paginate(page=2, per_page=5)`. We then verify that this is, in fact, the second page by calling `pagination.page`. We know `pagination.has_next` should be `False` since this is the final page of `Widgets`, and `pagination.has_prev` should be `True`. `len(pagination.items)` is one since there are six total `Widgets` and items #1-5 were shown on `page=1`. Lastly, we verify that `pagination.items` contains a single `Widget` object.
+
+Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created for the `User` class.
+
 ### `pagination_model` API Model
 
-We need to update the import statements in `app/api/widgets/dto.py` to include Flask-RESTPlus classes that allow us to format various data types as JSON. Add **Line 6** and **Line 7** and save the file:
+In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href=http://localhost:1313/series/flask_api_tutorial/part-4/#user-model-api-model" target"_blank">Part 4</a>. If you need a refresher, please review it.
+
+First, we need to update the import statements in `app/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
 {{< highlight python "linenos=table,linenostart=2,hl_lines=5-6" >}}import re
 from datetime import date, datetime, time, timezone
 
 from dateutil import parser
 from flask_restplus import Model
-from flask_restplus.fields import Boolean, Integer, List, Nested, String
+from flask_restplus.fields import Boolean, DateTime, Integer, List, Nested, String, Url
 from flask_restplus.inputs import positive, URL
 from flask_restplus.reqparse import RequestParser
 
@@ -402,12 +412,13 @@ widget_model = Model(
     {
         "name": String,
         "info_url": String,
-        "created_at": String(attribute="created_at_str"),
+        "created_at_iso8601": DateTime(attribute="created_at"),
+        "created_at_rfc822": DateTime(attribute="created_at", dt_format="rfc822"),
         "deadline_passed": Boolean,
         "deadline": String(attribute="deadline_str"),
         "time_remaining": String(attribute="time_remaining_str"),
         "owner": Nested(widget_owner_model),
-        "link": String(attribute="uri"),
+        "link": Url("api.widget"),
     },
 )
 
@@ -536,11 +547,11 @@ def _pagination_url_dict(pagination):
     this_page = pagination.page
     per_page = pagination.per_page
     total_pages = pagination.pages
-    url_self = url_for("api.widget_list", page=this_page, per_page=per_page, _external=True)
-    url_prev = url_for("api.widget_list", page=this_page - 1, per_page=per_page, _external=True)
-    url_next = url_for("api.widget_list", page=this_page + 1, per_page=per_page, _external=True)
-    url_first = url_for("api.widget_list", page=1, per_page=per_page, _external=True)
-    url_last = url_for("api.widget_list", page=total_pages, per_page=per_page, _external=True)
+    url_self = url_for("api.widget_list", page=this_page, per_page=per_page)
+    url_prev = url_for("api.widget_list", page=this_page - 1, per_page=per_page)
+    url_next = url_for("api.widget_list", page=this_page + 1, per_page=per_page)
+    url_first = url_for("api.widget_list", page=1, per_page=per_page)
+    url_last = url_for("api.widget_list", page=total_pages, per_page=per_page)
     return dict(self=url_self, prev=url_prev, next=url_next, first=url_first, last=url_last){{< /highlight >}}
 
 ### `WidgetList` Resource (HTTP GET)
