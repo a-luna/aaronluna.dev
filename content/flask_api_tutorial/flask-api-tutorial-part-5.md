@@ -1025,7 +1025,7 @@ class WidgetList(Resource):
     @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     @widget_ns.expect(widget_reqparser)
     def post(self):
-        """Add new widget."""
+        """Create a widget."""
         widget_dict = widget_reqparser.parse_args()
         return create_widget(widget_dict){{< /highlight >}}
 

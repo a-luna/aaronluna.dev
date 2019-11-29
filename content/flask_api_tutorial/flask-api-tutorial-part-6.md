@@ -362,7 +362,7 @@ Next, we call `pagination.page` to verify that the page number matches the value
 
 Let's take a look at `pagination.items[0]`, the first `widget` added to the database. First, the `name` attribute is checked, followed by `owner`. `owner` contains a `User` object that corresponds to the user that created this `Widget`. The `create_widget` function (which performs the process of creating a widget after the request has been fully validated) stores the `id` of the `User` that sent the request in the `Widget.owner_id` attribute.
 
-<a href="/series/flask_api_tutorial/part-5/#widget-db-model" target="_blank">`owner_id` is defined</a> as <a href="https://docs.sqlalchemy.org/en/13/core/metadata.html#sqlalchemy.schema.Column" target="_blank">a SQLAlchemy `Column`</a> to which <a href="https://docs.sqlalchemy.org/en/13/core/constraints.html#sqlalchemy.schema.ForeignKey" target="_blank">a `ForeignKey` construct</a> has been applied and this integer value is stored in the `widget` database table. `Widget.owner` is defined as <a href="https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship" target="_blank">a SQLAlchemy relationship</a> between the `Widget` table and the `User` table, and <span class="emphasis">is not</span> stored in the database. Whenever a `Widget` object is retrieved from the database, `owner` is populated with a `User` object thanks to the foreign-key relationship and the magic of the SQLAlchemy ORM.
+<a href="/series/flask_api_tutorial/part-5/#widget-db-model">`owner_id` is defined</a> as <a href="https://docs.sqlalchemy.org/en/13/core/metadata.html#sqlalchemy.schema.Column" target="_blank">a SQLAlchemy `Column`</a> to which <a href="https://docs.sqlalchemy.org/en/13/core/constraints.html#sqlalchemy.schema.ForeignKey" target="_blank">a `ForeignKey` construct</a> has been applied and this integer value is stored in the `widget` database table. `Widget.owner` is defined as <a href="https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship" target="_blank">a SQLAlchemy relationship</a> between the `Widget` table and the `User` table, and <span class="emphasis">is not</span> stored in the database. Whenever a `Widget` object is retrieved from the database, `owner` is populated with a `User` object thanks to the foreign-key relationship and the magic of the SQLAlchemy ORM.
 
 <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination = Widget.query.paginate(page=2, per_page=5)</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.page</span>
@@ -378,11 +378,11 @@ Let's take a look at `pagination.items[0]`, the first `widget` added to the data
 
 Finally, we retrieve the second (and final) page of `Widget` objects with five items per page by calling `Widget.query.paginate(page=2, per_page=5)`. We then verify that this is, in fact, the second page by calling `pagination.page`. We know `pagination.has_next` should be `False` since this is the final page of `Widgets`, and `pagination.has_prev` should be `True`. `len(pagination.items)` is one since there are six total `Widgets` and items #1-5 were shown on `page=1`. Lastly, we verify that `pagination.items` contains a single `Widget` object.
 
-Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created for the `User` class.
+Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created <a href=/series/flask_api_tutorial/part-4/#user-model-api-model">for the `User` class</a>.
 
 ### `pagination_model` API Model
 
-In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href=http://localhost:1313/series/flask_api_tutorial/part-4/#user-model-api-model" target"_blank">Part 4</a>. If you need a refresher, please review it.
+In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href=/series/flask_api_tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
 
 First, we need to update the import statements in `app/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
@@ -414,8 +414,8 @@ widget_model = Model(
         "info_url": String,
         "created_at_iso8601": DateTime(attribute="created_at"),
         "created_at_rfc822": DateTime(attribute="created_at", dt_format="rfc822"),
-        "deadline_passed": Boolean,
         "deadline": String(attribute="deadline_str"),
+        "deadline_passed": Boolean,
         "time_remaining": String(attribute="time_remaining_str"),
         "owner": Nested(widget_owner_model),
         "link": Url("api.widget"),
@@ -447,9 +447,17 @@ pagination_model = Model(
     },
 ){{< /highlight >}}
 
-There is a lot to digest here. Let's take a look at how each API model is defined and how they interact with each other.
+There is a lot to digest here. This is the first time that we are encountering API models that are composed of other API models. `pagination_model` contains a list of `widget_model` objects as well as a single `pagination_links_model` instance, Also, `widget_model` contains a single instance of `widget_owner_model`. Let's take a look at how each API model is defined and how they interact with each other.
 
 #### `widget_model` and `widget_owner_model`
+
+Let's work our way from the inside-out. As demonstrated in the interactive shell, the structure of a `Pagination` object is:
+
+<pre><code>pagination -> items -> widget -> owner</code></pre>
+
+`owner` is a `User` object. Previously, we created <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a> to serialize a `User` object to JSON. This API model exposes every attribute of the `User` class, most of which are unnecessary in this context.
+
+Rather than re-using `user_model`, we will create `widget_owner_model` which exposes only the `email` and `public_id` values of the `User` object:
 
 {{< highlight python "linenos=table,linenostart=86" >}}widget_owner_model = Model(
     "Widget Owner",
@@ -464,14 +472,78 @@ widget_model = Model(
     {
         "name": String,
         "info_url": String,
-        "created_at": String(attribute="created_at_str"),
-        "deadline_passed": Boolean,
+        "created_at_iso8601": DateTime(attribute="created_at"),
+        "created_at_rfc822": DateTime(attribute="created_at", dt_format="rfc822"),
         "deadline": String(attribute="deadline_str"),
+        "deadline_passed": Boolean,
         "time_remaining": String(attribute="time_remaining_str"),
         "owner": Nested(widget_owner_model),
-        "link": String(attribute="uri"),
+        "link": Url("api.widget"),
     },
 ){{< /highlight >}}
+
+The `widget_model` has a bunch of features that we are seeing for the first time. Let's take a look at it in more depth:
+
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Lines 99-100: </strong>This is the first time that we are using <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.DateTime" target="_blank">the <code>flask_restplus.fields.DateTime</code> class</a>, which formats a <code>datetime</code> value as a string. There are two supported formats: RFC 822 and ISO 8601. The format which is returned is determined by the <code>dt_format</code> parameter.</p>
+        <p>By default, ISO 8601 format is used. Since <code>dt_format</code> is not specified, <code>created_at_iso8601</code> will use this format. On the other hand, <code>created_at_rfc822</code> specifies <code>dt_format="rfc822"</code> so the same date will be returned using RFC 822 format.</p>
+        <p>What do these two formats look like? Here's an example:</p>
+        <pre><code>"created_at_iso8601": "2019-09-20T04:47:50",
+"created_at_rfc822": "Fri, 20 Sep 2019 04:47:50 -0000",</code></pre>
+        <p>The benefit of using a standard output format is that it can be easily parsed back to the original <code>datetime</code> value. If this is not a requirement and you (like me) find these formats difficult to quickly parse visually, there are other ways to format <code>datetime</code> values within an API model.</p>
+      </li>
+      <li>
+        <p><strong>Line 101: </strong><code>deadline_str</code> is a formatted string version of <code>deadline</code>, which is a <code>datetime</code> value. Since <code>deadline</code> is localized to UTC, <code>deadline_str</code> converts this value to the local time zone where the code is executed.</p>
+        <p>Here's an example of the format used by <code>deadline_str</code>:</p>
+        <pre><code>"deadline": "09/20/19 10:59:59 PM UTC-08:00",</code></pre>
+        <p>I prefer this style of formatting to either ISO 8601 or RFC 822 format since it is localized to the user's timezone and is (IMO) more readable. However, if the <code>datetime</code> value will not be read by humans and/or will be provided to a function expecting either ISO 8601 or RFC 822 format, obviously use the built-in <code>flask_restplus.fields.Datetime</code> class.</p>
+      </li>
+      <li>
+        <p><strong>Line 102: </strong>We used the <code>Boolean</code> class already (in <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a>), so refer back to that section if you need to review how it works.</p>
+      </li>
+      <li>
+        <p><strong>Line 103: </strong><code>time_remaining_str</code> is a formatted string version of  <code>time_remaining</code>, which is a <code>timedelta</code> value. Since Flask-RESTPlus does not include built-in types for serializing <code>timedelta</code> values, formatting <code>time_remaining</code> as a string is the only way to include it in the serialized JSON.</p>
+        <p>Here's an example of the format used by <code>time_remaining_str</code>:</p>
+        <pre><code>"time_remaining": "16 hours 41 minutes 42 seconds",</code></pre>
+      </li>
+      <li>
+        <p><strong>Line 104: </strong>In order to serialize a <code>Widget</code> object and preserve the structure where <code>owner</code> is a <code>User</code> object nested within the parent <code>Widget</code> object, we use <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.Nested" target="_blank">the <code>Nested</code> class</a> in conjunction with the <code>widget_owner_model</code>.</p>
+        <p>Here's what the <code>widget_owner_model</code> will look like within the parent <code>Widget</code> object:</p>
+        <pre><code>"owner": {
+    "email": "admin@test.com",
+    "public_id": "475807a4-8497-4c5c-8d70-109b429bb4ef"
+},</code></pre>
+        <div class="note note-flex">
+            <div class="note-icon">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+            </div>
+            <div class="note-message" style="flex-flow: column wrap">
+                <p>For more information and examples of serializing complex structures to JSON, please read the <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#complex-structures" target="_blank">Complex Structures</a> and <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#nested-field" target="_blank">Nested Field</a> sections of the Flask-RESTPlus documentation.</p>
+            </div>
+        </div>
+      </li>
+      <li>
+        <p><strong>Line 105: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTPlus documentation</a>:</p>
+        <blockquote class="rfc">Flask-RESTPlus includes a special field, <code>fields.Url</code>, that synthesizes a uri for the resource that’s being requested. This is also a good example of how to add data to your response that’s not actually present on your data object.</blockquote>
+        <p>By including a <code>link</code> to the URI with each <code>Widget</code>, the client can perform CRUD actions without manually constructing or storing the URI (which is an example of <a href="#hateoas">HATEOAS</a>). By default, the value returned for <code>link</code> will be a relative URI as shown below:</p>
+        <pre><code>"link": "/api/v1/widgets/first_widget"</code></pre>
+        <p>If the <code>link</code> should be an absolute URI (containing scheme, hostname, and port), include the keyword argument <code>absolute=True</code> (e.g., <code>Url("api.widget", absolute=True)</code>). In my local test environment, this returns the URI below for the same <code>Widget</code> resource:</p>
+        <pre><code>"link": "http://localhost:5000/api/v1/widgets/first_widget"</code></pre>
+        <div class="alert alert-flex">
+            <div class="alert-icon">
+                <i class="fa fa-exclamation-triangle"></i>
+            </div>
+            <div class="alert-message">
+                <p>The implementation of the <code>Url</code> field in <code>widget_model</code> relies on the <code>api.widget</code> endpoint, which we haven't created at this point. This will result in an unhandled exception until the <code>api.widget</code> endpoint has been fully implemented.</p>
+            </div>
+        </div>
+      </li>
+    </ul>
+</div>
+
+The `widget_model` introduced a bunch of classes and new techniques, I hope all of it was easy to understand. The remaining API models will re-use some of these concepts and the amount of new information will be much less than what we just experienced.
 
 #### `pagination_links_model`
 
@@ -577,7 +649,7 @@ widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.expect(pagination_reqparser)
     def get(self):
-        """Get a list of all widgets."""
+        """Retrieve a list of widgets."""
         request_data = pagination_reqparser.parse_args()
         page_num = request_data.get("page")
         per_page = request_data.get("per_page")
@@ -651,7 +723,7 @@ def update_widget(name, widget_dict):
     @widget_ns.expect(widget_reqparser)
     @widget_ns.marshal_with(widget_model)
     def put(self, name):
-        """Update an existing widget."""
+        """Update a widget."""
         request_data = widget_reqparser.parse_args()
         widget_dict = {k: v for k, v in request_data.items()}
         return update_widget(name, widget_dict){{< /highlight >}}
