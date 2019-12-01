@@ -174,8 +174,8 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno">15</span>  <span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
 <span class="cmd-lineno">16</span>  <span class="purple">Date</span>: <span class="light-blue">Mon, 26 Aug 2019 11:45:39 GMT</span>
 <span class="cmd-lineno-hl">17  <span class="purple">Link</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="self",</span></span>
-<span class="cmd-lineno-hl">18    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=2&per_page=10>; rel="next",</span></span>
-<span class="cmd-lineno-hl">19    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="first",</span></span>
+<span class="cmd-lineno-hl">18    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="first",</span></span>
+<span class="cmd-lineno-hl">19    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=2&per_page=10>; rel="next",</span></span>
 <span class="cmd-lineno-hl">20    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=5&per_page=10>; rel="last"</span></span>
 <span class="cmd-lineno">21</span>  <span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
 <span class="cmd-lineno">22</span>  <span class="purple">Total-Count</span>: <span class="pink">23</span>
@@ -183,8 +183,8 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno">24</span>  <span class="bold-text">{
 <span class="cmd-lineno-hl">25    <span class="purple">"links"</span><span style="color: var(--light-gray2)">: {</span></span>
 <span class="cmd-lineno-hl">26      <span class="purple">"self"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-lineno-hl">27      <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-lineno-hl">28      <span class="purple">"first"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-lineno-hl">27      <span class="purple">"first"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-lineno-hl">28      <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
 <span class="cmd-lineno-hl">29      <span class="purple">"last"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=5&per_page=10"</span></span>
 <span class="cmd-lineno">30</span>    },
 <span class="cmd-lineno">31</span>    <span class="purple">"page"</span>: <span class="pink">1</span>
@@ -465,9 +465,11 @@ Rather than re-using `user_model`, we will create `widget_owner_model` which exp
         "email": String,
         "public_id": String,
     },
-)
+){{< /highlight >}}
 
-widget_model = Model(
+The `widget_model` has a bunch of features that we are seeing for the first time. Let's take a look at it in more depth:
+
+{{< highlight python "linenos=table,linenostart=94" >}}widget_model = Model(
     "Widget",
     {
         "name": String,
@@ -481,8 +483,6 @@ widget_model = Model(
         "link": Url("api.widget"),
     },
 ){{< /highlight >}}
-
-The `widget_model` has a bunch of features that we are seeing for the first time. Let's take a look at it in more depth:
 
 <div class="code-details">
     <ul>
@@ -543,9 +543,11 @@ The `widget_model` has a bunch of features that we are seeing for the first time
     </ul>
 </div>
 
-The `widget_model` introduced a bunch of classes and new techniques, I hope all of it was easy to understand. The remaining API models will re-use some of these concepts and the amount of new information will be much less than what we just experienced.
+I hope that all of the material we encountered for the first time in the `widget_model` and `widget_owner_model` was easy to understand. The remaining API models are much simpler, and contain only a few small bits of new information. If you're comfortable with all of the information we just covered, let's move on and finish creating the `pagination_model`.
 
-#### `pagination_links_model`
+#### `pagination_links_model` and `pagination_model`
+
+If you go back and look at the <a href="#pagination">pagination example in the Introduction</a> , there's something important that is included in the example that <span class="emphasis">is not</span> part of the Flask-RESTPlus `Pagination` object. Here's a hint: it has to do with <a href="#hateoas">HATEOAS</a>. The answer is: **navigational links**:
 
 {{< highlight python "linenos=table,linenostart=108" >}}pagination_links_model = Model(
     "Nav Links",
@@ -558,7 +560,9 @@ The `widget_model` introduced a bunch of classes and new techniques, I hope all 
     },
 ){{< /highlight >}}
 
-#### `pagination_model`
+Since all of the fields in `pagination_links_model` are serialized using the `String` class, there's nothing new to discuss in that regard.
+
+Finally, the `widget_model` and `pagination_links_model` are integrated into the `pagination_model`:
 
 {{< highlight python "linenos=table,linenostart=119" >}}pagination_model = Model(
     "Pagination",
@@ -573,6 +577,24 @@ The `widget_model` introduced a bunch of classes and new techniques, I hope all 
         "items": List(Nested(widget_model)),
     },
 ){{< /highlight >}}
+
+There are only a few things in `pagination_model` that we are seeing for the first time:
+
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 122: </strong>In order to match the object structure shown in the <a href="#pagination">Introduction</a>, <code>pagination_model</code> must have a field named <code>links</code> containing navigational links that allow the client to access all <code>Widget</code> instances available in the database.</p>
+        <p>Notice that we are using the <code>Nested</code> field type the same way we did in <code>widget_model</code>, the only difference is that now we are including the keyword argument <code>skip_none=True</code>. As explained in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#skip-none-in-nested-fields" target="_blank">the Flask-RESTPlus documentation</a>, by default, if any of the fields in <code>pagination_links_model</code> have value <code>None</code>, the JSON output will contain these fields with value <code>null</code>.</p>
+        <p>There are many situations where one or more of the navigational links will be <code>None</code> (e.g., for the first page of results <code>prev</code> will always be <code>None</code>). <span class="bold-italics">By specifying</span> <code>skip_none=True</code>, <span class="bold-italics">these values will not be rendered in the JSON output</span>, making it much cleaner and reducing the size of the response.</p>
+      </li>
+      <li>
+        <p><strong>Lines 126-128: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Line 129: </strong>.</p>
+      </li>
+    </ul>
+</div>
 
 ### `retrieve_widget_list` Method
 
@@ -594,42 +616,47 @@ def retrieve_widget_list(page_num, per_page):
     return response{{< /highlight >}}
 
 {{< highlight python "linenos=table,linenostart=41" >}}def _pagination_nav_links(pagination):
+    link_dict = {}
     url_dict = _pagination_url_dict(pagination)
-    link_dict = dict(self=url_dict["self"], first=url_dict["first"], last=url_dict["last"])
+    link_dict["self"] = url_dict["self"]
+    link_dict["first"] = url_dict["first"]
     if pagination.has_prev:
         link_dict["prev"] = url_dict["prev"]
     if pagination.has_next:
         link_dict["next"] = url_dict["next"]
+    link_dict["last"] = url_dict["last"]
     return link_dict
 
 
 def _pagination_nav_header_links(pagination):
     url_dict = _pagination_url_dict(pagination)
     link_header = f'<{url_dict["self"]}>; rel="self", '
+    link_header += f'<{url_dict["first"]}>; rel="first", '
     if pagination.has_prev:
         link_header += f'<{url_dict["prev"]}>; rel="prev", '
     if pagination.has_next:
         link_header += f'<{url_dict["next"]}>; rel="next", '
-    link_header += f'<{url_dict["first"]}>; rel="first", '
     link_header += f'<{url_dict["last"]}>; rel="last", '
     return link_header.strip().strip(",")
 
 
 def _pagination_url_dict(pagination):
     this_page = pagination.page
+    prev_page = this_page - 1
+    next_page = this_page + 1
     per_page = pagination.per_page
     total_pages = pagination.pages
     url_self = url_for("api.widget_list", page=this_page, per_page=per_page)
-    url_prev = url_for("api.widget_list", page=this_page - 1, per_page=per_page)
-    url_next = url_for("api.widget_list", page=this_page + 1, per_page=per_page)
     url_first = url_for("api.widget_list", page=1, per_page=per_page)
+    url_prev = url_for("api.widget_list", page=prev_page, per_page=per_page)
+    url_next = url_for("api.widget_list", page=next_page, per_page=per_page)
     url_last = url_for("api.widget_list", page=total_pages, per_page=per_page)
-    return dict(self=url_self, prev=url_prev, next=url_next, first=url_first, last=url_last){{< /highlight >}}
+    return dict(self=url_self, first=url_first, prev=url_prev, next=url_next, last=url_last){{< /highlight >}}
 
 ### `WidgetList` Resource (HTTP GET)
 
 {{< highlight python >}}from app.api.widget.dto import (
-    widget_reqparser,
+    create_widget_reqparser,
     pagination_reqparser,
     widget_owner_model,
     widget_model,
@@ -720,11 +747,11 @@ def update_widget(name, widget_dict):
     @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found")
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
-    @widget_ns.expect(widget_reqparser)
+    @widget_ns.expect(update_widget_reqparser)
     @widget_ns.marshal_with(widget_model)
     def put(self, name):
         """Update a widget."""
-        request_data = widget_reqparser.parse_args()
+        request_data = update_widget_reqparser.parse_args()
         widget_dict = {k: v for k, v in request_data.items()}
         return update_widget(name, widget_dict){{< /highlight >}}
 

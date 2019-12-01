@@ -503,7 +503,7 @@ So where should we begin? In my opinion, the endpoint that should be implemented
 
 Step 1 says <span class="bold-italics">create request parsers/API models to validate request data and serialize response data</span>. So let's dive into it!
 
-### `widget_reqparser` Request Parser
+### `create_widget_reqparser` Request Parser
 
 When a client sends a request to create a new `Widget`, what data is required? Take a look at the attributes of the `Widget` class:
 
@@ -585,8 +585,8 @@ def future_date_from_string(date_str):
     return deadline_utc
 
 
-widget_reqparser = RequestParser(bundle_errors=True)
-widget_reqparser.add_argument(
+create_widget_reqparser = RequestParser(bundle_errors=True)
+create_widget_reqparser.add_argument(
     "name",
     type=widget_name,
     location="form",
@@ -594,14 +594,14 @@ widget_reqparser.add_argument(
     nullable=False,
     case_sensitive=True,
 )
-widget_reqparser.add_argument(
+create_widget_reqparser.add_argument(
     "info_url",
     type=URL(schemes=["http", "https"]),
     location="form",
     required=True,
     nullable=False,
 )
-widget_reqparser.add_argument(
+create_widget_reqparser.add_argument(
     "deadline",
     type=future_date_from_string,
     location="form",
@@ -696,7 +696,7 @@ The first test passes since **test** consists of only letters. The second test p
 
 Wait, let's back up. Didn't the requirement for the `name` attribute say that only **lowercase** letters were allowed? Yep, you got me. I kinda sort-of lied about **test_1-AZ** being a valid `widget_name`. But there is a reason why I did this, which will be revealed by the configuration of the argument object for the `name` attribute:
 
-{{< highlight python "linenos=table,linenostart=50" >}}widget_reqparser.add_argument(
+{{< highlight python "linenos=table,linenostart=50" >}}create_widget_reqparser.add_argument(
     "name",
     type=widget_name,
     location="form",
@@ -725,7 +725,7 @@ If the widget name contains only valid characters, it will be converted to lower
 
 #### `info_url` Argument
 
-{{< highlight python "linenos=table,linenostart=58" >}}widget_reqparser.add_argument(
+{{< highlight python "linenos=table,linenostart=58" >}}create_widget_reqparser.add_argument(
     "info_url",
     type=URL(schemes=["http", "https"]),
     location="form",
@@ -822,9 +822,9 @@ There is also a problem that arises from the project requirements for the `deadl
 
 This second issue is another matter of opinion, since you could easily object by pointing out that the `name` attribute has a requirement to be unique and the task of querying the database for widgets with the same name is not performed in the `wiget_name` function we just created.
 
-I'll explain the distinction between these two requirements with a hypothetical situation: A request is received to create a new widget with `name="test"`. This is a valid widget name, so the request is passed to the business logic and since no widget already exists in the database with `name="test"`, a new widget is created. Then, an identical request is received to create a widget with `name="test"`. IMO, from the point-of-view of the `widget_reqparser`, `test` is a valid widget name, so the request is again passed to the business logic. However, since a widget already exists with `name="test"`, the request is aborted with a message indicating that a widget already exists in the database with `name="test"`.
+I'll explain the distinction between these two requirements with a hypothetical situation: A request is received to create a new widget with `name="test"`. This is a valid widget name, so the request is passed to the business logic and since no widget already exists in the database with `name="test"`, a new widget is created. Then, an identical request is received to create a widget with `name="test"`. IMO, from the point-of-view of the `create_widget_reqparser`, `test` is a valid widget name, so the request is again passed to the business logic. However, since a widget already exists with `name="test"`, the request is aborted with a message indicating that a widget already exists in the database with `name="test"`.
 
-OTOH, consider this scenario: A request is received to create a new widget with `deadline="1923-03-28"`. This string is in a valid format but since the date is obviously in the past, the `widget_reqparser` raises a `ValueError` and the request is aborted. A `deadline` in the past is always invalid and a request to create a widget containing an invalid value for a required parameter must always be rejected. Hopefully my reasoning makes sense to you.
+OTOH, consider this scenario: A request is received to create a new widget with `deadline="1923-03-28"`. This string is in a valid format but since the date is obviously in the past, the `create_widget_reqparser` raises a `ValueError` and the request is aborted. A `deadline` in the past is always invalid and a request to create a widget containing an invalid value for a required parameter must always be rejected. Hopefully my reasoning makes sense to you.
 
 ##### `dateutil.parser`
 
@@ -885,9 +885,9 @@ There are a few things about the `future_date_from_string` function that are wor
     </ul>
 </div>
 
-We already know how to use a custom type, so the last thing we need to do is add an argument to our `widget_reqparser` with `type=future_date_from_string`;
+We already know how to use a custom type, so the last thing we need to do is add an argument to our `create_widget_reqparser` with `type=future_date_from_string`;
 
-{{< highlight python "linenos=table,linenostart=65" >}}widget_reqparser.add_argument(
+{{< highlight python "linenos=table,linenostart=65" >}}create_widget_reqparser.add_argument(
     "deadline",
     type=future_date_from_string,
     location="form",
@@ -995,7 +995,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
   </div>
 </div>
 
-Next, we need to create the API endpoint for the create operation and incorporate it with the <code>widget_reqparser</code> and the <code>create_widget</code> function.
+Next, we need to create the API endpoint for the create operation and incorporate it with the <code>create_widget_reqparser</code> and the <code>create_widget</code> function.
 
 ### `WidgetList` Resource (HTTP POST)
 
@@ -1006,7 +1006,7 @@ from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widget.dto import widget_reqparser
+from app.api.widget.dto import create_widget_reqparser
 from app.api.widget.business import create_widget
 
 widget_ns = Namespace(name="widgets", validate=True)
@@ -1023,15 +1023,15 @@ class WidgetList(Resource):
     @widget_ns.response(HTTPStatus.CONFLICT, "Widget name already exists.")
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
-    @widget_ns.expect(widget_reqparser)
+    @widget_ns.expect(create_widget_reqparser)
     def post(self):
         """Create a widget."""
-        widget_dict = widget_reqparser.parse_args()
+        widget_dict = create_widget_reqparser.parse_args()
         return create_widget(widget_dict){{< /highlight >}}
 
 There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask_api_tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace`/`Resource` objects, `doc`, `response`, or `expect` decorators, etc.
 
-The important part is **Lines 26-27** where the `parse_args` method of `widget_reqparser` is used to validate the request data, which is then passed to the `create_widget` function which we just defined.
+The important part is **Lines 26-27** where the `parse_args` method of `create_widget_reqparser` is used to validate the request data, which is then passed to the `create_widget` function which we just defined.
 
 ### Add `widget_ns` Namespace to `api`
 
