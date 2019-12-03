@@ -187,19 +187,21 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno-hl">28      <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
 <span class="cmd-lineno-hl">29      <span class="purple">"last"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=5&per_page=10"</span></span>
 <span class="cmd-lineno">30</span>    },
-<span class="cmd-lineno">31</span>    <span class="purple">"page"</span>: <span class="pink">1</span>
-<span class="cmd-lineno">33</span>    <span class="purple">"total_pages"</span>: <span class="pink">5</span>,
-<span class="cmd-lineno">33</span>    <span class="purple">"items_per_page"</span>: <span class="pink">10</span>,
-<span class="cmd-lineno">34</span>    <span class="purple">"total_items"</span>: <span class="pink">23</span>,
-<span class="cmd-lineno">35</span>    <span class="purple">"items"</span>: [
-<span class="cmd-lineno">36</span>      {
-<span class="cmd-lineno">37</span>        <span class="gray">//...</span>
-<span class="cmd-lineno">38</span>        <span class="purple">"name"</span>: <span class="light-blue">"test"</span>
-<span class="cmd-lineno-hl">39        <span class="purple">"link"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets/test"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-lineno">40</span>      },
-<span class="cmd-lineno">41</span>      <span class="gray">//...</span>
-<span class="cmd-lineno">42</span>    ]
-<span class="cmd-lineno">43</span>  }</span></span></code></pre>
+<span class="cmd-lineno">31</span>    <span class="purple">"has_prev"</span>: <span class="orange">false</span>,
+<span class="cmd-lineno">32</span>    <span class="purple">"has_next"</span>: <span class="orange">true</span>,
+<span class="cmd-lineno">33</span>    <span class="purple">"page"</span>: <span class="pink">1</span>
+<span class="cmd-lineno">34</span>    <span class="purple">"total_pages"</span>: <span class="pink">5</span>,
+<span class="cmd-lineno">35</span>    <span class="purple">"items_per_page"</span>: <span class="pink">10</span>,
+<span class="cmd-lineno">36</span>    <span class="purple">"total_items"</span>: <span class="pink">23</span>,
+<span class="cmd-lineno">37</span>    <span class="purple">"items"</span>: [
+<span class="cmd-lineno">38</span>      {
+<span class="cmd-lineno">39</span>        <span class="gray">//...</span>
+<span class="cmd-lineno">40</span>        <span class="purple">"name"</span>: <span class="light-blue">"test"</span>
+<span class="cmd-lineno-hl">41        <span class="purple">"link"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets/test"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-lineno">42</span>      },
+<span class="cmd-lineno">43</span>      <span class="gray">//...</span>
+<span class="cmd-lineno">44</span>    ]
+<span class="cmd-lineno">45</span>  }</span></span></code></pre>
 
 In this example, the database contains a total of 23 `widget` objects. If the client sends a `GET` request to `/api/v1/widgets?page=1&per_page=10`, the server response will contain the first ten objects from the database in the order that they were created. (i.e., items #1-10) The client can step through the full set of `widget` objects by continually sending `GET` requests and incrementing the `page` attribute. With `page=2` and `per_page=10`, the server response will contain the next ten objects from the database (i.e., items #11-20). With `page=3` and `per_page=10`, only three items will be sent in the response (i.e., items #21-23).
 
@@ -702,42 +704,26 @@ def retrieve_widget_list(page, per_page):
 
 
 def _pagination_nav_links(pagination):
-    link_dict = {}
-    url_dict = _pagination_url_dict(pagination)
-    link_dict["self"] = url_dict["self"]
-    link_dict["first"] = url_dict["first"]
+    nav_links = {}
+    per_page = pagination.per_page
+    this_page = pagination.page
+    last_page = pagination.pages
+    nav_links["self"] = url_for("api.widget_list", page=this_page, per_page=per_page)
+    nav_links["first"] = url_for("api.widget_list", page=1, per_page=per_page)
     if pagination.has_prev:
-        link_dict["prev"] = url_dict["prev"]
+        nav_links["prev"] = url_for("api.widget_list", page=this_page - 1, per_page=per_page)
     if pagination.has_next:
-        link_dict["next"] = url_dict["next"]
-    link_dict["last"] = url_dict["last"]
-    return link_dict
+        nav_links["next"] = url_for("api.widget_list", page=this_page + 1, per_page=per_page)
+    nav_links["last"] = url_for("api.widget_list", page=last_page, per_page=per_page)
+    return nav_links
 
 
 def _pagination_nav_header_links(pagination):
-    url_dict = _pagination_url_dict(pagination)
-    link_header = f'<{url_dict["self"]}>; rel="self", '
-    link_header += f'<{url_dict["first"]}>; rel="first", '
-    if pagination.has_prev:
-        link_header += f'<{url_dict["prev"]}>; rel="prev", '
-    if pagination.has_next:
-        link_header += f'<{url_dict["next"]}>; rel="next", '
-    link_header += f'<{url_dict["last"]}>; rel="last", '
-    return link_header.strip().strip(",")
-
-
-def _pagination_url_dict(pagination):
-    this_page = pagination.page
-    prev_page = this_page - 1
-    next_page = this_page + 1
-    per_page = pagination.per_page
-    total_pages = pagination.pages
-    url_self = url_for("api.widget_list", page=this_page, per_page=per_page)
-    url_first = url_for("api.widget_list", page=1, per_page=per_page)
-    url_prev = url_for("api.widget_list", page=prev_page, per_page=per_page)
-    url_next = url_for("api.widget_list", page=next_page, per_page=per_page)
-    url_last = url_for("api.widget_list", page=total_pages, per_page=per_page)
-    return dict(self=url_self, first=url_first, prev=url_prev, next=url_next, last=url_last){{< /highlight >}}
+    url_dict = _pagination_nav_links(pagination)
+    link_header = ""
+    for rel, url in url_dict.items():
+        link_header += f'<{url}>; rel="{rel}", '
+    return link_header.strip().strip(","){{< /highlight >}}
 
 This code implements the process of responding to a valid request for a list of widgets, please note the following:
 
@@ -747,7 +733,7 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 31: </strong>Per <span class="bold-text">Table 1</span>, the process of retrieving a list of <code>widgets</code> can only be performed by registered users (both regular and admin users). This is enforced by decorating the <code>retrieve_widget_list</code> function with <code>@token_required</code>.</p>
       </li>
       <li>
-        <p><strong>Line 32: </strong>The <code>page</code> and <code>per_page</code> parameters are passed to <code>retrieve_widget_list</code> after the <code>create_widget_reqparser</code> has parsed the values provided by the client from the request data.</p>
+        <p><strong>Line 32: </strong>The <code>page</code> and <code>per_page</code> parameters are passed to <code>retrieve_widget_list</code> after the <code>pagination_model</code> has parsed the values provided by the client from the request data.</p>
       </li>
       <li>
         <p><strong>Line 33: </strong><a href="#flask-sqlalchemy-paginate-method">As demonstrated in the Python interactive shell</a>, <code>pagination</code> objects are created by calling <code>Widget.query.paginate</code>, with the <code>page</code> and <code>per_page</code> values provided by the client.</p>
@@ -761,10 +747,11 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 35: </strong>Remember, the output of the <code>marshal</code> function is a <code>dict</code>. Also remember that the <code>flask_sqlalchemy.Pagination</code> class <span class="emphasis">does not</span> contain navigational links. We will discuss the <code>_pagination_nav_links</code> function shortly, but what is important to know is that it returns a <code>dict</code> that matches the fields in <code>pagination_links_model</code>. This <code>dict</code> is then added to the <code>pagination</code> object with key-name <code>links</code>, which matches the field on <code>pagination_model</code> containing <code>Nested(pagination_links_model, skip_none=True)</code>.</p>
       </li>
       <li>
-        <p><strong>Line 36: </strong>After adding the navigational links to the <code>pagination</code> object, it is ready to send to the client. <a href="/series/flask_api_tutorial/part-3/#process-registration-request">We discussed the <code>flask.jsonify</code> function in Part 3</a>, please review it if you need to remind yourself what it does. TL;DR, calling <code>jsonify(response_data)</code> converts <code>response_data</code> (which is a <code>dict</code> object) to JSON and returns <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.Response" target="_blank">a <code>flask.Response</code> object</a> with the JSON object as the response body.</p>
+        <p><strong>Line 36: </strong>After adding the navigational links to the <code>pagination</code> object, it is ready to send to the client. <a href="/series/flask_api_tutorial/part-3/#process-registration-request">We discussed the <code>flask.jsonify</code> function in Part 3</a>, please review it if you are drawing a blank trying to remember what it does.</p>
+        <p>TL;DR, calling <code>jsonify(response_data)</code> converts <code>response_data</code> (which is a <code>dict</code> object) to JSON and returns <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.Response" target="_blank">a <code>flask.Response</code> object</a> with the JSON object as the response body.</p>
       </li>
       <li>
-        <p><strong>Line 37: </strong>Refer back to <a href="/series/flask_api_tutorial/part-6/#pagination">the <code>pagination</code> section</a>, and note that the example includes navigational links in both the JSON response body <span class="emphasis">AND</span> the <code>Link</code> field in the response header. We will discuss the <code>_pagination_nav_header_links</code> function very soon, but what is important to know is that it returns a string containing all valid nav links in <a href="https://tools.ietf.org/html/rfc8288#section-3" target="_blank">the format specified for the Link Header Field</a> defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>.</p>
+        <p><strong>Line 37: </strong>Refer back to <a href="/series/flask_api_tutorial/part-6/#pagination">the <code>pagination</code> section</a>, and note that the example includes navigational links in both the JSON response body <span class="emphasis">AND</span> the <code>Link</code> field in the response header. We will discuss the <code>_pagination_nav_header_links</code> function very soon, but what is important to know is that it returns a string containing all valid page navigation URLs in <a href="https://tools.ietf.org/html/rfc8288#section-3" target="_blank">the format specified for the Link Header Field</a> defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>.</p>
       </li>
       <li>
         <p><strong>Line 38: </strong>This isn't an official best practice, but it is very common to include other metadata about the paginated list in the response header. Here, we create a field named <code>Total-Count</code> that contains the total number of <code>Widget</code> objects in the database.</p>
@@ -773,16 +760,16 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 39: </strong>After the response object is fully configured, we return it from the <code>retrieve_widget_list</code> function before sending it to the client.</p>
       </li>
       <li>
-        <p><strong>Lines 42-52: </strong>.</p>
+        <p><strong>Lines 42-54: </strong>The <code>_pagination_nav_links</code> function accepts a single parameter which is assumed to be a <code>Pagination</code> instance and returns a <code>dict</code> object named <code>nav_links</code> that matches the fields in <code>pagination_links_model</code>. By default, <code>nav_links</code> contains navigation URLs for <code>self</code>, <code>first</code>, and <code>last</code> pages (even if the total number of pages is one and all navigation URLs are the same). <code>prev</code> and <code>next</code> navigation URLs are not included by default. If <code>pagination.has_prev</code>, then the <code>prev</code> page URL is included (accordingly, <code>next</code> is included if <code>pagination.has_next</code>).</p>
       </li>
       <li>
-        <p><strong>Lines 55-64: </strong>.</p>
-      </li>
-      <li>
-        <p><strong>Lines 67-78: </strong>.</p>
+        <p><strong>Lines 57-62: </strong>Finally, the <code>_pagination_nav_header_links</code> function also accepts a single parameter which is assumed to be a <code>Pagination</code> instance, but instead of a <code>dict</code> object a string is returned containing all valid page navigation URLs in the correct format for the <code>Link</code> header field.</p>
+        <p>This function calls <code>_pagination_nav_links</code> and uses the <code>dict</code> that is returned to generate the <code>Link</code> header field. This works because the keys of the <code>dict</code> object are the same as the <code>Link</code> field's <code>rel</code> parameter and the <code>dict</code> values are the page navigation URLs.</p>
       </li>
     </ul>
 </div>
+
+Now that the business logic has been implemented, we can add a method to the `api.widget_list` endpoint to handle `GET` requests which will call the `retrieve_widget_list` function.
 
 ### `WidgetList` Resource (GET Request)
 
