@@ -997,7 +997,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
 
 Next, we need to create the API endpoint for the create operation and incorporate it with the <code>create_widget_reqparser</code> and the <code>create_widget</code> function.
 
-### `WidgetList` Resource (HTTP POST)
+### `WidgetList` Resource (POST Request)
 
 According to **Table 1**, the operation to create a <code>widget</code> is accessed by sending a <code>POST</code> request to the <code>api.widget_list</code> resource, located at <code>/api/v1/widgets</code>. To create this endpoint, create a new file <code>endpoints.py</code> in <code>app/api/widgets</code> and enter the content below:
 

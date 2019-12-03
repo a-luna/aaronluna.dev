@@ -213,7 +213,7 @@ The object named "items" contains the first ten (of 23 total) widget objects. Ea
 
 `page` and `per_page` are <a href="https://en.wikipedia.org/wiki/Query_string" target="_blank">query string parameters</a>. Query string parameters can be parsed using the same techniques that we used to parse email/password values from form data in the `auth_ns` namespace, and `widget` information in the previous section.
 
-If the client sends a `GET` request to `http://localhost:5000/api/v1/widgets` (i.e., neither `page` or `page_num` are sent with the request), what happens? Typically, default values are assumed for these parameters. The default values are configured when we create the `RequestParser` arguments for the pagination parameters.
+If the client sends a `GET` request to `http://localhost:5000/api/v1/widgets` (i.e., neither `page` or `per_page` are sent with the request), what happens? Typically, default values are assumed for these parameters. The default values are configured when we create the `RequestParser` arguments for the pagination parameters.
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -236,7 +236,8 @@ The request to retrieve a list of `widget` objects should include two values: th
 
 Open `app/api/widgets/dto.py` and update the import statements to include the `flask_restplus.inputs.positive` class **(Line 6)**:
 
-{{< highlight python "linenos=table,linenostart=2,hl_lines=5" >}}import re
+{{< highlight python "linenos=table,hl_lines=6" >}}"""Parsers and serializers for /widgets API endpoints."""
+import re
 from datetime import date, datetime, time, timezone
 
 from dateutil import parser
@@ -273,7 +274,7 @@ There are a couple of important things to note about how these arguments are con
                     <i class="fa fa-pencil"></i>
                 </div>
                 <div class="note-message" style="flex-flow: column wrap">
-                    <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive" target="_blank">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>page_num</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
+                    <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive" target="_blank">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>per_page</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
                 </div>
             </div>
         </li>
@@ -305,7 +306,7 @@ It is possible to create the paginated list manually from scratch and define API
 
 ### Flask-SQLAlchemy `paginate` Method
 
-The Flask-SQLAlchemy extension has a <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">`paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">`Pagination` objects</a>. The pagination method is a member of the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank"><code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
+The Flask-SQLAlchemy extension has <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">a `paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">`Pagination` objects</a>. The `paginate` method is a member of <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank">the <code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
@@ -362,7 +363,7 @@ Next, we call `pagination.page` to verify that the page number matches the value
 
 Let's take a look at `pagination.items[0]`, the first `widget` added to the database. First, the `name` attribute is checked, followed by `owner`. `owner` contains a `User` object that corresponds to the user that created this `Widget`. The `create_widget` function (which performs the process of creating a widget after the request has been fully validated) stores the `id` of the `User` that sent the request in the `Widget.owner_id` attribute.
 
-<a href="/series/flask_api_tutorial/part-5/#widget-db-model">`owner_id` is defined</a> as <a href="https://docs.sqlalchemy.org/en/13/core/metadata.html#sqlalchemy.schema.Column" target="_blank">a SQLAlchemy `Column`</a> to which <a href="https://docs.sqlalchemy.org/en/13/core/constraints.html#sqlalchemy.schema.ForeignKey" target="_blank">a `ForeignKey` construct</a> has been applied and this integer value is stored in the `widget` database table. `Widget.owner` is defined as <a href="https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship" target="_blank">a SQLAlchemy relationship</a> between the `Widget` table and the `User` table, and <span class="emphasis">is not</span> stored in the database. Whenever a `Widget` object is retrieved from the database, `owner` is populated with a `User` object thanks to the foreign-key relationship and the magic of the SQLAlchemy ORM.
+<a href="/series/flask_api_tutorial/part-5/#widget-db-model">`owner_id` is defined</a> as <a href="https://docs.sqlalchemy.org/en/13/core/metadata.html#sqlalchemy.schema.Column" target="_blank">a SQLAlchemy `Column`</a> to which <a href="https://docs.sqlalchemy.org/en/13/core/constraints.html#sqlalchemy.schema.ForeignKey" target="_blank">a `ForeignKey` construct</a> has been applied and this integer value is stored in the `widget` database table. `Widget.owner` is defined as <a href="https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship" target="_blank">a SQLAlchemy relationship</a> between the `Widget` table and the `User` table, and <span class="emphasis">is not</span> stored in the database. Whenever a `Widget` object is retrieved from the database, `Widget.owner` is populated with a `User` object thanks to the foreign-key relationship and the magic of the SQLAlchemy ORM.
 
 <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination = Widget.query.paginate(page=2, per_page=5)</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.page</span>
@@ -386,7 +387,8 @@ In order to send a paginated list of widgets as part of an HTTP response, we nee
 
 First, we need to update the import statements in `app/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
-{{< highlight python "linenos=table,linenostart=2,hl_lines=5-6" >}}import re
+{{< highlight python "linenos=table,hl_lines=6-7" >}}"""Parsers and serializers for /widgets API endpoints."""
+import re
 from datetime import date, datetime, time, timezone
 
 from dateutil import parser
@@ -449,7 +451,7 @@ pagination_model = Model(
 
 There is a lot to digest here. This is the first time that we are encountering API models that are composed of other API models. `pagination_model` contains a list of `widget_model` objects as well as a single `pagination_links_model` instance, Also, `widget_model` contains a single instance of `widget_owner_model`. Let's take a look at how each API model is defined and how they interact with each other.
 
-#### `widget_model` and `widget_owner_model`
+#### `widget_owner_model` and `widget_model`
 
 Let's work our way from the inside-out. As demonstrated in the interactive shell, the structure of a `Pagination` object is:
 
@@ -588,34 +590,118 @@ There are only a few things in `pagination_model` that we are seeing for the fir
         <p>There are many situations where one or more of the navigational links will be <code>None</code> (e.g., for the first page of results <code>prev</code> will always be <code>None</code>). <span class="bold-italics">By specifying</span> <code>skip_none=True</code>, <span class="bold-italics">these values will not be rendered in the JSON output</span>, making it much cleaner and reducing the size of the response.</p>
       </li>
       <li>
-        <p><strong>Lines 126-128: </strong>.</p>
+        <p><strong>Lines 126-128: </strong>This isn't new information, I just want to point out that I have renamed these three fields to be more descriptive. IMHO, <code>total_pages</code> is a better name than <code>pages</code>, and the same thing goes for <code>items_per_page</code>/<code>per_page</code>, as well as <code>total_items</code>/<code>total</code>.</p>
       </li>
       <li>
-        <p><strong>Line 129: </strong>.</p>
+        <p><strong>Line 129: </strong>We have already seen examples using the <code>Nested</code> type, which allows us to create complex API models which are composed of built-in types, custom types, and other API models. However, in order to serialize the most important part of the pagination object, we need a way to marshall a list of <code>widget</code> objects to JSON.</p>
+        <p>This is easily accomplished using the <code>List</code> type in conjunction with the <code>Nested</code> type. For more information on the <code>List</code> type, refer to <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#list-field" target="_blank">the Flask-RESTPlus documentation for Response Marshalling</a>.</p>
       </li>
     </ul>
 </div>
 
+We finally covered everything necessary to create the `pagination_model` API model. Here's an example of the JSON that our API model will produce given a pagination object with <code>page=2</code>, <code>per_page=5</code>, and <code>total=7</code>:
+
+```json
+{
+  "links": {
+    "self": "/api/v1/widgets?page=2&per_page=5",
+    "first": "/api/v1/widgets?page=1&per_page=5",
+    "prev": "/api/v1/widgets?page=1&per_page=5",
+    "last": "/api/v1/widgets?page=2&per_page=5"
+  },
+  "has_prev": true,
+  "has_next": false,
+  "page": 2,
+  "total_pages": 2,
+  "items_per_page": 5,
+  "total_items": 7,
+  "items": [
+    {
+      "name": "foo",
+      "info_url": "https://www.foo.bar",
+      "created_at_iso8601": "2019-11-18T14:07:20",
+      "created_at_rfc822": "Mon, 18 Nov 2019 14:07:20 -0000",
+      "deadline": "11/19/19 11:59:59 PM UTC-08:00",
+      "deadline_passed": true,
+      "time_remaining": "No time remaining",
+      "owner": {
+        "email": "admin@test.com",
+        "public_id": "475807a4-8497-4c5c-8d70-109b429bb4ef"
+      },
+      "link": "/api/v1/widgets/foo"
+    },
+    {
+      "name": "new-test-555",
+      "info_url": "http://www.newtest.net",
+      "created_at_iso8601": "2019-12-01T17:45:26",
+      "created_at_rfc822": "Sun, 01 Dec 2019 17:45:26 -0000",
+      "deadline": "12/02/19 11:59:59 PM UTC-08:00",
+      "deadline_passed": false,
+      "time_remaining": "1 day 14 hours 12 minutes 46 seconds",
+      "owner": {
+        "email": "admin@test.com",
+        "public_id": "475807a4-8497-4c5c-8d70-109b429bb4ef"
+      },
+      "link": "/api/v1/widgets/new-test-555"
+    }
+  ]
+}
+```
+
 ### `retrieve_widget_list` Method
 
-{{< highlight python >}}from flask import jsonify, url_for
+Next, we need to create a function that performs the following actions:
+
+* Create a `pagination` object given the `page` and `per_page` values parsed from the request data.
+* Serialize the `pagination` object to JSON using `pagination_model` and <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the `flask_restplus.marshall` method</a>.
+* Construct <code>dict</code> of navigational links and add links to response header and body.
+* Manually construct HTTP response using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.json.jsonify" target="_blank">the `flask.jsonify` method</a> and send response to client.
+
+Before we begin, open `/app/api/widgets/business.py` and make the following updates to the import statements:
+
+{{< highlight python "linenos=table,hl_lines=4-5 8-9" >}}"""Business logic for /widgets API endpoints."""
+from http import HTTPStatus
+
+from flask import jsonify, url_for
 from flask_restplus import abort, marshal
 
 from app import db
+from app.api.auth.decorator import token_required, admin_token_required
 from app.api.widget.dto import pagination_model
-from app.api.auth.decorator import token_required, admin_token_required{{< /highlight >}}
+from app.models.user import User
+from app.models.widget import Widget{{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=14" >}}@token_required
-def retrieve_widget_list(page_num, per_page):
-    pagination = Widget.query.paginate(page_num, per_page, error_out=False)
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 4: </strong>Update to include the <code>flask.url_for</code> method.</p>
+      </li>
+      <li>
+        <p><strong>Line 5: </strong>Update to include the <code>flask_restplus.marshal</code> method.</p>
+      </li>
+      <li>
+        <p><strong>Line 8: </strong>Update to include the <code>token_required</code> decorator.</p>
+      </li>
+      <li>
+        <p><strong>Line 9: </strong>Update to include the <code>pagination_model</code> object.</p>
+      </li>
+    </ul>
+</div>
+
+Next, add the content below:
+
+{{< highlight python "linenos=table,linenostart=31" >}}@token_required
+def retrieve_widget_list(page, per_page):
+    pagination = Widget.query.paginate(page, per_page, error_out=False)
     response_data = marshal(pagination, pagination_model)
     response_data["links"] = _pagination_nav_links(pagination)
     response = jsonify(response_data)
     response.headers["Link"] = _pagination_nav_header_links(pagination)
     response.headers["Total-Count"] = pagination.total
-    return response{{< /highlight >}}
+    return response
 
-{{< highlight python "linenos=table,linenostart=41" >}}def _pagination_nav_links(pagination):
+
+def _pagination_nav_links(pagination):
     link_dict = {}
     url_dict = _pagination_url_dict(pagination)
     link_dict["self"] = url_dict["self"]
@@ -653,9 +739,59 @@ def _pagination_url_dict(pagination):
     url_last = url_for("api.widget_list", page=total_pages, per_page=per_page)
     return dict(self=url_self, first=url_first, prev=url_prev, next=url_next, last=url_last){{< /highlight >}}
 
-### `WidgetList` Resource (HTTP GET)
+This code implements the process of responding to a valid request for a list of widgets, please note the following:
 
-{{< highlight python >}}from app.api.widget.dto import (
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 31: </strong>Per <span class="bold-text">Table 1</span>, the process of retrieving a list of <code>widgets</code> can only be performed by registered users (both regular and admin users). This is enforced by decorating the <code>retrieve_widget_list</code> function with <code>@token_required</code>.</p>
+      </li>
+      <li>
+        <p><strong>Line 32: </strong>The <code>page</code> and <code>per_page</code> parameters are passed to <code>retrieve_widget_list</code> after the <code>create_widget_reqparser</code> has parsed the values provided by the client from the request data.</p>
+      </li>
+      <li>
+        <p><strong>Line 33: </strong><a href="#flask-sqlalchemy-paginate-method">As demonstrated in the Python interactive shell</a>, <code>pagination</code> objects are created by calling <code>Widget.query.paginate</code>, with the <code>page</code> and <code>per_page</code> values provided by the client.</p>
+      </li>
+      <li>
+        <p><strong>Line 34: </strong>This is the first time that we are seeing <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the <code>flask_restplus.marshal</code> function</a>. However, we already know how it works since we used <a href="/series/flask_api_tutorial/part-4/#getuser-resource">the <code>@marshall_with</code> decorator in Part 4</a>.</p>
+        <p>There is only a single, subtle difference between these two functions/decorators. Both operate on an object and filter the object's attributes/keys against the provided API model and validate the object's data against the set of fields configured in the API model.</p>
+        <p>However, <code>@marshal_with</code> operates on the value returned from the function it decorates, while <code>flask_restplus.marshal</code> operates on whatever is passed to the function as the first parameter. So why are we calling the <code>marshal</code> function directly? In <span class="bold-text">Lines 37-38</span> custom header fields are added to the response before it is sent to the client, and there is no way to add these headers using <code>@marshal_with</code>.</p>
+      </li>
+      <li>
+        <p><strong>Line 35: </strong>Remember, the output of the <code>marshal</code> function is a <code>dict</code>. Also remember that the <code>flask_sqlalchemy.Pagination</code> class <span class="emphasis">does not</span> contain navigational links. We will discuss the <code>_pagination_nav_links</code> function shortly, but what is important to know is that it returns a <code>dict</code> that matches the fields in <code>pagination_links_model</code>. This <code>dict</code> is then added to the <code>pagination</code> object with key-name <code>links</code>, which matches the field on <code>pagination_model</code> containing <code>Nested(pagination_links_model, skip_none=True)</code>.</p>
+      </li>
+      <li>
+        <p><strong>Line 36: </strong>After adding the navigational links to the <code>pagination</code> object, it is ready to send to the client. <a href="/series/flask_api_tutorial/part-3/#process-registration-request">We discussed the <code>flask.jsonify</code> function in Part 3</a>, please review it if you need to remind yourself what it does. TL;DR, calling <code>jsonify(response_data)</code> converts <code>response_data</code> (which is a <code>dict</code> object) to JSON and returns <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.Response" target="_blank">a <code>flask.Response</code> object</a> with the JSON object as the response body.</p>
+      </li>
+      <li>
+        <p><strong>Line 37: </strong>Refer back to <a href="/series/flask_api_tutorial/part-6/#pagination">the <code>pagination</code> section</a>, and note that the example includes navigational links in both the JSON response body <span class="emphasis">AND</span> the <code>Link</code> field in the response header. We will discuss the <code>_pagination_nav_header_links</code> function very soon, but what is important to know is that it returns a string containing all valid nav links in <a href="https://tools.ietf.org/html/rfc8288#section-3" target="_blank">the format specified for the Link Header Field</a> defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>.</p>
+      </li>
+      <li>
+        <p><strong>Line 38: </strong>This isn't an official best practice, but it is very common to include other metadata about the paginated list in the response header. Here, we create a field named <code>Total-Count</code> that contains the total number of <code>Widget</code> objects in the database.</p>
+      </li>
+      <li>
+        <p><strong>Line 39: </strong>After the response object is fully configured, we return it from the <code>retrieve_widget_list</code> function before sending it to the client.</p>
+      </li>
+      <li>
+        <p><strong>Lines 42-52: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 55-64: </strong>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 67-78: </strong>.</p>
+      </li>
+    </ul>
+</div>
+
+### `WidgetList` Resource (GET Request)
+
+{{< highlight python "linenos=table,hl_lines=8-12 14 17-20" >}}"""API endpoint definitions for /widgets namespace."""
+from http import HTTPStatus
+
+from flask_restplus import Namespace, Resource
+
+from app.api.widget.dto import (
     create_widget_reqparser,
     pagination_reqparser,
     widget_owner_model,
@@ -663,24 +799,42 @@ def _pagination_url_dict(pagination):
     pagination_links_model,
     pagination_model,
 )
-from app.api.widget.business import create_widget, retrieve_widget_list{{< /highlight >}}
+from app.api.widget.business import create_widget, retrieve_widget_list
 
-{{< highlight python "linenos=table,linenostart=17" >}}widget_ns = Namespace(name="widgets", validate=True)
+widget_ns = Namespace(name="widgets", validate=True)
 widget_ns.models[widget_owner_model.name] = widget_owner_model
 widget_ns.models[widget_model.name] = widget_model
 widget_ns.models[pagination_links_model.name] = pagination_links_model
 widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=28" >}}    @widget_ns.doc(security="Bearer")
+{{< highlight python "linenos=table,linenostart=23,hl_lines=5-14" >}}@widget_ns.route("", endpoint="widget_list")
+class WidgetList(Resource):
+    """Handles HTTP requests to URL: /widgets."""
+
+    @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Retrieved widget list.", pagination_model)
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.expect(pagination_reqparser)
     def get(self):
         """Retrieve a list of widgets."""
         request_data = pagination_reqparser.parse_args()
-        page_num = request_data.get("page")
+        page = request_data.get("page")
         per_page = request_data.get("per_page")
-        return retrieve_widget_list(page_num, per_page){{< /highlight >}}
+        return retrieve_widget_list(page, per_page)
+
+    @widget_ns.doc(security="Bearer")
+    @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
+    @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
+    @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
+    @widget_ns.response(HTTPStatus.CONFLICT, "Widget name already exists.")
+    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+    @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+    @widget_ns.expect(create_widget_reqparser)
+    def post(self):
+        """Create a widget."""
+        widget_dict = create_widget_reqparser.parse_args()
+        return create_widget(widget_dict)
+{{< /highlight >}}
 
 ## Retrieve Widget
 
@@ -696,7 +850,7 @@ def retrieve_widget(name):
         else abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail"),
     ){{< /highlight >}}
 
-### `Widget` Resource (HTTP GET)
+### `Widget` Resource (GET Request)
 
 {{< highlight python "linenos=table,linenostart=15" >}}from app.api.widgets.business import (
     create_widget,
@@ -723,15 +877,13 @@ def retrieve_widget(name):
 def update_widget(name, widget_dict):
     widget = Widget.find_by_name(name)
     if not widget:
-        error = f"Widget name: {name} not found."
-        abort(HTTPStatus.NOT_FOUND, error, status="fail")
+        abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail")
     for k, v in widget_dict.items():
         setattr(widget, k, v)
-    setattr(widget, "last_update", datetime.now(timezone.utc))
     db.session.commit()
     return widget, HTTPStatus.OK{{< /highlight >}}
 
-### `Widget` Resource (HTTP PUT)
+### `Widget` Resource (PUT Request)
 
 {{< highlight python "linenos=table,linenostart=15" >}}from app.api.widgets.business import (
     create_widget,
@@ -751,8 +903,7 @@ def update_widget(name, widget_dict):
     @widget_ns.marshal_with(widget_model)
     def put(self, name):
         """Update a widget."""
-        request_data = update_widget_reqparser.parse_args()
-        widget_dict = {k: v for k, v in request_data.items()}
+        widget_dict = update_widget_reqparser.parse_args()
         return update_widget(name, widget_dict){{< /highlight >}}
 
 ## Delete Widget
@@ -768,7 +919,7 @@ def delete_widget(name):
     db.session.commit()
     return "", HTTPStatus.NO_CONTENT{{< /highlight >}}
 
-### `Widget` Resource (HTTP DELETE)
+### `Widget` Resource (DELETE Request)
 
 {{< highlight python "linenos=table,linenostart=92" >}}    @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.NO_CONTENT, "Widget was deleted.")
@@ -787,4 +938,4 @@ def delete_widget(name):
 
 ## Unit Tests: Update Widget
 
-## Unit Tests: Delete aaWidget
+## Unit Tests: Delete Widget

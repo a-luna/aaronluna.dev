@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "Aaron Luna's Blog",
     "dependencies": {
-        "css-doodle": "^0.7.4",
+        "css-doodle": "^0.7.6",
         "netlify-lambda": "^1.6.3"
     },
     "repository": {
@@ -15,7 +15,7 @@
     },
     "homepage": "https://github.com/a-luna/aaronluna.dev",
     "devDependencies": {
-        "autoprefixer": "^9.7.2",
+        "autoprefixer": "^9.7.3",
         "postcss": "^7.0.23",
         "postcss-cli": "^6.1.3",
         "postcss-uncss": "^0.17.0",
