@@ -87,5 +87,5 @@
 
   /* Syntax Highlighting */
   --hl-num-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray2));
-  --hl-line-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray1), rgba(255,255,255,0));
+  --hl-line-bg: linear-gradient(to right, var(--dark-gray2) 35%, var(--dark-gray1) 35%, rgba(255,255,255,0)) 30%;
 }
