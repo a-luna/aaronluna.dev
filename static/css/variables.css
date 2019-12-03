@@ -2,6 +2,7 @@
   /* Color Pallette */
   --black1: #202020;
   --black2: #232326;
+  --black3: #262626;
   --dark-gray1: #323232;
   --dark-gray2: #444;
   --mid-gray1: #666;
@@ -40,7 +41,7 @@
   --page-bg-color: var(--dark-gray1);
   --body-text-color: var(--off-white1);
   --header-bg-color: var(--black1);
-  --header-link-color1: var(--light-gray-1);
+  --header-link-color1: var(--light-gray1);
   --header-link-color2: var(--white2);
   --widget-bg-color: var(--black2);
   --link-color: var(--blue2);
@@ -83,4 +84,7 @@
   /* Comments */
   --comments-bg: var(--widget-bg-color);
   --comments-border: #38383d;
+
+  /* Syntax Highlighting */
+  --hl-line-bg: var(--dark-gray2)
 }

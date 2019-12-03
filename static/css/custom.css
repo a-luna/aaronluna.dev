@@ -465,7 +465,7 @@ h4 {
 
 .cmd-lineno-hl {
   color: #ffc107;
-  background-color: var(--page-bg-color);
+  background-color: var(--hl-line-bg);
   font-weight: 700;
 }
 
@@ -1112,11 +1112,11 @@ pre.chroma code {
 }
 
 .chroma .lntd:first-child .hl {
-  background-color: var(--page-bg-color);
+  background-color: var(--hl-line-bg);
 }
 
 .chroma .hl {
-  background: #323232;
+  background: var(--hl-line-bg);
 }
 
 .chroma .hl .lnt {
