@@ -588,10 +588,10 @@ There are a few new concepts to note:
       <p><strong>Line 55: </strong><a href="#api-blueprint">When we configured the <code>api</code> object</a>, we specified that the <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer authentication scheme</a> would be used. In order to mark an HTTP method of a <code>Resource</code> class as a protected resource that requires authorization, we decorate the HTTP method with <code>@doc</code> and set the value of the <code>security</code> parameter to <code>"Bearer"</code>.</p>
     </li>
     <li>
-      <p><strong>Line 56: </strong>For the <code>@response</code> decorator, you can specify an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page along with the response code 200 <code>HTTPStatus.OK</code>.</p>
+      <p><strong>Line 56: </strong>The <code>response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page along with response code 200 as an example response body.</p>
     </li>
     <li>
-      <p><strong>Line 59: </strong>The <code>@marshal_with</code> decorator is how we tell Flask-RESTPlus to filter the data returned from this method against the provided API model (<code>user_model</code>), and validate the data against the set of fields configured in the API model.</p>
+      <p><strong>Line 59: </strong>The <code>marshal_with</code> decorator is how we tell Flask-RESTPlus to filter the data returned from this method against the provided API model (<code>user_model</code>), and validate the data against the set of fields configured in the API model.</p>
     </li>
     <li>
       <p><strong>Line 62: </strong>Remember, <code>get_logged_in_user</code> returns a <code>User</code> object. Without the <code>@marshal_with</code> decorator, this would produce a server error since we are not returning an HTTP response object as expected. The <code>@marshal_with</code> decorator creates the JSON using the <code>user_model</code> and assigns status code 200 <code>HTTPStatus.OK</code> before returning the response.</p>

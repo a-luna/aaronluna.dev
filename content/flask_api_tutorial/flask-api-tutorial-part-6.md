@@ -595,7 +595,7 @@ There are only a few things in `pagination_model` that we are seeing for the fir
         <p><strong>Lines 126-128: </strong>This isn't new information, I just want to point out that I have renamed these three fields to be more descriptive. IMHO, <code>total_pages</code> is a better name than <code>pages</code>, and the same thing goes for <code>items_per_page</code>/<code>per_page</code>, as well as <code>total_items</code>/<code>total</code>.</p>
       </li>
       <li>
-        <p><strong>Line 129: </strong>We have already seen examples using the <code>Nested</code> type, which allows us to create complex API models which are composed of built-in types, custom types, and other API models. However, in order to serialize the most important part of the pagination object, we need a way to marshall a list of <code>widget</code> objects to JSON.</p>
+        <p><strong>Line 129: </strong>We have already seen examples using the <code>Nested</code> type, which allows us to create complex API models which are composed of built-in types, custom types, and other API models. However, in order to serialize the most important part of the pagination object, we need a way to marshal a list of <code>widget</code> objects to JSON.</p>
         <p>This is easily accomplished using the <code>List</code> type in conjunction with the <code>Nested</code> type. For more information on the <code>List</code> type, refer to <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#list-field" target="_blank">the Flask-RESTPlus documentation for Response Marshalling</a>.</p>
       </li>
     </ul>
@@ -655,7 +655,7 @@ We finally covered everything necessary to create the `pagination_model` API mod
 Next, we need to create a function that performs the following actions:
 
 * Create a `pagination` object given the `page` and `per_page` values parsed from the request data.
-* Serialize the `pagination` object to JSON using `pagination_model` and <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the `flask_restplus.marshall` method</a>.
+* Serialize the `pagination` object to JSON using `pagination_model` and <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the `flask_restplus.marshal` method</a>.
 * Construct <code>dict</code> of navigational links and add links to response header and body.
 * Manually construct HTTP response using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.json.jsonify" target="_blank">the `flask.jsonify` method</a> and send response to client.
 
@@ -760,7 +760,7 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 39: </strong>After the response object is fully configured, we return it from the <code>retrieve_widget_list</code> function before sending it to the client.</p>
       </li>
       <li>
-        <p><strong>Lines 42-54: </strong>The <code>_pagination_nav_links</code> function accepts a single parameter which is assumed to be a <code>Pagination</code> instance and returns a <code>dict</code> object named <code>nav_links</code> that matches the fields in <code>pagination_links_model</code>. By default, <code>nav_links</code> contains navigation URLs for <code>self</code>, <code>first</code>, and <code>last</code> pages (even if the total number of pages is one and all navigation URLs are the same). <code>prev</code> and <code>next</code> navigation URLs are not included by default. If <code>pagination.has_prev</code>, then the <code>prev</code> page URL is included (accordingly, <code>next</code> is included if <code>pagination.has_next</code>).</p>
+        <p><strong>Lines 42-54: </strong>The <code>_pagination_nav_links</code> function accepts a single parameter which is assumed to be a <code>Pagination</code> instance and returns a <code>dict</code> object named <code>nav_links</code> that matches the fields in <code>pagination_links_model</code>. By default, <code>nav_links</code> contains navigation URLs for <code>self</code>, <code>first</code>, and <code>last</code> pages (even if the total number of pages is one and all navigation URLs are the same). <code>prev</code> and <code>next</code> navigation URLs are not included by default. If <code>pagination.has_prev</code> is <code>True</code>, then the <code>prev</code> page URL is included (accordingly, <code>next</code> is included if <code>pagination.has_next</code> is <code>True</code>).</p>
       </li>
       <li>
         <p><strong>Lines 57-62: </strong>Finally, the <code>_pagination_nav_header_links</code> function also accepts a single parameter which is assumed to be a <code>Pagination</code> instance, but instead of a <code>dict</code> object a string is returned containing all valid page navigation URLs in the correct format for the <code>Link</code> header field.</p>
@@ -769,9 +769,13 @@ This code implements the process of responding to a valid request for a list of 
     </ul>
 </div>
 
-Now that the business logic has been implemented, we can add a method to the `api.widget_list` endpoint to handle `GET` requests which will call the `retrieve_widget_list` function.
+Now that the business logic has been implemented, we can add a method to the `api.widget_list` endpoint that will call `retrieve_widget_list` after parsing/validating the request data.
 
 ### `WidgetList` Resource (GET Request)
+
+We created the `api.widget_list` endpoint <a href="/series/flask_api_tutorial/part-5/#widgetlist-resource-post-request">in Part 5</a> and implemented the function that handles `POST` requests. According to **Table 1**, this endpoint also supports `GET` requests which allows clients to retrieve lists of `widgets`.
+
+Open `/app/api/widgets/endpoints.py` and make the following updates to the import statements:
 
 {{< highlight python "linenos=table,hl_lines=8-12 14 17-20" >}}"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
@@ -786,15 +790,32 @@ from app.api.widget.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widget.business import create_widget, retrieve_widget_list
+from app.api.widget.business import create_widget, retrieve_widget_list{{< /highlight >}}
 
-widget_ns = Namespace(name="widgets", validate=True)
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 8: </strong>Update to include the <code>pagination_reqparser</code> object.</p>
+      </li>
+      <li>
+        <p><strong>Lines 9-12: </strong>Update to include the <code>widget_owner_model</code>, <code>widget_model</code>, <code>pagination_links_model</code>, and <code>pagination_model</code> API models.</p>
+      </li>
+      <li>
+        <p><strong>Line 14: </strong>Update to include the <code>retrieve_widget_list</code> function.</p>
+      </li>
+    </ul>
+</div>
+
+Next, add the highlighted lines to `endpoints.py` and save the file:
+
+{{< highlight python "linenos=table,linenostart=16,hl_lines=2-5 12-21" >}}widget_ns = Namespace(name="widgets", validate=True)
 widget_ns.models[widget_owner_model.name] = widget_owner_model
 widget_ns.models[widget_model.name] = widget_model
 widget_ns.models[pagination_links_model.name] = pagination_links_model
-widget_ns.models[pagination_model.name] = pagination_model{{< /highlight >}}
+widget_ns.models[pagination_model.name] = pagination_model
 
-{{< highlight python "linenos=table,linenostart=23,hl_lines=5-14" >}}@widget_ns.route("", endpoint="widget_list")
+
+@widget_ns.route("", endpoint="widget_list")
 class WidgetList(Resource):
     """Handles HTTP requests to URL: /widgets."""
 
@@ -823,6 +844,48 @@ class WidgetList(Resource):
         return create_widget(widget_dict)
 {{< /highlight >}}
 
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Lines 17-20: </strong>We need to register all of the API models that we created in <code>app.api.widgets.dto</code> with the <code>widget_ns</code> namespace. This is an easy thing to forget and can be a difficult issue to debug. If the API models are not registered with the <code>widget_ns</code> namespace, the entire Swagger UI page will fail to render, displaying only a single cryptic error message: <span class="bold-italics">No API definition provided</span>.</p>
+      </li>
+      <li>
+        <p><strong>Line 28: </strong>The <code>response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page with response code 200 as an example response body.</p>
+      </li>
+      <li>
+        <p><strong>Line 30: </strong>The <code>expect</code> decorator was explained in depth <a href="http://localhost:1313/series/flask_api_tutorial/part-3/#registeruser-resource">in Part 3</a>, please review the implementation of the function that handles <code>POST</code> requests for the <code>api.auth_register</code> endpoint if you need a refresher. Basically, applying the decorator <code>@widget_ns.expect(pagination_reqparser)</code> to a function has two enormous effects: it specifies that <code>pagination_reqparser</code> will be used to parse the client's request, <span class="emphasis">AND</span> it renders a form on the Swagger UI page with <code>input</code> text elements for <code>widget.name</code>, <code>widget.info_url</code>, and <code>widget.deadline</code>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 33-36: </strong>Everything here should be completely obvious to you since calling <code>parse_args</code> to get the client's request data and passing the data to our business logic is a process that we implement on (nearly) every API handler.</p>
+      </li>
+    </ul>
+</div>
+
+We can verify that the `api.widget_list` endpoint now supports both `GET` and `POST` requests by executing the `flask routes` command:
+
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
+<span class="cmd-results">Endpoint             Methods    Rule
+-------------------  ---------  --------------------------
+api.auth_login       POST       /api/v1/auth/login
+api.auth_logout      POST       /api/v1/auth/logout
+api.auth_register    POST       /api/v1/auth/register
+api.auth_user        GET        /api/v1/auth/user
+api.doc              GET        /api/v1/ui
+api.root             GET        /api/v1/
+api.specs            GET        /api/v1/swagger.json
+<span class="highlite">api.widget_list      GET, POST  /api/v1/widgets</span>
+restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
+static               GET        /static/&lt;path:filename&gt;</span></code></pre>
+
+<div class="alert alert-flex">
+  <div class="alert-icon">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+  </div>
+  <div class="alert-message">
+    <p>Please remember, currently an unhandled exception occurs if you attempt to execute either of the methods we have created for the <code>api.widget_list</code> endpoint since the business logic for creating a new <code>Widget</code> depends on the <code>api.widget</code> endpoint existing. We will create unit tests for both endpoints in the <code>widget_ns</code> namespace when both have been fully implemented.</p>
+  </div>
+</div>
+
 ## Retrieve Widget
 
 ### `retrieve_widget` Method
@@ -839,13 +902,31 @@ def retrieve_widget(name):
 
 ### `Widget` Resource (GET Request)
 
-{{< highlight python "linenos=table,linenostart=15" >}}from app.api.widgets.business import (
+{{< highlight python "linenos=table,hl_lines=17" >}}"""API endpoint definitions for /widgets namespace."""
+from http import HTTPStatus
+
+from flask_restplus import Namespace, Resource
+
+from app.api.widget.dto import (
+    create_widget_reqparser,
+    pagination_reqparser,
+    widget_owner_model,
+    widget_model,
+    pagination_links_model,
+    pagination_model,
+)
+from app.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget
 ){{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=56" >}}    @widget_ns.doc(security="Bearer")
+{{< highlight python "linenos=table,linenostart=56" >}}@widget_ns.route("/<name>", endpoint="widget")
+@widget_ns.param("name", "Widget name")
+class Widget(Resource):
+    """Handles HTTP requests to URL: /widgets/{name}."""
+
+    @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
     @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
     @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
@@ -856,9 +937,12 @@ def retrieve_widget(name):
 
 ## Update Widget
 
-### `update_widget` Method
+### `update_widget_reqparser` Request Parser
 
-{{< highlight python "linenos=table,linenostart=2" >}}from datetime import datetime, timezone{{< /highlight >}}
+{{< highlight python "linenos=table,linenostart=67" >}}update_widget_reqparser = create_widget_reqparser.copy()
+update_widget_reqparser.remove_argument("name"){{< /highlight >}}
+
+### `update_widget` Method
 
 {{< highlight python "linenos=table,linenostart=50" >}}@admin_token_required
 def update_widget(name, widget_dict):
@@ -872,14 +956,42 @@ def update_widget(name, widget_dict):
 
 ### `Widget` Resource (PUT Request)
 
-{{< highlight python "linenos=table,linenostart=15" >}}from app.api.widgets.business import (
+{{< highlight python "linenos=table,hl_lines=8 19" >}}"""API endpoint definitions for /widgets namespace."""
+from http import HTTPStatus
+
+from flask_restplus import Namespace, Resource
+
+from app.api.widget.dto import (
+    create_widget_reqparser,
+    update_widget_reqparser,
+    pagination_reqparser,
+    widget_owner_model,
+    widget_model,
+    pagination_links_model,
+    pagination_model,
+)
+from app.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget,
     update_widget,
 ){{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=76" >}}    @widget_ns.doc(security="Bearer")
+{{< highlight python "linenos=table,linenostart=58,hl_lines=15-27" >}}@widget_ns.route("/<name>", endpoint="widget")
+@widget_ns.param("name", "Widget name")
+class Widget(Resource):
+    """Handles HTTP requests to URL: /widgets/{name}."""
+
+    @widget_ns.doc(security="Bearer")
+    @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
+    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
+    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+    @widget_ns.marshal_with(widget_model)
+    def get(self, name):
+        """Retrieve a widget."""
+        return retrieve_widget(name)
+
+    @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
     @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
@@ -908,7 +1020,57 @@ def delete_widget(name):
 
 ### `Widget` Resource (DELETE Request)
 
-{{< highlight python "linenos=table,linenostart=92" >}}    @widget_ns.doc(security="Bearer")
+{{< highlight python "linenos=table,hl_lines=20" >}}"""API endpoint definitions for /widgets namespace."""
+from http import HTTPStatus
+
+from flask_restplus import Namespace, Resource
+
+from app.api.widget.dto import (
+    create_widget_reqparser,
+    update_widget_reqparser,
+    pagination_reqparser,
+    widget_owner_model,
+    widget_model,
+    pagination_links_model,
+    pagination_model,
+)
+from app.api.widgets.business import (
+    create_widget,
+    retrieve_widget_list,
+    retrieve_widget,
+    update_widget,
+    delete_widget,
+){{< /highlight >}}
+
+{{< highlight python "linenos=table,linenostart=59,hl_lines=29-36" >}}@widget_ns.route("/<name>", endpoint="widget")
+@widget_ns.param("name", "Widget name")
+class Widget(Resource):
+    """Handles HTTP requests to URL: /widgets/{name}."""
+
+    @widget_ns.doc(security="Bearer")
+    @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
+    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
+    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+    @widget_ns.marshal_with(widget_model)
+    def get(self, name):
+        """Retrieve a widget."""
+        return retrieve_widget(name)
+
+    @widget_ns.doc(security="Bearer")
+    @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
+    @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
+    @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
+    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found")
+    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+    @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+    @widget_ns.expect(update_widget_reqparser)
+    @widget_ns.marshal_with(widget_model)
+    def put(self, name):
+        """Update a widget."""
+        widget_dict = update_widget_reqparser.parse_args()
+        return update_widget(name, widget_dict)
+
+    @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.NO_CONTENT, "Widget was deleted.")
     @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")

@@ -329,7 +329,6 @@ Before we can begin implementing the API endpoints in **Table 1**, we need to cr
 {{< highlight python "linenos=table" >}}"""Class definition for Widget model."""
 from datetime import datetime, timezone, timedelta
 
-from flask import url_for
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from app import db
@@ -400,31 +399,31 @@ Let's take a look at how these attributes are defined and how they fulfill the v
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 23: </strong><span class="bold-text">Table 1</span> indicates that the value of the <code>name</code> attribute will be embedded in the URI for each <code>Widget</code>. Because of this, the value must be unique which is ensured by setting <code>unique=True</code>. Additionally, it would be ideal to prevent the user from creating a new <code>widget</code> if the <code>name</code> contains characters that are not URL-safe (/, +, & etc.). To accomplish this, we will design a custom <code>RequestParser</code> data type that considers a value to be valid if it contains <span class="emphasis">ONLY</span> lowercase-letters, numbers, underscore and/or hyphen characters.</p>
+        <p><strong>Line 22: </strong><span class="bold-text">Table 1</span> indicates that the value of the <code>name</code> attribute will be embedded in the URI for each <code>Widget</code>. Because of this, the value must be unique which is ensured by setting <code>unique=True</code>. Additionally, it would be ideal to prevent the user from creating a new <code>widget</code> if the <code>name</code> contains characters that are not URL-safe (/, +, & etc.). To accomplish this, we will design a custom <code>RequestParser</code> data type that considers a value to be valid if it contains <span class="emphasis">ONLY</span> lowercase-letters, numbers, underscore and/or hyphen characters.</p>
       </li>
       <li>
-        <p><strong>Line 24: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not recognized as a valid URL must be rejected without adding the widget to the database. The validation logic will be implemented using a built-in <code>RequestParser</code> data type for URL values.</p>
+        <p><strong>Line 23: </strong>The purpose of the <code>info_url</code> attribute is to demonstrate how to implement input validation for URL values. Any values that are not recognized as a valid URL must be rejected without adding the widget to the database. The validation logic will be implemented using a built-in <code>RequestParser</code> data type for URL values.</p>
       </li>
       <li>
-        <p><strong>Line 26: </strong>The purpose of the <code>deadline</code> attribute is to demonstrate how to implement input validation for <code>datetime</code> values. Additionally, only <code>datetime</code> values that are either the same as or greater than the current date are considered valid. Values not recognized as valid <code>datetime</code> values <span class="emphasis">AND</span> valid <code>datetime</code> values in the past must be rejected without adding the widget to the database.</p>
+        <p><strong>Line 25: </strong>The purpose of the <code>deadline</code> attribute is to demonstrate how to implement input validation for <code>datetime</code> values. Additionally, only <code>datetime</code> values that are either the same as or greater than the current date are considered valid. Values not recognized as valid <code>datetime</code> values <span class="emphasis">AND</span> valid <code>datetime</code> values in the past must be rejected without adding the widget to the database.</p>
       </li>
       <li>
-        <p><strong>Lines 28-29: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
+        <p><strong>Lines 27-28: </strong>We will also use the <code>Widget</code> class to demonstrate how relationships between database tables are defined and managed. We have defined a foreign key relationship between this table and the <code>site_user</code> table. The <code>owner</code> of each widget will be the <code>User</code> that created it (The <code>User.id</code> attribute will be stored when each <code>Widget</code> is created).</p>
       </li>
       <li>
-        <p><strong>Lines 34-42: </strong>Both of these hybrid properties convert the datetime value stored in the database to the timezone of the machine executing the code and formats the datetime as a string value.</p>
+        <p><strong>Lines 33-41: </strong>Both of these hybrid properties convert the datetime value stored in the database to the timezone of the machine executing the code and formats the datetime as a string value.</p>
       </li>
       <li>
-        <p><strong>Lines 44-46: </strong><code>deadline_passed</code> is a bool value, this has been included as part of the <code>Widget</code> model solely to increase the number of data types that are serialized when <code>Widget</code> objects are included in an HTTP response. This attribute should return <code>True</code> if the curent date is greater than the date stored in <code>deadline</code>, and should return <code>False</code> if the current date is less than or the same as the date stored in <code>deadline</code>.</p>
+        <p><strong>Lines 43-45: </strong><code>deadline_passed</code> is a bool value, this has been included as part of the <code>Widget</code> model solely to increase the number of data types that are serialized when <code>Widget</code> objects are included in an HTTP response. This attribute should return <code>True</code> if the curent date is greater than the date stored in <code>deadline</code>, and should return <code>False</code> if the current date is less than or the same as the date stored in <code>deadline</code>.</p>
       </li>
       <li>
-        <p><strong>Lines 48-51: </strong><code>time_remaining</code> is a <code>timedelta</code> value that represents the time remaining until the <code>deadline</code> is passed. If the curent date is greater than the date stored in <code>deadline</code>, then this attribute should return <code>timedelta(0)</code>.</p>
+        <p><strong>Lines 47-50: </strong><code>time_remaining</code> is a <code>timedelta</code> value that represents the time remaining until the <code>deadline</code> is passed. If the curent date is greater than the date stored in <code>deadline</code>, then this attribute should return <code>timedelta(0)</code>.</p>
       </li>
       <li>
-        <p><strong>Lines 53-56: </strong><code>time_remaining_str</code> converts the <code>timedelta</code> object returned by <code>time_remaining</code> to a formatted string if the <code>deadline</code> has not been passed. If the <code>deadline</code> has passed, <span class="bold-text">"No time remaining"</span> is returned.</p>
+        <p><strong>Lines 52-55: </strong><code>time_remaining_str</code> converts the <code>timedelta</code> object returned by <code>time_remaining</code> to a formatted string if the <code>deadline</code> has not been passed. If the <code>deadline</code> has passed, <span class="bold-text">"No time remaining"</span> is returned.</p>
       </li>
       <li>
-        <p><strong>Lines 58-60: </strong><code>find_by_name</code> is a class method just like the <code>find_by_email</code> and <code>find_by_public_id</code> methods we previously created in the <code>User</code> class. Since the <code>name</code> attribute must be unique, we can use it to retrieve a specific <code>Widget</code>.</p>
+        <p><strong>Lines 57-59: </strong><code>find_by_name</code> is a class method just like the <code>find_by_email</code> and <code>find_by_public_id</code> methods we previously created in the <code>User</code> class. Since the <code>name</code> attribute must be unique, we can use it to retrieve a specific <code>Widget</code>.</p>
       </li>
     </ul>
 </div>
@@ -1083,7 +1082,7 @@ static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 As expected, a new endpoint has been created named `api.widget_list` that responds to requests sent to `/api/v1/widgets`. Currently, this endpoint only supports requests where the method type is `POST`.
 
-Normally, we would create unit tests to verify the endpoint does create `widget` objects correctly. However, it was noted while explaining the design of the `create_widget` function that currently an unhandled exception occurs when running this function since the `uri` attribute of the `Widget` class depends on the `api.widget` endpoint existing. We will create unit tests for both endpoints in the `widget_ns` namespace when both have been fully implemented.
+Normally, we would create unit tests to verify the endpoint does create `widget` objects correctly. However, it was noted while explaining the design of the `create_widget` function that currently an unhandled exception occurs when running this function since the business logic for creating a new `Widget` depends on the `api.widget` endpoint existing. We will create unit tests for both endpoints in the `widget_ns` namespace when both have been fully implemented.
 
 ## Checkpoint
 
