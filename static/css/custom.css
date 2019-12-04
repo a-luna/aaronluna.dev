@@ -1112,11 +1112,13 @@ pre.chroma code {
 }
 
 .chroma .lntd:first-child .hl {
+  background-color: var(--dark-gray1);
   background: var(--hl-num-bg);
   background-repeat: no-repeat;
 }
 
 .chroma .hl {
+  background-color: var(--dark-gray1);
   background: var(--hl-line-bg);
   background-repeat: no-repeat;
 }

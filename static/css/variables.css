@@ -86,6 +86,6 @@
   --comments-border: #38383d;
 
   /* Syntax Highlighting */
-  --hl-num-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray2));
-  --hl-line-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray1), rgba(255,255,255,0));
+  --hl-num-bg: linear-gradient(to right, var(--dark-gray1), var(--dark-gray1));
+  --hl-line-bg: linear-gradient(to right, var(--dark-gray1) 40%, var(--widget-bg-color) 78%, rgba(0,0,0,0)) 100%;
 }
