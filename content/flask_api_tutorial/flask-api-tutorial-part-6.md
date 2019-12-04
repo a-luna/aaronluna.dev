@@ -882,7 +882,7 @@ static               GET        /static/&lt;path:filename&gt;</span></code></pre
     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
   </div>
   <div class="alert-message">
-    <p>Please remember, currently an unhandled exception occurs if you attempt to execute either of the methods we have created for the <code>api.widget_list</code> endpoint since the business logic for creating a new <code>Widget</code> depends on the <code>api.widget</code> endpoint existing. We will create unit tests for both endpoints in the <code>widget_ns</code> namespace when both have been fully implemented.</p>
+    <p>Please remember, currently an unhandled exception occurs if you attempt to execute either of the methods we have created for the <code>api.widget_list</code> endpoint since the business logic for both operations depends on the <code>api.widget</code> endpoint existing. We will create unit tests for all endpoints/CRUD operations in <span class="bold-text">Table 1</span> when they have been fully implemented.</p>
   </div>
 </div>
 
@@ -893,12 +893,9 @@ static               GET        /static/&lt;path:filename&gt;</span></code></pre
 {{< highlight python "linenos=table,linenostart=24" >}}@token_required
 def retrieve_widget(name):
     widget = Widget.find_by_name(name)
-    return (
-        widget,
-        HTTPStatus.OK
-        if widget
-        else abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail"),
-    ){{< /highlight >}}
+    if widget:
+        return widget, HTTPStatus.OK
+    abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail"),{{< /highlight >}}
 
 ### `Widget` Resource (GET Request)
 
@@ -947,12 +944,12 @@ update_widget_reqparser.remove_argument("name"){{< /highlight >}}
 {{< highlight python "linenos=table,linenostart=50" >}}@admin_token_required
 def update_widget(name, widget_dict):
     widget = Widget.find_by_name(name)
-    if not widget:
-        abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail")
-    for k, v in widget_dict.items():
-        setattr(widget, k, v)
-    db.session.commit()
-    return widget, HTTPStatus.OK{{< /highlight >}}
+    if widget:
+        for k, v in widget_dict.items():
+            setattr(widget, k, v)
+        db.session.commit()
+        return widget, HTTPStatus.OK
+    abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail"){{< /highlight >}}
 
 ### `Widget` Resource (PUT Request)
 
@@ -1012,10 +1009,9 @@ class Widget(Resource):
 {{< highlight python "linenos=table,linenostart=63" >}}@admin_token_required
 def delete_widget(name):
     widget = Widget.find_by_name(name)
-    if not widget:
-        return "", HTTPStatus.NO_CONTENT
-    db.session.delete(release_info)
-    db.session.commit()
+    if widget:
+        db.session.delete(widget)
+        db.session.commit()
     return "", HTTPStatus.NO_CONTENT{{< /highlight >}}
 
 ### `Widget` Resource (DELETE Request)
