@@ -22,41 +22,46 @@
   HUGO_ENABLEGITINFO = "false"
 [[redirects]]
   from ="/vendor/bulma.css"
-  to = "https://aaronlunadev-sapper.netlify.com/vendor/bulma.css"
+  to = "https://svelte-base64.netlify.com/vendor/bulma.css"
+  status = 200
+  force = true
+[[redirects]]
+  from ="/vendor/bulma.css.map"
+  to = "https://svelte-base64.netlify.com/vendor/bulma.css.map"
   status = 200
   force = true
 [[redirects]]
   from ="/vendor/all.css"
-  to = "https://aaronlunadev-sapper.netlify.com/vendor/all.css"
+  to = "https://svelte-base64.netlify.com/vendor/all.css"
   status = 200
   force = true
 [[redirects]]
   from ="/global.css"
-  to = "https://aaronlunadev-sapper.netlify.com/global.css"
+  to = "https://svelte-base64.netlify.com/global.css"
   status = 200
   force = true
 [[redirects]]
   from ="/favicon.png"
-  to = "https://aaronlunadev-sapper.netlify.com/favicon.png"
+  to = "https://svelte-base64.netlify.com/favicon.png"
   status = 200
   force = true
 [[redirects]]
   from ="/logo-192.png"
-  to = "https://aaronlunadev-sapper.netlify.com/logo-192.png"
+  to = "https://svelte-base64.netlify.com/logo-192.png"
   status = 200
   force = true
 [[redirects]]
   from ="/logo-512.png"
-  to = "https://aaronlunadev-sapper.netlify.com/logo-512.png"
+  to = "https://svelte-base64.netlify.com/logo-512.png"
   status = 200
   force = true
 [[redirects]]
   from ="/base64/*"
-  to = "https://aaronlunadev-sapper.netlify.com/base64/:splat"
+  to = "https://svelte-base64.netlify.com/base64/:splat"
   status = 200
   force = true
 [[redirects]]
   from ="/client/*"
-  to = "https://aaronlunadev-sapper.netlify.com/client/:splat"
+  to = "https://svelte-base64.netlify.com/client/:splat"
   status = 200
   force = true
