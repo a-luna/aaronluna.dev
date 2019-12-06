@@ -157,7 +157,7 @@ Clients can navigate through the full set of database objects by including a `pa
 
 An example of a request/response pair containing paginated data is given below:
 
-<pre><code><span class="cmd-lineno"> 1</span>  <span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">http :5000/api/v1/widgets Authorization:"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY4MjA3NDksImlhdCI6MTU2NjgxOTg0NCwic3ViIjoiMzUyMDg5N2EtZWQ0My00YWMwLWIzYWYtMmZjMTY3NzE5MTYwIiwiYWRtaW4iOmZhbHNlfQ.AkpscH6QoCrfHYeyJTyouanwyj4KH34f3YmzMnyKKdM"</span>
+<pre><code><span class="cmd-lineno"> 1</span>  <span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">http :5000/api/v1/widgets?page=1&per_page=10 Authorization:"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjY4MjA3NDksImlhdCI6MTU2NjgxOTg0NCwic3ViIjoiMzUyMDg5N2EtZWQ0My00YWMwLWIzYWYtMmZjMTY3NzE5MTYwIiwiYWRtaW4iOmZhbHNlfQ.AkpscH6QoCrfHYeyJTyouanwyj4KH34f3YmzMnyKKdM"</span>
 <span class="cmd-lineno"> 2</span>
 <span class="cmd-lineno"> 3</span>  <span class="cmd-results"><span class="bold-text goldenrod">GET /api/v1/widgets?page=1&per_page=10 HTTP/1.1</span>
 <span class="cmd-lineno"> 4</span>  <span class="purple">Accept</span>: <span class="light-blue">*/*</span>
@@ -173,19 +173,19 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno">14</span>  <span class="purple">Content-Length</span>: <span class="light-blue">1407</span>
 <span class="cmd-lineno">15</span>  <span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
 <span class="cmd-lineno">16</span>  <span class="purple">Date</span>: <span class="light-blue">Mon, 26 Aug 2019 11:45:39 GMT</span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">17</span>  <span class="purple">Link</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="self",</span></span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">18</span>  <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="first",</span></span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">19</span>  <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=2&per_page=10>; rel="next",</span></span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">20</span>  <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=5&per_page=10>; rel="last"</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">17</span>  <span class="purple">Link</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">&lt;/api/v1/widgets?page=1&per_page=10>; rel="self",</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">18</span>  <span class="light-blue">&lt;/api/v1/widgets?page=1&per_page=10>; rel="first",</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">19</span>  <span class="light-blue">&lt;/api/v1/widgets?page=2&per_page=10>; rel="next",</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">20</span>  <span class="light-blue">&lt;/api/v1/widgets?page=5&per_page=10>; rel="last"</span></span>
 <span class="cmd-lineno">21</span>  <span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
 <span class="cmd-lineno">22</span>  <span class="purple">Total-Count</span>: <span class="pink">23</span>
 <span class="cmd-lineno">23</span>
 <span class="cmd-lineno">24</span>  <span class="bold-text">{
 <span class="cmd-hl"><span class="cmd-lineno-hl">25</span>    <span class="purple">"links"</span><span style="color: var(--light-gray2)">:{                                                        </span></span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">26</span>    <span class="purple">"self"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">27</span>    <span class="purple">"first"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">28</span>    <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">29</span>    <span class="purple">"last"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=5&per_page=10"</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">26</span>    <span class="purple">"self"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">27</span>    <span class="purple">"first"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">28</span>    <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">29</span>    <span class="purple">"last"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets?page=5&per_page=10"</span></span>
 <span class="cmd-lineno">30</span>    },
 <span class="cmd-lineno">31</span>    <span class="purple">"has_prev"</span>: <span class="orange">false</span>,
 <span class="cmd-lineno">32</span>    <span class="purple">"has_next"</span>: <span class="orange">true</span>,
@@ -197,7 +197,7 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno">38</span>      {
 <span class="cmd-lineno">39</span>        <span class="gray">//...</span>
 <span class="cmd-lineno">40</span>        <span class="purple">"name"</span>: <span class="light-blue">"test"</span>
-<span class="cmd-hl"><span class="cmd-lineno-hl">41</span>    <span class="purple">"link"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets/test"</span><span style="color: var(--light-gray2)">,              </span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">41</span>    <span class="purple">"link"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets/test"</span><span style="color: var(--light-gray2)">,              </span></span>
 <span class="cmd-lineno">42</span>      },
 <span class="cmd-lineno">43</span>      <span class="gray">//...</span>
 <span class="cmd-lineno">44</span>    ]
@@ -851,7 +851,7 @@ class WidgetList(Resource):
         <p><strong>Line 31: </strong>The <code>response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page with response code 200 as an example response body.</p>
       </li>
       <li>
-        <p><strong>Line 32: </strong>The <code>expect</code> decorator was explained in depth <a href="http://localhost:1313/series/flask_api_tutorial/part-3/#registeruser-resource">in Part 3</a>, please review the implementation of the function that handles <code>POST</code> requests for the <code>api.auth_register</code> endpoint if you need a refresher. Basically, applying the decorator <code>@widget_ns.expect(pagination_reqparser)</code> to a function has two enormous effects: it specifies that <code>pagination_reqparser</code> will be used to parse the client's request, <span class="emphasis">AND</span> it renders a form on the Swagger UI page with <code>input</code> text elements for <code>widget.name</code>, <code>widget.info_url</code>, and <code>widget.deadline</code>.</p>
+        <p><strong>Line 32: </strong>The <code>expect</code> decorator was explained in depth <a href="http://localhost:1313/series/flask_api_tutorial/part-3/#registeruser-resource">in Part 3</a>, please review the implementation of the function that handles <code>POST</code> requests for the <code>api.auth_register</code> endpoint if you need a refresher. Basically, applying the decorator <code>@widget_ns.expect(create_widget_reqparser)</code> to a function has two enormous effects: it specifies that <code>create_widget_reqparser</code> will be used to parse the client's request, <span class="emphasis">AND</span> it renders a form on the Swagger UI page with <code>input</code> text elements for <code>widget.name</code>, <code>widget.info_url</code>, and <code>widget.deadline</code>.</p>
       </li>
       <li>
         <p><strong>Lines 35-38: </strong>Everything here should be completely obvious to you since calling <code>parse_args</code> to get the client's request data and passing the data to our business logic is a process that we implement on (nearly) every API handler.</p>
@@ -896,7 +896,7 @@ Let's start with the process that is most similar to the last one we implemented
 
 The business logic for retrieving a single `widget` is very simple. First, the database is queried for `widgets` matching the `name` that was requested by the client. If a matching `widget` is found, it is serialized to JSON and sent to the client with status code `HTTPStatus.OK` (200). If no `widget` exists with the specified `name`, a `HTTPStatus.NOT_FOUND` (404) response is sent to the client.
 
-Because this is such a common pattern in web applications, <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/#queries-in-views" target="_blank">Flask-SQLAlchemy provides the `first_or_404` method</a> does exactly what we need. It is modeled after the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Query.first" target="_blank">the `first` function</a> from SQLAlchemy, which returns either the first result of a query or `None`. `first_or_404` raises a 404 error instead of returning `None`.
+Because this is such a common pattern in web applications, <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/#queries-in-views" target="_blank">Flask-SQLAlchemy provides the `first_or_404` method</a> which does exactly what we need. It is modeled after <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Query.first" target="_blank">the `first` function</a> from SQLAlchemy, which returns either the first result of a query or `None`. `first_or_404` raises a 404 error instead of returning `None`.
 
 Open `/app/api/widgets/business.py` and add the function below:
 
@@ -1004,26 +1004,44 @@ static               GET        /static/&lt;path:filename&gt;</span></code></pre
 
 ## Update Widget
 
-Working our way through **Table 1**, the next process to implement is updating a single `widget`. Clients with administrator access can perform this operation by sending a `PUT` request to the `api.widget` endpoint.
+Working our way through **Table 1**, the next process to implement is updating a single `widget`. Clients with administrator access can perform this operation by sending a `PUT` request to the `api.widget` endpoint. A common point of confusion when designing a REST API is understanding what exactly is supposed to be happen when a `PUT` request is received.
+
+According to <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231 ()</a>, part of the formal definition for the `PUT` method is given below:
+
+<blockquote class="rfc">Use <code>PUT</code> when you want to modify a singular resource which is already a part of resources collection. <strong><code>PUT</code> replaces the resource in its entirety.</strong></blockquote>
+
+I've highlighted what (IMO) is the most important factor to consider when designing the process that is invoked by a `PUT` request. In order to **replace the resource in its entirety**, the client's request must include every value that is required to create a new `widget`. In other words, to change the value of `info_url` on a single `widget`, you cannot just send a `PUT` request with the new `info_url` value. The request must contain the `name`, `info_url`, and `deadline` values.
 
 ### `update_widget_reqparser` Request Parser
 
+The request data sent by the client for a `PUT` request is nearly identical to the data sent with a `POST` request, with one important difference. With a `PUT` request, the `name` parameter is provided in the URI instead of the body of the request. Because of this, we can't just re-use the `create_widget_reqparser` as-is to parse a `PUT` request.
 
+It turns out that the need to re-use portions of a request parser is such a common occurrence that <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#parser-inheritance" target="_blank">Flask-RESTPlus provides methods to copy an existing parser, and then add/remove arguments</a>. This is extremely useful since it obviates the need to re-write every argument and duplicate a bunch of code just to slightly tweak the behavior of a request parser.
+
+For example, open `/app/api/widgets/dto.py`, add the lines below, then save the file:
 
 {{< highlight python "linenos=table,linenostart=67" >}}update_widget_reqparser = create_widget_reqparser.copy()
 update_widget_reqparser.remove_argument("name"){{< /highlight >}}
+
+Now we have exactly the request parser that we need for `PUT` requests received at the `api.widgets` endpoint. The `update_widget_reqparser` is created by simply copying the `create_widget_reqparser` and removing the `name` argument. We will import and use this when we are ready to implement the `put` method handler.
 
 ### `update_widget` Method
 
 {{< highlight python "linenos=table,linenostart=49" >}}@admin_token_required
 def update_widget(name, widget_dict):
-    widget = Widget.query.filter_by(name=name).first_or_404(
-        description=f"{name} not found in database."
-    )
-    for k, v in widget_dict.items():
-        setattr(widget, k, v)
-    db.session.commit()
-    return widget{{< /highlight >}}
+    widget = Widget.find_by_name(name)
+    if widget:
+        for k, v in widget_dict.items():
+            setattr(widget, k, v)
+        db.session.commit()
+        response_dict = dict(status="success", message=f"'{name}' was successfully updated")
+        return response_dict, HTTPStatus.OK
+    try:
+        valid_name = widget_name(name)
+    except ValueError as e:
+        abort(HTTPStatus.BAD_REQUEST, str(e), status="fail")
+    widget_dict["name"] = valid_name
+    return create_widget(widget_dict){{< /highlight >}}
 
 ### `Widget` Resource (PUT Request)
 
@@ -1066,9 +1084,9 @@ class Widget(Resource):
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
+    @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
     @widget_ns.expect(update_widget_reqparser)
-    @widget_ns.marshal_with(widget_model)
     def put(self, name):
         """Update a widget."""
         widget_dict = update_widget_reqparser.parse_args()
@@ -1078,7 +1096,7 @@ class Widget(Resource):
 
 ### `delete_widget` Method
 
-{{< highlight python "linenos=table,linenostart=60" >}}@admin_token_required
+{{< highlight python "linenos=table,linenostart=66" >}}@admin_token_required
 def delete_widget(name):
     widget = Widget.query.filter_by(name=name).first_or_404(
         description=f"{name} not found in database."
@@ -1129,9 +1147,9 @@ class Widget(Resource):
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
+    @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
     @widget_ns.expect(update_widget_reqparser)
-    @widget_ns.marshal_with(widget_model)
     def put(self, name):
         """Update a widget."""
         widget_dict = update_widget_reqparser.parse_args()
