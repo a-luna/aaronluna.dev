@@ -173,19 +173,19 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno">14</span>  <span class="purple">Content-Length</span>: <span class="light-blue">1407</span>
 <span class="cmd-lineno">15</span>  <span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
 <span class="cmd-lineno">16</span>  <span class="purple">Date</span>: <span class="light-blue">Mon, 26 Aug 2019 11:45:39 GMT</span>
-<span class="cmd-lineno-hl">17  <span class="purple">Link</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="self",</span></span>
-<span class="cmd-lineno-hl">18    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="first",</span></span>
-<span class="cmd-lineno-hl">19    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=2&per_page=10>; rel="next",</span></span>
-<span class="cmd-lineno-hl">20    <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=5&per_page=10>; rel="last"</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">17</span>  <span class="purple">Link</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="self",</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">18</span>  <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=1&per_page=10>; rel="first",</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">19</span>  <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=2&per_page=10>; rel="next",</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">20</span>  <span class="light-blue">&lt;http://localhost:5000/api/v1/widgets?page=5&per_page=10>; rel="last"</span></span>
 <span class="cmd-lineno">21</span>  <span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
 <span class="cmd-lineno">22</span>  <span class="purple">Total-Count</span>: <span class="pink">23</span>
 <span class="cmd-lineno">23</span>
 <span class="cmd-lineno">24</span>  <span class="bold-text">{
-<span class="cmd-lineno-hl">25    <span class="purple">"links"</span><span style="color: var(--light-gray2)">: {</span></span>
-<span class="cmd-lineno-hl">26      <span class="purple">"self"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-lineno-hl">27      <span class="purple">"first"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-lineno-hl">28      <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
-<span class="cmd-lineno-hl">29      <span class="purple">"last"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=5&per_page=10"</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">25</span>    <span class="purple">"links"</span><span style="color: var(--light-gray2)">:{                                                        </span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">26</span>    <span class="purple">"self"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">27</span>    <span class="purple">"first"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">28</span>    <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">29</span>    <span class="purple">"last"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets?page=5&per_page=10"</span></span>
 <span class="cmd-lineno">30</span>    },
 <span class="cmd-lineno">31</span>    <span class="purple">"has_prev"</span>: <span class="orange">false</span>,
 <span class="cmd-lineno">32</span>    <span class="purple">"has_next"</span>: <span class="orange">true</span>,
@@ -197,7 +197,7 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno">38</span>      {
 <span class="cmd-lineno">39</span>        <span class="gray">//...</span>
 <span class="cmd-lineno">40</span>        <span class="purple">"name"</span>: <span class="light-blue">"test"</span>
-<span class="cmd-lineno-hl">41        <span class="purple">"link"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets/test"</span><span style="color: var(--light-gray2)">,</span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">41</span>    <span class="purple">"link"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"http://localhost:5000/api/v1/widgets/test"</span><span style="color: var(--light-gray2)">,              </span></span>
 <span class="cmd-lineno">42</span>      },
 <span class="cmd-lineno">43</span>      <span class="gray">//...</span>
 <span class="cmd-lineno">44</span>    ]
@@ -808,7 +808,7 @@ from app.api.widget.business import create_widget, retrieve_widget_list{{< /high
 
 Next, add the highlighted lines to `endpoints.py` and save the file:
 
-{{< highlight python "linenos=table,linenostart=16,hl_lines=2-5 12-21" >}}widget_ns = Namespace(name="widgets", validate=True)
+{{< highlight python "linenos=table,linenostart=16,hl_lines=2-5 15-23" >}}widget_ns = Namespace(name="widgets", validate=True)
 widget_ns.models[widget_owner_model.name] = widget_owner_model
 widget_ns.models[widget_model.name] = widget_model
 widget_ns.models[pagination_links_model.name] = pagination_links_model
@@ -816,12 +816,14 @@ widget_ns.models[pagination_model.name] = pagination_model
 
 
 @widget_ns.route("", endpoint="widget_list")
+@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
+@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
 class WidgetList(Resource):
     """Handles HTTP requests to URL: /widgets."""
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Retrieved widget list.", pagination_model)
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.expect(pagination_reqparser)
     def get(self):
         """Retrieve a list of widgets."""
@@ -832,17 +834,13 @@ class WidgetList(Resource):
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
-    @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
     @widget_ns.response(HTTPStatus.CONFLICT, "Widget name already exists.")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     @widget_ns.expect(create_widget_reqparser)
     def post(self):
         """Create a widget."""
         widget_dict = create_widget_reqparser.parse_args()
-        return create_widget(widget_dict)
-{{< /highlight >}}
+        return create_widget(widget_dict){{< /highlight >}}
 
 <div class="code-details">
     <ul>
@@ -850,13 +848,13 @@ class WidgetList(Resource):
         <p><strong>Lines 17-20: </strong>We need to register all of the API models that we created in <code>app.api.widgets.dto</code> with the <code>widget_ns</code> namespace. This is an easy thing to forget and can be a difficult issue to debug. If the API models are not registered with the <code>widget_ns</code> namespace, the entire Swagger UI page will fail to render, displaying only a single cryptic error message: <span class="bold-italics">No API definition provided</span>.</p>
       </li>
       <li>
-        <p><strong>Line 28: </strong>The <code>response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page with response code 200 as an example response body.</p>
+        <p><strong>Line 31: </strong>The <code>response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page with response code 200 as an example response body.</p>
       </li>
       <li>
-        <p><strong>Line 30: </strong>The <code>expect</code> decorator was explained in depth <a href="http://localhost:1313/series/flask_api_tutorial/part-3/#registeruser-resource">in Part 3</a>, please review the implementation of the function that handles <code>POST</code> requests for the <code>api.auth_register</code> endpoint if you need a refresher. Basically, applying the decorator <code>@widget_ns.expect(pagination_reqparser)</code> to a function has two enormous effects: it specifies that <code>pagination_reqparser</code> will be used to parse the client's request, <span class="emphasis">AND</span> it renders a form on the Swagger UI page with <code>input</code> text elements for <code>widget.name</code>, <code>widget.info_url</code>, and <code>widget.deadline</code>.</p>
+        <p><strong>Line 32: </strong>The <code>expect</code> decorator was explained in depth <a href="http://localhost:1313/series/flask_api_tutorial/part-3/#registeruser-resource">in Part 3</a>, please review the implementation of the function that handles <code>POST</code> requests for the <code>api.auth_register</code> endpoint if you need a refresher. Basically, applying the decorator <code>@widget_ns.expect(pagination_reqparser)</code> to a function has two enormous effects: it specifies that <code>pagination_reqparser</code> will be used to parse the client's request, <span class="emphasis">AND</span> it renders a form on the Swagger UI page with <code>input</code> text elements for <code>widget.name</code>, <code>widget.info_url</code>, and <code>widget.deadline</code>.</p>
       </li>
       <li>
-        <p><strong>Lines 33-36: </strong>Everything here should be completely obvious to you since calling <code>parse_args</code> to get the client's request data and passing the data to our business logic is a process that we implement on (nearly) every API handler.</p>
+        <p><strong>Lines 35-38: </strong>Everything here should be completely obvious to you since calling <code>parse_args</code> to get the client's request data and passing the data to our business logic is a process that we implement on (nearly) every API handler.</p>
       </li>
     </ul>
 </div>
@@ -888,16 +886,31 @@ static               GET        /static/&lt;path:filename&gt;</span></code></pre
 
 ## Retrieve Widget
 
+At this point, we have completed two of the five CRUD processes specified in **Table 1**. Thankfully, the remaining three should be much simpler and faster to implement since many of the elements can be reused (e.g. request parsers, API models).
+
+The two processes we completed (create a `widget`, retrieve a list of `widgets`) are accessed via the `/api/v1/widgets` endpoint, which is also called the **resource collection** endpoint. However, the remaining three processes are accessed via the **resource item** endpoint, <code>api/v1/widgets/&lt;name&gt;</code>. The `name` parameter is provided by the client and is used to perform the requested action (retrieve, update, delete) on a specific `widget` instance.
+
+Let's start with the process that is most similar to the last one we implemented, retrieving a single `widget`. We do not need to create any request parsers or API models since the name of the `widget` is provided in the URI requested by the client, and the `widget_model` can be re-used to serialize the requested object in the response.
+
 ### `retrieve_widget` Method
 
-{{< highlight python "linenos=table,linenostart=24" >}}@token_required
+The business logic for retrieving a single `widget` is very simple. First, the database is queried for `widgets` matching the `name` that was requested by the client. If a matching `widget` is found, it is serialized to JSON and sent to the client with status code `HTTPStatus.OK` (200). If no `widget` exists with the specified `name`, a `HTTPStatus.NOT_FOUND` (404) response is sent to the client.
+
+Because this is such a common pattern in web applications, <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/#queries-in-views" target="_blank">Flask-SQLAlchemy provides the `first_or_404` method</a> does exactly what we need. It is modeled after the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Query.first" target="_blank">the `first` function</a> from SQLAlchemy, which returns either the first result of a query or `None`. `first_or_404` raises a 404 error instead of returning `None`.
+
+Open `/app/api/widgets/business.py` and add the function below:
+
+{{< highlight python "linenos=table,linenostart=42" >}}@token_required
 def retrieve_widget(name):
-    widget = Widget.find_by_name(name)
-    if widget:
-        return widget, HTTPStatus.OK
-    abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail"),{{< /highlight >}}
+    return Widget.query.filter_by(name=name).first_or_404(
+        description=f"{name} not found in database."
+    ){{< /highlight >}}
+
+This operation requires a valid access token, so the `@token_required` decorator is applied to the function **(Line 42)**. The `first_or_404` method **(Line 44)** accepts an optional `description` parameter which is used to include a message in the body of the HTTP response explaining why the request failed.
 
 ### `Widget` Resource (GET Request)
+
+Next, we need to create the `api.widget` endpoint. Before we do so, open `/app/api/widgets/endpoints.py` and update the import statements to include the `retrieve_widget` function **(Line 17)**:
 
 {{< highlight python "linenos=table,hl_lines=17" >}}"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
@@ -918,38 +931,99 @@ from app.api.widgets.business import (
     retrieve_widget
 ){{< /highlight >}}
 
+Next, add the content below:
+
 {{< highlight python "linenos=table,linenostart=56" >}}@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
+@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+@widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
+@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
+@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
 class Widget(Resource):
     """Handles HTTP requests to URL: /widgets/{name}."""
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
-    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
         return retrieve_widget(name){{< /highlight >}}
 
+The only thing that we are seeing for the first time is how to include a parameter in the endpoint path. Thankfully, Flask-RESTPlus uses the same process as Flask for URL route registration (via the `@route` decorator). <a href="https://flask.palletsprojects.com/en/1.1.x/api/#url-route-registrations" target="_blank">From the Flask documentation</a>:
+
+<blockquote class="rfc">
+  <p>Variable parts in the route can be specified with angular brackets (<code>/user/&lt;username&gt;</code>). By default a variable part in the URL accepts any string without a slash however a different converter can be specified as well by using <code>/&lt;converter:name&gt;</code>.</p>
+  <p>Variable parts are passed to the view function as keyword arguments.</p>
+  <p>The following converters are available:</p>
+  <table>
+    <tr>
+      <td><code>string</code></td>
+      <td>accepts any text without a slash (the default)</td>
+    </tr>
+    <tr>
+      <td><code>int</code></td>
+      <td>accepts integers</td>
+    </tr>
+    <tr>
+      <td><code>float</code></td>
+      <td>like int but for floating point values</td>
+    </tr>
+    <tr>
+      <td><code>path</code></td>
+      <td>like the default but also accepts slashes</td>
+    </tr>
+    <tr>
+      <td><code>int</code></td>
+      <td>matches one of the items provided</td>
+    </tr>
+    <tr>
+      <td><code>uuid</code></td>
+      <td>accepts UUID strings</td>
+    </tr>
+  </table>
+</blockquote>
+
+For the `api.widget` endpoint, the `name` parameter is documented in **Lines 56-57** and is then passed to the `get` method as a parameter in **Line 68**.
+
+We can verify that the `api.widget` endpoint has been registered and currently only responds to `GET` requests by executing the `flask routes` command:
+
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
+<span class="cmd-results">Endpoint             Methods    Rule
+-------------------  ---------  --------------------------
+api.auth_login       POST       /api/v1/auth/login
+api.auth_logout      POST       /api/v1/auth/logout
+api.auth_register    POST       /api/v1/auth/register
+api.auth_user        GET        /api/v1/auth/user
+api.doc              GET        /api/v1/ui
+api.root             GET        /api/v1/
+api.specs            GET        /api/v1/swagger.json
+<span class="highlite">api.widget           GET        /api/v1/widgets/&lt;name&gt;</span>
+api.widget_list      GET, POST  /api/v1/widgets
+restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
+static               GET        /static/&lt;path:filename&gt;</span></code></pre>
+
 ## Update Widget
 
+Working our way through **Table 1**, the next process to implement is updating a single `widget`. Clients with administrator access can perform this operation by sending a `PUT` request to the `api.widget` endpoint.
+
 ### `update_widget_reqparser` Request Parser
+
+
 
 {{< highlight python "linenos=table,linenostart=67" >}}update_widget_reqparser = create_widget_reqparser.copy()
 update_widget_reqparser.remove_argument("name"){{< /highlight >}}
 
 ### `update_widget` Method
 
-{{< highlight python "linenos=table,linenostart=50" >}}@admin_token_required
+{{< highlight python "linenos=table,linenostart=49" >}}@admin_token_required
 def update_widget(name, widget_dict):
-    widget = Widget.find_by_name(name)
-    if widget:
-        for k, v in widget_dict.items():
-            setattr(widget, k, v)
-        db.session.commit()
-        return widget, HTTPStatus.OK
-    abort(HTTPStatus.NOT_FOUND, f"{name} not found in database.", status="fail"){{< /highlight >}}
+    widget = Widget.query.filter_by(name=name).first_or_404(
+        description=f"{name} not found in database."
+    )
+    for k, v in widget_dict.items():
+        setattr(widget, k, v)
+    db.session.commit()
+    return widget{{< /highlight >}}
 
 ### `Widget` Resource (PUT Request)
 
@@ -974,15 +1048,17 @@ from app.api.widgets.business import (
     update_widget,
 ){{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=58,hl_lines=15-27" >}}@widget_ns.route("/<name>", endpoint="widget")
+{{< highlight python "linenos=table,linenostart=58,hl_lines=17-27" >}}@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
+@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+@widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
+@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
+@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
 class Widget(Resource):
     """Handles HTTP requests to URL: /widgets/{name}."""
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
-    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
@@ -990,11 +1066,7 @@ class Widget(Resource):
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
-    @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
-    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     @widget_ns.expect(update_widget_reqparser)
     @widget_ns.marshal_with(widget_model)
     def put(self, name):
@@ -1006,12 +1078,13 @@ class Widget(Resource):
 
 ### `delete_widget` Method
 
-{{< highlight python "linenos=table,linenostart=63" >}}@admin_token_required
+{{< highlight python "linenos=table,linenostart=60" >}}@admin_token_required
 def delete_widget(name):
-    widget = Widget.find_by_name(name)
-    if widget:
-        db.session.delete(widget)
-        db.session.commit()
+    widget = Widget.query.filter_by(name=name).first_or_404(
+        description=f"{name} not found in database."
+    )
+    db.session.delete(widget)
+    db.session.commit()
     return "", HTTPStatus.NO_CONTENT{{< /highlight >}}
 
 ### `Widget` Resource (DELETE Request)
@@ -1038,15 +1111,17 @@ from app.api.widgets.business import (
     delete_widget,
 ){{< /highlight >}}
 
-{{< highlight python "linenos=table,linenostart=59,hl_lines=29-36" >}}@widget_ns.route("/<name>", endpoint="widget")
+{{< highlight python "linenos=table,linenostart=59,hl_lines=27-33" >}}@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
+@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+@widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
+@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
+@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
 class Widget(Resource):
     """Handles HTTP requests to URL: /widgets/{name}."""
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
-    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
@@ -1054,11 +1129,7 @@ class Widget(Resource):
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
-    @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
-    @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     @widget_ns.expect(update_widget_reqparser)
     @widget_ns.marshal_with(widget_model)
     def put(self, name):
@@ -1068,9 +1139,7 @@ class Widget(Resource):
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.NO_CONTENT, "Widget was deleted.")
-    @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     def delete(self, name):
         """Delete a widget."""
         return delete_widget(name){{< /highlight >}}

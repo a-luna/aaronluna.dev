@@ -19,6 +19,7 @@
   --blue2: #6fc1ff;
   --green1: #73f906;
   --green2: #98fa47;
+  --green3: #a9fb68;
   --purple1: #600aff;
   --purple2: #8b4dff;
   --orange1: #d97502;
@@ -40,6 +41,7 @@
   /* Theme Colors */
   --page-bg-color: var(--dark-gray1);
   --body-text-color: var(--off-white1);
+  --site-bg-color: var(--mid-gray1);
   --header-bg-color: var(--black1);
   --header-link-color1: var(--light-gray1);
   --header-link-color2: var(--white2);
@@ -47,12 +49,14 @@
   --link-color: var(--blue2);
   --accent-color1: var(--blue2);
   --accent-color2: var(--mid-gray2);
+  --code-text-color1: var(--green3);
+  --code-text-color2: var(--off-white1);
 
   /* Headers */
   --h1-color: var(--white2);
-  --h2-color: var(--white1);
-  --h3-color: var(--white1);
-  --h4-color: var(--white1);
+  --h2-color: var(--white2);
+  --h3-color: var(--white2);
+  --h4-color: var(--white2);
 
   /* Home Page */
   --home-title-color: var(--h1-color);

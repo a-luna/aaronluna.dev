@@ -1012,16 +1012,16 @@ widget_ns = Namespace(name="widgets", validate=True)
 
 
 @widget_ns.route("", endpoint="widget_list")
+@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
+@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
+@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
 class WidgetList(Resource):
     """Handles HTTP requests to URL: /widgets."""
 
     @widget_ns.doc(security="Bearer")
     @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
-    @widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
     @widget_ns.response(HTTPStatus.CONFLICT, "Widget name already exists.")
-    @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     @widget_ns.expect(create_widget_reqparser)
     def post(self):
         """Create a widget."""
@@ -1031,6 +1031,16 @@ class WidgetList(Resource):
 There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask_api_tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace`/`Resource` objects, `doc`, `response`, or `expect` decorators, etc.
 
 The important part is **Lines 26-27** where the `parse_args` method of `create_widget_reqparser` is used to validate the request data, which is then passed to the `create_widget` function which we just defined.
+
+<div class="note note-flex">
+  <div class="note-icon">
+    <i class="fa fa-pencil" aria-hidden="true"></i>
+  </div>
+  <div class="note-message" style="flex-flow: column wrap">
+    <p>You may have noticed that the <code>@response</code> decorator is sometimes applied to the <code>WidgetList Resource</code> and sometimes applied to the <code>post</code> method. Why would you do this instead of solely documenting one or the other? <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html#cascading" target="_blank">Flask-RESTPlus documentation decorators applied to a class cascade and apply to all methods within the class</a>.</p>
+    <p>In this case, <code>HTTPStatus.BAD_REQUEST</code>, <code>HTTPStatus.UNAUTHORIZED</code>, and <code>HTTPStatus.INTERNAL_SERVER_ERROR</code> are valid responses to any HTTP request made to this endpoint. Placing the <code>@response</code> decorators on the <code>Resource</code> prevents duplicating them on each method.</p>
+  </div>
+</div>
 
 ### Add `widget_ns` Namespace to `api`
 

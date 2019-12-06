@@ -45,8 +45,8 @@ html {
 body {
   font-family: roboto, Helvetica, Arial, sans-serif;
   font-weight: 400;
-  background: #666;
-  color: #c4c4c4;
+  background: var(--site-bg-color);
+  color: var(--body-text-color);
   margin: 0;
 }
 
@@ -274,7 +274,7 @@ code.unmodified-file {
 
 pre .work-file,
 code.work-file {
-  color: #a9fb68;
+  color: var(--code-text-color1);
   font-weight: 500;
 }
 
@@ -465,8 +465,11 @@ h4 {
 
 .cmd-lineno-hl {
   color: #ffc107;
-  background-color: var(--hl-line-bg);
   font-weight: 700;
+}
+
+.cmd-hl {
+  background: var(--hl-line-bg);
 }
 
 .highlite {
@@ -730,7 +733,7 @@ div.note,
 div.requirements {
   font-size: 0.9em;
   line-height: 1.5;
-  margin: 10px 15px 15px 15px;
+  margin: 10px 0 15px 0;
   border-radius: 4px;
   overflow-wrap: normal;
   overflow-x: auto;
@@ -870,7 +873,7 @@ div.requirements {
 }
 
 .command code {
-  color: #a9fb68;
+  color: var(--code-text-color1);
   background: var(--widget-bg-color);
   border: none;
 }
@@ -984,7 +987,7 @@ li code {
 code,
 p code,
 li code {
-  color: #a9fb68;
+  color: var(--code-text-color1);
 }
 
 .post__content p code {
@@ -2021,7 +2024,7 @@ table tfoot td p {
 }
 
 table tfoot code {
-  color: #a9fb68;
+  color: var(--code-text-color1);
 }
 
 .tutorial .table-wrapper {
@@ -2844,6 +2847,27 @@ header,
   background-color: var(--comments-bg);
   border-radius: 4px;
   border: 1px solid var(--comments-border);
+}
+
+/* RFC Table */
+
+blockquote table {
+  width: auto;
+  margin: 0 auto 15px auto;
+  border: 1px solid var(--dark-gray2);
+}
+
+blockquote code {
+  color: var(--code-text-color1);
+}
+
+blockquote tr:nth-child(even),
+blockquote tr:nth-child(odd) {
+  background-color: var(--widget-bg-color);
+}
+
+blockquote td {
+  border: 1px solid var(--dark-gray2);
 }
 
 @media screen and (max-width: 767px) {

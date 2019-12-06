@@ -9,6 +9,7 @@ series_part: "Part 7"
 series_part_lead: "Test Coverage, Code Quality, Logging and More"
 categories: ["Flask", "Python"]
 toc: true
+draft: true
 summary: ""
 test_this: "What a great section this part of the tutorial was. Just magnificent."
 twitter:

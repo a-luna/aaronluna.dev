@@ -9,6 +9,7 @@ series_part: "Part 8"
 series_part_lead: "Continuous Integration and Continuous Delivery"
 categories: ["Flask", "Python"]
 toc: true
+draft: true
 summary: ""
 twitter:
   card: "summary"
