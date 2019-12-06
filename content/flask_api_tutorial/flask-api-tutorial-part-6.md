@@ -661,7 +661,8 @@ Next, we need to create a function that performs the following actions:
 
 Before we begin, open `/app/api/widgets/business.py` and make the following updates to the import statements:
 
-{{< highlight python "linenos=table,hl_lines=4-5 8-9" >}}"""Business logic for /widgets API endpoints."""
+```python{linenos=table,hl_lines=["4-5","8-9"]}
+"""Business logic for /widgets API endpoints."""
 from http import HTTPStatus
 
 from flask import jsonify, url_for
@@ -671,7 +672,8 @@ from app import db
 from app.api.auth.decorator import token_required, admin_token_required
 from app.api.widget.dto import pagination_model
 from app.models.user import User
-from app.models.widget import Widget{{< /highlight >}}
+from app.models.widget import Widget
+```
 
 <div class="code-details">
     <ul>
@@ -692,7 +694,8 @@ from app.models.widget import Widget{{< /highlight >}}
 
 Next, add the content below:
 
-{{< highlight python "linenos=table,linenostart=31" >}}@token_required
+```python{linenos=table,linenostart=31}
+@token_required
 def retrieve_widget_list(page, per_page):
     pagination = Widget.query.paginate(page, per_page, error_out=False)
     response_data = marshal(pagination, pagination_model)
@@ -723,7 +726,8 @@ def _pagination_nav_header_links(pagination):
     link_header = ""
     for rel, url in url_dict.items():
         link_header += f'<{url}>; rel="{rel}", '
-    return link_header.strip().strip(","){{< /highlight >}}
+    return link_header.strip().strip(",")
+```
 
 This code implements the process of responding to a valid request for a list of widgets, please note the following:
 
@@ -777,7 +781,8 @@ We created the `api.widget_list` endpoint <a href="/series/flask_api_tutorial/pa
 
 Open `/app/api/widgets/endpoints.py` and make the following updates to the import statements:
 
-{{< highlight python "linenos=table,hl_lines=8-12 14 17-20" >}}"""API endpoint definitions for /widgets namespace."""
+```python{linenos=table,hl_lines=["8-12",14,"17-20"]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
@@ -790,7 +795,8 @@ from app.api.widget.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widget.business import create_widget, retrieve_widget_list{{< /highlight >}}
+from app.api.widget.business import create_widget, retrieve_widget_list
+```
 
 <div class="code-details">
     <ul>
@@ -808,7 +814,8 @@ from app.api.widget.business import create_widget, retrieve_widget_list{{< /high
 
 Next, add the highlighted lines to `endpoints.py` and save the file:
 
-{{< highlight python "linenos=table,linenostart=16,hl_lines=2-5 15-23" >}}widget_ns = Namespace(name="widgets", validate=True)
+```python{linenos=table,linenostart=16,hl_lines=["2-5","15-23"]}
+widget_ns = Namespace(name="widgets", validate=True)
 widget_ns.models[widget_owner_model.name] = widget_owner_model
 widget_ns.models[widget_model.name] = widget_model
 widget_ns.models[pagination_links_model.name] = pagination_links_model
@@ -840,7 +847,8 @@ class WidgetList(Resource):
     def post(self):
         """Create a widget."""
         widget_dict = create_widget_reqparser.parse_args()
-        return create_widget(widget_dict){{< /highlight >}}
+        return create_widget(widget_dict)
+```
 
 <div class="code-details">
     <ul>
@@ -900,11 +908,13 @@ Because this is such a common pattern in web applications, <a href="https://flas
 
 Open `/app/api/widgets/business.py` and add the function below:
 
-{{< highlight python "linenos=table,linenostart=42" >}}@token_required
+```python{linenos=table,linenostart=42}
+@token_required
 def retrieve_widget(name):
     return Widget.query.filter_by(name=name).first_or_404(
         description=f"{name} not found in database."
-    ){{< /highlight >}}
+    )
+```
 
 This operation requires a valid access token, so the `@token_required` decorator is applied to the function **(Line 42)**. The `first_or_404` method **(Line 44)** accepts an optional `description` parameter which is used to include a message in the body of the HTTP response explaining why the request failed.
 
@@ -912,7 +922,8 @@ This operation requires a valid access token, so the `@token_required` decorator
 
 Next, we need to create the `api.widget` endpoint. Before we do so, open `/app/api/widgets/endpoints.py` and update the import statements to include the `retrieve_widget` function **(Line 17)**:
 
-{{< highlight python "linenos=table,hl_lines=17" >}}"""API endpoint definitions for /widgets namespace."""
+```python{linenos=table,hl_lines=[17]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
@@ -929,11 +940,13 @@ from app.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget
-){{< /highlight >}}
+)
+```
 
 Next, add the content below:
 
-{{< highlight python "linenos=table,linenostart=56" >}}@widget_ns.route("/<name>", endpoint="widget")
+```python{linenos=table,linenostart=56}
+@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
 @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
@@ -947,7 +960,8 @@ class Widget(Resource):
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
-        return retrieve_widget(name){{< /highlight >}}
+        return retrieve_widget(name)
+```
 
 The only thing that we are seeing for the first time is how to include a parameter in the endpoint path. Thankfully, Flask-RESTPlus uses the same process as Flask for URL route registration (via the `@route` decorator). <a href="https://flask.palletsprojects.com/en/1.1.x/api/#url-route-registrations" target="_blank">From the Flask documentation</a>:
 
@@ -1027,7 +1041,8 @@ Now we have exactly the request parser that we need for `PUT` requests received 
 
 ### `update_widget` Method
 
-{{< highlight python "linenos=table,linenostart=49" >}}@admin_token_required
+```python{linenos=table,linenostart=49}
+@admin_token_required
 def update_widget(name, widget_dict):
     widget = Widget.find_by_name(name)
     if widget:
@@ -1041,11 +1056,13 @@ def update_widget(name, widget_dict):
     except ValueError as e:
         abort(HTTPStatus.BAD_REQUEST, str(e), status="fail")
     widget_dict["name"] = valid_name
-    return create_widget(widget_dict){{< /highlight >}}
+    return create_widget(widget_dict)
+```
 
 ### `Widget` Resource (PUT Request)
 
-{{< highlight python "linenos=table,hl_lines=8 19" >}}"""API endpoint definitions for /widgets namespace."""
+```python{linenos=table,hl_lines=[8,19]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
@@ -1064,9 +1081,11 @@ from app.api.widgets.business import (
     retrieve_widget_list,
     retrieve_widget,
     update_widget,
-){{< /highlight >}}
+)
+```
 
-{{< highlight python "linenos=table,linenostart=58,hl_lines=17-27" >}}@widget_ns.route("/<name>", endpoint="widget")
+```python{linenos=table,linenostart=58,hl_lines=["17-27"]}
+@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
 @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
@@ -1090,24 +1109,28 @@ class Widget(Resource):
     def put(self, name):
         """Update a widget."""
         widget_dict = update_widget_reqparser.parse_args()
-        return update_widget(name, widget_dict){{< /highlight >}}
+        return update_widget(name, widget_dict)
+```
 
 ## Delete Widget
 
 ### `delete_widget` Method
 
-{{< highlight python "linenos=table,linenostart=66" >}}@admin_token_required
+```python{linenos=table,linenostart=66}
+@admin_token_required
 def delete_widget(name):
     widget = Widget.query.filter_by(name=name).first_or_404(
         description=f"{name} not found in database."
     )
     db.session.delete(widget)
     db.session.commit()
-    return "", HTTPStatus.NO_CONTENT{{< /highlight >}}
+    return "", HTTPStatus.NO_CONTENT
+```
 
 ### `Widget` Resource (DELETE Request)
 
-{{< highlight python "linenos=table,hl_lines=20" >}}"""API endpoint definitions for /widgets namespace."""
+```python{linenos=table,hl_lines=[20]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
@@ -1127,9 +1150,11 @@ from app.api.widgets.business import (
     retrieve_widget,
     update_widget,
     delete_widget,
-){{< /highlight >}}
+)
+```
 
-{{< highlight python "linenos=table,linenostart=59,hl_lines=27-33" >}}@widget_ns.route("/<name>", endpoint="widget")
+```python{linenos=table,linenostart=59,hl_lines=["27-33"]}
+@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
 @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
@@ -1160,7 +1185,8 @@ class Widget(Resource):
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
     def delete(self, name):
         """Delete a widget."""
-        return delete_widget(name){{< /highlight >}}
+        return delete_widget(name)
+```
 
 ## Unit Tests: Create Widget
 

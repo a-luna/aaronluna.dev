@@ -9,6 +9,11 @@ pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsUseClasses = true
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = false
+
 [outputs]
     home = ["HTML", "JSON"]
     page = ["HTML"]
