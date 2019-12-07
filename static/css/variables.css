@@ -24,8 +24,8 @@
   --purple2: #8b4dff;
   --orange1: #d97502;
   --orange2: #FFB86C;
-  --goldenrod1: #ffc105;
-  --goldenrod2: #ffd147;
+  --gold1: #ffc105;
+  --gold2: #ffd147;
   --pink1: #d60552;
   --pink2: #f92472;
   --magenta1: #f60ef2;
@@ -51,6 +51,8 @@
   --accent-color2: var(--mid-gray2);
   --code-text-color1: var(--green3);
   --code-text-color2: var(--off-white1);
+  --blockquote-text-color: var(--blue1);
+  --blockquote-code-text-color: var(--body-text-color);
 
   /* Headers */
   --h1-color: var(--white2);
@@ -71,7 +73,7 @@
   --aws: var(--purple2);
   --devops: var(--pink1);
   --dotnet: var(--blue1);
-  --flask: var(--goldenrod1);
+  --flask: var(--gold1);
   --hugo: var(--magenta1);
   --javascript: var(--teal1);
   --linux: var(--orange1);

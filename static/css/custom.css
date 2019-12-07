@@ -1155,18 +1155,24 @@ pre.chroma code {
 
 blockquote {
   font-size: 0.9em;
-  font-weight: 300;
+  font-weight: 400;
   font-style: italic;
-  color: #a9fb68;
+  color: var(--blockquote-text-color);
   background: var(--widget-bg-color);
-  border-left: 3px solid #a9fb68;
-  padding: 5px 15px;
-  margin: 0 0 1em;
+  border-left: 3px solid var(--blockquote-text-color);
+  padding: 5px 10px;
+  margin: 0 0 1em 1em;
 }
 
-article blockquote p strong {
-  color: #a9fb68;
+blockquote strong,
+blockquote .bold-text {
+  color: var(--blockquote-text-color);
 }
+
+blockquote.rfc .bold-text {
+  color: #2196f3;
+}
+
 
 blockquote.rfc {
   color: #2196f3;
