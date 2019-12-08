@@ -1010,16 +1010,17 @@ I'd like you to try and imagine the business logic that the server should perfor
 
 This is certainly a sensible, common sense answer. And the function that we implement will do the same thing in certain situations. However, <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231 (HTTP/1.1 Semantics and Content)</a> contains the formal specification for the `PUT` method. I've excerpted some of the most important parts of the spec below:
 
-<blockquote>The PUT method requests that the state of the target resource be created or replaced with the state defined by the representation enclosed in the request message payload.
+<blockquote><strong>4.3.4.  PUT</strong>
+<p style="margin: 5px 0 0 10px">The PUT method requests that the state of the target resource be created or replaced with the state defined by the representation enclosed in the request message payload.
 <br>...<br>
 If the target resource does not have a current representation and the PUT successfully creates one, then the origin server MUST inform the user agent by sending a 201 (Created) response.  If the target resource does have a current representation and that representation is successfully modified in accordance with the state of the enclosed representation, then the origin server MUST send either a 200 (OK) or a 204 (No Content) response to indicate successful completion of the request
 <br>....<br>
 An origin server SHOULD verify that the PUT representation is consistent with any constraints the server has for the target resource that cannot or will not be changed by the PUT.
 <br>....<br>
-The fundamental difference between the POST and PUT methods is highlighted by the different intent for the enclosed representation. The target resource in a POST request is intended to handle the enclosed representation according to the resource's own semantics, whereas the enclosed representation in a PUT request is defined as replacing the state of the target resource.  Hence, the intent of PUT is idempotent and visible to intermediaries, even though the exact effect is only known by the origin server.
+The fundamental difference between the POST and PUT methods is highlighted by the different intent for the enclosed representation. The target resource in a POST request is intended to handle the enclosed representation according to the resource's own semantics, whereas the enclosed representation in a PUT request is defined as replacing the state of the target resource.  Hence, the intent of PUT is idempotent and visible to intermediaries, even though the exact effect is only known by the origin server.</p>
 </blockquote>
 
-I know, the language is highly technical and much more complex than the simple "update" process from my hypothetical answer. Fear not, implementing the `PUT` method per the specification doesn't require much additional effort, which we will see shortly.
+I know, the language is highly technical and much more complex than the answer to the hypothetical question I posed. Fear not, implementing the `PUT` method per the specification doesn't require much additional effort.
 
 ### `update_widget_reqparser` Request Parser
 
