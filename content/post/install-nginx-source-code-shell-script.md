@@ -228,12 +228,12 @@ drwxr-xr-x 14  501 staff 4096 Jan 15  2017 zlib-1.2.11</span>
 <span class="cmd-lineno">15</span> <span class="cmd-prompt">></span> <span class="cmd-input">--http-proxy-temp-path=/var/lib/nginx/proxy \</span>
 <span class="cmd-lineno">16</span> <span class="cmd-prompt">></span> <span class="cmd-input">--http-scgi-temp-path=/var/lib/nginx/scgi \</span>
 <span class="cmd-lineno">17</span> <span class="cmd-prompt">></span> <span class="cmd-input">--http-uwsgi-temp-path=/var/lib/nginx/uwsgi \</span>
-<span class="cmd-lineno highlite">18</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-openssl=/opt/src_files/openssl-1.1.1a \</span>
+<span class="cmd-lineno cmd-hl-border">18</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-openssl=/opt/src_files/openssl-1.1.1a \</span>
 <span class="cmd-lineno">19</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-openssl-opt=enable-ec_nistp_64_gcc_128 \</span>
 <span class="cmd-lineno">20</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-openssl-opt=no-weak-ssl-ciphers \</span>
-<span class="cmd-lineno highlite">21</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-pcre=/opt/src_files/pcre-8.42 \</span>
+<span class="cmd-lineno cmd-hl-border">21</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-pcre=/opt/src_files/pcre-8.42 \</span>
 <span class="cmd-lineno">22</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-pcre-jit \</span>
-<span class="cmd-lineno highlite">23</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-zlib=/opt/src_files/zlib-1.2.11 \</span>
+<span class="cmd-lineno cmd-hl-border">23</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-zlib=/opt/src_files/zlib-1.2.11 \</span>
 <span class="cmd-lineno">24</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-compat \</span>
 <span class="cmd-lineno">25</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-file-aio \</span>
 <span class="cmd-lineno">26</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-threads \</span>
@@ -259,8 +259,8 @@ drwxr-xr-x 14  501 staff 4096 Jan 15  2017 zlib-1.2.11</span>
 <span class="cmd-lineno">46</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-stream_ssl_module \</span>
 <span class="cmd-lineno">47</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-stream_ssl_preread_module \</span>
 <span class="cmd-lineno">48</span> <span class="cmd-prompt">></span> <span class="cmd-input">--with-debug \</span>
-<span class="cmd-lineno highlite">49</span> <span class="cmd-prompt">></span> <span class="cmd-input">--add-module=../ngx_http_geoip2_module \</span>
-<span class="cmd-lineno highlite">50</span> <span class="cmd-prompt">></span> <span class="cmd-input">--add-module=../ngx_cache_purge \</span></code></pre>
+<span class="cmd-lineno cmd-hl-border">49</span> <span class="cmd-prompt">></span> <span class="cmd-input">--add-module=../ngx_http_geoip2_module \</span>
+<span class="cmd-lineno cmd-hl-border">50</span> <span class="cmd-prompt">></span> <span class="cmd-input">--add-module=../ngx_cache_purge \</span></code></pre>
     <p>If you need to disable a module which is enabled by default, please read <a href="https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/#modules">these instructions</a>. All arguments of the form <code>&#8211;&#8211;with*_module</code> enable NGINX modules which are by default disabled. If you need to do the opposite (i.e. disable a module which by default is enabled when installing NGINX) (e.g. the fastcgi module), you would add <code>&#8211;&#8211;without&#8211;http_fastcgi_module</code> to the list of arguments.</p>
     <p>For more information on how you can customize your install with arguments supplied to the configure command, see the links below:</p>
     <ul class="list-of-links">

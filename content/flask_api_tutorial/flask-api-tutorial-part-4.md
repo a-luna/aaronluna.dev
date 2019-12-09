@@ -157,7 +157,7 @@ We can verify that the new route was correctly registered by running `flask rout
 <pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
 <span class="cmd-results">Endpoint             Methods  Rule
 -------------------  -------  --------------------------
-<span class="highlite">api.auth_login       POST     /api/v1/auth/login</span>
+<span class="cmd-hl-border">api.auth_login       POST     /api/v1/auth/login</span>
 api.auth_register    POST     /api/v1/auth/register
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
@@ -606,7 +606,7 @@ We can verify that the new route was correctly registered by running `flask rout
 -------------------  -------  --------------------------
 api.auth_login       POST     /api/v1/auth/login
 api.auth_register    POST     /api/v1/auth/register
-<span class="highlite">api.auth_user        GET      /api/v1/auth/user</span>
+<span class="cmd-hl-border">api.auth_user        GET      /api/v1/auth/user</span>
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json

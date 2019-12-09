@@ -17,17 +17,21 @@
   --teal2: #19f5d4;
   --blue1: #57b6ff;
   --blue2: #6fc1ff;
+  --blue3: #2196f3;
   --green1: #73f906;
   --green2: #98fa47;
   --green3: #a9fb68;
   --purple1: #600aff;
   --purple2: #8b4dff;
+  --purple3: #ae81ff;
   --orange1: #d97502;
   --orange2: #FFB86C;
-  --gold1: #ffc105;
+  --gold1: #ffc107;
   --gold2: #ffd147;
+  --gold3: #e5b965;
   --pink1: #d60552;
   --pink2: #f92472;
+  --pink3: #ff2c6d;
   --magenta1: #f60ef2;
   --magenta2: #fa72f8;
 
@@ -39,20 +43,21 @@
   --bot-padding-10: 0 0 10px 0;
 
   /* Theme Colors */
-  --page-bg-color: var(--dark-gray1);
-  --body-text-color: var(--off-white1);
   --site-bg-color: var(--mid-gray1);
   --header-bg-color: var(--black1);
-  --header-link-color1: var(--light-gray1);
+  --header-link-color1: var(--light-gray2);
   --header-link-color2: var(--white2);
+  --page-bg-color: var(--dark-gray1);
+  --body-text-color: var(--off-white1);
   --widget-bg-color: var(--black2);
   --link-color: var(--blue2);
   --accent-color1: var(--blue2);
   --accent-color2: var(--mid-gray2);
   --code-text-color1: var(--green3);
   --code-text-color2: var(--off-white1);
-  --blockquote-text-color: var(--blue1);
+  --blockquote-text-color: var(--purple2);
   --blockquote-code-text-color: var(--body-text-color);
+  --code-details-lineno: var(--white2);
 
   /* Headers */
   --h1-color: var(--white2);
@@ -70,12 +75,12 @@
   --home-card-bg-color: var(--widget-bg-color);
 
   /* Categories */
-  --aws: var(--purple2);
-  --devops: var(--pink1);
+  --aws: var(--purple3);
+  --devops: var(--pink2);
   --dotnet: var(--blue1);
   --flask: var(--gold1);
   --hugo: var(--magenta1);
-  --javascript: var(--teal1);
+  --javascript: var(--teal2);
   --linux: var(--orange1);
   --python: var(--green1);
   --virtualization: var(--orange2);
@@ -86,6 +91,7 @@
   /* Section: Tutorial */
   --tut-link-color1: var(--teal2);
   --tut-link-color2: var(--teal2);
+  --tut-requirements :var(--gold1);
 
   /* Comments */
   --comments-bg: var(--widget-bg-color);
@@ -94,4 +100,23 @@
   /* Syntax Highlighting */
   --hl-num-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray2));
   --hl-line-bg: linear-gradient(to right, var(--dark-gray2),  var(--dark-gray1), var(--widget-bg-color), rgba(0,0,0,0));
+
+  /* Command-line/Python REPL */
+  --cmd-lineno: var(--light-gray2);
+  --cmd-lineno-hl: var(--gold1);
+  --cmd-prompt: var(--mid-gray2);
+  --cmd-prompt-venv: var(--purple3);
+  --cmd-input: var(--green3);
+  --cmd-results: var(--off-white2);
+  --cmd-comments: var(--blue3);
+  --cmd-repl-prompt: var(--blue3);
+  --cmd-repl-comment: var(--mid-gray2);
+  --cmd-warning: var(--pink3);
+  --cmd-hl-border: var(--gold3);
+
+  /* Important Note Box */
+  --note-box: var(--blue3);
+
+  /* Alert Box */
+  --alert-box: var(--gold1);
 }

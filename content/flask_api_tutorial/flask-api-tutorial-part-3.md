@@ -691,7 +691,7 @@ We can verify that our route has been correctly registered by running `flask rou
 <pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
 <span class="cmd-results">Endpoint             Methods  Rule
 -------------------  -------  --------------------------
-<span class="highlite">api.auth_register    POST     /api/v1/auth/register</span>
+<span class="cmd-hl-border">api.auth_register    POST     /api/v1/auth/register</span>
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json

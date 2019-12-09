@@ -907,7 +907,7 @@ You may remember that `FLASK_APP` was one of the values we defined in our `.env`
     return find_best_app(script_info, module)
   File "/Users/aaronluna/Desktop/temp/venv/lib/python3.7/site-packages/flask/cli.py", line 96, in find_best_app
     module=module.__name__
-<span class="highlite">flask.cli.NoAppException: Failed to find Flask application or factory in module "run". Use "FLASK_APP=run:name to specify one.</span>
+<span class="cmd-hl-border">flask.cli.NoAppException: Failed to find Flask application or factory in module "run". Use "FLASK_APP=run:name to specify one.</span>
 Usage: flask [OPTIONS] COMMAND [ARGS]...
 
   A general utility script for Flask applications.

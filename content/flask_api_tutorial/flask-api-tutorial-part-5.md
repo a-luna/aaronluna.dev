@@ -284,7 +284,7 @@ Options:
   --help     Show this message and exit.
 
 Commands:
-  <span class="highlite">add-user  add a new user</span>
+  <span class="cmd-hl-border">add-user  add a new user</span>
   db        Perform database migrations.
   routes    Show the routes for the app.
   run       Run a development server.
@@ -996,7 +996,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
 
 Next, we need to create the API endpoint for the create operation and incorporate it with the <code>create_widget_reqparser</code> and the <code>create_widget</code> function.
 
-### `WidgetList` Resource (POST Request)
+### `api.widget_list` Endpoint (POST Request)
 
 According to **Table 1**, the operation to create a <code>widget</code> is accessed by sending a <code>POST</code> request to the <code>api.widget_list</code> resource, located at <code>/api/v1/widgets</code>. To create this endpoint, create a new file <code>endpoints.py</code> in <code>app/api/widgets</code> and enter the content below:
 
@@ -1005,7 +1005,7 @@ from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widget.dto import create_widget_reqparser
+from app.api.widgets.dto import create_widget_reqparser
 from app.api.widget.business import create_widget
 
 widget_ns = Namespace(name="widgets", validate=True)
@@ -1086,7 +1086,7 @@ api.auth_user        GET      /api/v1/auth/user
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json
-<span class="highlite">api.widget_list      POST     /api/v1/widgets</span>
+<span class="cmd-hl-border">api.widget_list      POST     /api/v1/widgets</span>
 restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
 static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 

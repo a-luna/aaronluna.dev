@@ -181,7 +181,7 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-lineno">22</span>  <span class="purple">Total-Count</span>: <span class="pink">23</span>
 <span class="cmd-lineno">23</span>
 <span class="cmd-lineno">24</span>  <span class="bold-text">{
-<span class="cmd-hl"><span class="cmd-lineno-hl">25</span>    <span class="purple">"links"</span><span style="color: var(--light-gray2)">:{                                                        </span></span>
+<span class="cmd-hl"><span class="cmd-lineno-hl">25</span>    <span class="purple">"links"</span><span style="color: var(--light-gray2)">:{                                  </span></span>
 <span class="cmd-hl"><span class="cmd-lineno-hl">26</span>    <span class="purple">"self"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
 <span class="cmd-hl"><span class="cmd-lineno-hl">27</span>    <span class="purple">"first"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets?page=1&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
 <span class="cmd-hl"><span class="cmd-lineno-hl">28</span>    <span class="purple">"next"</span><span style="color: var(--light-gray2)">:</span> <span class="light-blue">"/api/v1/widgets?page=2&per_page=10"</span><span style="color: var(--light-gray2)">,</span></span>
@@ -381,11 +381,11 @@ Let's take a look at `pagination.items[0]`, the first `widget` added to the data
 
 Finally, we retrieve the second (and final) page of `Widget` objects with five items per page by calling `Widget.query.paginate(page=2, per_page=5)`. We then verify that this is, in fact, the second page by calling `pagination.page`. We know `pagination.has_next` should be `False` since this is the final page of `Widgets`, and `pagination.has_prev` should be `True`. `len(pagination.items)` is one since there are six total `Widgets` and items #1-5 were shown on `page=1`. Lastly, we verify that `pagination.items` contains a single `Widget` object.
 
-Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created <a href=/series/flask_api_tutorial/part-4/#user-model-api-model">for the `User` class</a>.
+Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">for the `User` class</a>.
 
 ### `pagination_model` API Model
 
-In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href=/series/flask_api_tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
+In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
 
 First, we need to update the import statements in `app/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
@@ -553,7 +553,8 @@ I hope that all of the material we encountered for the first time in the `widget
 
 If you go back and look at the <a href="#pagination">pagination example in the Introduction</a> , there's something important that is included in the example that <span class="emphasis">is not</span> part of the Flask-RESTPlus `Pagination` object. Here's a hint: it has to do with <a href="#hateoas">HATEOAS</a>. The answer is: **navigational links**:
 
-{{< highlight python "linenos=table,linenostart=108" >}}pagination_links_model = Model(
+```python {linenos=table,linenostart=108}
+pagination_links_model = Model(
     "Nav Links",
     {
         "self": String,
@@ -562,13 +563,15 @@ If you go back and look at the <a href="#pagination">pagination example in the I
         "first": String,
         "last": String,
     },
-){{< /highlight >}}
+)
+```
 
 Since all of the fields in `pagination_links_model` are serialized using the `String` class, there's nothing new to discuss in that regard.
 
 Finally, the `widget_model` and `pagination_links_model` are integrated into the `pagination_model`:
 
-{{< highlight python "linenos=table,linenostart=119" >}}pagination_model = Model(
+```python {linenos=table,linenostart=119}
+pagination_model = Model(
     "Pagination",
     {
         "links": Nested(pagination_links_model, skip_none=True),
@@ -580,7 +583,8 @@ Finally, the `widget_model` and `pagination_links_model` are integrated into the
         "total_items": Integer(attribute="total"),
         "items": List(Nested(widget_model)),
     },
-){{< /highlight >}}
+)
+```
 
 There are only a few things in `pagination_model` that we are seeing for the first time:
 
@@ -661,7 +665,8 @@ Next, we need to create a function that performs the following actions:
 
 Before we begin, open `/app/api/widgets/business.py` and make the following updates to the import statements:
 
-{{< highlight python "linenos=table,hl_lines=4-5 8-9" >}}"""Business logic for /widgets API endpoints."""
+```python {linenos=table,hl_lines=["4-5","8-9"]}
+"""Business logic for /widgets API endpoints."""
 from http import HTTPStatus
 
 from flask import jsonify, url_for
@@ -669,9 +674,10 @@ from flask_restplus import abort, marshal
 
 from app import db
 from app.api.auth.decorator import token_required, admin_token_required
-from app.api.widget.dto import pagination_model
+from app.api.widgets.dto import pagination_model
 from app.models.user import User
-from app.models.widget import Widget{{< /highlight >}}
+from app.models.widget import Widget
+```
 
 <div class="code-details">
     <ul>
@@ -692,7 +698,8 @@ from app.models.widget import Widget{{< /highlight >}}
 
 Next, add the content below:
 
-{{< highlight python "linenos=table,linenostart=31" >}}@token_required
+```python {linenos=table,linenostart=31}
+@token_required
 def retrieve_widget_list(page, per_page):
     pagination = Widget.query.paginate(page, per_page, error_out=False)
     response_data = marshal(pagination, pagination_model)
@@ -723,7 +730,8 @@ def _pagination_nav_header_links(pagination):
     link_header = ""
     for rel, url in url_dict.items():
         link_header += f'<{url}>; rel="{rel}", '
-    return link_header.strip().strip(","){{< /highlight >}}
+    return link_header.strip().strip(",")
+```
 
 This code implements the process of responding to a valid request for a list of widgets, please note the following:
 
@@ -771,18 +779,19 @@ This code implements the process of responding to a valid request for a list of 
 
 Now that the business logic has been implemented, we can add a method to the `api.widget_list` endpoint that will call `retrieve_widget_list` after parsing/validating the request data.
 
-### `WidgetList` Resource (GET Request)
+### `api.widget_list` Endpoint (GET Request)
 
 We created the `api.widget_list` endpoint <a href="/series/flask_api_tutorial/part-5/#widgetlist-resource-post-request">in Part 5</a> and implemented the function that handles `POST` requests. According to **Table 1**, this endpoint also supports `GET` requests which allows clients to retrieve lists of `widgets`.
 
 Open `/app/api/widgets/endpoints.py` and make the following updates to the import statements:
 
-{{< highlight python "linenos=table,hl_lines=8-12 14 17-20" >}}"""API endpoint definitions for /widgets namespace."""
+```python {linenos=table,hl_lines=["8-12",14,"17-20"]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widget.dto import (
+from app.api.widgets.dto import (
     create_widget_reqparser,
     pagination_reqparser,
     widget_owner_model,
@@ -790,7 +799,8 @@ from app.api.widget.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widget.business import create_widget, retrieve_widget_list{{< /highlight >}}
+from app.api.widget.business import create_widget, retrieve_widget_list
+```
 
 <div class="code-details">
     <ul>
@@ -808,7 +818,8 @@ from app.api.widget.business import create_widget, retrieve_widget_list{{< /high
 
 Next, add the highlighted lines to `endpoints.py` and save the file:
 
-{{< highlight python "linenos=table,linenostart=16,hl_lines=2-5 15-23" >}}widget_ns = Namespace(name="widgets", validate=True)
+```python {linenos=table,linenostart=16,hl_lines=["2-5","15-23"]}
+widget_ns = Namespace(name="widgets", validate=True)
 widget_ns.models[widget_owner_model.name] = widget_owner_model
 widget_ns.models[widget_model.name] = widget_model
 widget_ns.models[pagination_links_model.name] = pagination_links_model
@@ -840,7 +851,8 @@ class WidgetList(Resource):
     def post(self):
         """Create a widget."""
         widget_dict = create_widget_reqparser.parse_args()
-        return create_widget(widget_dict){{< /highlight >}}
+        return create_widget(widget_dict)
+```
 
 <div class="code-details">
     <ul>
@@ -871,7 +883,7 @@ api.auth_user        GET        /api/v1/auth/user
 api.doc              GET        /api/v1/ui
 api.root             GET        /api/v1/
 api.specs            GET        /api/v1/swagger.json
-<span class="highlite">api.widget_list      GET, POST  /api/v1/widgets</span>
+<span class="cmd-hl-border">api.widget_list      GET, POST  /api/v1/widgets</span>
 restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
 static               GET        /static/&lt;path:filename&gt;</span></code></pre>
 
@@ -894,30 +906,33 @@ Let's start with the process that is most similar to the last one we implemented
 
 ### `retrieve_widget` Method
 
-The business logic for retrieving a single `widget` is very simple. First, the database is queried for `widgets` matching the `name` that was requested by the client. If a matching `widget` is found, it is serialized to JSON and sent to the client with status code `HTTPStatus.OK` (200). If no `widget` exists with the specified `name`, a `HTTPStatus.NOT_FOUND` (404) response is sent to the client.
+The business logic for retrieving a single `widget` is very simple. First, the database is queried for `widgets` matching the `name` that was requested by the client. If a matching `widget` is found, it is serialized to JSON and sent to the client with status code 200 (`HTTPStatus.OK`). If no `widget` exists with the specified `name`, a 404 (`HTTPStatus.NOT_FOUND`) response is sent to the client.
 
 Because this is such a common pattern in web applications, <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/#queries-in-views" target="_blank">Flask-SQLAlchemy provides the `first_or_404` method</a> which does exactly what we need. It is modeled after <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Query.first" target="_blank">the `first` function</a> from SQLAlchemy, which returns either the first result of a query or `None`. `first_or_404` raises a 404 error instead of returning `None`.
 
 Open `/app/api/widgets/business.py` and add the function below:
 
-{{< highlight python "linenos=table,linenostart=42" >}}@token_required
+```python {linenos=table,linenostart=42}
+@token_required
 def retrieve_widget(name):
     return Widget.query.filter_by(name=name).first_or_404(
         description=f"{name} not found in database."
-    ){{< /highlight >}}
+    )
+```
 
 This operation requires a valid access token, so the `@token_required` decorator is applied to the function **(Line 42)**. The `first_or_404` method **(Line 44)** accepts an optional `description` parameter which is used to include a message in the body of the HTTP response explaining why the request failed.
 
-### `Widget` Resource (GET Request)
+### `api.widget` Endpoint (GET Request)
 
 Next, we need to create the `api.widget` endpoint. Before we do so, open `/app/api/widgets/endpoints.py` and update the import statements to include the `retrieve_widget` function **(Line 17)**:
 
-{{< highlight python "linenos=table,hl_lines=17" >}}"""API endpoint definitions for /widgets namespace."""
+```python {linenos=table,hl_lines=[17]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widget.dto import (
+from app.api.widgets.dto import (
     create_widget_reqparser,
     pagination_reqparser,
     widget_owner_model,
@@ -929,11 +944,13 @@ from app.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget
-){{< /highlight >}}
+)
+```
 
 Next, add the content below:
 
-{{< highlight python "linenos=table,linenostart=56" >}}@widget_ns.route("/<name>", endpoint="widget")
+```python {linenos=table,linenostart=56}
+@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
 @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
@@ -947,7 +964,8 @@ class Widget(Resource):
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
-        return retrieve_widget(name){{< /highlight >}}
+        return retrieve_widget(name)
+```
 
 The only thing that we are seeing for the first time is how to include a parameter in the endpoint path. Thankfully, Flask-RESTPlus uses the same process as Flask for URL route registration (via the `@route` decorator). <a href="https://flask.palletsprojects.com/en/1.1.x/api/#url-route-registrations" target="_blank">From the Flask documentation</a>:
 
@@ -997,7 +1015,7 @@ api.auth_user        GET        /api/v1/auth/user
 api.doc              GET        /api/v1/ui
 api.root             GET        /api/v1/
 api.specs            GET        /api/v1/swagger.json
-<span class="highlite">api.widget           GET        /api/v1/widgets/&lt;name&gt;</span>
+<span class="cmd-hl-border">api.widget           GET        /api/v1/widgets/&lt;name&gt;</span>
 api.widget_list      GET, POST  /api/v1/widgets
 restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
 static               GET        /static/&lt;path:filename&gt;</span></code></pre>
@@ -1024,22 +1042,45 @@ I know, the language is highly technical and much more complex than the answer t
 
 ### `update_widget_reqparser` Request Parser
 
-The request data sent by the client for a `PUT` request is nearly identical to the data sent with a `POST` request, with one important difference. With a `PUT` request, the `name` parameter is provided in the URI instead of the body of the request. Because of this, we can't just re-use the `create_widget_reqparser` as-is to parse a `PUT` request.
+The request data sent by the client for a `PUT` request is nearly identical to the data sent for a `POST` request, with one important difference. With a `PUT` request, the `name` parameter is provided in the URI instead of the body of the request. Because of this, we can't just re-use the `create_widget_reqparser` as-is to parse a `PUT` request.
 
 It turns out that the need to re-use portions of a request parser is such a common occurrence that <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#parser-inheritance" target="_blank">Flask-RESTPlus provides methods to copy an existing parser, and then add/remove arguments</a>. This is extremely useful since it obviates the need to re-write every argument and duplicate a bunch of code just to slightly tweak the behavior of a request parser.
 
 For example, open `/app/api/widgets/dto.py`, add the lines below, then save the file:
 
-{{< highlight python "linenos=table,linenostart=67" >}}update_widget_reqparser = create_widget_reqparser.copy()
-update_widget_reqparser.remove_argument("name"){{< /highlight >}}
+```python {linenos=table,linenostart=67}
+update_widget_reqparser = create_widget_reqparser.copy()
+update_widget_reqparser.remove_argument("name")
+```
 
 Now we have exactly the request parser that we need for `PUT` requests received at the `api.widgets` endpoint. The `update_widget_reqparser` is created by simply copying the `create_widget_reqparser` and removing the `name` argument. We will import and use this when we are ready to implement the `put` method handler.
 
 ### `update_widget` Method
 
-{{< highlight python "linenos=table,linenostart=49" >}}@admin_token_required
+Next, we need to create the business logic that implements the `PUT` method as specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>.
+
+First, open `/app/api/widgets/business.py` and update the import statements to include the `widget_name` function from the `app.api.widgets.dto` module **(Line 9)**:
+
+```python {linenos=table,hl_lines=[9]}
+"""Business logic for /widgets API endpoints."""
+from http import HTTPStatus
+
+from flask import jsonify, url_for
+from flask_restplus import abort, marshal
+
+from app import db
+from app.api.auth.decorator import token_required, admin_token_required
+from app.api.widgets.dto import pagination_model, widget_name
+from app.models.user import User
+from app.models.widget import Widget
+```
+
+Then copy the `update_widget` function below and add it to `business.py`:
+
+```python {linenos=table,linenostart=49}
+@admin_token_required
 def update_widget(name, widget_dict):
-    widget = Widget.find_by_name(name)
+    widget = Widget.find_by_name(name.lower())
     if widget:
         for k, v in widget_dict.items():
             setattr(widget, k, v)
@@ -1051,16 +1092,57 @@ def update_widget(name, widget_dict):
     except ValueError as e:
         abort(HTTPStatus.BAD_REQUEST, str(e), status="fail")
     widget_dict["name"] = valid_name
-    return create_widget(widget_dict){{< /highlight >}}
+    return create_widget(widget_dict)
+```
 
-### `Widget` Resource (PUT Request)
+Let's make sure that the `update_widget` function correctly implements the `PUT` method:
 
-{{< highlight python "linenos=table,hl_lines=8 19" >}}"""API endpoint definitions for /widgets namespace."""
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 51: </strong>The first thing we do is check the database for a <code>widget</code> with the name provided by the client. </p>
+        <div class="note note-flex">
+          <div class="note-icon">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </div>
+          <div class="note-message" style="flex-flow: column wrap">
+            <p>Remember, all <code>widget</code> names are converted to lowercase when written to the database. Because of this, we must be careful to convert the value provided by the client to lowercase before searching. You can review <a href="/series/flask_api_tutorial/part-5/#name-argument">the validation logic for the <code>widget</code> name attribute in Part 5</a>.</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <p><strong>Lines 53-55: </strong>If the name provided by the client is found in the database, we save it as <code>widget</code>. Next, we iterate over the items in <code>widget_dict</code> and overwrite the attributes of <code>widget</code> with the values provided by the client. Then, the updated <code>widget</code> is committed to the database.</p>
+      </li>
+      <li>
+        <p><strong>Lines 56-57: </strong>Per the specification, if the name provided by the client already exists, and the <code>widget</code> was successfully updated using the remaining values, we can confirm that the request succeeded by sending either a 200 (<code>HTTPStatus.OK</code>) or 204 (<code>HTTPStatus.NO_CONTENT</code>) response.</p>
+      </li>
+      <li>
+        <p><strong>Line 59: </strong>If we reach this point, it means that the database does not contain a <code>widget</code> with the name provided by the client. Before using this value to create a new <code>widget</code>, we must ensure that it is a valid <code>widget</code> name with <a href="/series/flask_api_tutorial/part-5/#name-argument">the <code>app.api.widgets.dto.widget_name</code> function</a>. If it is valid, this function will return the name converted to lowercase. If it is not valid, a <code>ValueError</code> will be thrown.</p>
+      </li>
+      <li>
+        <p><strong>Line 61: </strong>If the name provided by the client is invalid we cannot create a new <code>widget</code>. The server rejects the request with a 400 (<code>HTTPStatus.BAD_REQUEST</code>) response containing an error message detailing why the value provided is not a valid <code>widget</code> name.</p>
+      </li>
+      <li>
+        <p><strong>Line 62: </strong>If the name provided by the client was successfully validated by the <code>widget_name</code> function, we need to add it to the <code>widget_dict</code> object since the <code>create_widget</code> function expects to receive a <code>dict</code> object containing <code>name</code>, <code>info_url</code>, and <code>deadline</code> keys.</p>
+        <p><code>widget_dict["name"] = valid_name</code> stores the validated name (which has been converted to lowercase). At this point, <code>widget_dict</code> is in the format expected by the <code>create_widget</code> function.</p>
+      </li>
+      <li>
+        <p><strong>Line 63: </strong>As specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>, if the name provided by the client does not already exist and this <code>PUT</code> request successfully creates one, we can confirm that the request succeeded by sending a 201 (<code>HTTPStatus.CREATED</code>) response.</p>
+      </li>
+    </ul>
+</div>
+
+I believe that the `update_widget` function satisfies the specification for the `PUT` method as specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>. <span class="bold-italics">If you disagree, please let me know in the comments, I would greatly appreciate it if my understanding of the spec is faulty in any way.</span>
+
+### `api.widget` Endpoint (PUT Request)
+
+```python {linenos=table,hl_lines=[8,19]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widget.dto import (
+from app.api.widgets.dto import (
     create_widget_reqparser,
     update_widget_reqparser,
     pagination_reqparser,
@@ -1074,9 +1156,11 @@ from app.api.widgets.business import (
     retrieve_widget_list,
     retrieve_widget,
     update_widget,
-){{< /highlight >}}
+)
+```
 
-{{< highlight python "linenos=table,linenostart=58,hl_lines=17-27" >}}@widget_ns.route("/<name>", endpoint="widget")
+```python {linenos=table,linenostart=58,hl_lines=["17-27"]}
+@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
 @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
@@ -1100,29 +1184,33 @@ class Widget(Resource):
     def put(self, name):
         """Update a widget."""
         widget_dict = update_widget_reqparser.parse_args()
-        return update_widget(name, widget_dict){{< /highlight >}}
+        return update_widget(name, widget_dict)
+```
 
 ## Delete Widget
 
 ### `delete_widget` Method
 
-{{< highlight python "linenos=table,linenostart=66" >}}@admin_token_required
+```python {linenos=table,linenostart=66}
+@admin_token_required
 def delete_widget(name):
     widget = Widget.query.filter_by(name=name).first_or_404(
         description=f"{name} not found in database."
     )
     db.session.delete(widget)
     db.session.commit()
-    return "", HTTPStatus.NO_CONTENT{{< /highlight >}}
+    return "", HTTPStatus.NO_CONTENT
+```
 
-### `Widget` Resource (DELETE Request)
+### `api.widget` Endpoint (DELETE Request)
 
-{{< highlight python "linenos=table,hl_lines=20" >}}"""API endpoint definitions for /widgets namespace."""
+```python {linenos=table,hl_lines=[20]}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widget.dto import (
+from app.api.widgets.dto import (
     create_widget_reqparser,
     update_widget_reqparser,
     pagination_reqparser,
@@ -1137,9 +1225,11 @@ from app.api.widgets.business import (
     retrieve_widget,
     update_widget,
     delete_widget,
-){{< /highlight >}}
+)
+```
 
-{{< highlight python "linenos=table,linenostart=59,hl_lines=27-33" >}}@widget_ns.route("/<name>", endpoint="widget")
+```python {linenos=table,linenostart=59,hl_lines=["27-33"]}
+@widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
 @widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
@@ -1170,14 +1260,17 @@ class Widget(Resource):
     @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
     def delete(self, name):
         """Delete a widget."""
-        return delete_widget(name){{< /highlight >}}
+        return delete_widget(name)
+```
 
-## Unit Tests: Create Widget
+## Unit Tests
 
-## Unit Tests: Retrieve Widget List
+### Create Widget
 
-## Unit Tests: Retrieve Widget
+### Retrieve Widget List
 
-## Unit Tests: Update Widget
+### Retrieve Widget
 
-## Unit Tests: Delete Widget
+### Update Widget
+
+### Delete Widget
