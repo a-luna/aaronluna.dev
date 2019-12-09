@@ -67,7 +67,7 @@
 
   /* Home Page */
   --home-title-color: var(--h1-color);
-  --home-lead-color: var(--light-gray2);
+  --home-lead-color: var(--light-gray1);
   --home-p-color: var(--body-text-color);
   --home-hr-color: var(--accent-color2);
   --home-h4-color: var( --h1-color);

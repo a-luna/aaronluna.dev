@@ -1,0 +1,5 @@
+static/css/font-awesome.min.css linguist-vendored
+static/css/style.css linguist-vendored
+static/css/syntax.css linguist-vendored
+static/fonts/* linguist-vendored
+static/js/vendor/* linguist-vendored

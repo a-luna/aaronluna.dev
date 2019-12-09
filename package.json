@@ -4,6 +4,7 @@
     "description": "Aaron Luna's Blog",
     "dependencies": {
         "css-doodle": "^0.7.6",
+        "lunr": "^2.3.8",
         "netlify-lambda": "^1.6.3"
     },
     "repository": {
