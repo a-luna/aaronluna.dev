@@ -238,7 +238,8 @@ The request to retrieve a list of `widget` objects should include two values: th
 
 Open `app/api/widgets/dto.py` and update the import statements to include the `flask_restplus.inputs.positive` class **(Line 6)**:
 
-{{< highlight python "linenos=table,hl_lines=6" >}}"""Parsers and serializers for /widgets API endpoints."""
+```python {linenos=table,hl_lines=["6"]}
+"""Parsers and serializers for /widgets API endpoints."""
 import re
 from datetime import date, datetime, time, timezone
 
@@ -246,11 +247,13 @@ from dateutil import parser
 from flask_restplus.inputs import positive, URL
 from flask_restplus.reqparse import RequestParser
 
-from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME{{< /highlight >}}
+from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
+```
 
 Next, add the content below:
 
-{{< highlight python "linenos=table,linenostart=69" >}}pagination_reqparser = RequestParser(bundle_errors=True)
+```python {linenos=table,linenostart=69}
+pagination_reqparser = RequestParser(bundle_errors=True)
 pagination_reqparser.add_argument(
     "page",
     type=positive,
@@ -263,7 +266,8 @@ pagination_reqparser.add_argument(
     required=False,
     choices=[5, 10, 25, 50, 100],
     default=10,
-){{< /highlight >}}
+)
+```
 
 There are a couple of important things to note about how these arguments are configured:
 
@@ -389,7 +393,8 @@ In order to send a paginated list of widgets as part of an HTTP response, we nee
 
 First, we need to update the import statements in `app/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
-{{< highlight python "linenos=table,hl_lines=6-7" >}}"""Parsers and serializers for /widgets API endpoints."""
+```python {linenos=table,hl_lines=["6-7"]}
+"""Parsers and serializers for /widgets API endpoints."""
 import re
 from datetime import date, datetime, time, timezone
 
@@ -399,11 +404,13 @@ from flask_restplus.fields import Boolean, DateTime, Integer, List, Nested, Stri
 from flask_restplus.inputs import positive, URL
 from flask_restplus.reqparse import RequestParser
 
-from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME{{< /highlight >}}
+from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
+```
 
 Next, add the content below:
 
-{{< highlight python "linenos=table,linenostart=86" >}}widget_owner_model = Model(
+```python {linenos=table,linenostart=86}
+widget_owner_model = Model(
     "Widget Owner",
     {
         "email": String,
@@ -449,7 +456,8 @@ pagination_model = Model(
         "total_items": Integer(attribute="total"),
         "items": List(Nested(widget_model)),
     },
-){{< /highlight >}}
+)
+```
 
 There is a lot to digest here. This is the first time that we are encountering API models that are composed of other API models. `pagination_model` contains a list of `widget_model` objects as well as a single `pagination_links_model` instance, Also, `widget_model` contains a single instance of `widget_owner_model`. Let's take a look at how each API model is defined and how they interact with each other.
 
@@ -463,17 +471,20 @@ Let's work our way from the inside-out. As demonstrated in the interactive shell
 
 Rather than re-using `user_model`, we will create `widget_owner_model` which exposes only the `email` and `public_id` values of the `User` object:
 
-{{< highlight python "linenos=table,linenostart=86" >}}widget_owner_model = Model(
+```python {linenos=table,linenostart=86}
+widget_owner_model = Model(
     "Widget Owner",
     {
         "email": String,
         "public_id": String,
     },
-){{< /highlight >}}
+)
+```
 
 The `widget_model` has a bunch of features that we are seeing for the first time. Let's take a look at it in more depth:
 
-{{< highlight python "linenos=table,linenostart=94" >}}widget_model = Model(
+```python {linenos=table,linenostart=94}
+widget_model = Model(
     "Widget",
     {
         "name": String,
@@ -486,7 +497,8 @@ The `widget_model` has a bunch of features that we are seeing for the first time
         "owner": Nested(widget_owner_model),
         "link": Url("api.widget"),
     },
-){{< /highlight >}}
+)
+```
 
 <div class="code-details">
     <ul>
@@ -494,14 +506,14 @@ The `widget_model` has a bunch of features that we are seeing for the first time
         <p><strong>Lines 99-100: </strong>This is the first time that we are using <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.DateTime" target="_blank">the <code>flask_restplus.fields.DateTime</code> class</a>, which formats a <code>datetime</code> value as a string. There are two supported formats: RFC 822 and ISO 8601. The format which is returned is determined by the <code>dt_format</code> parameter.</p>
         <p>By default, ISO 8601 format is used. Since <code>dt_format</code> is not specified, <code>created_at_iso8601</code> will use this format. On the other hand, <code>created_at_rfc822</code> specifies <code>dt_format="rfc822"</code> so the same date will be returned using RFC 822 format.</p>
         <p>What do these two formats look like? Here's an example:</p>
-        <pre><code>"created_at_iso8601": "2019-09-20T04:47:50",
-"created_at_rfc822": "Fri, 20 Sep 2019 04:47:50 -0000",</code></pre>
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"created_at_iso8601"</span><span class="p">:</span> <span class="s2">"2019-09-20T04:47:50"</span><span class="p">,</span>
+<span class="nt">"created_at_rfc822"</span><span class="p">:</span> <span class="s2">"Fri, 20 Sep 2019 04:47:50 -0000"</span><span class="p">,</span></code></pre>
         <p>The benefit of using a standard output format is that it can be easily parsed back to the original <code>datetime</code> value. If this is not a requirement and you (like me) find these formats difficult to quickly parse visually, there are other ways to format <code>datetime</code> values within an API model.</p>
       </li>
       <li>
         <p><strong>Line 101: </strong><code>deadline_str</code> is a formatted string version of <code>deadline</code>, which is a <code>datetime</code> value. Since <code>deadline</code> is localized to UTC, <code>deadline_str</code> converts this value to the local time zone where the code is executed.</p>
         <p>Here's an example of the format used by <code>deadline_str</code>:</p>
-        <pre><code>"deadline": "09/20/19 10:59:59 PM UTC-08:00",</code></pre>
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"deadline"</span><span class="p">:</span> <span class="s2">"09/20/19 10:59:59 PM UTC-08:00"</span><span class="p">,</span></code></pre>
         <p>I prefer this style of formatting to either ISO 8601 or RFC 822 format since it is localized to the user's timezone and is (IMO) more readable. However, if the <code>datetime</code> value will not be read by humans and/or will be provided to a function expecting either ISO 8601 or RFC 822 format, obviously use the built-in <code>flask_restplus.fields.Datetime</code> class.</p>
       </li>
       <li>
@@ -510,15 +522,15 @@ The `widget_model` has a bunch of features that we are seeing for the first time
       <li>
         <p><strong>Line 103: </strong><code>time_remaining_str</code> is a formatted string version of  <code>time_remaining</code>, which is a <code>timedelta</code> value. Since Flask-RESTPlus does not include built-in types for serializing <code>timedelta</code> values, formatting <code>time_remaining</code> as a string is the only way to include it in the serialized JSON.</p>
         <p>Here's an example of the format used by <code>time_remaining_str</code>:</p>
-        <pre><code>"time_remaining": "16 hours 41 minutes 42 seconds",</code></pre>
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"time_remaining"</span><span class="p">:</span> <span class="s2">"16 hours 41 minutes 42 seconds"</span><span class="p">,</span></code></pre>
       </li>
       <li>
         <p><strong>Line 104: </strong>In order to serialize a <code>Widget</code> object and preserve the structure where <code>owner</code> is a <code>User</code> object nested within the parent <code>Widget</code> object, we use <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.Nested" target="_blank">the <code>Nested</code> class</a> in conjunction with the <code>widget_owner_model</code>.</p>
         <p>Here's what the <code>widget_owner_model</code> will look like within the parent <code>Widget</code> object:</p>
-        <pre><code>"owner": {
-    "email": "admin@test.com",
-    "public_id": "475807a4-8497-4c5c-8d70-109b429bb4ef"
-},</code></pre>
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"owner"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"admin@test.com"</span><span class="p">,</span>
+    <span class="nt">"public_id"</span><span class="p">:</span> <span class="s2">"475807a4-8497-4c5c-8d70-109b429bb4ef"</span><span class="p">,</span>
+<span class="p">}</span></code></pre>
         <div class="note note-flex">
             <div class="note-icon">
                 <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -532,9 +544,9 @@ The `widget_model` has a bunch of features that we are seeing for the first time
         <p><strong>Line 105: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTPlus documentation</a>:</p>
         <blockquote class="rfc">Flask-RESTPlus includes a special field, <code>fields.Url</code>, that synthesizes a uri for the resource that’s being requested. This is also a good example of how to add data to your response that’s not actually present on your data object.</blockquote>
         <p>By including a <code>link</code> to the URI with each <code>Widget</code>, the client can perform CRUD actions without manually constructing or storing the URI (which is an example of <a href="#hateoas">HATEOAS</a>). By default, the value returned for <code>link</code> will be a relative URI as shown below:</p>
-        <pre><code>"link": "/api/v1/widgets/first_widget"</code></pre>
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"link"</span><span class="p">:</span> <span class="s2">"/api/v1/widgets/first_widget"</span><span class="p">,</span></code></pre>
         <p>If the <code>link</code> should be an absolute URI (containing scheme, hostname, and port), include the keyword argument <code>absolute=True</code> (e.g., <code>Url("api.widget", absolute=True)</code>). In my local test environment, this returns the URI below for the same <code>Widget</code> resource:</p>
-        <pre><code>"link": "http://localhost:5000/api/v1/widgets/first_widget"</code></pre>
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"link"</span><span class="p">:</span> <span class="s2">"http://localhost:5000/api/v1/widgets/first_widget"</span><span class="p">,</span></code></pre>
         <div class="alert alert-flex">
             <div class="alert-icon">
                 <i class="fa fa-exclamation-triangle"></i>

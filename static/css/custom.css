@@ -1146,6 +1146,11 @@ pre.chroma code {
   font-weight: 700;
 }
 
+.language-json .err {
+  color: var(--body-text-color);
+  background-color: var(--widget-bg-color);
+}
+
 blockquote {
   font-size: 0.9em;
   font-weight: 400;
