@@ -624,25 +624,34 @@ article p strong {
   font-weight: 700;
 }
 
-.green,
-.steps {
+.green {
   color: #a9fb68;
+}
+
+.steps {
+  color: var(--step-list);
 }
 
 .steps .emphasis {
   font-weight: 700;
-  color: #a9fb68;
+  color: var(--step-list);
 }
 
 .steps .pink .emphasis {
   font-weight: 700;
-  color: #f92672;
+  color: var(--pink2);
 }
 
-.goldenrod,
-.alert,
+.goldenrod {
+  color: var(--gold1);
+}
+
+.alert {
+  color: var(--alert-box);
+}
+
 .requirements {
-  color: #ffc107;
+  color: var(--tut-requirements);
 }
 
 .alert p strong,
@@ -650,23 +659,26 @@ article p strong {
 .alert p .bold-text,
 .alert p .bold-italics,
 span.italics.requirements {
-  color: #ffc107;
+  color: var(--alert-box);
 }
 
 .purple {
   color: #ae81ff;
 }
 
-.blue,
-.note {
+.blue {
   color: #2196f3;
+}
+
+.note {
+  color: var(--note-box);
 }
 
 .note p strong,
 .note p .emphasis,
 .note p .bold-italics {
   font-weight: 700;
-  color: #2196f3;
+  color: var(--note-box);
 }
 
 .orange {
@@ -2841,7 +2853,7 @@ blockquote table {
 }
 
 blockquote code {
-  color: var(--code-text-color1);
+  color: var(--blockquote-code-text-color);
 }
 
 blockquote tr:nth-child(even),

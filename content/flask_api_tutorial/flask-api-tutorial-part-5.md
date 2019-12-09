@@ -701,7 +701,7 @@ Wait, let's back up. Didn't the requirement for the `name` attribute say that on
     location="form",
     required=True,
     nullable=False,
-    case_sensitive=True,
+    case_sensitive=False,
 ){{< /highlight >}}
 
 <div class="code-details">
@@ -713,12 +713,12 @@ Wait, let's back up. Didn't the requirement for the `name` attribute say that on
         <p><strong>Lines 53-55: </strong>The <code>location</code>, <code>required</code> and <code>nullable</code> parameters should be familiar since we explained their purpose in <a href="/series/flask_api_tutorial/part-3/#request-parser-configuration">Part 3</a>.</p>
       </li>
       <li>
-        <p><strong>Line 56: </strong>This is the first time we are using the <code>case_sensitive</code> parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, if <code>case_sensitive=True</code> "this will convert all values to lowercase".</p>
+        <p><strong>Line 56: </strong>This is the first time we are using the <code>case_sensitive</code> parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, by default, <code>case_sensitive=True</code>. If this value is <code>False</code> "this will convert all values to lowercase".</p>
       </li>
     </ul>
 </div>
 
-Configuring the `name` argument with `type=widget_name` and `case_sensitive=True` allows the client to provide a value for the widget name in any combination of upper and lowercase letters. When an HTTP request is received to create a widget, if the request contains a `name` attribute, the value of that attribute will be passed to the `widget_name` function.
+Configuring the `name` argument with `type=widget_name` and `case_sensitive=False` allows the client to provide a value for the widget name in any combination of upper and lowercase letters. When an HTTP request is received to create a widget, if the request contains a `name` attribute, the value of that attribute will be passed to the `widget_name` function.
 
 If the widget name contains only valid characters, it will be converted to lowercase before being passed to the business logic. The business logic will query the database for widgets with the same name. If a widget is found with the same name, the request will be aborted and the widget will not be created. If no widget is found with the same name, a new widget object will be created and added to the database.
 
@@ -1006,7 +1006,7 @@ from http import HTTPStatus
 from flask_restplus import Namespace, Resource
 
 from app.api.widgets.dto import create_widget_reqparser
-from app.api.widget.business import create_widget
+from app.api.widgets.business import create_widget
 
 widget_ns = Namespace(name="widgets", validate=True)
 
@@ -1051,7 +1051,7 @@ from flask import Blueprint
 from flask_restplus import Api
 
 from app.api.auth.endpoints import auth_ns
-from app.api.widget.endpoints import widget_ns
+from app.api.widgets.endpoints import widget_ns
 
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")

@@ -55,7 +55,7 @@
   --accent-color2: var(--mid-gray2);
   --code-text-color1: var(--green3);
   --code-text-color2: var(--off-white1);
-  --blockquote-text-color: var(--magenta2);
+  --blockquote-text-color: var(--green3);
   --blockquote-code-text-color: var(--body-text-color);
   --code-details-lineno: var(--white2);
 
@@ -119,4 +119,7 @@
 
   /* Alert Box */
   --alert-box: var(--gold1);
+
+  /* List of Steps */
+  --step-list: var(--green3);
 }

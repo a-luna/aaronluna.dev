@@ -542,7 +542,7 @@ widget_model = Model(
       </li>
       <li>
         <p><strong>Line 105: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTPlus documentation</a>:</p>
-        <blockquote class="rfc">Flask-RESTPlus includes a special field, <code>fields.Url</code>, that synthesizes a uri for the resource that’s being requested. This is also a good example of how to add data to your response that’s not actually present on your data object.</blockquote>
+        <blockquote>Flask-RESTPlus includes a special field, <code>fields.Url</code>, that synthesizes a uri for the resource that’s being requested. This is also a good example of how to add data to your response that’s not actually present on your data object.</blockquote>
         <p>By including a <code>link</code> to the URI with each <code>Widget</code>, the client can perform CRUD actions without manually constructing or storing the URI (which is an example of <a href="#hateoas">HATEOAS</a>). By default, the value returned for <code>link</code> will be a relative URI as shown below:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"link"</span><span class="p">:</span> <span class="s2">"/api/v1/widgets/first_widget"</span><span class="p">,</span></code></pre>
         <p>If the <code>link</code> should be an absolute URI (containing scheme, hostname, and port), include the keyword argument <code>absolute=True</code> (e.g., <code>Url("api.widget", absolute=True)</code>). In my local test environment, this returns the URI below for the same <code>Widget</code> resource:</p>
@@ -811,7 +811,7 @@ from app.api.widgets.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widget.business import create_widget, retrieve_widget_list
+from app.api.widgets.business import create_widget, retrieve_widget_list
 ```
 
 <div class="code-details">
@@ -1100,7 +1100,7 @@ def update_widget(name, widget_dict):
         response_dict = dict(status="success", message=f"'{name}' was successfully updated")
         return response_dict, HTTPStatus.OK
     try:
-        valid_name = widget_name(name)
+        valid_name = widget_name(name.lower())
     except ValueError as e:
         abort(HTTPStatus.BAD_REQUEST, str(e), status="fail")
     widget_dict["name"] = valid_name
@@ -1123,20 +1123,19 @@ Let's make sure that the `update_widget` function correctly implements the `PUT`
         </div>
       </li>
       <li>
-        <p><strong>Lines 53-55: </strong>If the name provided by the client is found in the database, we save it as <code>widget</code>. Next, we iterate over the items in <code>widget_dict</code> and overwrite the attributes of <code>widget</code> with the values provided by the client. Then, the updated <code>widget</code> is committed to the database.</p>
+        <p><strong>Lines 53-55: </strong>If the name provided by the client is found in the database, we save the retrieved <code>Widget</code> instance as <code>widget</code>. Next, we iterate over the items in <code>widget_dict</code> and overwrite the attributes of <code>widget</code> with the values provided by the client. Then, the updated <code>widget</code> is committed to the database.</p>
       </li>
       <li>
-        <p><strong>Lines 56-57: </strong>Per the specification, if the name provided by the client already exists, and the <code>widget</code> was successfully updated using the remaining values, we can confirm that the request succeeded by sending either a 200 (<code>HTTPStatus.OK</code>) or 204 (<code>HTTPStatus.NO_CONTENT</code>) response.</p>
+        <p><strong>Lines 56-57: </strong>Per the specification, if the name provided by the client already exists, and the <code>widget</code> was successfully updated using the values parsed from the request data, we can confirm that the request succeeded by sending either a 200 (<code>HTTPStatus.OK</code>) or 204 (<code>HTTPStatus.NO_CONTENT</code>) response.</p>
       </li>
       <li>
-        <p><strong>Line 59: </strong>If we reach this point, it means that the database does not contain a <code>widget</code> with the name provided by the client. Before using this value to create a new <code>widget</code>, we must ensure that it is a valid <code>widget</code> name with <a href="/series/flask_api_tutorial/part-5/#name-argument">the <code>app.api.widgets.dto.widget_name</code> function</a>. If it is valid, this function will return the name converted to lowercase. If it is not valid, a <code>ValueError</code> will be thrown.</p>
+        <p><strong>Line 59: </strong>If we reach this point, it means that the database does not contain a <code>widget</code> with the name provided by the client. Before using this value to create a new <code>widget</code>, we must validate it with <a href="/series/flask_api_tutorial/part-5/#name-argument">the <code>widget_name</code> function</a> we created in the <code>app.api.widgets.dto</code> module. If it is valid, this function will return the value we passed in. If it is not valid, a <code>ValueError</code> will be thrown.</p>
       </li>
       <li>
         <p><strong>Line 61: </strong>If the name provided by the client is invalid we cannot create a new <code>widget</code>. The server rejects the request with a 400 (<code>HTTPStatus.BAD_REQUEST</code>) response containing an error message detailing why the value provided is not a valid <code>widget</code> name.</p>
       </li>
       <li>
-        <p><strong>Line 62: </strong>If the name provided by the client was successfully validated by the <code>widget_name</code> function, we need to add it to the <code>widget_dict</code> object since the <code>create_widget</code> function expects to receive a <code>dict</code> object containing <code>name</code>, <code>info_url</code>, and <code>deadline</code> keys.</p>
-        <p><code>widget_dict["name"] = valid_name</code> stores the validated name (which has been converted to lowercase). At this point, <code>widget_dict</code> is in the format expected by the <code>create_widget</code> function.</p>
+        <p><strong>Line 62: </strong>If the name provided by the client was successfully validated by the <code>widget_name</code> function, we need to add it to the <code>widget_dict</code> object since the <code>create_widget</code> function expects to receive a <code>dict</code> object containing <code>name</code>, <code>info_url</code>, and <code>deadline</code> keys. <code>widget_dict["name"] = valid_name</code> stores the validated name. At this point, <code>widget_dict</code> is in the format expected by the <code>create_widget</code> function.</p>
       </li>
       <li>
         <p><strong>Line 63: </strong>As specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>, if the name provided by the client does not already exist and this <code>PUT</code> request successfully creates one, we can confirm that the request succeeded by sending a 201 (<code>HTTPStatus.CREATED</code>) response.</p>
@@ -1147,6 +1146,8 @@ Let's make sure that the `update_widget` function correctly implements the `PUT`
 I believe that the `update_widget` function satisfies the specification for the `PUT` method as specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>. <span class="bold-italics">If you disagree, please let me know in the comments, I would greatly appreciate it if my understanding of the spec is faulty in any way.</span>
 
 ### `api.widget` Endpoint (PUT Request)
+
+
 
 ```python {linenos=table,hl_lines=[8,19]}
 """API endpoint definitions for /widgets namespace."""
@@ -1206,7 +1207,7 @@ class Widget(Resource):
 ```python {linenos=table,linenostart=66}
 @admin_token_required
 def delete_widget(name):
-    widget = Widget.query.filter_by(name=name).first_or_404(
+    widget = Widget.query.filter_by(name=name.lower()).first_or_404(
         description=f"{name} not found in database."
     )
     db.session.delete(widget)
@@ -1286,3 +1287,35 @@ class Widget(Resource):
 ### Update Widget
 
 ### Delete Widget
+
+## Checkpoint
+
+<div class="requirements">
+  <p class="title">User Management/JWT Authentication</p>
+  <div class="fa-bullet-list">
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
+  </div>
+  <p class="title">API Resource: Widget List</p>
+  <div class="fa-bullet-list">
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>All users can retrieve a list of all widgets</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>All users can retrieve individual widgets by name</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can edit existing widgets</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
+  </div>
+</div>
