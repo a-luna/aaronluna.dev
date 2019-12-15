@@ -230,7 +230,7 @@ Feel free to create the project structure manually or through the command line a
 <span class="cmd-prompt">flask-api-tutorial/app/api $</span> <span class="cmd-input">mkdir auth && cd auth && touch __init__.py</span>
 <span class="cmd-prompt">flask-api-tutorial/app/api/auth $</span> <span class="cmd-input">cd ..</span>
 <span class="cmd-prompt">flask-api-tutorial/app/api $</span> <span class="cmd-input">mkdir widget && cd widget && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app/api/widget $</span> <span class="cmd-input">cd ../..</span>
+<span class="cmd-prompt">flask-api-tutorial/app/api/widgets $</span> <span class="cmd-input">cd ../..</span>
 <span class="cmd-prompt">flask-api-tutorial/app $</span> <span class="cmd-input">mkdir models && cd models && touch __init__.py</span>
 <span class="cmd-prompt">flask-api-tutorial/app/models $</span> <span class="cmd-input">cd ..</span>
 <span class="cmd-prompt">flask-api-tutorial/app $</span> <span class="cmd-input">mkdir util && cd util && touch __init__.py</span>
@@ -868,8 +868,8 @@ app/api/__init__.py::BLACK PASSED                                               
 app/api/__init__.py::FLAKE8 PASSED                                                                           [ 43%]
 app/api/auth/__init__.py::BLACK PASSED                                                                       [ 47%]
 app/api/auth/__init__.py::FLAKE8 PASSED                                                                      [ 52%]
-app/api/widget/__init__.py::BLACK PASSED                                                                     [ 56%]
-app/api/widget/__init__.py::FLAKE8 PASSED                                                                    [ 60%]
+app/api/widgets/__init__.py::BLACK PASSED                                                                     [ 56%]
+app/api/widgets/__init__.py::FLAKE8 PASSED                                                                    [ 60%]
 app/models/__init__.py::BLACK PASSED                                                                         [ 65%]
 app/models/__init__.py::FLAKE8 PASSED                                                                        [ 69%]
 app/util/__init__.py::BLACK PASSED                                                                           [ 73%]

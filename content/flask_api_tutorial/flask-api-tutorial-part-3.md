@@ -272,7 +272,7 @@ You should see something similar to the screenshot below. Note that the URL path
 
 ### API Namespaces
 
-In the same way that we can organize our Flask project with **blueprints**, we can organize our Flask-RESTPlus API with **namespace** objects. Our API will contain two namespaces: `auth_ns` and `widget_ns`, which correspond to the `app.api.auth` and `app.api.widget` packages, respectively. For now, we will focus on `auth_ns`, since this is the namespace that handles authentication requests.
+In the same way that we can organize our Flask project with **blueprints**, we can organize our Flask-RESTPlus API with **namespace** objects. Our API will contain two namespaces: `auth_ns` and `widget_ns`, which correspond to the `app.api.auth` and `app.api.widgets` packages, respectively. For now, we will focus on `auth_ns`, since this is the namespace that handles authentication requests.
 
 Currently, the `app/api/auth` folder only contains the `__init__.py` file. We need to create 3 new files in the `auth` folder: `business.py`, `dto.py` and `endpoints.py`. Run the command below from the project root folder to create the files (or create them yourself however you wish):
 

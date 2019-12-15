@@ -1171,7 +1171,7 @@ blockquote {
   font-style: italic;
   color: var(--blockquote-text-color);
   background: var(--widget-bg-color);
-  border-left: 3px solid var(--blockquote-text-color);
+  border-left: 2px solid var(--blockquote-text-color);
   padding: 5px 10px;
   margin: 0 0 1em 1em;
 }

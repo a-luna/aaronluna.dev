@@ -1028,7 +1028,7 @@ class WidgetList(Resource):
         widget_dict = create_widget_reqparser.parse_args()
         return create_widget(widget_dict){{< /highlight >}}
 
-There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask_api_tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace`/`Resource` objects, `doc`, `response`, or `expect` decorators, etc.
+There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask_api_tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace` objects, `Resource` objects, `@doc`, `@response`, or `@expect` decorators, etc.
 
 The important part is **Lines 26-27** where the `parse_args` method of `create_widget_reqparser` is used to validate the request data, which is then passed to the `create_widget` function which we just defined.
 

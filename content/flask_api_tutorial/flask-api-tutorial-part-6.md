@@ -59,9 +59,12 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |- <span class="unmodified-file">test_auth_register.py</span>
 |   |- <span class="unmodified-file">test_auth_user.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>
+|   |- <span class="work-file">test_create_widget.py</span>
+|   |- <span class="work-file">test_delete_widget.py</span>
+|   |- <span class="work-file">test_retrieve_widget.py</span>
+|   |- <span class="work-file">test_retrieve_widget_list.py</span>
+|   |- <span class="work-file">test_update_widget.py</span>
 |   |- <span class="unmodified-file">test_user.py</span>
-|   |- <span class="work-file">test_widget.py</span>
-|   |- <span class="work-file">test_widget_list.py</span>
 |
 |- <span class="unmodified-file">.env</span>
 |- <span class="unmodified-file">pytest.ini</span>
@@ -927,12 +930,12 @@ Open `/app/api/widgets/business.py` and add the function below:
 ```python {linenos=table,linenostart=42}
 @token_required
 def retrieve_widget(name):
-    return Widget.query.filter_by(name=name).first_or_404(
+    return Widget.query.filter_by(name=name.lower()).first_or_404(
         description=f"{name} not found in database."
     )
 ```
 
-This operation requires a valid access token, so the `@token_required` decorator is applied to the function **(Line 42)**. The `first_or_404` method **(Line 44)** accepts an optional `description` parameter which is used to include a message in the body of the HTTP response explaining why the request failed.
+This operation requires a valid access token, so the `@token_required` decorator is applied to the function **(Line 42)**. The `first_or_404` method **(Line 44)** accepts an optional `description` parameter which is used to include a message in the body of the HTTP response explaining why the request failed. Also, please note that the `name` value provided by the client is converted to lowercase before searching.
 
 ### `api.widget` Endpoint (GET Request)
 
@@ -961,7 +964,7 @@ from app.api.widgets.business import (
 
 Next, add the content below:
 
-```python {linenos=table,linenostart=56}
+```python {linenos=table,linenostart=55}
 @widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
@@ -1147,7 +1150,7 @@ I believe that the `update_widget` function satisfies the specification for the 
 
 ### `api.widget` Endpoint (PUT Request)
 
-
+Before we can bring everything together and expose the `put` method handler for the `api.widget` endpoint, open `/app/api/widgets/endpoints.py` and update the import statements to include the `update_widget_reqparser` we created in `app.api.widgets.dto` **(Line 8)** and the `update_widget` function we created in `app.api.widgets.business` **(Line 19)**:
 
 ```python {linenos=table,hl_lines=[8,19]}
 """API endpoint definitions for /widgets namespace."""
@@ -1172,7 +1175,9 @@ from app.api.widgets.business import (
 )
 ```
 
-```python {linenos=table,linenostart=58,hl_lines=["17-27"]}
+Next, add the highlighted lines to `endpoints.py` and save the file:
+
+```python {linenos=table,linenostart=57,hl_lines=["17-27"]}
 @widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
@@ -1200,9 +1205,32 @@ class Widget(Resource):
         return update_widget(name, widget_dict)
 ```
 
+We have previously encountered and explained everything in the `put` method, so you should be comfortable moving on without explaining the design/implementation. We can verify that the `api.widget` endpoint now supports both `GET` and `PUT` requests by executing the `flask routes` command:
+
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
+<span class="cmd-results">Endpoint             Methods    Rule
+-------------------  ---------  --------------------------
+api.auth_login       POST       /api/v1/auth/login
+api.auth_logout      POST       /api/v1/auth/logout
+api.auth_register    POST       /api/v1/auth/register
+api.auth_user        GET        /api/v1/auth/user
+api.doc              GET        /api/v1/ui
+api.root             GET        /api/v1/
+api.specs            GET        /api/v1/swagger.json
+<span class="cmd-hl-border">api.widget           GET, PUT   /api/v1/widgets/&lt;name&gt;</span>
+api.widget_list      GET, POST  /api/v1/widgets
+restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
+static               GET        /static/&lt;path:filename&gt;</span></code></pre>
+
+Alright, four down, one to go! The only remaining CRUD process we have not yet implemented is deleting a single `widget`.
+
 ## Delete Widget
 
+Implementing the process to delete a single `widget` will be simple and very similar to implementing the process to retrieve a single `widget`. The only data that is sent by the client is the `name` of the `widget`, so we do not need to create a request parser for this process. Also, a successful response will not include any data in the response body, so we do not need to create any API models to serialize the response.
+
 ### `delete_widget` Method
+
+Open `/app/api/widgets/business.py` and add the content below:
 
 ```python {linenos=table,linenostart=66}
 @admin_token_required
@@ -1215,7 +1243,11 @@ def delete_widget(name):
     return "", HTTPStatus.NO_CONTENT
 ```
 
+The `delete_widget` function relies on the Flask-SQLAlchemy `first_or_404` method which we used previously in the `retrieve_widget` function. If the database does not contain a `widget` with the `name` provided by the client, the request is rejected and a 404 (`HTTPStatus.NOT_FOUND`) response is sent. If a `widget` was successfully retrieved, however, it is deleted and the changes are committed to the database. Then, a 204 (`HTTPStatus.NO_CONTENT`) response is sent with an empty request body.
+
 ### `api.widget` Endpoint (DELETE Request)
+
+I told you this would be easy! Open `/app/api/widgets/endpoints.py` and update the import statements to include the `delete_widget` function that we just created in `app.api.widgets.business` **(Line 20)**:
 
 ```python {linenos=table,hl_lines=[20]}
 """API endpoint definitions for /widgets namespace."""
@@ -1241,7 +1273,9 @@ from app.api.widgets.business import (
 )
 ```
 
-```python {linenos=table,linenostart=59,hl_lines=["27-33"]}
+Next, add the highlighted lines to `endpoints.py` and save the file:
+
+```python {linenos=table,linenostart=58,hl_lines=["27-33"]}
 @widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
 @widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
@@ -1276,9 +1310,240 @@ class Widget(Resource):
         return delete_widget(name)
 ```
 
+We have previously encountered and explained everything in the `delete` method, so there's nothing we need to elaborate on. We can verify that the `api.widget` endpoint now supports `DELETE`, `GET` and `PUT` requests by executing the `flask routes` command:
+
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
+<span class="cmd-results">Endpoint             Methods           Rule
+-------------------  ----------------  --------------------------
+api.auth_login       POST              /api/v1/auth/login
+api.auth_logout      POST              /api/v1/auth/logout
+api.auth_register    POST              /api/v1/auth/register
+api.auth_user        GET               /api/v1/auth/user
+api.doc              GET               /api/v1/ui
+api.root             GET               /api/v1/
+api.specs            GET               /api/v1/swagger.json
+<span class="cmd-hl-border">api.widget           DELETE, GET, PUT  /api/v1/widgets/&lt;name&gt;</span>
+api.widget_list      GET, POST         /api/v1/widgets
+restplus_doc.static  GET               /swaggerui/&lt;path:filename&gt;
+static               GET               /static/&lt;path:filename&gt;</span></code></pre>
+
+We have finally implemented all of the API routes/CRUD processes specified in **Table 1**, but we actually have no idea if they are working correctly. At the absolute minimum, we need to create unit tests that verify the "happy path" behavior for each CRUD process. We also need unit tests that verify our request parsers are configured correctly, and requests containing invalid data are rejected.
+
 ## Unit Tests
 
+At this point, I would like you to attempt to create as many unit tests you can think of for the Widget API endpoints/CRUD operations we implemented in this section and the previous section ([Part 5](/series/flask_api_tutorial/part-5/)). For each, dtft6r6yrfjtjd4I will provide a few tests to get you started, and demonstrate how touse the `@pytest.mark.parametrize` makes testing multiple values for a single parameter much simpler.
+
+### `conftest.py`
+
+```python {linenos=table}
+"""Global pytest fixtures."""
+import pytest
+
+from flask_api_tutorial import create_app
+from flask_api_tutorial import db as database
+from flask_api_tutorial.models.user import User
+from test.util import EMAIL, ADMIN_EMAIL, PASSWORD
+
+
+@pytest.fixture
+def app():
+    app = create_app("testing")
+    return app
+
+
+@pytest.fixture
+def db(app, client, request):
+    database.drop_all()
+    database.create_all()
+    database.session.commit()
+
+    def fin():
+        database.session.remove()
+
+    request.addfinalizer(fin)
+    return database
+
+
+@pytest.fixture
+def user(db):
+    user = User(email=EMAIL, password=PASSWORD)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+
+@pytest.fixture
+def admin(db):
+    admin = User(email=ADMIN_EMAIL, password=PASSWORD, admin=True)
+    db.session.add(admin)
+    db.session.commit()
+    return admin
+```
+
 ### Create Widget
+
+```python {linenos=table}
+"""Unit tests for api.widget_list API endpoint."""
+from datetime import date
+from http import HTTPStatus
+
+import pytest
+from flask import url_for
+from test.util import (
+    EMAIL,
+    ADMIN_EMAIL,
+    BAD_REQUEST,
+    UNAUTHORIZED,
+    FORBIDDEN,
+    DEFAULT_NAME,
+    DEFAULT_URL,
+    DEFAULT_DEADLINE,
+    login_user,
+    create_widget,
+)
+
+
+@pytest.mark.parametrize("widget_name", ["abc123", "widget-name", "new_widget1"])
+def test_create_widget_valid_name(client, db, admin, widget_name):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token, widget_name=widget_name)
+    assert response.status_code == HTTPStatus.CREATED
+    assert "status" in response.json and response.json["status"] == "success"
+    success = f"New widget added: {widget_name}."
+    assert "message" in response.json and response.json["message"] == success
+    location = f"http://localhost/api/v1/widgets/{widget_name}"
+    assert "Location" in response.headers and response.headers["Location"] == location
+
+
+@pytest.mark.parametrize("widget_name", ["abc!23", "widget name", "@widget"])
+def test_create_widget_invalid_name(client, db, admin, widget_name):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token, widget_name=widget_name)
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert "message" in response.json and response.json["message"] == BAD_REQUEST
+    assert "errors" in response.json and "name" in response.json["errors"]
+    name_error = f"'{widget_name}' contains one or more invalid characters."
+    assert name_error in response.json["errors"]["name"]
+
+
+@pytest.mark.parametrize(
+    "info_url",
+    ["http://www.widget.info", "https://www.securewidgets.gov", "http://aaa.bbb.ccc/ddd/eee.html"],
+)
+def test_create_widget_valid_url(client, db, admin, info_url):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token, info_url=info_url)
+    assert response.status_code == HTTPStatus.CREATED
+    assert "status" in response.json and response.json["status"] == "success"
+    success = f"New widget added: {DEFAULT_NAME}."
+    assert "message" in response.json and response.json["message"] == success
+    location = f"http://localhost/api/v1/widgets/{DEFAULT_NAME}"
+    assert "Location" in response.headers and response.headers["Location"] == location
+
+
+@pytest.mark.parametrize(
+    "info_url", ["www.widget.info", "http://localhost:5000", "git://aaa.bbb.ccc"]
+)
+def test_create_widget_invalid_url(client, db, admin, info_url):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token, info_url=info_url)
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert "message" in response.json and response.json["message"] == BAD_REQUEST
+    assert "errors" in response.json and "info_url" in response.json["errors"]
+    assert f"{info_url} is not a valid URL." in response.json["errors"]["info_url"]
+
+
+@pytest.mark.parametrize(
+    "deadline",
+    [
+        date.today().strftime("%m/%d/%Y"),
+        date.today().strftime("%Y-%m-%d"),
+        date.today().strftime("%b %d %Y"),
+    ],
+)
+def test_create_widget_valid_deadline(client, db, admin, deadline):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token, deadline=deadline)
+    assert response.status_code == HTTPStatus.CREATED
+    assert "status" in response.json and response.json["status"] == "success"
+    success = f"New widget added: {DEFAULT_NAME}."
+    assert "message" in response.json and response.json["message"] == success
+    location = f"http://localhost/api/v1/widgets/{DEFAULT_NAME}"
+    assert "Location" in response.headers and response.headers["Location"] == location
+
+
+@pytest.mark.parametrize("deadline", ["1/1/1970", "2020 - 45 - 21 - 66", "someday"])
+def test_create_widget_invalid_deadline(client, db, admin, deadline):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token, deadline=deadline)
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert "message" in response.json and response.json["message"] == BAD_REQUEST
+    assert "errors" in response.json and "deadline" in response.json["errors"]
+
+
+def test_create_widget_bundle_errors(client, db, admin):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(
+        client,
+        access_token,
+        widget_name="widget name",
+        info_url="www.widget.info",
+        deadline="1/1/1970",
+    )
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert "message" in response.json and response.json["message"] == BAD_REQUEST
+    assert "errors" in response.json and "name" in response.json["errors"]
+    assert "info_url" in response.json["errors"] and "deadline" in response.json["errors"]
+
+
+def test_create_widget_already_exists(client, db, admin):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token)
+    assert response.status_code == HTTPStatus.CREATED
+    response = create_widget(client, access_token)
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert "status" in response.json and response.json["status"] == "fail"
+    name_conflict = f"Widget name: {DEFAULT_NAME} already exists, must be unique."
+    assert "message" in response.json and response.json["message"] == name_conflict
+
+
+def test_create_widget_no_token(client, db):
+    request_data = f"name={DEFAULT_NAME}&info_url={DEFAULT_URL}&deadline={DEFAULT_DEADLINE}"
+    response = client.post(
+        url_for("api.widget_list"),
+        data=request_data,
+        content_type="application/x-www-form-urlencoded",
+    )
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert "status" in response.json and response.json["status"] == "fail"
+    assert "message" in response.json and response.json["message"] == UNAUTHORIZED
+
+
+def test_create_widget_no_admin_token(client, db, user):
+    response = login_user(client, email=EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token)
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    assert "status" in response.json and response.json["status"] == "fail"
+    assert "message" in response.json and response.json["message"] == FORBIDDEN
+```
 
 ### Retrieve Widget List
 
