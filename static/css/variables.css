@@ -98,6 +98,7 @@
   --comments-border: #38383d;
 
   /* Syntax Highlighting */
+  --lang-name: var(--light-gray1);
   --hl-num-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray2));
   --hl-line-bg: linear-gradient(to right, var(--dark-gray2),  var(--dark-gray1), var(--widget-bg-color), rgba(0,0,0,0));
 
