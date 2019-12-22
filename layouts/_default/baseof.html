@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {{ if eq .Section "blog" }}
 	{{ .Scratch.Set "body_classes" "body blog-list" }}
-{{ else if or (eq .Section "series") (eq .Section "flask-api-tutorial") }}
+{{ else if or (eq .Section "series") (eq .Section "flask_api_tutorial") }}
 	{{ .Scratch.Set "body_classes" "body tutorial" }}
 {{ else }}
     {{ .Scratch.Set "body_classes" "body" }}
