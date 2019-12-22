@@ -372,7 +372,7 @@ Next, we call `pagination.page` to verify that the page number matches the value
 
 Let's take a look at `pagination.items[0]`, the first `widget` added to the database. First, the `name` attribute is checked, followed by `owner`. `owner` contains a `User` object that corresponds to the user that created this `Widget`. The `create_widget` function (which performs the process of creating a widget after the request has been fully validated) stores the `id` of the `User` that sent the request in the `Widget.owner_id` attribute.
 
-<a href="/series/flask_api_tutorial/part-5/#widget-db-model">`owner_id` is defined</a> as <a href="https://docs.sqlalchemy.org/en/13/core/metadata.html#sqlalchemy.schema.Column" target="_blank">a SQLAlchemy `Column`</a> to which <a href="https://docs.sqlalchemy.org/en/13/core/constraints.html#sqlalchemy.schema.ForeignKey" target="_blank">a `ForeignKey` construct</a> has been applied and this integer value is stored in the `widget` database table. `Widget.owner` is defined as <a href="https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship" target="_blank">a SQLAlchemy relationship</a> between the `Widget` table and the `User` table, and <span class="emphasis">is not</span> stored in the database. Whenever a `Widget` object is retrieved from the database, `Widget.owner` is populated with a `User` object thanks to the foreign-key relationship and the magic of the SQLAlchemy ORM.
+<a href="/series/flask-api-tutorial/part-5/#widget-db-model">`owner_id` is defined</a> as <a href="https://docs.sqlalchemy.org/en/13/core/metadata.html#sqlalchemy.schema.Column" target="_blank">a SQLAlchemy `Column`</a> to which <a href="https://docs.sqlalchemy.org/en/13/core/constraints.html#sqlalchemy.schema.ForeignKey" target="_blank">a `ForeignKey` construct</a> has been applied and this integer value is stored in the `widget` database table. `Widget.owner` is defined as <a href="https://docs.sqlalchemy.org/en/13/orm/relationship_api.html#sqlalchemy.orm.relationship" target="_blank">a SQLAlchemy relationship</a> between the `Widget` table and the `User` table, and <span class="emphasis">is not</span> stored in the database. Whenever a `Widget` object is retrieved from the database, `Widget.owner` is populated with a `User` object thanks to the foreign-key relationship and the magic of the SQLAlchemy ORM.
 
 <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination = Widget.query.paginate(page=2, per_page=5)</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.page</span>
@@ -388,11 +388,11 @@ Let's take a look at `pagination.items[0]`, the first `widget` added to the data
 
 Finally, we retrieve the second (and final) page of `Widget` objects with five items per page by calling `Widget.query.paginate(page=2, per_page=5)`. We then verify that this is, in fact, the second page by calling `pagination.page`. We know `pagination.has_next` should be `False` since this is the final page of `Widgets`, and `pagination.has_prev` should be `True`. `len(pagination.items)` is one since there are six total `Widgets` and items #1-5 were shown on `page=1`. Lastly, we verify that `pagination.items` contains a single `Widget` object.
 
-Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">for the `User` class</a>.
+Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">for the `User` class</a>.
 
 ### `pagination_model` API Model
 
-In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
+In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
 
 First, we need to update the import statements in `app/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
@@ -470,7 +470,7 @@ Let's work our way from the inside-out. As demonstrated in the interactive shell
 
 <pre><code>pagination -> items -> widget -> owner</code></pre>
 
-`owner` is a `User` object. Previously, we created <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a> to serialize a `User` object to JSON. This API model exposes every attribute of the `User` class, most of which are unnecessary in this context.
+`owner` is a `User` object. Previously, we created <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a> to serialize a `User` object to JSON. This API model exposes every attribute of the `User` class, most of which are unnecessary in this context.
 
 Rather than re-using `user_model`, we will create `widget_owner_model` which exposes only the `email` and `public_id` values of the `User` object:
 
@@ -520,7 +520,7 @@ widget_model = Model(
         <p>I prefer this style of formatting to either ISO 8601 or RFC 822 format since it is localized to the user's timezone and is (IMO) more readable. However, if the <code>datetime</code> value will not be read by humans and/or will be provided to a function expecting either ISO 8601 or RFC 822 format, obviously use the built-in <code>flask_restplus.fields.Datetime</code> class.</p>
       </li>
       <li>
-        <p><strong>Line 102: </strong>We used the <code>Boolean</code> class already (in <a href="/series/flask_api_tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a>), so refer back to that section if you need to review how it works.</p>
+        <p><strong>Line 102: </strong>We used the <code>Boolean</code> class already (in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a>), so refer back to that section if you need to review how it works.</p>
       </li>
       <li>
         <p><strong>Line 103: </strong><code>time_remaining_str</code> is a formatted string version of  <code>time_remaining</code>, which is a <code>timedelta</code> value. Since Flask-RESTPlus does not include built-in types for serializing <code>timedelta</code> values, formatting <code>time_remaining</code> as a string is the only way to include it in the serialized JSON.</p>
@@ -762,7 +762,7 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 33: </strong><a href="#flask-sqlalchemy-paginate-method">As demonstrated in the Python interactive shell</a>, <code>pagination</code> objects are created by calling <code>Widget.query.paginate</code>, with the <code>page</code> and <code>per_page</code> values provided by the client.</p>
       </li>
       <li>
-        <p><strong>Line 34: </strong>This is the first time that we are seeing <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the <code>flask_restplus.marshal</code> function</a>. However, we already know how it works since we used <a href="/series/flask_api_tutorial/part-4/#getuser-resource">the <code>@marshall_with</code> decorator in Part 4</a>.</p>
+        <p><strong>Line 34: </strong>This is the first time that we are seeing <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the <code>flask_restplus.marshal</code> function</a>. However, we already know how it works since we used <a href="/series/flask-api-tutorial/part-4/#getuser-resource">the <code>@marshall_with</code> decorator in Part 4</a>.</p>
         <p>There is only a single, subtle difference between these two functions/decorators. Both operate on an object and filter the object's attributes/keys against the provided API model and validate the object's data against the set of fields configured in the API model.</p>
         <p>However, <code>@marshal_with</code> operates on the value returned from the function it decorates, while <code>flask_restplus.marshal</code> operates on whatever is passed to the function as the first parameter. So why are we calling the <code>marshal</code> function directly? In <span class="bold-text">Lines 37-38</span> custom header fields are added to the response before it is sent to the client, and there is no way to add these headers using <code>@marshal_with</code>.</p>
       </li>
@@ -770,11 +770,11 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 35: </strong>Remember, the output of the <code>marshal</code> function is a <code>dict</code>. Also remember that the <code>flask_sqlalchemy.Pagination</code> class <span class="emphasis">does not</span> contain navigational links. We will discuss the <code>_pagination_nav_links</code> function shortly, but what is important to know is that it returns a <code>dict</code> that matches the fields in <code>pagination_links_model</code>. This <code>dict</code> is then added to the <code>pagination</code> object with key-name <code>links</code>, which matches the field on <code>pagination_model</code> containing <code>Nested(pagination_links_model, skip_none=True)</code>.</p>
       </li>
       <li>
-        <p><strong>Line 36: </strong>After adding the navigational links to the <code>pagination</code> object, it is ready to send to the client. <a href="/series/flask_api_tutorial/part-3/#process-registration-request">We discussed the <code>flask.jsonify</code> function in Part 3</a>, please review it if you are drawing a blank trying to remember what it does.</p>
+        <p><strong>Line 36: </strong>After adding the navigational links to the <code>pagination</code> object, it is ready to send to the client. <a href="/series/flask-api-tutorial/part-3/#process-registration-request">We discussed the <code>flask.jsonify</code> function in Part 3</a>, please review it if you are drawing a blank trying to remember what it does.</p>
         <p>TL;DR, calling <code>jsonify(response_data)</code> converts <code>response_data</code> (which is a <code>dict</code> object) to JSON and returns <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.Response" target="_blank">a <code>flask.Response</code> object</a> with the JSON object as the response body.</p>
       </li>
       <li>
-        <p><strong>Line 37: </strong>Refer back to <a href="/series/flask_api_tutorial/part-6/#pagination">the <code>pagination</code> section</a>, and note that the example includes navigational links in both the JSON response body <span class="emphasis">AND</span> the <code>Link</code> field in the response header. We will discuss the <code>_pagination_nav_header_links</code> function very soon, but what is important to know is that it returns a string containing all valid page navigation URLs in <a href="https://tools.ietf.org/html/rfc8288#section-3" target="_blank">the format specified for the Link Header Field</a> defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>.</p>
+        <p><strong>Line 37: </strong>Refer back to <a href="/series/flask-api-tutorial/part-6/#pagination">the <code>pagination</code> section</a>, and note that the example includes navigational links in both the JSON response body <span class="emphasis">AND</span> the <code>Link</code> field in the response header. We will discuss the <code>_pagination_nav_header_links</code> function very soon, but what is important to know is that it returns a string containing all valid page navigation URLs in <a href="https://tools.ietf.org/html/rfc8288#section-3" target="_blank">the format specified for the Link Header Field</a> defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>.</p>
       </li>
       <li>
         <p><strong>Line 38: </strong>This isn't an official best practice, but it is very common to include other metadata about the paginated list in the response header. Here, we create a field named <code>Total-Count</code> that contains the total number of <code>Widget</code> objects in the database.</p>
@@ -796,7 +796,7 @@ Now that the business logic has been implemented, we can add a method to the `ap
 
 ### `api.widget_list` Endpoint (GET Request)
 
-We created the `api.widget_list` endpoint <a href="/series/flask_api_tutorial/part-5/#widgetlist-resource-post-request">in Part 5</a> and implemented the function that handles `POST` requests. According to **Table 1**, this endpoint also supports `GET` requests which allows clients to retrieve lists of `widgets`.
+We created the `api.widget_list` endpoint <a href="/series/flask-api-tutorial/part-5/#widgetlist-resource-post-request">in Part 5</a> and implemented the function that handles `POST` requests. According to **Table 1**, this endpoint also supports `GET` requests which allows clients to retrieve lists of `widgets`.
 
 Open `/app/api/widgets/endpoints.py` and make the following updates to the import statements:
 
@@ -878,7 +878,7 @@ class WidgetList(Resource):
         <p><strong>Line 31: </strong>The <code>response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page with response code 200 as an example response body.</p>
       </li>
       <li>
-        <p><strong>Line 32: </strong>The <code>expect</code> decorator was explained in depth <a href="http://localhost:1313/series/flask_api_tutorial/part-3/#registeruser-resource">in Part 3</a>, please review the implementation of the function that handles <code>POST</code> requests for the <code>api.auth_register</code> endpoint if you need a refresher. Basically, applying the decorator <code>@widget_ns.expect(create_widget_reqparser)</code> to a function has two enormous effects: it specifies that <code>create_widget_reqparser</code> will be used to parse the client's request, <span class="emphasis">AND</span> it renders a form on the Swagger UI page with <code>input</code> text elements for <code>widget.name</code>, <code>widget.info_url</code>, and <code>widget.deadline</code>.</p>
+        <p><strong>Line 32: </strong>The <code>expect</code> decorator was explained in depth <a href="http://localhost:1313/series/flask-api-tutorial/part-3/#registeruser-resource">in Part 3</a>, please review the implementation of the function that handles <code>POST</code> requests for the <code>api.auth_register</code> endpoint if you need a refresher. Basically, applying the decorator <code>@widget_ns.expect(create_widget_reqparser)</code> to a function has two enormous effects: it specifies that <code>create_widget_reqparser</code> will be used to parse the client's request, <span class="emphasis">AND</span> it renders a form on the Swagger UI page with <code>input</code> text elements for <code>widget.name</code>, <code>widget.info_url</code>, and <code>widget.deadline</code>.</p>
       </li>
       <li>
         <p><strong>Lines 35-38: </strong>Everything here should be completely obvious to you since calling <code>parse_args</code> to get the client's request data and passing the data to our business logic is a process that we implement on (nearly) every API handler.</p>
@@ -1121,7 +1121,7 @@ Let's make sure that the `update_widget` function correctly implements the `PUT`
             <i class="fa fa-pencil" aria-hidden="true"></i>
           </div>
           <div class="note-message" style="flex-flow: column wrap">
-            <p>Remember, all <code>widget</code> names are converted to lowercase when written to the database. Because of this, we must be careful to convert the value provided by the client to lowercase before searching. You can review <a href="/series/flask_api_tutorial/part-5/#name-argument">the validation logic for the <code>widget</code> name attribute in Part 5</a>.</p>
+            <p>Remember, all <code>widget</code> names are converted to lowercase when written to the database. Because of this, we must be careful to convert the value provided by the client to lowercase before searching. You can review <a href="/series/flask-api-tutorial/part-5/#name-argument">the validation logic for the <code>widget</code> name attribute in Part 5</a>.</p>
           </div>
         </div>
       </li>
@@ -1132,7 +1132,7 @@ Let's make sure that the `update_widget` function correctly implements the `PUT`
         <p><strong>Lines 56-57: </strong>Per the specification, if the name provided by the client already exists, and the <code>widget</code> was successfully updated using the values parsed from the request data, we can confirm that the request succeeded by sending either a 200 (<code>HTTPStatus.OK</code>) or 204 (<code>HTTPStatus.NO_CONTENT</code>) response.</p>
       </li>
       <li>
-        <p><strong>Line 59: </strong>If we reach this point, it means that the database does not contain a <code>widget</code> with the name provided by the client. Before using this value to create a new <code>widget</code>, we must validate it with <a href="/series/flask_api_tutorial/part-5/#name-argument">the <code>widget_name</code> function</a> we created in the <code>app.api.widgets.dto</code> module. If it is valid, this function will return the value we passed in. If it is not valid, a <code>ValueError</code> will be thrown.</p>
+        <p><strong>Line 59: </strong>If we reach this point, it means that the database does not contain a <code>widget</code> with the name provided by the client. Before using this value to create a new <code>widget</code>, we must validate it with <a href="/series/flask-api-tutorial/part-5/#name-argument">the <code>widget_name</code> function</a> we created in the <code>app.api.widgets.dto</code> module. If it is valid, this function will return the value we passed in. If it is not valid, a <code>ValueError</code> will be thrown.</p>
       </li>
       <li>
         <p><strong>Line 61: </strong>If the name provided by the client is invalid we cannot create a new <code>widget</code>. The server rejects the request with a 400 (<code>HTTPStatus.BAD_REQUEST</code>) response containing an error message detailing why the value provided is not a valid <code>widget</code> name.</p>
@@ -1331,7 +1331,7 @@ We have finally implemented all of the API routes/CRUD processes specified in **
 
 ## Unit Tests
 
-At this point, I would like you to attempt to create as many unit tests you can think of for the Widget API endpoints/CRUD operations we implemented in this section and the previous section ([Part 5](/series/flask_api_tutorial/part-5/)). For each, dtft6r6yrfjtjd4I will provide a few tests to get you started, and demonstrate how touse the `@pytest.mark.parametrize` makes testing multiple values for a single parameter much simpler.
+At this point, I would like you to attempt to create as many unit tests you can think of for the Widget API endpoints/CRUD operations we implemented in this section and the previous section ([Part 5](/series/flask-api-tutorial/part-5/)). For each, dtft6r6yrfjtjd4I will provide a few tests to get you started, and demonstrate how touse the `@pytest.mark.parametrize` makes testing multiple values for a single parameter much simpler.
 
 ### `conftest.py`
 

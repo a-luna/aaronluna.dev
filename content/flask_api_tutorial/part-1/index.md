@@ -41,7 +41,7 @@ Ok, since we are all on the same page, let's discuss some of the core concepts w
 
 ### Statelessness
 
-I have made the conscious decision NOT to refer to this series as a REST API tutorial. Seemingly every API and every how-to article on API design written in the last few years proclaims itself RESTful. This trend is a disservice to the depth and complexity that Roy Fielding laid out in his doctoral thesis introducing and defining REST. I will go into further detail on this subject in [Part 3](/series/flask_api_tutorial/part-3/) when we begin configuring the API.
+I have made the conscious decision NOT to refer to this series as a REST API tutorial. Seemingly every API and every how-to article on API design written in the last few years proclaims itself RESTful. This trend is a disservice to the depth and complexity that Roy Fielding laid out in his doctoral thesis introducing and defining REST. I will go into further detail on this subject in [Part 3](/series/flask-api-tutorial/part-3/) when we begin configuring the API.
 
 However, I think it is important to point out where I am attempting to adhere to the requirements/constraints of REST. One of these constaints is **statelessness**. Statelessness is an essential characteristic of a RESTful system, but it can be a confusing concept at first.
 
@@ -1003,7 +1003,7 @@ In the regular Python interpreter, the `app` and `db` objects are not recognized
 def shell():
     return {"db": db}{{< /highlight >}}
 
-In [Part 2](/series/flask_api_tutorial/part-2/), as we add model classes for each database table, we will add the models to this dictionary so they will be available to us in the shell context without importing them manually. The `shell_context_processor` function must return a dictionary and not a list. This allows you to control the names used in the shell, since the dictionary key for each object will be used as the name.
+In [Part 2](/series/flask-api-tutorial/part-2/), as we add model classes for each database table, we will add the models to this dictionary so they will be available to us in the shell context without importing them manually. The `shell_context_processor` function must return a dictionary and not a list. This allows you to control the names used in the shell, since the dictionary key for each object will be used as the name.
 
 Let's make sure that the error we saw earlier has been fixed, Run `flask`:
 

@@ -2,6 +2,9 @@
 title: "How To: Create a Flask API with JWT-Based Authentication (Overview)"
 lead: "Project Overview"
 slug: "overview"
+url: "/series/flask-api-tutorial/overview"
+aliases:
+    - /series/flask_api_tutorial/
 series: ["flask_api_tutorial"]
 series_weight: 0
 series_title: "How To: Create a Flask API with JWT-Based Authentication"

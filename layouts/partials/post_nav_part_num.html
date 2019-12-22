@@ -14,14 +14,18 @@
         </div>
     </a>
     {{- else }}
-    <div class="post-nav-flex-item-disabled">
-        <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
-            <div class="post-nav__chevron chevron-prev">
-                <i class="fa fa-lg fa-fw fa-arrow-left" aria-hidden="true"></i>
+    <a class="post-nav__link post-nav__link--prev" href="/series/flask-api-tutorial/overview/" rel="prev">
+        <div class="post-nav-flex-item-prev">
+            <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
+                <div class="post-nav__chevron chevron-prev">
+                    <i class="fa fa-lg fa-fw fa-arrow-left" aria-hidden="true"></i>
+                </div>
+                <div class="post-nav__post-title title-prev">
+                    Overview
+                </div>
             </div>
-            <div class="post-nav__post-title title-prev">&nbsp;</div>
         </div>
-    </div>
+    </a>
     {{- end }} {{- if .PrevInSection }}
     <a class="post-nav__link post-nav__link--next" href="{{.PrevInSection.RelPermalink}}" rel="next">
         <div class="post-nav-flex-item-next">

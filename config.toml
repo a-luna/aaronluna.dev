@@ -21,7 +21,7 @@ pygmentsUseClasses = true
 [permalinks]
   post = "/blog/:slug/"
   project = "/project/:slug/"
-  flask_api_tutorial = "/series/flask_api_tutorial/:slug/"
+  flask_api_tutorial = "/series/flask-api-tutorial/:slug/"
 
 [Author]
   name = "Aaron Luna"
@@ -72,7 +72,7 @@ pygmentsUseClasses = true
   [[menu.tutorials]]
     identifier = "flask-api-tutorial"
     name = "How To: Create a Flask API with JWT-Based Authentication"
-    url = "/series/flask_api_tutorial/"
+    url = "/series/flask-api-tutorial/overview"
     weight = 0
 
 # For social icons, the "name" field should match the name of the icon to be used

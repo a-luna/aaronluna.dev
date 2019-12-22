@@ -3,7 +3,7 @@
     <article class="post">
         <header class="post__header">
             <h1 class="post__title">{{ .Params.lead }}</h1>
-            <div class="series__title"><a href="/series/flask_api_tutorial/">{{ .Params.series_title}}</a></div>
+            <div class="series__title"><a href="/series/flask-api-tutorial/overview">{{ .Params.series_title}}</a></div>
             {{ partial "post_nav_part_num.html" . }} {{ partial "api_tutorial_series.html" . }} {{ partial "api_tutorial_toc.html" . }}
         </header>
         {{- if .Params.thumbnail }}

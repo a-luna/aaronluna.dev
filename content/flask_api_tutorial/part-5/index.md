@@ -80,7 +80,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 
 ## Introduction
 
-In the previous section, we created four API endpoints to perform basic user registration and authentication functions. However, these API endpoints are not designed as RESTful resources (I explained [my reasoning for this choice in Part 3](/series/flask_api_tutorial/part-3/#user-authentication-in-a-restful-system)).
+In the previous section, we created four API endpoints to perform basic user registration and authentication functions. However, these API endpoints are not designed as RESTful resources (I explained [my reasoning for this choice in Part 3](/series/flask-api-tutorial/part-3/#user-authentication-in-a-restful-system)).
 
 In this section of the tutorial, we will create a resource that is <span class="bold-text">REST-like</span> (<span class="bold-text">REST-faux</span>? <span class="bold-text">REST-adjacent</span>?). I am deliberately not describing it as <span class="bold-text">RESTful</span>, because <span class="emphasis">designing a truly RESTful system is HARD</span>. Check out <a href="https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" target="_blank">this blog post from Roy Fielding</a> and the discussion in the comments to get an idea of what I mean.
 
@@ -190,7 +190,7 @@ Each endpoint can be configured to respond to a unique set of HTTP method types.
 
 ## `flask add-user` Command
 
-[Way back in Part 1](/series/flask_api_tutorial/part-1/#flask-cli-application-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a> which can be used to create powerful Python CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
+[Way back in Part 1](/series/flask-api-tutorial/part-1/#flask-cli-application-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a> which can be used to create powerful Python CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
 
 Currently, the `api/v1/auth/register` endpoint can only create regular (non-admin) users. We want to leave it this way since this endpoint is publically-accessible. However, we also need a way to create admin users since regular users cannot create, update or delete widget objects.
 
@@ -428,7 +428,7 @@ Let's take a look at how these attributes are defined and how they fulfill the v
     </ul>
 </div>
 
-Next, we need to update `run.py` in order for the Flask-Migrate extension to recognize the <code>Widget</code> class and create a migration script that adds the new table to the database (this is the same process we previously performed for the User class in [Part 2](/series/flask_api_tutorial/part-2/#user-db-model) and for the BlacklistedToken class in [Part 4](/series/flask_api_tutorial/part-4/#blacklistedtoken-db-model)).
+Next, we need to update `run.py` in order for the Flask-Migrate extension to recognize the <code>Widget</code> class and create a migration script that adds the new table to the database (this is the same process we previously performed for the User class in [Part 2](/series/flask-api-tutorial/part-2/#user-db-model) and for the BlacklistedToken class in [Part 4](/series/flask-api-tutorial/part-4/#blacklistedtoken-db-model)).
 
 Open `run.py` in the project root folder and update the import statements to include the `Widget` class **(Line 9)**. Then add the `Widget` class to the `dict` object that is returned by the `make_shell_context` function **(Line 16)**:
 
@@ -477,7 +477,7 @@ After the `widget` table has been added to the database, we can begin implementi
 
 ## Create Widget
 
-So where should we begin? In my opinion, the endpoint that should be implemented first is the endpoint responsible for the create operation, since without `Widget` objects there's nothing to be retrieved, updated or deleted. In [Part 3](/series/flask_api_tutorial/part-3/#auth-ns-endpoints) we followed the process below for each endpoint in the `auth_ns` namespace. We will follow the same process to implement the `widget_ns` endpoints in **Table 1**:
+So where should we begin? In my opinion, the endpoint that should be implemented first is the endpoint responsible for the create operation, since without `Widget` objects there's nothing to be retrieved, updated or deleted. In [Part 3](/series/flask-api-tutorial/part-3/#auth-ns-endpoints) we followed the process below for each endpoint in the `auth_ns` namespace. We will follow the same process to implement the `widget_ns` endpoints in **Table 1**:
 
 <div class="steps">
     <ol>
@@ -536,7 +536,7 @@ owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
     </ul>
 </div>
 
-Flask-RESTPlus includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. When we created the `auth_reqparser` in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` to verify if a value provided by the client is a valid email address. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
+Flask-RESTPlus includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. When we created the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth-reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` to verify if a value provided by the client is a valid email address. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
 
 Create a new file named `dto.py` in `app/api/widgets` and enter the content below:
 
@@ -710,7 +710,7 @@ Wait, let's back up. Didn't the requirement for the `name` attribute say that on
         <p><strong>Line 52: </strong>All we need to do to use our custom type is set the value of the <code>type</code> parameter to the <code>widget_name</code> function.</p>
       </li>
       <li>
-        <p><strong>Lines 53-55: </strong>The <code>location</code>, <code>required</code> and <code>nullable</code> parameters should be familiar since we explained their purpose in <a href="/series/flask_api_tutorial/part-3/#request-parser-configuration">Part 3</a>.</p>
+        <p><strong>Lines 53-55: </strong>The <code>location</code>, <code>required</code> and <code>nullable</code> parameters should be familiar since we explained their purpose in <a href="/series/flask-api-tutorial/part-3/#request-parser-configuration">Part 3</a>.</p>
       </li>
       <li>
         <p><strong>Line 56: </strong>This is the first time we are using the <code>case_sensitive</code> parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, by default, <code>case_sensitive=True</code>. If this value is <code>False</code> "this will convert all values to lowercase".</p>
@@ -745,7 +745,7 @@ The only restriction on `info_url` that we will employ is that the URL scheme mu
   </div>
 </div>
 
-There really isn't anything else to say about how the `info_url` attribute is parsed since we already covered using a pre-defined `input` type when we used the `email` type as part of the `auth_reqparser` in [Part 3](/series/flask_api_tutorial/part-3/#auth-reqparser-request-parser). So let's move on to something a bit more interesting.
+There really isn't anything else to say about how the `info_url` attribute is parsed since we already covered using a pre-defined `input` type when we used the `email` type as part of the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth-reqparser-request-parser). So let's move on to something a bit more interesting.
 
 #### `deadline` Argument
 
@@ -948,7 +948,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 13: </strong>Per the specification in <span class="bold-text">Table 1</span>, the ability to create a widget object is limited to users with the administrator role. To enforce this, we decorate the <code>create_widget</code> method with <code>@admin_token_required</code>. If you would like to review how this decorator is implemented, <a href="/series/flask_api_tutorial/part-4/#decorators">click here</a>.</p>
+        <p><strong>Line 13: </strong>Per the specification in <span class="bold-text">Table 1</span>, the ability to create a widget object is limited to users with the administrator role. To enforce this, we decorate the <code>create_widget</code> method with <code>@admin_token_required</code>. If you would like to review how this decorator is implemented, <a href="/series/flask-api-tutorial/part-4/#decorators">click here</a>.</p>
       </li>
       <li>
         <p><strong>Line 14: </strong>After the request data has been parsed and validated, it is passed to the <code>create_widget</code> function as a <code>dict</code> object named <code>widget_dict</code>.</p>
@@ -960,7 +960,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
         <p><strong>Line 19: </strong><code>**</code> is the dictionary unpacking operator, you can find more info on it and the related list unpacking operator (<code>*</code>) in <a href="https://www.python.org/dev/peps/pep-0448/">PEP 448</a>. It is a concise way to pass the <code>name</code>, <code>info_url</code>, and <code>deadline</code> values to the <code>Widget</code> constructor.</p>
       </li>
       <li>
-        <p><strong>Lines 20-21: </strong>Thanks to the <code>@admin_token_required</code> decorator, the <code>public_id</code> of the user who sent the request is stored in <code>create_widget.public_id</code> (If you don't remember why this is is the case, review the last section where we broke down <a href="/series/flask_api_tutorial/part-4/#decorators">how the decorators are designed</a>).</p>
+        <p><strong>Lines 20-21: </strong>Thanks to the <code>@admin_token_required</code> decorator, the <code>public_id</code> of the user who sent the request is stored in <code>create_widget.public_id</code> (If you don't remember why this is is the case, review the last section where we broke down <a href="/series/flask-api-tutorial/part-4/#decorators">how the decorators are designed</a>).</p>
         <p>We retrieve the <code>User</code> object that corresponds to the <code>public_id</code> of the user that sent the request and assign it to <code>owner</code>. Then, <code>owner.id</code> is set as the value of <code>widget.owner_id</code>.</p>
         <div class="note note-flex">
           <div class="note-icon">
@@ -1028,7 +1028,7 @@ class WidgetList(Resource):
         widget_dict = create_widget_reqparser.parse_args()
         return create_widget(widget_dict){{< /highlight >}}
 
-There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask_api_tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace` objects, `Resource` objects, `@doc`, `@response`, or `@expect` decorators, etc.
+There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask-api-tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace` objects, `Resource` objects, `@doc`, `@response`, or `@expect` decorators, etc.
 
 The important part is **Lines 26-27** where the `parse_args` method of `create_widget_reqparser` is used to validate the request data, which is then passed to the `create_widget` function which we just defined.
 

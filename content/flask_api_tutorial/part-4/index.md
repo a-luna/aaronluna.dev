@@ -82,7 +82,7 @@ Why is this the case? The data required to register a new user or authenticate a
 
 ### `process_login_request` Function
 
-When a user sends a login request and their credentials are successfully validated, the server must return an HTTP response that includes an access token. As we saw when we implemented the registration process, any response that includes sensitive information (e.g., an access token) must satisfy all <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">OAuth 2.0 requirements</a>, which we thoroughly documented and implemented [in Part 3](/series/flask_api_tutorial/part-3/#process-registration-request). The implementation for the response to a successful login request will be nearly identical.
+When a user sends a login request and their credentials are successfully validated, the server must return an HTTP response that includes an access token. As we saw when we implemented the registration process, any response that includes sensitive information (e.g., an access token) must satisfy all <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">OAuth 2.0 requirements</a>, which we thoroughly documented and implemented [in Part 3](/series/flask-api-tutorial/part-3/#process-registration-request). The implementation for the response to a successful login request will be nearly identical.
 
 Open `app/api/auth/business.py`, add the content below and save the file:
 
@@ -716,7 +716,7 @@ There are a few things to note about this test case:
   </ul>
 </div>
 
-Let's do one more. In [Part 2](/series/flask_api_tutorial/part-2/#decode-access-token-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired. Copy the test case below and add it to `test_auth_user.py`:
+Let's do one more. In [Part 2](/series/flask-api-tutorial/part-2/#decode-access-token-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired. Copy the test case below and add it to `test_auth_user.py`:
 
 {{< highlight python "linenos=table,linenostart=59" >}}def test_auth_user_expired_token(client, db):
     register_user(client)
@@ -1069,7 +1069,7 @@ def shell():
     </ul>
 </div>
 
-Finally, we need to create a new migration script and upgrade the database to create the actual <code>token_blacklist</code> table. We already went through this in [Part 2](/series/flask_api_tutorial/part-2/#creating-the-first-migration) when we created the <code>User</code> model class, but let's demonstrate the process once more.
+Finally, we need to create a new migration script and upgrade the database to create the actual <code>token_blacklist</code> table. We already went through this in [Part 2](/series/flask-api-tutorial/part-2/#creating-the-first-migration) when we created the <code>User</code> model class, but let's demonstrate the process once more.
 
 First, run <code>flask db migrate</code> and add a message explaining the changes that will be made by running this migration:
 

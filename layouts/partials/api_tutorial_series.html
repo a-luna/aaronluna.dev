@@ -4,6 +4,7 @@
         <div class="accordian-content">
             <div id="api-tutorial">
                 <ul>
+                    <li><a href="/series/flask-api-tutorial/overview/">Project Overview</a></li>
                     {{ range .Site.Taxonomies.series.flask_api_tutorial }}
                     <li><a href="{{ .RelPermalink }}">{{ .Params.Lead }}</a></li>
                     {{- end }}
