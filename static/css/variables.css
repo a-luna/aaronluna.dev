@@ -60,6 +60,7 @@
   --code-details-lineno: var(--white2);
 
   /* Headers */
+  --header-color: var(--white2);
   --h1-color: var(--white2);
   --h2-color: var(--white2);
   --h3-color: var(--white2);
@@ -98,7 +99,9 @@
   --comments-border: #38383d;
 
   /* Syntax Highlighting */
-  --lang-name: var(--light-gray1);
+  --chroma-border-color: var(--dark-gray2);
+  --lang-name: var(---code-text-color2);
+  --lang-name-bg: var(--widget-bg-color);
   --hl-num-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray2));
   --hl-line-bg: linear-gradient(to right, var(--dark-gray2),  var(--dark-gray1), var(--widget-bg-color), rgba(0,0,0,0));
 

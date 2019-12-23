@@ -630,10 +630,6 @@ article p strong {
   color: #a9fb68;
 }
 
-.steps {
-  color: var(--step-list);
-}
-
 .steps .emphasis {
   font-weight: 700;
   color: var(--step-list);
@@ -918,8 +914,18 @@ blockquote p code {
   border: none;
 }
 
+.steps ul {
+  list-style: none;
+  margin: 0 0 5px 0.5em;
+}
+
 .steps ul ol {
-  margin: 5px 0 0 1.5em;
+  margin: 5px 0 20px 2em;
+  list-style: decimal;
+}
+
+.steps ul li:last-child ol {
+  margin: 5px 0 0 2em;
 }
 
 .note ul {
@@ -930,19 +936,24 @@ blockquote p code {
 
 .steps .title,
 .requirements .title {
-  font-weight: 700;
+  font-size: 1.1em;
   padding: 0;
   margin: 0 0 5px;
 }
 
+.steps .title {
+  color: var(--header-color);
+}
+
 .requirements .title {
-  font-size: 1.1em;
+  font-weight: 700;
 }
 
 div.steps {
   border: none;
   margin: 0 0 1em;
   padding: 5px;
+  line-height: 1.5;
 }
 
 .note ul li:last-child {
@@ -1033,7 +1044,7 @@ p code.chroma {
 
 .highlight-wrapper {
   display: block;
-  margin: 2em 0 1em 0;
+  margin: 2.5em 0 1em 0;
 }
 
 .highlight {
@@ -1041,11 +1052,48 @@ p code.chroma {
   z-index: 0;
   padding: 0;
   margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .highlight > .chroma {
   position: static;
   z-index: 1;
+  border-top-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.copy-code-button {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 13px;
+  letter-spacing: 0.5px;
+  width: 61px;
+  color: var(--widget-bg-color);
+  background-color: var(--blue1);
+  border: 1px solid var(--blue1);
+  border-radius: 4px;
+  white-space: nowrap;
+  padding: 4px 7px;
+  margin: 10px 10px 0 0;
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+.copy-code-button:hover,
+.copy-code-button:focus,
+.copy-code-button:active,
+.copy-code-button:active:hover {
+  background-color: var(--blue2);
+  border: 1px solid var(--blue2);
+  opacity: 0.8;
 }
 
 .tutorial .copy-code-button {
@@ -1059,33 +1107,6 @@ p code.chroma {
 .tutorial .copy-code-button:active:hover {
   background-color: var(--tut-link-color2);
   border: 1px solid var(--tut-link-color2);
-}
-
-.copy-code-button {
-  position: absolute;
-  z-index: 2;
-  right: 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--widget-bg-color);
-  background-color: var(--blue1);
-  border: 1px solid var(--blue1);
-  border-radius: 4px;
-  white-space: nowrap;
-  padding: 2px 7px;
-  margin: 5px 5px 0 0;
-  line-height: 14px;
-  cursor: pointer;
-  opacity: 0.3;
-}
-
-.copy-code-button:hover,
-.copy-code-button:focus,
-.copy-code-button:active,
-.copy-code-button:active:hover {
-  background-color: var(--blue2);
-  border: 1px solid var(--blue2);
-  opacity: 0.8;
 }
 
 pre.chroma code {
@@ -1171,13 +1192,13 @@ pre.chroma code {
 .chroma [data-lang]:before
 {
   position: absolute;
-  z-index: 2;
-  top: -20px;
-  left: 0;
+  z-index: 0;
+  top: -24px;
+  left: 0px;
   content: attr(data-lang);
   font-size: 1em;
   color: var(--lang-name);
-  background-color: var(--widget-bg-color);
+  background-color: var(--lang-name-bg);
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   border-bottom-left-radius: 0;

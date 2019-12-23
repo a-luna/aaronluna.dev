@@ -17,9 +17,10 @@ async function copyCodeToClipboard(button, highlight) {
     } else {
       copyCodeBlockExecCommand(codeToCopy, highlight);
     }
-    codeWasCopied(button);
   } catch (_) {
     copyCodeBlockExecCommand(codeToCopy, highlight);
+  }
+  finally {
     codeWasCopied(button);
   }
 }

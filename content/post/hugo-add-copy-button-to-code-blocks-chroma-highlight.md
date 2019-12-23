@@ -126,7 +126,8 @@ Similarly, the `copyable-text-area` class will be applied to a `textarea` elemen
 
 With that in mind, let's take a look at the JavaScript:
 
-{{< highlight javascript "linenos=table" >}}function createCopyButton(highlight) {
+```javascript {linenos=table}
+function createCopyButton(highlight) {
   const button = document.createElement("button");
   button.className = "copy-code-button";
   button.type = "button";
@@ -180,7 +181,7 @@ function addCopyButtonToDom(button, highlight) {
 
 document.querySelectorAll(".highlight")
   .forEach(highlight => createCopyButton(highlight));
-{{< /highlight >}}
+```
 
 So what does this script do? When the page has fully loaded, a "Copy" button is created for each <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element and the `copyCodeToClipboard` function is assigned as the event handler for the button's click event (**Lines 2-6**). Then, `addCopyButtonToDom` is called. Let's examine how this function works:
 
