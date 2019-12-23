@@ -834,42 +834,41 @@ This is the first time we are creating a test case that sends requests to an API
       <p><strong>Line 8-9: </strong>Rather than copy the same values over and over, I defined <code>EMAIL</code> and <code>PASSWORD</code> as global variables since they will be used multiple times throughout this test set.</p>
     </li>
     <li>
-      <p><strong>Line 10-12: </strong>These error messages are stored in variables to save horizontal space and avoid splitting a single statement across two lines.</p>
+      <p><strong>Line 10-13: </strong>These error messages are stored in variables to save horizontal space and avoid splitting a single statement across two lines.</p>
     </li>
     <li>
-      <p><strong>Line 15: </strong>This function is not a test case (since the name does not begin with <code>test_</code>). <code>register_user</code> takes a Flask test client instance, and values for <code>email</code> and <code>password</code> as parameters. The test client instance must always be passed when using this function, but <code>email</code> and <code>password</code> will use the default values if none are specified.</p>
+      <p><strong>Line 16: </strong>This function is not a test case (since the name does not begin with <code>test_</code>). <code>register_user</code> takes a Flask test client instance, and values for <code>email</code> and <code>password</code> as parameters. The test client instance must always be passed when using this function, but <code>email</code> and <code>password</code> will use the default values if none are specified.</p>
     </li>
     <li>
-      <p><strong>Line 16: </strong>The <a href="https://werkzeug.palletsprojects.com/en/0.15.x/test/#werkzeug.test.Client" target="_blank">Flask test client</a> allows us to make HTTP requests. In order to register a new user, we must send a <code>POST</code> request to the <code>api.auth_register</code> endpoint. To do so, we call the test client's <code>post</code> method. The test client is capable of sending requests for all HTTP method types: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code>, <code>head</code> and <code>trace.</code></p>
+      <p><strong>Line 17: </strong>The <a href="https://werkzeug.palletsprojects.com/en/0.15.x/test/#werkzeug.test.Client" target="_blank">Flask test client</a> allows us to make HTTP requests. In order to register a new user, we must send a <code>POST</code> request to the <code>api.auth_register</code> endpoint. To do so, we call the test client's <code>post</code> method. The test client is capable of sending requests for all HTTP method types: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code>, <code>head</code> and <code>trace.</code></p>
     </li>
     <li>
-      <p><strong>Line 17: </strong>The first argument to the <code>post</code> method is the request URL. Since the target URL is within our Flask application, we can dynamically construct the URL using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.url_for" target="_blank">the <code>url_for</code> function</a>. This is really useful because it allows us to create links within our application without hardcoding any part of the path. All we need to do to use the <code>url_for</code> function is provide the name of the API endpoint, and voila, the URL is dynamically generated and provided to the <code>post</code> method.</p>
+      <p><strong>Line 18: </strong>The first argument to the <code>post</code> method is the request URL. Since the target URL is within our Flask application, we can dynamically construct the URL using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.url_for" target="_blank">the <code>url_for</code> function</a>. This is really useful because it allows us to create links within our application without hardcoding any part of the path. All we need to do to use the <code>url_for</code> function is provide the name of the API endpoint, and voila, the URL is dynamically generated and provided to the <code>post</code> method.</p>
     </li>
     <li>
-      <p><strong>Line 18: </strong>For a <code>POST</code> request, the server expects the data to be sent in the request body. Since we are simulating a form submission, we must format the data as a series of name/value pairs, each pair separated by an ampersand (&), and for each pair, the name is separated from the value by an equals (=) sign.</p>
+      <p><strong>Line 19: </strong>For a <code>POST</code> request, the server expects the data to be sent in the request body. Since we are simulating a form submission, we must format the data as a series of name/value pairs, each pair separated by an ampersand (&), and for each pair, the name is separated from the value by an equals (=) sign.</p>
     </li>
     <li>
-      <p><strong>Line 19: </strong>This is how we specify the value of the <code>Content-Type</code> HTTP header. The value of this header is very important because it tells the server what type of data is being sent. The value <code>application/x-www-form-urlencoded</code> tells the server that the request contains form data encoded as URL parameters.</p>
+      <p><strong>Line 20: </strong>This is how we specify the value of the <code>Content-Type</code> HTTP header. The value of this header is very important because it tells the server what type of data is being sent. The value <code>application/x-www-form-urlencoded</code> tells the server that the request contains form data encoded as URL parameters.</p>
     </li>
     <li>
-      <p><strong>Line 23: </strong><code>test_auth_register</code> is a test case, and <code>client</code> and <code>db</code> are test fixtures defined in <code>conftest.py</code>. The reason for invoking the <code>client</code> fixture is obvious &mdash; we need it to test the API. However, the reason for invoking <code>db</code> is not so obvious since it isn't actually being called in the test function. This fixture initializes the database by creating tables for each database model class (the only model class at this point is <code>User</code>).</p>
+      <p><strong>Line 24: </strong><code>test_auth_register</code> is a test case, and <code>client</code> and <code>db</code> are test fixtures defined in <code>conftest.py</code>. The reason for invoking the <code>client</code> fixture is obvious &mdash; we need it to test the API. However, the reason for invoking <code>db</code> is not so obvious since it isn't actually being called in the test function. This fixture initializes the database by creating tables for each database model class (the only model class at this point is <code>User</code>).</p>
       <p>In this test case, we are sending a request to register a new user and expecting the request to succeed. This will only work if the database has been initialized and the <code>site_user</code> table exists in the database since the SQLAlchemy extension will attempt to execute a <code>INSERT INTO site_user...</code> SQL statement.</p>
       <p><span class="emphasis">BOTTOM LINE</span> &mdash; Invoking the <code>db</code> fixture is necessary for any test cases that add or modify database objects.</p>
     </li>
     <li>
-      <p><strong>Line 24: </strong>We start off the test case by submitting the registration request with the default values. This is really the only action performed in this test case, the rest of the code just verifies the server response to the registration request.</p>
-    <li>
-      <p><strong>Line 25: </strong>This <code>assert</code> statement verifies that server response is in JSON format.</p>
+      <p><strong>Line 25: </strong>We start off the test case by submitting the registration request with the default values. This is really the only action performed in this test case, the rest of the code just verifies the server response to the registration request.</p>
     </li>
     <li>
       <p><strong>Line 26: </strong>Next, we verify that the HTTP status code of the server response is 201 <code>HTTPStatus.CREATED</code> which indicates that a new user was created in the database.</p>
     </li>
-    </li>
     <li>
       <p><strong>Line 27-28: </strong>These two lines verify that the <code>status</code> and <code>message</code> attributes exist in the response JSON and that the values indicate that the user was successfully registered.</p>
     </li>
+    <li>
       <p><strong>Line 29: </strong>This <code>assert</code> statement verifies that the <code>token_type</code> attribute exists in the response JSON and that the value is <code>bearer</code>.</p>
     </li>
+    <li>
       <p><strong>Line 30: </strong>This <code>assert</code> statement verifies that the <code>expires_in</code> attribute exists in the response JSON and that the value is <code>5</code>.</p>
     </li>
     <li>
