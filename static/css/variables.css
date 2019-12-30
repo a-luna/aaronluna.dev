@@ -49,6 +49,8 @@
   --header-link-color2: var(--white2);
   --page-bg-color: var(--dark-gray1);
   --body-text-color: var(--off-white1);
+  --header-anchor-link: var(--off-white1);
+  --header-anchor-link-hover: var(--white2);
   --widget-bg-color: var(--black2);
   --link-color: var(--blue2);
   --accent-color1: var(--blue2);
@@ -90,8 +92,7 @@
   --blog-link-color: var(--accent-color1);
 
   /* Section: Tutorial */
-  --tut-link-color1: var(--teal2);
-  --tut-link-color2: var(--teal2);
+  --tut-link-color: var(--accent-color1);
   --tut-requirements :var(--gold1);
 
   /* Comments */
@@ -102,6 +103,10 @@
   --chroma-border-color: var(--dark-gray2);
   --lang-name: var(---code-text-color2);
   --lang-name-bg: var(--widget-bg-color);
+  --copy-code-button: var(--mid-gray2);
+  --copy-code-button-hover: var(--light-gray2);
+  --copy-code-button-text: var(--black2);
+  --copy-code-button-text-hover: var(--black2);
   --hl-num-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray2));
   --hl-line-bg: linear-gradient(to right, var(--dark-gray2),  var(--dark-gray1), var(--widget-bg-color), rgba(0,0,0,0));
 
@@ -125,5 +130,5 @@
   --alert-box: var(--gold1);
 
   /* List of Steps */
-  --step-list: var(--green3);
+  --step-list: var(--white2);
 }

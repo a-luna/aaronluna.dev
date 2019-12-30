@@ -18,12 +18,12 @@ twitter:
 ---
 ## Introduction
 
-My goal is to make this tutorial as informative as possible, however I assume that you have experience with Python and that you are familiar with Flask. Here's a quick test, read the instructions below:
+It is my goal to make this tutorial series as informative and all-encompassing as possible. However, the content is targeted towards intermediate-level users of Python and Flask. I created a small test to quickly check your level of experience, please read the instructions below:
 
 <div class="steps">
   <ol>
-    <li>Create a new Python 3.6 virtual environment and install the project dependencies from the <code>requirements.txt</code> file (using <code>pip</code>). Then, activate the virtual environment.</li>
-    <li>Create a method named <code>login</code> and bind it to the URL <strong>/login/</strong>, users are allowed to submit GET and POST requests to this URL. For a GET, this method should render the <code>login.html</code> template. For a POST, inspect the form data and attempt to authenticate the user based on the submitted credentials.</li>
+    <li>Create a new Python 3.7 virtual environment and install the project dependencies from the <code>requirements.txt</code> file (using <code>pip</code>). Then, activate the virtual environment.</li>
+    <li>Create a method named <code>login</code> and bind it to the URL <strong>/login/</strong>, users are allowed to submit <code>GET</code> and <code>POST</code> requests to this URL. For a <code>GET</code>, this method should render the <code>login.html</code> template. For a <code>POST</code>, inspect the form data and attempt to authenticate the user based on the submitted credentials.</li>
   </ol>
 </div>
 
@@ -156,62 +156,87 @@ Flake8 is my preferred code linter. While black reformats your code, it doesn't 
 
 Flake8 can be configured in a multitude of ways, so getting the most out of it requires a bit of an investment. Applied correctly, flake8 will make your code easier to read, less bug-prone and more maintainable. We will explore my preferred flake8 settings later in this tutorial.
 
-## Project Setup
+### Tox
 
-The location of your test code in relation to your app code is very important. There are multiple valid ways to layout your project, and the pros and cons of each approach are collected as <a href="https://docs.pytest.org/en/latest/goodpractices.html" target="_blank">a helpful set of best practices</a> on the pytest documentation site. The specific recommendations that I have applied to this project are:
+<a href="https://tox.readthedocs.io/en/latest/" target="_blank">Tox is a very powerful tool</a> that can be used as a single entry point for various build, test and release activities. The most common use case for tox is validating the installation process for a project and running arbitrary commands (such as unit tests) within isolated virtual environments. This is extremely important if you need to support multiple Python versions, and extremely helpful since tox automates what would otherwise be a tedious, involved process.
+
+## Project Structure
+
+The location of your test code in relation to your app code is very important. There are multiple valid ways to layout your project, and the pros and cons of various project layouts are collected as <a href="https://docs.pytest.org/en/latest/goodpractices.html" target="_blank">a helpful set of best practices</a> on the pytest documentation site. The specific recommendations that I have applied to this project are given below:
 
 <div class="steps">
   <ul>
     <li>Place a <code>setup.py</code> file in your project's root folder. We will cover the contents of this file shortly, having this file allows you to install your application with <code>pip</code>.</li>
     <li>Place your test code in a separate folder <span class="emphasis">outside</span> of your application code.
       <ul>
-        <li>This allows you to run your tests against an installed version of your application after executing <code>pip install .</code></li>
-        <li>This allows you to run your tests against your local development version of your application after executing <code>pip install -e .</code></li>
+        <li>This allows you to run your tests against an installed version of your application after executing either <code>pip install .</code> or <code>pip install -e .</code></li>
+        <li>The <code>-e</code> flag installs the application in <span class="bold-text">editable mode</span>, which allows you to run your tests against your local development instance of your code. This saves you from having to re-install your application whenever a change is made, since your tests will be executed against the code that you modified.</li>
+        <li>How is this possible? Editable mode installs your application using a symlink to your dev code.</li>
       </ul>
     </li>
-    <li>Installing your application in "editable" mode (<code>pip install -e .</code>) allows you to modify your app code and test code and re-run your test cases on demand.</li>
-    <li>"Editable" mode installs your application using a symlink to your dev code.</li>
   </ul>
 </div>
 
-### Project Structure
+In addition to the requirements listed above, I am using a project structure with an isolated **src** folder for this project. The important thing about the **src** folder is that it is **not a Python package** (i.e., it does not contain a `__init__.py` file). **src** is located at the root of the project and contains only a single folder named `flask-api-tutorial` (which is a Python package).
+
+The project root will also contain the **tests** folder, the `setup.py` file to install the application, configuration files, license, README, etc. Here's a visual to help if you're confused by my description:
+
+<pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
+|- <span class="project-folder">src</span>
+|   |- <span class="project-folder">flask-api-tutorial</span>
+|       |- <span class="project-empty-file">__init__.py</span>
+|       |- <span class="project-empty-file">...</span>
+|
+|- <span class="project-folder">tests</span>
+|   |- <span class="project-empty-file">__init__.py</span>
+|   |- <span class="project-empty-file">...</span>
+|
+|- <span class="project-empty-file">setup.py</span></div></pre>
+
+There are numerous benefits that result from structuring your project in this manner. The most obvious is that you are forced to install your application through `pip` in order to run your tests. This ensures that your `setup.py` script correctly deploys the application, allowing any issues to be detected and fixed immediately.
+
+<a href="https://blog.ionelmc.ro/2014/05/25/python-packaging/" target="_blank"><span class="italics">Python Packaging</span> by Ionel Cristian Mărieș</a> provides an excellent argument in favor of the **src** layout. Similarly, <a href="https://hynek.me/articles/testing-packaging/" target="_blank"><span class="italics">Testing & Packaging</span> by Hynek Schlawack</a> is a recent article arguing in favor of the **src** layout. I strongly recommend reading both blog posts in their entirety.
+
+### Create Initial Folders & Files
 
 With those guidelines in mind, let's start by creating the folder layout for our application.
 
-You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask-api-tutorial`. In this post, we will work on everything marked as <code class="work-file">NEW CODE</code> in the chart below (all files will be empty at this point):
+You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask-api-tutorial`. In this section, we will work on everything marked as <code class="work-file">NEW CODE</code> in the chart below (all files will be empty at this point):
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
-|- <span class="project-folder">app</span>
-|   |- <span class="project-folder">api</span>
-|   |   |- <span class="project-folder">auth</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |
-|   |   |- <span class="project-folder">widgets</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |
-|   |- <span class="project-folder">models</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |
-|   |- <span class="project-folder">util</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |-  |- <span class="work-file">datetime_util.py</span>
-|   |-  |- <span class="work-file">result.py</span>
-|   |
-|   |- <span class="work-file">__init__.py</span>
-|   |- <span class="work-file">config.py</span>
+|- <span class="project-folder">src</span>
+|   |- <span class="project-folder">flask-api-tutorial</span>
+|       |- <span class="project-folder">api</span>
+|       |   |- <span class="project-folder">auth</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |
+|       |   |- <span class="project-folder">widgets</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |
+|       |- <span class="project-folder">models</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |
+|       |- <span class="project-folder">util</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="work-file">datetime_util.py</span>
+|       |-  |- <span class="work-file">result.py</span>
+|       |
+|       |- <span class="work-file">__init__.py</span>
+|       |- <span class="work-file">config.py</span>
 |
-|- <span class="project-folder">test</span>
+|- <span class="project-folder">tests</span>
+|   |- <span class="project-empty-file">__init_.py</span>
 |   |- <span class="work-file">test_config.py</span>
 |
 |- <span class="work-file">.env</span>
 |- <span class="work-file">pytest.ini</span>
+|- <span class="work-file">tox.ini</span>
+|- <span class="work-file">README.md</span>
 |- <span class="work-file">run.py</span>
 |- <span class="work-file">setup.py</span>
-|- <span class="work-file">pyproject.toml</span>
-|- <span class="work-file">requirements.txt</span>
-|- <span class="work-file">requirements_dev.txt</span></div>
+|- <span class="work-file">pyproject.toml</span></div>
 <div class="project-structure-key-wrapper">
 <div class="project-structure-key">
 <div class="key-item key-label">KEY:</div>
@@ -224,71 +249,97 @@ You can name your root folder whatever you like (represented by the top-level ".
 Feel free to create the project structure manually or through the command line as shown below:
 
 <pre><code><span class="cmd-prompt">~ $</span> <span class="cmd-input">mkdir flask-api-tutorial && cd flask-api-tutorial</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">touch .env pytest.ini run.py setup.py pyproject.toml requirements.txt requirements_dev.txt</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">mkdir app && cd app && touch __init__.py config.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app $</span> <span class="cmd-input">mkdir api && cd api && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app/api $</span> <span class="cmd-input">mkdir auth && cd auth && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app/api/auth $</span> <span class="cmd-input">cd ..</span>
-<span class="cmd-prompt">flask-api-tutorial/app/api $</span> <span class="cmd-input">mkdir widget && cd widget && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app/api/widgets $</span> <span class="cmd-input">cd ../..</span>
-<span class="cmd-prompt">flask-api-tutorial/app $</span> <span class="cmd-input">mkdir models && cd models && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app/models $</span> <span class="cmd-input">cd ..</span>
-<span class="cmd-prompt">flask-api-tutorial/app $</span> <span class="cmd-input">mkdir util && cd util && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/app/util $</span> <span class="cmd-input">cd ../..</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">mkdir test && cd test && touch test_config.py</span>
-<span class="cmd-prompt">flask-api-tutorial/test $</span> <span class="cmd-input">cd ..</span>
+<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">mkdir src && cd src</span>
+<span class="cmd-prompt">flask-api-tutorial/src $</span> <span class="cmd-input">mkdir flask-api-tutorial && cd flask-api-tutorial && touch __init__.py</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial $</span> <span class="cmd-input">mkdir api && cd api && touch __init__.py</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api $</span> <span class="cmd-input">mkdir auth && cd auth && touch __init__.py</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api/auth $</span> <span class="cmd-input">cd ..</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api $</span> <span class="cmd-input">mkdir widget && cd widget && touch __init__.py</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api/widgets $</span> <span class="cmd-input">cd ../..</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial $</span> <span class="cmd-input">mkdir models && cd models && touch __init__.py</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/models $</span> <span class="cmd-input">cd ..</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial $</span> <span class="cmd-input">mkdir util && cd util && touch __init__.py</span>
+<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/util $</span> <span class="cmd-input">cd ../../..</span>
+<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">mkdir tests && cd tests && touch __init__.py</span>
+<span class="cmd-prompt">flask-api-tutorial/tests $</span> <span class="cmd-input">cd ..</span>
 <span class="cmd-prompt">flask-api-tutorial $</span></code></pre>
 
-### Installation Script & Requirements Files
+### Installation Script
 
 After the folder structure is in place, open the `setup.py` file in the project root and add the content below. Then, save and close the file:
 
-{{< highlight python >}}"""Installation script for flask-api-tutorial."""
+```python
+"""Installation script for flask-api-tutorial application."""
+from pathlib import Path
 from setuptools import setup, find_packages
+
+DESCRIPTION = (
+    "Boilerplate Flask API with Flask-RESTPlus, SQLAlchemy, pytest, flake8, tox configured"
+)
+README = (Path(__file__).parent / "README.md").read_text()
+AUTHOR = "Aaron Luna"
+AUTHOR_EMAIL = "admin@aaronluna.dev"
+PROJECT_URLS = {
+    "Documentation": "https://aaronluna.dev/series/flask-api-tutorial/",
+    "Bug Tracker": "https://github.com/a-luna/flask-api-tutorial/issues",
+    "Source Code": "https://github.com/a-luna/flask-api-tutorial",
+}
+INSTALL_REQUIRES = [
+    "Flask",
+    "Flask-Bcrypt",
+    "Flask-Cors",
+    "Flask-Migrate",
+    "flask-restplus",
+    "Flask-SQLAlchemy",
+    "PyJWT",
+    "python-dateutil",
+    "python-dotenv",
+    "requests",
+    "urllib3",
+]
+EXTRAS_REQUIRE = {
+    "tests": [
+        "black",
+        "flake8",
+        "pydocstyle",
+        "pytest",
+        "pytest-black",
+        "pytest-clarity",
+        "pytest-dotenv",
+        "pytest-flake8",
+        "pytest-flask",
+        "tox",
+    ]
+}
+EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
+
 
 setup(
     name="flask-api-tutorial",
+    description=DESCRIPTION,
+    long_description=README,
+    long_description_content_type='text/markdown',
     version="0.1",
-    packages=find_packages(),
-    install_requires=[
-        "Flask",
-        "Flask-Bcrypt",
-        "Flask-Cors",
-        "Flask-Migrate",
-        "flask-restplus",
-        "Flask-SQLAlchemy",
-        "PyJWT",
-        "python-dateutil",
-        "python-dotenv",
-        "requests",
-        "urllib3",
-    ],
-){{< /highlight >}}
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    maintainer=AUTHOR,
+    maintainer_email=AUTHOR_EMAIL,
+    license="MIT",
+    url="https://github.com/a-luna/flask-api-tutorial",
+    project_urls=PROJECT_URLS,
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
+    python_requires='>=3.6',
+    install_requires=INSTALL_REQUIRES,
+    extras_require=EXTRAS_REQUIRE,
+)
+```
 
-Next, open the `requirements.txt` file and add the content below. Then, save and close the file:
-
-{{< highlight python >}}# install flask-api-design application in editable mode
--e .
-{{< /highlight >}}
-
-Finally, open the `requirements_dev.txt` file and add the content below. Then, save and close the file:
-
-{{< highlight python >}}#install packages listed in requirements.txt
--r requirements.txt
-
-black
-flake8
-pydocstyle
-pytest
-pytest-black
-pytest-clarity
-pytest-dotenv
-pytest-flake8
-pytest-flask{{< /highlight >}}
+If you are unfamiliar with the structure or operation of the `setup.py` file, <a href="https://github.com/pypa/sampleproject/blob/master/setup.py" target="_blank">I recommend bookmarking this example from the PyPA</a> which is fully documented with comments explaining every keyword-argument that the `setup` function supports, which kwargs are required or optional, etc.
 
 ### Create Virtual Environment
 
-Next, create a new virtual environment by whatever method you prefer (this project requires Python 3.6+). I use a Mac, and since MacOS "officially" supports Python 2.7, I use `pyenv` to install as many versions as I want. For a quick and easy guide to setting up and using `pyenv`, check out <a href="https://hackernoon.com/reaching-python-development-nirvana-bb5692adf30c" target="_blank">this article from Hacker Noon</a>.
+Next, create a new virtual environment by whatever method you prefer (this project requires Python 3.6+). I use `pyenv` to manage multiple installations of Python since various projects must support and be tested against different or multiple versions. For a quick and easy guide to setting up and using `pyenv`, check out <a href="https://hackernoon.com/reaching-python-development-nirvana-bb5692adf30c" target="_blank">this article from Hacker Noon</a>.
 
 Even if you do not use `pyenv`, the process to create and activate a virtual environment will be similar to the steps below:
 
@@ -301,21 +352,20 @@ Even if you do not use `pyenv`, the process to create and activate a virtual env
 <span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">source venv/bin/activate</span>
 <span class="cmd-venv">(venv) flask-api-tutorial $</span></code></pre>
 
-At this point, <a href="https://packaging.python.org/guides/tool-recommendations/" target="_blank">the PyPA recommends</a> using `pipenv` for installing and managing project dependencies. However, my various encounters with `pipenv` and these newfangled "Pipfiles" have been frustrating, slow, and generally not a smooth experience.
+At this point, <a href="https://packaging.python.org/guides/tool-recommendations/" target="_blank">the PyPA recommends</a> using `pipenv` for installing and managing project dependencies. However, my various encounters with `pipenv` and "Pipfiles" have been frustrating, slow, and generally not a smooth experience.
 
-Chastise me if you wish, but I will be using `pip` to manage project dependencies throughout this tutorial. Please upgrade `pip`, `setuptools` and `wheel`:
+Therefore, I will be using `pip` throughout this tutorial. After activating the new virtual environment, upgrade `pip`, `setuptools` and `wheel`:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pip install --upgrade pip setuptools wheel</span>
 <span class="cmd-comment"># removed package upgrade messages...</span>
 <span class="cmd-results">Successfully installed pip-19.2.1 setuptools-41.0.1 wheel-0.33.4</span></code></pre>
 
-Next, install the project dependencies and development/testing dependencies (`requirements_dev.txt` calls `requirements.txt` so there's no need to run `pip install -r` for both files):
+Finally, install the `flask-api-tutorial` application in editable mode:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pip install -r requirements_dev.txt</span>
 <span class="cmd-comment"># removed package install messages...</span>
 <span class="cmd-results">Successfully installed Flask-1.1.1 Flask-Bcrypt-0.7.1 Flask-Cors-3.0.8 Flask-Migrate-2.5.2 Flask-SQLAlchemy-2.4.0 Jinja2-2.10.1 Mako-1.0.14 MarkupSafe-1.1.1 PyJWT-1.7.1 SQLAlchemy-1.3.6 Six-1.12.0 Werkzeug-0.15.5 alembic-1.0.11 aniso8601-7.0.0 appdirs-1.4.3 atomicwrites-1.3.0 attrs-19.1.0 bcrypt-3.1.7 black-19.3b0 certifi-2019.6.16 cffi-1.12.3 chardet-3.0.4 click-7.0 entrypoints-0.3 flake8-3.7.8 flask-restplus-0.12.1 idna-2.8 importlib-metadata-0.18 itsdangerous-1.1.0 jsonschema-3.0.1 mccabe-0.6.1 more-itertools-7.2.0 packaging-19.0 pluggy-0.12.0 py-1.8.0 pycodestyle-2.5.0 pycparser-2.19 pydocstyle-4.0.0 pyflakes-2.1.1 pyparsing-2.4.0 pyrsistent-0.15.3 pytest-5.0.1 pytest-black-0.3.7 pytest-clarity-0.2.0a1 pytest-dotenv-0.4.0 pytest-flake8-1.0.4 pytest-flask-0.15.0 python-dateutil-2.8.0 python-dotenv-0.10.3 python-editor-1.0.4 pytz-2019.1 requests-2.22.0 snowballstemmer-1.9.0 termcolor-1.1.0 toml-0.10.0 tzlocal-2.0.0 urllib3-1.25.3 wcwidth-0.1.7 zipp-0.5.2</span></code></pre>
 
-Finally, install our application in editable mode:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pip install -e .</span>
 <span class="cmd-comment"># removed package install messages...</span>

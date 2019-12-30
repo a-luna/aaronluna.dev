@@ -9,12 +9,12 @@ series_part: "Part 2"
 series_part_lead: "Database Models, Migrations and JWT Setup"
 categories: ["Flask", "Python"]
 toc: true
-summary: ""
+summary: 'Part 2 covers the basics of SQLAlchemy, the Flask-SQLAlchemy extension, and the Flask-Migrate extension. The process of creating a new database table to store user information by defining a class and "registering" it with SQLAlchemy is demonstrated. Next, setting up a system that manages changes to a database schema is thoroughly explained and demonstrated. After initializing the database, functions to encode and decode JSON Web Tokens (JWTs) are created. This section concludes with an introduction to pytest fixtures and examples of several test cases that verify the ability to encode/decode JWTs issued by our API.'
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
-  title: ""
-  description: ""
+  title: "How To: Create a Flask API with JWT-Based Authentication (Part 2: Database Models, Migrations and JWT Setup)"
+  description: 'Part 2 covers the basics of SQLAlchemy, the Flask-SQLAlchemy extension, and the Flask-Migrate extension. The process of creating a new database table to store user information by defining a class and "registering" it with SQLAlchemy is demonstrated. Next, setting up a system that manages changes to a database schema is thoroughly explained and demonstrated. After initializing the database, functions to encode and decode JSON Web Tokens (JWTs) are created. This section concludes with an introduction to pytest fixtures and examples of several test cases that verify the ability to encode/decode JWTs issued by our API.'
 ---
 ## Project Structure
 
@@ -416,17 +416,9 @@ Let's breakdown how this method generates the access token:
             <ul>
                 <li><strong>admin: </strong>True/False value indicating whether the User has administrator access.</li>
             </ul>
-            <div class="note note-flex">
-                <div class="note-icon">
-                    <i class="fa fa-pencil"></i>
-                </div>
-                <div class="note-message">
-                    <p>Since this method is in the <code>User</code> class, the values <code>self.public_id</code> and <code>self.admin</code> refer to a User object. By including these values in the token, the server does not have to perform a database query to determine if a user has administrator access when handling a request.</p>
-                </div>
-            </div>
         </li>
         <li>
-            <p><strong>Line 54: </strong>In order to calculate the token's signature, we must retrieve the <code>SECRET_KEY</code> config setting. When creating the token, this value will be used in the algorithm that generates the cryptographic signature. We will use this same value to decode the token and ensure that the contents have not been modified.</p>
+            <p><strong>Line 54: </strong>In order to calculate the token's signature, we must retrieve the <code>SECRET_KEY</code> config setting. We will use this same value to decode the token and ensure that the contents have not been modified.</p>
         </li>
         <li>
             <p><strong>Line 55: </strong>The <code>jwt.encode()</code> function accepts three arguments. The first two of which we have just described: the payload and the secret key. The third argument is the signing algorithm. Most applications use the <code>HS256</code> algorithm, which is short for HMAC-SHA256. The signing algorithm is what protects the payload of the JWT against tampering.</p>

@@ -9,29 +9,40 @@
   opacity: .01;
 }
 
-.content a.hanchor {
-  color: var(--blog-link-color);
-}
-
+.content a.hanchor,
 .tutorial .content a.hanchor {
-  color: var(--tut-link-color1);
-}
-
-.content a.hanchor {
-  font-size: 0.75em;
+  color: var(--header-anchor-link);
   opacity: 0.4;
 }
 
 .content a.hanchor:hover,
-.content a.hanchor:hover {
+.content a.hanchor:active,
+.content a.hanchor:active:hover,
+.content a.hanchor:focus,
+.tutorial .content a.hanchor:hover,
+.tutorial .content a.hanchor:active,
+.tutorial .content a.hanchor:active:hover,
+.tutorial .content a.hanchor:focus  {
+  color: var(--header-anchor-link-hover);
   opacity: 1;
 }
 
-.content a.hanchor-self {
+.content h2 a.hanchor-self {
+  font-size: 0.7em;
   margin: 0 0 0 7px;
 }
 
-.content a.hanchor-top {
+.content h2 a.hanchor-top {
+  font-size: 0.9em;
+  margin: 0 0 0 6px;
+}
+
+.content h3 a.hanchor-self {
+  font-size: 0.8em;
+  margin: 0 0 0 7px;
+}
+
+.content h3 a.hanchor-top {
   font-size: 1em;
   margin: 0 0 0 6px;
 }
@@ -178,19 +189,19 @@ ol li p {
 }
 
 #showcase a {
-  color: #19f6d6;
+  color: var(--tut-link-color);
 }
 
 #showcase a:hover,
 #showcase a:active,
 #showcase a:active:hover,
 #showcase a:focus {
-  color: #19f6d6;
+  color: var(--tut-link-color);
   text-decoration: underline;
 }
 
 #showcase h2 {
-  color: #19f6d6;
+  color: var(--tut-link-color);
   font-size: 1.25rem;
   margin: 0 0 7px;
 }
@@ -221,7 +232,7 @@ ol li p {
 }
 
 .tutorial .series__title a {
-  color: var(--tut-link-color1)
+  color: var(--tut-link-color)
 }
 
 .blog-list .main__content {
@@ -274,7 +285,7 @@ code.unmodified-file {
 
 pre .work-file,
 code.work-file {
-  color: var(--code-text-color1);
+  color: var(--green3);
   font-weight: 500;
 }
 
@@ -358,25 +369,62 @@ h1.post__title {
 }
 
 .badge {
+  --cat-color: var(--accent-color2);
   color: #d8d8d8;
-  background-color: var(--widget-bg-color);
-  font-size: 0.8em;
+  background-color: var(--cat-color);
+  color: var(--widget-bg-color);
+  font-size: 0.9em;
   font-weight: 500;
   padding: 3px 5px;
-  text-transform: uppercase;
+  text-transform: lowercase;
   border-radius: 4px;
 }
 
 #showcase .badge {
-  background-color: #08c4a8;
   font-weight: 700;
   padding: 3px 6px;
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 
 .new-badge,
 .tutorial-series-badge {
-  color: var(--widget-bg-color);
+  --cat-color: var(--teal2);
+}
+
+.badge.python {
+  --cat-color: var(--python);
+}
+
+.badge.devops {
+  --cat-color: var(--devops);
+}
+
+.badge.aws {
+  --cat-color: var(--aws);
+}
+
+.badge.hugo {
+  --cat-color: var(--hugo);
+}
+
+.badge.javascript {
+  --cat-color: var(--javascript);
+}
+
+.badge.dotnet {
+  --cat-color: var(--dotnet);
+}
+
+.badge.linux {
+  --cat-color: var(--linux);
+}
+
+.badge.flask {
+  --cat-color: var(--flask);
+}
+
+.badge.virtualization {
+  --cat-color: var(--virtualization);
 }
 
 h3,
@@ -507,7 +555,7 @@ a:active:hover {
 
 .tutorial .widget a,
 .tutorial .widget a:hover {
-  color: var(--tut-link-color1);
+  color: var(--tut-link-color);
 }
 
 .content a {
@@ -520,7 +568,7 @@ a:active:hover {
 .tutorial a:hover,
 .tutorial .content a,
 .tutorial .content a:hover {
-  color: var(--tut-link-color1);
+  color: var(--tut-link-color);
 }
 
 .content a:hover {
@@ -604,6 +652,10 @@ a:active:hover {
 
 .content p .italics {
   color: #e2e2e2;
+}
+
+.content p a .italics {
+  color: var(--link-color);
 }
 
 .bold-italics {
@@ -798,7 +850,7 @@ div.note-flex {
 
 .tutorial .alert-message a,
 .tutorial .note-message a {
-  color: var(--tut-link-color1);
+  color: var(--tut-link-color);
 }
 
 .alert-message p,
@@ -902,20 +954,14 @@ blockquote p code {
   background: var(--page-bg-color);
 }
 
-.steps code {
-  color: #d8d8d8;
-}
-
 .steps ul,
 .steps ol,
 .note ul {
-  font-size: 0.9em;
   margin: 0 0 0 1.5em;
   border: none;
 }
 
 .steps ul {
-  list-style: none;
   margin: 0 0 5px 0.5em;
 }
 
@@ -1071,42 +1117,33 @@ p code.chroma {
   position: absolute;
   z-index: 2;
   right: 0;
-  font-size: 13px;
+  top: 0;
+  font-size: 12px;
   font-weight: 700;
-  line-height: 13px;
+  line-height: 12px;
   letter-spacing: 0.5px;
-  width: 61px;
-  color: var(--widget-bg-color);
-  background-color: var(--blue1);
-  border: 1px solid var(--blue1);
-  border-radius: 4px;
+  width: 60px;
+  color: var(--copy-code-button-text);
+  background-color: var(--copy-code-button);
+  border: 1.25px solid var(--widget-bg-color);
+  border-top-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 4px;
   white-space: nowrap;
-  padding: 4px 7px;
-  margin: 10px 10px 0 0;
+  padding: 3px 4px 4px 4px;
+  margin: 0 0 0 1px;
   cursor: pointer;
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 .copy-code-button:hover,
 .copy-code-button:focus,
 .copy-code-button:active,
 .copy-code-button:active:hover {
-  background-color: var(--blue2);
-  border: 1px solid var(--blue2);
-  opacity: 0.8;
-}
-
-.tutorial .copy-code-button {
-  background-color: var(--tut-link-color1);
-  border: 1px solid var(--tut-link-color1);
-}
-
-.tutorial .copy-code-button:hover,
-.tutorial .copy-code-button:focus,
-.tutorial .copy-code-button:active,
-.tutorial .copy-code-button:active:hover {
-  background-color: var(--tut-link-color2);
-  border: 1px solid var(--tut-link-color2);
+  color: var(--copy-code-button-text-hover);
+  background-color: var(--copy-code-button-hover);
+  opacity: 0.9;
 }
 
 pre.chroma code {
@@ -1125,7 +1162,7 @@ pre.chroma code {
 }
 
 .tutorial .list-of-links {
-  color: var(--tut-link-color1);
+  color: var(--tut-link-color);
 }
 
 .chroma .lntable tr td:first-child pre {
@@ -1193,10 +1230,10 @@ pre.chroma code {
 {
   position: absolute;
   z-index: 0;
-  top: -24px;
+  top: -22px;
   left: 0px;
   content: attr(data-lang);
-  font-size: 1em;
+  font-size: 1.1em;
   color: var(--lang-name);
   background-color: var(--lang-name-bg);
   border-top-left-radius: 4px;
@@ -1414,10 +1451,14 @@ figcaption {
 
 .toc__menu ul {
   list-style: disc;
-  color: #19f6d6;
+  color: var(--blog-link-color);
   padding: 0;
   margin: 0 0 0 20px;
   line-height: 1.3;
+}
+
+.tutorial .toc__menu ul {
+  color: var(--tut-link-color);
 }
 
 .toc__menu ul li {
@@ -1463,7 +1504,7 @@ figcaption {
   text-transform: none;
   color: #e2e2e2;
   line-height: 1.3;
-  border-bottom: 1px solid #19f6d6;
+  border-bottom: 1px solid var(--blog-link-color);
   border-radius: 0;
   background-color: var(--widget-bg-color);
   padding: 0 0 5px 0;
@@ -1478,7 +1519,11 @@ figcaption {
 }
 
 .toc__menu a {
-  color: #19f6d6;
+  color: var(--blog-link-color);
+}
+
+.tutorial .toc__menu a {
+  color: var(--tut-link-color);
 }
 
 .list__item {
@@ -1651,7 +1696,7 @@ a.post-nav__link:focus {
 
 .tutorial .post-nav__link,
 .tutorial a.post-nav__link {
-  color: var(--tut-link-color2);
+  color: var(--tut-link-color);
 }
 
 .tutorial .post-nav__link:hover,
@@ -1662,7 +1707,7 @@ a.post-nav__link:focus {
 .tutorial a.post-nav__link:active,
 .tutorial a.post-nav__link:active:hover,
 .tutorial a.post-nav__link:focus {
-  color: var(--tut-link-color2);
+  color: var(--tut-link-color);
 }
 
 #header-nav {
@@ -1707,7 +1752,7 @@ a.post-nav__link:focus {
 #header-nav .post-nav__link:focus {
   display: inline;
   border-radius: 4px;
-  color: #19f6d6;
+  color: var(--blog-link-color);
   text-decoration: none;
 }
 
@@ -1715,7 +1760,23 @@ a.post-nav__link:focus {
 #header-nav .post-nav__chevron:active,
 #header-nav .post-nav__chevron:active:hover,
 #header-nav .post-nav__chevron:focus {
-  color: #19f6d6;
+  color: var(--blog-link-color);
+}
+
+.tutorial #header-nav .post-nav__link,
+.tutorial #header-nav .post-nav__link:hover,
+.tutorial #header-nav .post-nav__link:active,
+.tutorial #header-nav .post-nav__link:active:hover,
+.tutorial #header-nav .post-nav__link:focus,
+.tutorial #header-nav .post-nav__link:hover,
+.tutorial #header-nav .post-nav__link:active,
+.tutorial #header-nav .post-nav__link:active:hover,
+.tutorial #header-nav .post-nav__link:focus,
+.tutorial #header-nav .post-nav__chevron:hover,
+.tutorial #header-nav .post-nav__chevron:active,
+.tutorial #header-nav .post-nav__chevron:active:hover,
+.tutorial #header-nav .post-nav__chevron:focus {
+  color: var(--tut-link-color);
 }
 
 #header-nav .chevron-prev {
@@ -1748,8 +1809,15 @@ a.post-nav__link:focus {
 #header-nav .post-nav__post-title:active,
 #header-nav .post-nav__post-title:active:hover,
 #header-nav .post-nav__post-title:focus {
-  color: #19f6d6;
+  color: var(--blog-link-color);
   text-decoration: underline;
+}
+
+.tutorial #header-nav .post-nav__post-title:hover,
+.tutorial #header-nav .post-nav__post-title:active,
+.tutorial #header-nav .post-nav__post-title:active:hover,
+.tutorial #header-nav .post-nav__post-title:focus {
+  color: var(--tut-link-color);
 }
 
 #header-nav .title-prev,
@@ -1773,7 +1841,18 @@ header a.post-nav__link:hover,
 header a.post-nav__link:active,
 header a.post-nav__link:active:hover,
 header a.post-nav__link:focus {
-  color: #19f6d6;
+  color: var(--blog-link-color);
+}
+
+.tutorial header .post-nav__link:hover,
+.tutorial header .post-nav__link:active,
+.tutorial header .post-nav__link:active:hover,
+.tutorial header .post-nav__link:focus,
+.tutorial header a.post-nav__link:hover,
+.tutorial header a.post-nav__link:active,
+.tutorial header a.post-nav__link:active:hover,
+.tutorial header a.post-nav__link:focus {
+  color: var(--tut-link-color);
 }
 
 .post-nav__item {
@@ -1852,7 +1931,7 @@ input {
 }
 
 .tutorial .widget__title {
-  border-bottom: 1px solid var(--tut-link-color1);
+  border-bottom: 1px solid var(--tut-link-color);
 }
 
 #api-tutorial {
@@ -1861,7 +1940,7 @@ input {
 }
 
 #api-tutorial ul {
-  color: #19f6d6;
+  color: var(--tut-link-color);
   margin: 0 0 0 20px;
   padding: 0;
   line-height: 1.3;
@@ -1874,7 +1953,7 @@ input {
 
 #api-tutorial a,
 #api-tutorial a:hover {
-  color: #19f6d6;
+  color: var(--tut-link-color);
 }
 
 #api-tutorial a:hover {
@@ -2310,15 +2389,26 @@ table.aws-hosting-costs {
 }
 
 .accordian h2 a {
-  color: #19f6d6;
+  color: var(--blog-link-color);
   margin: 0 0 0 1px;
+}
+
+.tutorial .accordian h2 a {
+  color: var(--tut-link-color);
 }
 
 .accordian h2 a:hover,
 .accordian h2 a:focus,
 .accordian h2 a:active,
 .accordian h2 a:active:hover {
-  color: #19f6d6;
+  color: var(--blog-link-color);
+}
+
+.tutorial .accordian h2 a:hover,
+.tutorial .accordian h2 a:focus,
+.tutorial .accordian h2 a:active,
+.tutorial .accordian h2 a:active:hover {
+  color: var(--tut-link-color);
 }
 
 .accordian section {
@@ -2341,9 +2431,13 @@ table.aws-hosting-costs {
 }
 
 .accordian .pointer {
-  color: #19f6d6;
+  color: var(--blog-link-color);
   font-size: 0.72727em;
   margin: auto 5px;
+}
+
+.tutorial .accordian .pointer {
+  color: var(--tut-link-color)
 }
 
 .accordian section h2 {
@@ -2603,7 +2697,7 @@ header,
 }
 
 .post-category {
-  --cat-color: var(--light-gray2);
+  --cat-color: var(--accent-color2);
   font-size: 12px;
   font-weight: 700;
   color: var(--black2);
@@ -2648,38 +2742,47 @@ header,
   font-weight: 700;
 }
 
+.badge.python,
 .post-category.python {
   --cat-color: var(--python);
 }
 
+.badge.devops,
 .post-category.devops {
   --cat-color: var(--devops);
 }
 
+.badge.aws,
 .post-category.aws {
   --cat-color: var(--aws);
 }
 
+.badge.hugo,
 .post-category.hugo {
   --cat-color: var(--hugo);
 }
 
+.badge.javascript,
 .post-category.javascript {
   --cat-color: var(--javascript);
 }
 
+.badge.dotnet,
 .post-category.dotnet {
   --cat-color: var(--dotnet);
 }
 
+.badge.linux,
 .post-category.linux {
   --cat-color: var(--linux);
 }
 
+.badge.flask,
 .post-category.flask {
   --cat-color: var(--flask);
 }
 
+.badge.virtualization,
 .post-category.virtualization {
   --cat-color: var(--virtualization);
 }
