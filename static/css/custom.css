@@ -2770,7 +2770,7 @@ header,
 .list__item a.post-category,
 #showcase a.post-category {
   --cat-color: var(--accent-color2);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--black2);
   background-color: var(--cat-color);
