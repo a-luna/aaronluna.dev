@@ -1459,8 +1459,8 @@ figcaption {
 
 .post__header {
   background-color: #323232;
+  padding: 0 0 10px;
   margin: 0 0 15px;
-  padding: 0 0 15px;
   border-bottom: 2px dotted var(--accent-color2);
 
 }
@@ -2774,8 +2774,13 @@ header,
   margin: 0;
 }
 
+.post__meta .post-categories {
+  margin: 10px 0;
+}
+
 .post-category,
 .list__item a.post-category,
+.post__meta a.post-category,
 #showcase a.post-category {
   --cat-color: var(--accent-color2);
   font-size: 14px;
@@ -2823,7 +2828,11 @@ header,
 .list__item a.post-category:hover,
 .list__item a.post-category:focus,
 .list__item a.post-category:active,
-.list__item a.post-category:active:hover {
+.list__item a.post-category:active:hover,
+.post__meta a.post-category:hover,
+.post__meta a.post-category:focus,
+.post__meta a.post-category:active,
+.post__meta a.post-category:active:hover {
   color: var(--cat-color);
   background-color: var(--page-bg-color);
   text-decoration: none;
@@ -2833,62 +2842,72 @@ header,
 .badge.python,
 .post-category.python,
 .list__item .post-category.python,
+.post__meta .post-category.python,
 #showcase .post-category.python {
   --cat-color: var(--python);
 }
 
 .badge.devops,
 .post-category.devops,
-.list__item .post-category.devops {
+.list__item .post-category.devops,
+.post__meta .post-category.devops {
   --cat-color: var(--devops);
 }
 
 .badge.aws,
 .post-category.aws,
-.list__itema .post-category.aws {
+.list__item .post-category.aws,
+.post__meta .post-category.aws {
   --cat-color: var(--aws);
 }
 
 .badge.hugo,
 .post-category.hugo,
-.list__item .post-category.hugo {
+.list__item .post-category.hugo,
+.post__meta .post-category.hugo {
   --cat-color: var(--hugo);
 }
 
 .badge.javascript,
 .post-category.javascript,
-.list__item .post-category.javascript {
+.list__item .post-category.javascript,
+.post__meta .post-category.javascript {
   --cat-color: var(--javascript);
 }
 
 .badge.dotnet,
 .post-category.dotnet,
-.list__item .post-category.dotnet {
+.list__item .post-category.dotnet,
+.post__meta .post-category.dotnet {
   --cat-color: var(--dotnet);
 }
 
 .badge.linux,
 .post-category.linux,
-.list__item .post-category.linux {
+.list__item .post-category.linux,
+.post__meta .post-category.linux {
   --cat-color: var(--linux);
 }
 
 .badge.flask,
 .post-category.flask,
-.meta .post-category.flask,
+.list__item .post-category.flask,
+.post__meta .post-category.flask,
 #showcase .post-category.flask {
   --cat-color: var(--flask);
 }
 
 .badge.virtualization,
 .post-category.virtualization,
-.list__item .post-category.virtualization {
+.list__item .post-category.virtualization,
+.post__meta .post-category.virtualization {
   --cat-color: var(--virtualization);
 }
 
 .badge.tutorial-series,
 .post-category.tutorial-series,
 .list__item .post-category.tutorial-series,
+.post__meta .post-category.tutorial-series,
 #showcase .post-category.tutorial-series {
   --cat-color: var(--tutorial-series);
 }
