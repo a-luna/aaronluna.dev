@@ -191,13 +191,13 @@ So what does this script do? When the page has fully loaded, a "Copy" button is 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 46: </strong>First, the "Copy" button is inserted into the DOM as the first child of the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element.</p>
+        <p><strong>Line 47: </strong>First, the "Copy" button is inserted into the DOM as the first child of the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element.</p>
       </li>
       <li>
-        <p><strong>Line 47-48: </strong>We create a <code>div</code> element to act as a wrapper for the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element and assign the appropriate styling.</p>
+        <p><strong>Line 48-49: </strong>We create a <code>div</code> element to act as a wrapper for the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element and assign the appropriate styling.</p>
       </li>
       <li>
-        <p><strong>Line 49-50: </strong>Finally, the wrapper element is inserted into the DOM in the same location as the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element, and the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element is "wrapped" by calling <code>appendChild</code>.</p>
+        <p><strong>Line 50-51: </strong>Finally, the wrapper element is inserted into the DOM in the same location as the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element, and the <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> element is "wrapped" by calling <code>appendChild</code>.</p>
       </li>
     </ul>
 </div>
@@ -216,22 +216,22 @@ When the user clicks a "Copy" button, the `copyCodeToClipboard` function is call
         <p><strong>Line 18: </strong>If the browser supports the Clipboard API but the <code>clipboard-write</code> permission <span class="emphasis">has not been granted</span>, we call <code>copyCodeBlockExecCommand</code>.</p>
       </li>
       <li>
-        <p><strong>Line 20: </strong>In either case, since we are still within the <code>try</code> block (i.e., no error/exception has occurred, and thus, the desired code has been copied) we call <code>codeWasCopied</code> which changes the button text to "Copied!" to notify the user that the code was successfully copied. After two seconds the button text is changed back to "Copy".</p>
+        <p><strong>Lines 21: </strong>If the browser <span class="emphasis">does not</span> support the Clipboard API, an error will be raised and caught. Since this is an expected failure, the error is not re-thrown, and the same action that is performed when the browser supports the Clipboard API but the <code>clipboard-write</code> permission <span class="emphasis">has not been granted</span> is executed &mdash; within the <code>catch</code> block we call <code>copyCodeBlockExecCommand</code>.</p>
       </li>
       <li>
-        <p><strong>Lines 22-23: </strong>If the browser <span class="emphasis">does not</span> support the Clipboard API, an error will be raised and caught. Since this is an expected failure, the error is not re-thrown, and the same actions that are performed when the browser supports the Clipboard API but the <code>clipboard-write</code> permission <span class="emphasis">has not been granted</span> are executed &mdash; within the <code>catch</code> block we call <code>copyCodeBlockExecCommand</code> followed by <code>codeWasCopied</code>.</p>
+        <p><strong>Line 24: </strong>Code within a <code>finally</code> block is called after either <code>try</code>/<code>catch</code>, regardless of result. Since the "copy" operation was invoked in either <code>try</code>/<code>catch</code> block, we call <code>codeWasCopied</code> which changes the button text to "Copied!". After two seconds the button text is changed back to "Copy".</p>
       </li>
       <li>
-        <p><strong>Line 28-29: </strong>When the Clipboard API is unsupported/permission is not granted, we create a <code>textarea</code> element and assign the appropriate styling to make it hidden from the user but still available programmatically.</p>
+        <p><strong>Line 29-30: </strong>When the Clipboard API is unsupported/permission is not granted, we create a <code>textarea</code> element and assign the appropriate styling to make it hidden from the user but still available programmatically.</p>
       </li>
       <li>
-        <p><strong>Line 30: </strong>We set the value of the <code>textarea</code> element to be equal the text the user wishes to copy.</p>
+        <p><strong>Line 31: </strong>We set the value of the <code>textarea</code> element to be equal the text the user wishes to copy.</p>
       </li>
       <li>
-        <p><strong>Line 31: </strong>The <code>textarea</code> element is temporarily aded to the DOM next to the copy button.</p>
+        <p><strong>Line 32: </strong>The <code>textarea</code> element is temporarily aded to the DOM next to the copy button.</p>
       </li>
       <li>
-        <p><strong>Line 32-34: </strong>The <code>textarea</code> element is selected before calling <code>document.execCommand("copy")</code>, which copies the text we assigned to the <code>textarea</code> element to the clipboard. After doing so, the <code>textarea</code> element is removed from the DOM.</p>
+        <p><strong>Line 33-35: </strong>The <code>textarea</code> element is selected before calling <code>document.execCommand("copy")</code>, which copies the text we assigned to the <code>textarea</code> element to the clipboard. After doing so, the <code>textarea</code> element is removed from the DOM.</p>
       </li>
     </ul>
 </div>
