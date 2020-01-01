@@ -5,20 +5,16 @@ date: '2019-11-13'
 categories:
   - Hugo
   - JavaScript
-summary: "Hugo includes a built-in syntax-highlighter called Chroma. Chroma is extremely fast since it is written
-in pure Go (like Hugo) and supports every language I can think of. Chroma's speed is especially important since
-syntax highlighters are notorious for causing slow page loads. However, it lacks one vital feature — an easy way
-to copy a code block to the clipboard. Check out my implementation that uses only vanilla JS (every blog post I
-found for this issue relied on jquery to parse the DOM, which makes me sick to my stomach)."
+summary: "Hugo includes a built-in syntax-highlighter called Chroma. Chroma is extremely fast since it is written in pure Go (like Hugo) and supports every language I can think of. Chroma's speed is especially important since syntax highlighters are notorious for causing slow page loads. However, it lacks one vital feature — an easy way to copy a code block to the clipboard. I decided to document my implementation using only vanilla JS since every blog post I found for this issue relied on jquery to parse the DOM, which is a shame. We can do better, people."
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
   site: "https://aaronluna.dev"
   title: "Hugo: Add Copy-to-Clipboard Button to Code Blocks with Vanilla JS"
-  description: 'Chroma, the syntax highlighting package built into Hugo, is extremely fast and supports every language I can think of. However, manually copying a code block quickly becomes tedious. This is my solution which adds a "Copy" button to each code block using only vanilla JavaScript'
+  description: 'Hugo includes a built-in syntax-highlighter called Chroma. Chroma is extremely fast, however it lacks one vital feature — an easy way to copy a code block to the clipboard. I decided to document my implementation using only vanilla JS since every blog post I found for this issue relied on jquery to parse the DOM, which is a shame. We can do better, people.'
 ---
 
-I am currently working on a multi-part tutorial series that demonstrates how to create a REST API using Flask, SQLAlchemy and various other tools/packages. After instructing the reader to <span class="bold-italics">"copy the text below and paste into file blah blah"</span> for the eightieth time I realized that asking someone to select an entire block of text from a `code` element, and then copy and paste it is an annoying and error-prone process. It's also unnecessary! Even the most rudimentary and humble of blog posts have code blocks with a button that copies the code to the clipboard.
+Hugo includes <a href="https://gohugo.io/content-management/syntax-highlighting/" target="_blank">a built-in syntax-highlighter called Chroma</a>. Chroma is extremely fast since it is written in pure Go (like Hugo) and supports every language I can think of. Chroma's speed is especially important since syntax highlighters are notorious for causing slow page loads. However, it lacks one vital feature — an easy way to copy a code block to the clipboard. I decided to document my implementation using only vanilla JS (every blog post I found for this issue relied on jquery to parse the DOM, which is a shame. We can do better, people).
 
 A quick search led me to <a href="https://www.dannyguo.com/blog/how-to-add-copy-to-clipboard-buttons-to-code-blocks-in-hugo/" target="_blank">this post</a> on Danny Guo's blog. I used his example as my starting point but made several changes:
 
