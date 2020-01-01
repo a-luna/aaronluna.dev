@@ -185,10 +185,10 @@ ol li p {
 }
 
 #showcase .showcase-message {
-  color: var(--gold1);
+  color: var(--white2);
   font-weight: 700;
   font-size: 1.2em;
-  margin: 0 0 5px;
+  margin: 5px 0;
   line-height: 17px;
 }
 
@@ -211,11 +211,11 @@ ol li p {
 #showcase h2 {
   color: var(--tut-link-color);
   font-size: 1.25rem;
-  margin: 0 0 7px;
+  margin: 7px 0;
 }
 
 #showcase strong {
-  color: #e2e2e2;
+  color: var(--white2);
   font-weight: 700;
 }
 
