@@ -85,10 +85,10 @@
   --aws: var(--purple3);
   --devops: var(--pink2);
   --dotnet: var(--blue1);
-  --flask: var(--gold1);
+  --flask: var(--red);
   --hugo: var(--magenta1);
   --javascript: var(--teal2);
-  --tutorial-series: var(--red);
+  --tutorial-series: var(--gold1);
   --linux: var(--orange1);
   --python: var(--green1);
   --virtualization: var(--orange2);

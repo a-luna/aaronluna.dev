@@ -184,8 +184,16 @@ ol li p {
   border-radius: 4px;
 }
 
+#showcase .showcase-message {
+  color: var(--gold1);
+  font-weight: 700;
+  font-size: 1.2em;
+  margin: 0 0 5px;
+  line-height: 17px;
+}
+
 #showcase p {
-  margin: 0 0 10px;
+  margin: 0 0 5px;
 }
 
 #showcase a {
