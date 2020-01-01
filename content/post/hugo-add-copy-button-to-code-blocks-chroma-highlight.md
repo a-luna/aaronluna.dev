@@ -89,26 +89,28 @@ I use the version with line numbers much more often than the version without, so
   position: absolute;
   z-index: 2;
   right: 0;
-  font-size: 13px;
+  top: 0;
+  font-size: 12px;
   font-weight: 700;
-  color: #202020;
-  background-color: #57b6ff;
-  border: 1px solid #57b6ff;
+  line-height: 12px;
+  letter-spacing: 0.5px;
+  width: 60px;
+  color: #232326;
+  background-color: #7f7f7f;
+  border: 1.25px solid #232326;
   border-radius: 4px;
   white-space: nowrap;
-  padding: 2px 7px;
-  margin: 5px 5px 0 0;
-  line-height: 14px;
+  padding: 3px 4px 4px 4px;
+  margin: 0 0 0 1px;
   cursor: pointer;
-  opacity: 0.3;
+  opacity: 0.6;
 }
 
 .copy-code-button:hover,
 .copy-code-button:focus,
 .copy-code-button:active,
 .copy-code-button:active:hover {
-  background-color: #6fc1ff;
-  border: #6fc1ff;
+  background-color: #b3b3b3;
   opacity: 0.8;
 }
 

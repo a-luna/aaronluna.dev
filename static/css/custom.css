@@ -238,7 +238,7 @@ ol li p {
 .blog-list .main__content {
   background-color: #323232;
   border-bottom: 2px dotted #7f7f7f;
-  margin: 0 0 20px;
+  margin: 0 0 10px;
   padding: 0 0 25px;
 }
 
@@ -1143,7 +1143,7 @@ p code.chroma {
 .copy-code-button:active:hover {
   color: var(--copy-code-button-text-hover);
   background-color: var(--copy-code-button-hover);
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 pre.chroma code {
@@ -1421,8 +1421,9 @@ figcaption {
 }
 
 .post__meta {
-  border-top: 1px dotted #7f7f7f;
-  border-bottom: none;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 .warning a {
@@ -1435,9 +1436,35 @@ figcaption {
 }
 
 .list__header,
-.post__header,
 .main__header {
   background-color: #323232;
+  margin: 0 0 5px;
+  padding: 0;
+}
+
+.home .post__header {
+  background-color: #323232;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post__header {
+  background-color: #323232;
+  margin: 0 0 15px;
+  padding: 0 0 15px;
+  border-bottom: 2px dotted var(--accent-color2);
+
+}
+
+.about-me .post__header {
+  border: none;
+}
+
+.tutorial .post__header {
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 .toc__menu nav {
@@ -1528,6 +1555,14 @@ figcaption {
 
 .list__item {
   border-bottom: 2px dotted #7f7f7f;
+  margin: 0 0 10px;
+  padding: 0 0 10px;
+}
+
+#showcase .list__item {
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 .pagination {
@@ -2673,6 +2708,29 @@ header,
   margin: 0 0 5px;
 }
 
+.list__meta {
+  margin: 7px 0;
+}
+
+.list__header .post-meta-date {
+  margin: 0 0 3px;
+}
+
+.list__header .post-meta-date .meta__text,
+.post__header .post-meta-date .meta__text {
+  font-size: 1em;
+}
+
+.list__header .post-meta-date .meta__text {
+  color: var(--list-header-date-color);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.post__header .post-meta-date {
+  margin: 0 0 5px 0;
+}
+
 .recent-post .post-title {
   display: block;
   font-size: 16px;
@@ -2687,16 +2745,30 @@ header,
   margin: 10px 0 0 0;
 }
 
-#widgets .post-categories {
+#widgets .post-categories,
+.list__item .post-categories {
   display: flex;
   flex-flow: row wrap;
   justify-content: stretch;
   background-color: var(--page-bg-color);
   padding: 0;
+}
+
+#showcase .post-categories {
+  background-color: var(--widget-bg-color);
+}
+
+#widgets .post-categories {
   margin: 0 0 2em 0
 }
 
-.post-category {
+.list__item .post-categories {
+  margin: 0;
+}
+
+.post-category,
+.list__item a.post-category,
+#showcase a.post-category {
   --cat-color: var(--accent-color2);
   font-size: 12px;
   font-weight: 700;
@@ -2725,7 +2797,11 @@ header,
 .post-category:hover,
 .post-category:focus,
 .post-category:active,
-.post-category:active:hover {
+.post-category:active:hover,
+#showcase a.post-category:hover,
+#showcase a.post-category:focus,
+#showcase a.post-category:active,
+#showcase a.post-category:active:hover {
   color: var(--cat-color);
   background-color: var(--home-card-bg-color);
   text-decoration: none;
@@ -2735,7 +2811,11 @@ header,
 #widgets .post-category:hover,
 #widgets .post-category:focus,
 #widgets .post-category:active,
-#widgets .post-category:active:hover {
+#widgets .post-category:active:hover,
+.list__item a.post-category:hover,
+.list__item a.post-category:focus,
+.list__item a.post-category:active,
+.list__item a.post-category:active:hover {
   color: var(--cat-color);
   background-color: var(--page-bg-color);
   text-decoration: none;
@@ -2743,48 +2823,66 @@ header,
 }
 
 .badge.python,
-.post-category.python {
+.post-category.python,
+.list__item .post-category.python,
+#showcase .post-category.python {
   --cat-color: var(--python);
 }
 
 .badge.devops,
-.post-category.devops {
+.post-category.devops,
+.list__item .post-category.devops {
   --cat-color: var(--devops);
 }
 
 .badge.aws,
-.post-category.aws {
+.post-category.aws,
+.list__itema .post-category.aws {
   --cat-color: var(--aws);
 }
 
 .badge.hugo,
-.post-category.hugo {
+.post-category.hugo,
+.list__item .post-category.hugo {
   --cat-color: var(--hugo);
 }
 
 .badge.javascript,
-.post-category.javascript {
+.post-category.javascript,
+.list__item .post-category.javascript {
   --cat-color: var(--javascript);
 }
 
 .badge.dotnet,
-.post-category.dotnet {
+.post-category.dotnet,
+.list__item .post-category.dotnet {
   --cat-color: var(--dotnet);
 }
 
 .badge.linux,
-.post-category.linux {
+.post-category.linux,
+.list__item .post-category.linux {
   --cat-color: var(--linux);
 }
 
 .badge.flask,
-.post-category.flask {
+.post-category.flask,
+.meta .post-category.flask,
+#showcase .post-category.flask {
   --cat-color: var(--flask);
 }
 
 .badge.virtualization,
-.post-category.virtualization {
+.post-category.virtualization,
+.list__item .post-category.virtualization {
   --cat-color: var(--virtualization);
+}
+
+.badge.tutorial-series,
+.post-category.tutorial-series,
+.list__item .post-category.tutorial-series,
+#showcase .post-category.tutorial-series {
+  --cat-color: var(--tutorial-series);
 }
 
 #home-blog-link,

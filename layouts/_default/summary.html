@@ -7,14 +7,19 @@
         </figure>
     {{- end }}
     <header class="list__header">
+        <div class="post-meta-date">
+            {{- if not .Date.IsZero }}
+            <div class="meta__item-datetime meta__item">
+                <time class="meta__text" datetime="{{ .Date.Format " 2006-01-02T15:04:05 " }}">{{.Date.Format ( .Site.Params.dateformat | default "January 02, 2006")}}</time> {{- if ne .Date .Lastmod }}
+                <time class="meta__text" datetime="{{ .Lastmod.Format " 2006-01-02T15:04:05 " }}"> ({{ T "meta_lastmod" }}: {{.Lastmod.Format ( .Site.Params.dateformat | default "January 02, 2006")}})</time> {{- end }}
+            </div>
+            {{ end -}}
+        </div>
         <h3 class="list__title post__title ">
             <a href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a>
         </h3>
         {{- with .Params.lead }}
             <p class="list__lead post__lead">{{ . }}</p>
-        {{- end }}
-        {{ with partial "post_meta.html" . -}}
-            <div class="list__meta meta">{{ . }}</div>
         {{- end }}
     </header>
     <div class="content list__excerpt post__content clearfix">
@@ -27,4 +32,5 @@
             </div>
         {{- end }}
     {{- end }}
+    {{- partial "post_meta/categories.html" . -}}
 </article>

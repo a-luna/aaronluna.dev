@@ -32,6 +32,7 @@
   --pink1: #d60552;
   --pink2: #f92472;
   --pink3: #ff2c6d;
+  --red: #f72f39;
   --magenta1: #f60ef2;
   --magenta2: #fa72f8;
 
@@ -70,12 +71,15 @@
 
   /* Home Page */
   --home-title-color: var(--h1-color);
-  --home-lead-color: var(--light-gray1);
+  --home-lead-color: var(--header-color);
   --home-p-color: var(--body-text-color);
   --home-hr-color: var(--accent-color2);
-  --home-h4-color: var( --h1-color);
+  --home-h4-color: var( --header-color);
   --home-recent-post-date-color: var(--body-text-color);
   --home-card-bg-color: var(--widget-bg-color);
+
+  /* /blog */
+  --list-header-date-color: var(--header-color);
 
   /* Categories */
   --aws: var(--purple3);
@@ -84,6 +88,7 @@
   --flask: var(--gold1);
   --hugo: var(--magenta1);
   --javascript: var(--teal2);
+  --tutorial-series: var(--red);
   --linux: var(--orange1);
   --python: var(--green1);
   --virtualization: var(--orange2);

@@ -91,9 +91,9 @@ The PyJWT package trims all padding characters ("=") from the JWT components. Th
 
 ## Project Dependencies
 
-I'm sure you're familiar with the `requirements.txt` file that comes with nearly every Python project you see on Github. In my projects, I like to create both a `requirements.txt` file and a `requirements_dev.txt` file. The `dev` version installs the packages listed in `requirements.txt` as well as packages that are only needed when developing the project.
+The installation script for our application will allow the user to install dependencies that are only needed to run the test set and/or contribute to the development of the app. This is an extremely common option for a Python application, and in fact this is how we will install the application before we even begin working on the actual functionality. For a good description of the process we will use to enable this installation option, please read <a href="https://codefellows.github.io/sea-python-401d4/lectures/python_packaging_1.html#specifying-dependencies" target="_blank">this section from <span class="italics">An Introduction to Python Packaging</span></a>.
 
-In this project, `requirements_dev.txt` will install a code formatter, linter, the unit testing framework and a few pytest plugins. Let's discuss these tools as well as some of the most important packages that we will use in this project.
+The `[dev]` installation option for our project will install a code formatter, linter, the unit testing framework and a few pytest plugins. Let's discuss these tools as well as some of the most important packages that we will use in this project.
 
 ### PyJWT
 
@@ -177,13 +177,13 @@ The location of your test code in relation to your app code is very important. T
   </ul>
 </div>
 
-In addition to the requirements listed above, I am using a project structure with an isolated **src** folder for this project. The important thing about the **src** folder is that it is **not a Python package** (i.e., it does not contain a `__init__.py` file). **src** is located at the root of the project and contains only a single folder named `flask-api-tutorial` (which is a Python package).
+In addition to the requirements listed above, I am using a project structure with an isolated **src** folder for this project. The important thing about the **src** folder is that it is **not a Python package** (i.e., it does not contain a `__init__.py` file). **src** is located at the root of the project and contains only a single folder named `flask_api_tutorial` (which is a Python package).
 
 The project root will also contain the **tests** folder, the `setup.py` file to install the application, configuration files, license, README, etc. Here's a visual to help if you're confused by my description:
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">src</span>
-|   |- <span class="project-folder">flask-api-tutorial</span>
+|   |- <span class="project-folder">flask_api_tutorial</span>
 |       |- <span class="project-empty-file">__init__.py</span>
 |       |- <span class="project-empty-file">...</span>
 |
@@ -201,11 +201,11 @@ There are numerous benefits that result from structuring your project in this ma
 
 With those guidelines in mind, let's start by creating the folder layout for our application.
 
-You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask-api-tutorial`. In this section, we will work on everything marked as <code class="work-file">NEW CODE</code> in the chart below (all files will be empty at this point):
+You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask_api_tutorial`. In this section, we will work on everything marked as <code class="work-file">NEW CODE</code> in the chart below (all files will be empty at this point):
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">src</span>
-|   |- <span class="project-folder">flask-api-tutorial</span>
+|   |- <span class="project-folder">flask_api_tutorial</span>
 |       |- <span class="project-folder">api</span>
 |       |   |- <span class="project-folder">auth</span>
 |       |   |   |- <span class="project-empty-file">__init__.py</span>
@@ -248,35 +248,34 @@ You can name your root folder whatever you like (represented by the top-level ".
 
 Feel free to create the project structure manually or through the command line as shown below:
 
-<pre><code><span class="cmd-prompt">~ $</span> <span class="cmd-input">mkdir flask-api-tutorial && cd flask-api-tutorial</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">mkdir src && cd src</span>
-<span class="cmd-prompt">flask-api-tutorial/src $</span> <span class="cmd-input">mkdir flask-api-tutorial && cd flask-api-tutorial && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial $</span> <span class="cmd-input">mkdir api && cd api && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api $</span> <span class="cmd-input">mkdir auth && cd auth && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api/auth $</span> <span class="cmd-input">cd ..</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api $</span> <span class="cmd-input">mkdir widget && cd widget && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/api/widgets $</span> <span class="cmd-input">cd ../..</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial $</span> <span class="cmd-input">mkdir models && cd models && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/models $</span> <span class="cmd-input">cd ..</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial $</span> <span class="cmd-input">mkdir util && cd util && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/src/flask-api-tutorial/util $</span> <span class="cmd-input">cd ../../..</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">mkdir tests && cd tests && touch __init__.py</span>
-<span class="cmd-prompt">flask-api-tutorial/tests $</span> <span class="cmd-input">cd ..</span>
-<span class="cmd-prompt">flask-api-tutorial $</span></code></pre>
+<pre><code><span class="cmd-prompt">~ $</span> <span class="cmd-input">mkdir flask_api_tutorial && cd flask_api_tutorial</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">mkdir src && cd src</span>
+<span class="cmd-prompt">flask_api_tutorial/src $</span> <span class="cmd-input">mkdir flask_api_tutorial && cd flask_api_tutorial && touch __init__.py</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial $</span> <span class="cmd-input">mkdir api && cd api && touch __init__.py</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial/api $</span> <span class="cmd-input">mkdir auth && cd auth && touch __init__.py</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial/api/auth $</span> <span class="cmd-input">cd ..</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial/api $</span> <span class="cmd-input">mkdir widgets && cd widgets && touch __init__.py</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial/api/widgets $</span> <span class="cmd-input">cd ../..</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial $</span> <span class="cmd-input">mkdir models && cd models && touch __init__.py</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial/models $</span> <span class="cmd-input">cd ..</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial $</span> <span class="cmd-input">mkdir util && cd util && touch __init__.py</span>
+<span class="cmd-prompt">flask_api_tutorial/src/flask_api_tutorial/util $</span> <span class="cmd-input">cd ../../..</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">mkdir tests && cd tests && touch __init__.py</span>
+<span class="cmd-prompt">flask_api_tutorial/tests $</span> <span class="cmd-input">cd ..</span>
+<span class="cmd-prompt">flask_api_tutorial $</span></code></pre>
 
 ### Installation Script
 
 After the folder structure is in place, open the `setup.py` file in the project root and add the content below. Then, save and close the file:
 
 ```python
-"""Installation script for flask-api-tutorial application."""
+"""Installation script for flask_api_tutorial application."""
 from pathlib import Path
 from setuptools import setup, find_packages
 
 DESCRIPTION = (
     "Boilerplate Flask API with Flask-RESTPlus, SQLAlchemy, pytest, flake8, tox configured"
 )
-README = (Path(__file__).parent / "README.md").read_text()
 AUTHOR = "Aaron Luna"
 AUTHOR_EMAIL = "admin@aaronluna.dev"
 PROJECT_URLS = {
@@ -317,8 +316,6 @@ EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
 setup(
     name="flask-api-tutorial",
     description=DESCRIPTION,
-    long_description=README,
-    long_description_content_type='text/markdown',
     version="0.1",
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
@@ -343,36 +340,31 @@ Next, create a new virtual environment by whatever method you prefer (this proje
 
 Even if you do not use `pyenv`, the process to create and activate a virtual environment will be similar to the steps below:
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">python --version</span>
+<pre><code><span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python --version</span>
 <span class="cmd-results">Python 2.7.14</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pyenv local 3.7.4</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">python --version</span>
-<span class="cmd-results">Python 3.7.4</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">python -m venv venv</span>
-<span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">source venv/bin/activate</span>
-<span class="cmd-venv">(venv) flask-api-tutorial $</span></code></pre>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">pyenv local 3.7.5</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python --version</span>
+<span class="cmd-results">Python 3.7.5</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python -m venv venv</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">source venv/bin/activate</span>
+<span class="cmd-venv">(venv) flask_api_tutorial $</span></code></pre>
 
-At this point, <a href="https://packaging.python.org/guides/tool-recommendations/" target="_blank">the PyPA recommends</a> using `pipenv` for installing and managing project dependencies. However, my various encounters with `pipenv` and "Pipfiles" have been frustrating, slow, and generally not a smooth experience.
+At this point, <a href="https://packaging.python.org/guides/tool-recommendations/" target="_blank">the PyPA recommends</a> using `pipenv` for installing and managing project dependencies. However, my various encounters with `pipenv` and "Pipfiles" have been frustrating, slow, and generally not a smooth experience. Therefore, I will be using `pip` throughout this tutorial.
 
-Therefore, I will be using `pip` throughout this tutorial. After activating the new virtual environment, upgrade `pip`, `setuptools` and `wheel`:
+After activating the new virtual environment, upgrade `pip`, `setuptools` and `wheel`:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pip install --upgrade pip setuptools wheel</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pip install --upgrade pip setuptools wheel</span>
 <span class="cmd-comment"># removed package upgrade messages...</span>
-<span class="cmd-results">Successfully installed pip-19.2.1 setuptools-41.0.1 wheel-0.33.4</span></code></pre>
+<span class="cmd-results">Successfully installed pip-19.3.1 setuptools-43.0.0 wheel-0.33.6</span></code></pre>
 
 Finally, install the `flask-api-tutorial` application in editable mode:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pip install -r requirements_dev.txt</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pip install -e .[dev]</span>
 <span class="cmd-comment"># removed package install messages...</span>
-<span class="cmd-results">Successfully installed Flask-1.1.1 Flask-Bcrypt-0.7.1 Flask-Cors-3.0.8 Flask-Migrate-2.5.2 Flask-SQLAlchemy-2.4.0 Jinja2-2.10.1 Mako-1.0.14 MarkupSafe-1.1.1 PyJWT-1.7.1 SQLAlchemy-1.3.6 Six-1.12.0 Werkzeug-0.15.5 alembic-1.0.11 aniso8601-7.0.0 appdirs-1.4.3 atomicwrites-1.3.0 attrs-19.1.0 bcrypt-3.1.7 black-19.3b0 certifi-2019.6.16 cffi-1.12.3 chardet-3.0.4 click-7.0 entrypoints-0.3 flake8-3.7.8 flask-restplus-0.12.1 idna-2.8 importlib-metadata-0.18 itsdangerous-1.1.0 jsonschema-3.0.1 mccabe-0.6.1 more-itertools-7.2.0 packaging-19.0 pluggy-0.12.0 py-1.8.0 pycodestyle-2.5.0 pycparser-2.19 pydocstyle-4.0.0 pyflakes-2.1.1 pyparsing-2.4.0 pyrsistent-0.15.3 pytest-5.0.1 pytest-black-0.3.7 pytest-clarity-0.2.0a1 pytest-dotenv-0.4.0 pytest-flake8-1.0.4 pytest-flask-0.15.0 python-dateutil-2.8.0 python-dotenv-0.10.3 python-editor-1.0.4 pytz-2019.1 requests-2.22.0 snowballstemmer-1.9.0 termcolor-1.1.0 toml-0.10.0 tzlocal-2.0.0 urllib3-1.25.3 wcwidth-0.1.7 zipp-0.5.2</span></code></pre>
-
-
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pip install -e .</span>
-<span class="cmd-comment"># removed package install messages...</span>
-<span class="cmd-results">Installing collected packages: flask-api-tutorial
+<span class="cmd-results">Installing collected packages: MarkupSafe, Jinja2, itsdangerous, click, Werkzeug, Flask, Six, pycparser, cffi, bcrypt, Flask-Bcrypt, Flask-Cors, SQLAlchemy, Flask-SQLAlchemy, Mako, python-dateutil, python-editor, alembic, Flask-Migrate, more-itertools, zipp, importlib-metadata, attrs, pyrsistent, jsonschema, pytz, aniso8601, flask-restplus, PyJWT, python-dotenv, urllib3, idna, certifi, chardet, requests, regex, appdirs, pathspec, toml, typed-ast, black, pycodestyle, entrypoints, mccabe, pyflakes, flake8, snowballstemmer, pydocstyle, py, pyparsing, packaging, pluggy, wcwidth, pytest, pytest-black, termcolor, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask, filelock, virtualenv, tox, pyyaml, nodeenv, cfgv, aspy.yaml, identify, pre-commit, flask-api-tutorial
   Running setup.py develop for flask-api-tutorial
-Successfully installed flask-api-tutorial</span>
-<span class="cmd-venv">(venv) flask-api-tutorial $</span></code></pre>
+Successfully installed Flask-1.1.1 Flask-Bcrypt-0.7.1 Flask-Cors-3.0.8 Flask-Migrate-2.5.2 Flask-SQLAlchemy-2.4.1 Jinja2-2.10.3 Mako-1.1.0 MarkupSafe-1.1.1 PyJWT-1.7.1 SQLAlchemy-1.3.12 Six-1.13.0 Werkzeug-0.16.0 alembic-1.3.2 aniso8601-8.0.0 appdirs-1.4.3 aspy.yaml-1.3.0 attrs-19.3.0 bcrypt-3.1.7 black-19.10b0 certifi-2019.11.28 cffi-1.13.2 cfgv-2.0.1 chardet-3.0.4 click-7.0 entrypoints-0.3 filelock-3.0.12 flake8-3.7.9 flask-api-tutorial flask-restplus-0.13.0 identify-1.4.9 idna-2.8 importlib-metadata-1.3.0 itsdangerous-1.1.0 jsonschema-3.2.0 mccabe-0.6.1 more-itertools-8.0.2 nodeenv-1.3.3 packaging-19.2 pathspec-0.7.0 pluggy-0.13.1 pre-commit-1.20.0 py-1.8.1 pycodestyle-2.5.0 pycparser-2.19 pydocstyle-5.0.1 pyflakes-2.1.1 pyparsing-2.4.6 pyrsistent-0.15.6 pytest-5.3.2 pytest-black-0.3.7 pytest-clarity-0.2.0a1 pytest-dotenv-0.4.0 pytest-flake8-1.0.4 pytest-flask-0.15.0 python-dateutil-2.8.1 python-dotenv-0.10.3 python-editor-1.0.4 pytz-2019.3 pyyaml-5.2 regex-2019.12.20 requests-2.22.0 snowballstemmer-2.0.0 termcolor-1.1.0 toml-0.10.0 tox-3.14.3 typed-ast-1.4.0 urllib3-1.25.7 virtualenv-16.7.9 wcwidth-0.1.7 zipp-0.6.0</span>
+<span class="cmd-venv">(venv) flask_api_tutorial $</span></code></pre>
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -383,15 +375,16 @@ Successfully installed flask-api-tutorial</span>
   </div>
 </div>
 
-## `app.util` Package
+## `flask_api_tutorial.util` Package
 
-The `app.util` package contains general-purpose utlity classes and functions that we will use througout this project. They are not related to the main topics of this tutorial, so let's just get them out of the way before we begin working on the actual project.
+The `flask_api_tutorial.util` package contains general-purpose utlity classes and functions that we will use througout this project. They are not related to the main topics of this tutorial, so let's get them out of the way before we begin working on the actual project.
 
 ### `Result` Class
 
-[In a previous post](/blog/error-handling-python-result-class/), I demonstrated and explained the merits of incorporating principles from functional programming, with the `Result` class as a useful example. We will use this class frequently, so please read the linked post. When you finish that, create a new file in `app/util` named `result.py` and add the content below:
+[In a previous post](/blog/error-handling-python-result-class/), I demonstrated and explained the merits of incorporating principles from functional programming, with the `Result` class as a useful example. We will use this class frequently, so please read the linked post. When you finish that, create a new file in `flask_api_tutorial/util` named `result.py` and add the content below:
 
-{{< highlight python >}}"""This module provides classes and exceptions for representing the outcome of an operation."""
+```python
+"""This module provides classes and exceptions for representing the outcome of an operation."""
 
 
 class Result:
@@ -457,16 +450,17 @@ class Result:
     @staticmethod
     def Combine(results):
         """Return a Result object based on the outcome of a list of Results."""
-        if all([result.success for result in results]):
+        if all(result.success for result in results):
             return Result.Ok()
         errors = [result.error for result in results if result.failure]
-        return Result.Fail("\n".join(errors)){{< /highlight >}}
+        return Result.Fail("\n".join(errors))
+```
 
 ### `datetime_util` Module
 
 If you've spent anytime programming in Python, there is a 100% chance that you have encountered an annoying issue with `datetime`, `timezone` and/or `timedelta` objects. The `datetime_util` module contains helper functions for converting `datetime` objects from naive to timezone-aware, formatting `datetime` and `timedelta` objects as strings and a `namedtuple` named `timespan` that represents the difference between two `datetime` values but provides more data than the set of attributes provided by the `timedelta` class.
 
-Create a new file in `app/util` named `datetime_util.py` and add the content below:
+Create a new file in `flask_api_tutorial/util` named `datetime_util.py` and add the content below:
 
 ```python
 """Helper functions for datetime, timezone and timedelta objects."""
@@ -600,11 +594,13 @@ At this point, I recommend switching to your IDE of choice for Python developmen
 
 ### `.env` File
 
-First, open the `.env` file in the project root and add the values below. Save the file:
+First, create a file named `.env` in the project root folder and add the values below. Save the file:
 
-{{< highlight ini >}}FLASK_APP=run.py
+```ini
+FLASK_APP=run.py
 FLASK_ENV=development
-SECRET_KEY="please change me"{{< /highlight >}}
+SECRET_KEY="please change me"
+```
 
 `FLASK_APP` is the filepath (or module import-path) where the Flask application object is located (<a href="http://flask.pocoo.org/docs/1.0/cli/#application-discovery" target="_blank">More info on <code>FLASK_APP</code></a>).
 
@@ -624,9 +620,10 @@ SECRET_KEY="\x1ah\xe9\x00\x04\x1d>\x00\x14($\x17\x90\x1f?~?\xdc\xe9\x91U\xd2\xb5
 
 ### Black Configuration
 
-Before we write any app code, let's customize the rules used by black. Open `pyproject.toml` in the project root folder and add the following content:
+Before we write any app code, let's customize the rules used by black. Create a file named `pyproject.toml` in the project root folder and add the following content:
 
-{{< highlight ini >}}[tool.black]
+```ini
+[tool.black]
 line-length = 99
 target-version = ['py37']
 include = '\.pyi?$'
@@ -646,23 +643,25 @@ exclude =  '''
     | dist
     | venv
 )/
-'''{{< /highlight >}}
+'''
+```
 
 I prefer to increase the maximum line length to 99. The black maintainers recommend a line-length of roughly 90, but you should use whatever line length works best for you and your team. `target-version` controls which Python versions Black-formatted code should target. `include` and `exclude` are both regular expressions that match files and folders to (respectively) format with black and exclude from formatting.
 
 ### `get_config` Function
 
-Next, open `config.py` in the `app` folder and add the content below. Save the file:
+Next, create a file named `config.py` in the `src/flask_api_tutorial` folder and add the content below. Save the file:
 
-{{< highlight python "linenos=table" >}}"""Config settings for for development, testing and production environments."""
+```python {linenos=table}
+"""Config settings for for development, testing and production environments."""
 import os
 from pathlib import Path
 
 
-APP_ROOT = Path(__file__).resolve().parent.parent
-SQLITE_DEV = "sqlite:///" + str(APP_ROOT / "flask_api_tutorial_dev.db")
-SQLITE_TEST = "sqlite:///" + str(APP_ROOT / "flask_api_tutorial_test.db")
-SQLITE_PROD = "sqlite:///" + str(APP_ROOT / "flask_api_tutorial_prod.db")
+HERE = Path(__file__).parent
+SQLITE_DEV = "sqlite:///" + str(HERE / "flask_api_tutorial_dev.db")
+SQLITE_TEST = "sqlite:///" + str(HERE / "flask_api_tutorial_test.db")
+SQLITE_PROD = "sqlite:///" + str(HERE / "flask_api_tutorial_prod.db")
 
 
 class Config:
@@ -709,7 +708,8 @@ ENV_CONFIG_DICT = dict(
 
 def get_config(config_name):
     """Retrieve environment configuration settings."""
-    return ENV_CONFIG_DICT.get(config_name, ProductionConfig){{< /highlight >}}
+    return ENV_CONFIG_DICT.get(config_name, ProductionConfig)
+```
 
 There are several important things to note about the `Config` class:
 
@@ -753,7 +753,7 @@ As long as `python-dotenv` is installed, when the `flask` command is run any env
 
 ## The Application Factory Pattern
 
-In the `app` package's `__init__.py` file, add the following content and save the file:
+In the `src/flask_api_tutorial` folder's `__init__.py` file, add the following content and save the file:
 
 {{< highlight python >}}"""Flask app initialization via factory pattern."""
 from flask import Flask
@@ -762,7 +762,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from app.config import get_config
+from .config import get_config
 
 cors = CORS()
 db = SQLAlchemy()
@@ -797,7 +797,7 @@ You should recognize all of the Flask extensions from the first section of this 
 
 ## Pytest Configuration
 
-Before we begin writing any test code, let's configure how pytest reports test results and setup some of the plugins from `requirements_dev.txt` that we installed. Open `pytest.ini` in the project root folder and enter the content below:
+Before we begin writing any test code, let's configure how pytest reports test results and setup some of the plugins that we installed. Create a file named `pytest.ini` in the project root folder and enter the content below:
 
 {{< highlight ini "linenos=table" >}}[pytest]
 addopts =
@@ -840,13 +840,14 @@ We are obviously making many configuration decisions in this file. Please note t
 
 ## Unit Tests: `test_config.py`
 
-Let's verify that the config classes work as expected when we create an instance of our application and specify the environment configuration by name. In the `test_config.py` file inside the `test` folder, add the following content and save the file:
+Let's verify that the config classes work as expected when we create an instance of our application and specify the environment configuration by name. Create a file named `test_config.py` in the `tests` folder, add the following content and save the file:
 
-{{< highlight python >}}"""Unit tests for environment config settings."""
+```python
+"""Unit tests for environment config settings."""
 import os
 
 from app import create_app
-from app.config import SQLITE_DEV, SQLITE_PROD, SQLITE_TEST
+from flask_api_tutorial.config import SQLITE_DEV, SQLITE_PROD, SQLITE_TEST
 
 
 def test_config_development():
@@ -873,7 +874,8 @@ def test_config_production():
     assert not app.config["TESTING"]
     assert app.config["SQLALCHEMY_DATABASE_URI"] == os.getenv("DATABASE_URL", SQLITE_PROD)
     assert app.config["TOKEN_EXPIRE_HOURS"] == 1
-    assert app.config["TOKEN_EXPIRE_MINUTES"] == 0{{< /highlight >}}
+    assert app.config["TOKEN_EXPIRE_MINUTES"] == 0
+```
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -898,11 +900,11 @@ For each configuration, we verify that the value of `SECRET_KEY` is not equal to
 
 We can run these tests (and our static-analysis tools) with the `pytest` command:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pytest</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pytest</span>
 <span class="cmd-results">=============================================== test session starts ================================================
-platform darwin -- Python 3.7.4, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/aaronluna/Projects/flask-api-tutorial/venv/bin/python
+platform darwin -- Python 3.7.4, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
 plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
 collected 23 items
 
@@ -947,7 +949,7 @@ One of the many neat features of Flask is that it comes with a built-in Command-
 
 You may remember that `FLASK_APP` was one of the values we defined in our `.env` file (`FLASK_APP=run.py`). This tells Flask to look within `run.py` for an object named `app` (or a factory method named `create_app`). Currently, the `run.py` file is empty. If you attempt to run the Flask CLI with the `flask` command, an exception is thrown:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask</span>
 <span class="cmd-results">Traceback (most recent call last):
   File "/Users/aaronluna/Desktop/temp/venv/lib/python3.7/site-packages/flask/cli.py", line 540, in list_commands
     rv.update(info.load_app().cli.list_commands(ctx))
@@ -1016,7 +1018,7 @@ Please note the following about `run.py` (a.k.a the application entry point):
 
 The `shell` method in the `run.py` file is decorated with `@app.shell_context_processor`. This is the method that executes when we run `flask shell`. According to the `flask --help` documentation this command "Runs a shell in the app context." If you are not sure what this means, consider the examples below:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">python</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">python</span>
 <span class="cmd-results">Python 3.7.4 (default, May  7 2019, 00:14:38)
 [Clang 10.0.1 (clang-1001.0.46.4)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.</span>
@@ -1033,18 +1035,18 @@ NameError: name 'db' is not defined</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">app</span>
 <span class="cmd-repl-results">&#60;Flask 'app'&#62;</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">db</span>
-<span class="cmd-repl-results">&#60;SQLAlchemy engine=sqlite:////Users/aaronluna/Projects/flask-api-tutorial/flask_api_tutorial_dev.db&#62;</span>
+<span class="cmd-repl-results">&#60;SQLAlchemy engine=sqlite:////Users/aaronluna/Projects/flask_api_tutorial/flask_api_tutorial_dev.db&#62;</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">exit()</span></code></pre>
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-results">Python 3.7.4 (default, May  7 2019, 00:14:38)
 [Clang 10.0.1 (clang-1001.0.46.4)] on darwin
 App: app [development]
-Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
+Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">app</span>
 <span class="cmd-repl-results">&#60;Flask 'app'&#62;</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">db</span>
-<span class="cmd-repl-results">&#60;SQLAlchemy engine=sqlite:////Users/aaronluna/Projects/flask-api-tutorial/flask_api_tutorial_dev.db&#62;</span>
+<span class="cmd-repl-results">&#60;SQLAlchemy engine=sqlite:////Users/aaronluna/Projects/flask_api_tutorial/flask_api_tutorial_dev.db&#62;</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">exit()</span></code></pre>
 
 In the regular Python interpreter, the `app` and `db` objects are not recognized unless explicitly imported. But when we start the interpreter using `flask shell` the `app` object is imported automatically. This is nice, but what makes `flask shell` really useful is the ability to import a dictionary of objects that will be automatically imported in the Python interpreter. We configure this dictionary as the return value of the `shell_context_processor` function:
@@ -1057,7 +1059,7 @@ In [Part 2](/series/flask-api-tutorial/part-2/), as we add model classes for eac
 
 Let's make sure that the error we saw earlier has been fixed, Run `flask`:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask</span>
 <span class="cmd-results">Usage: flask [OPTIONS] COMMAND [ARGS]...
 
   A general utility script for Flask applications.
