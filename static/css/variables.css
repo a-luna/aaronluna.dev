@@ -136,4 +136,14 @@
 
   /* List of Steps */
   --step-list: var(--white2);
+
+  /* Accordian Control */
+  --accordian-bg-color: var(--widget-bg-color);
+  --accordian-header-toggled-color: var(--dark-gray2);
+
+  /* Github Links Box */
+  --project-repo-bg-color: var(--black2);
+  --project-repo-title-color: var(--pink2);
+  --project-repo-message-color: var(--off-white1);
+  --project-repo-link-color: var(--project-repo-title-color);
 }

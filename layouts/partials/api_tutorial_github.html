@@ -1,0 +1,10 @@
+<div id="project-repo">
+    <div class="title">Github Repository</div>
+    <div class="message">The complete code for this project is <a href="https://github.com/a-luna/flask-api-tutorial" target="_blank">available on github</a>. Each section of the tutorial is available as a tagged release, please use the links below to access the code at the point when everything in {{ .Params.series_part }} has been completed:</div>
+    <ul>
+        <li><a href="{{ .Params.url_git_rel_browse }}" target="_blank">View Code</a></li>
+        <li><a href="{{ .Params.url_git_rel_zip }}">Download .zip file</a></li>
+        <li><a href="{{ .Params.url_git_rel_tar }}">Download .tar.gz file</a></li>
+        {{- if .Param "url_git_rel_diff" }}<li><a href="{{ .Params.url_git_rel_diff }}">View Diff {{.Params.series_part}} &lt;-&gt; {{- if .NextInSection }}{{.NextInSection.Params.series_part}}{{- else }}N/A{{- end }}</a></li>{{- end }}
+    </ul>
+</div>

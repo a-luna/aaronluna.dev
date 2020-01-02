@@ -10,6 +10,10 @@ series_part_lead: "Project Setup and Environment Configuration"
 categories: ["Flask", "Python"]
 toc: true
 summary: "In Part 1, the core concepts of REST and JWTs are introduced, project dependencies are described and installed, and the project is fully configured for prod/dev environments. The flask server and CLI are demonstrated to ensure the setup was performed correctly before moving on to Part 2."
+url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.1"
+url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.1.zip"
+url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.1.tar.gz"
+url_git_rel_diff: ""
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
@@ -231,12 +235,13 @@ You can name your root folder whatever you like (represented by the top-level ".
 |   |- <span class="work-file">test_config.py</span>
 |
 |- <span class="work-file">.env</span>
+|- <span class="work-file">.gitignore</span>
+|- <span class="work-file">pyproject.toml</span></div>
 |- <span class="work-file">pytest.ini</span>
-|- <span class="work-file">tox.ini</span>
 |- <span class="work-file">README.md</span>
 |- <span class="work-file">run.py</span>
 |- <span class="work-file">setup.py</span>
-|- <span class="work-file">pyproject.toml</span></div>
+|- <span class="work-file">tox.ini</span>
 <div class="project-structure-key-wrapper">
 <div class="project-structure-key">
 <div class="key-item key-label">KEY:</div>
@@ -264,18 +269,23 @@ Feel free to create the project structure manually or through the command line a
 <span class="cmd-prompt">flask_api_tutorial/tests $</span> <span class="cmd-input">cd ..</span>
 <span class="cmd-prompt">flask_api_tutorial $</span></code></pre>
 
+### `README.md` and `.gitignore`
+
+Create two empty files in the project root folder: one named `README.md` and the other named `.gitignore`. Feel free to copy the versions in the github repository for this project. I am not providing an example to copy & paste since people tend to very opinionated about what files/folders they include in their `.gitignore`. The version I am using is customized from <a href="https://github.com/github/gitignore/blob/master/Python.gitignore" target="_blank">this official example `.gitignore` file for Python projects</a>.
+
 ### Installation Script
 
-After the folder structure is in place, open the `setup.py` file in the project root and add the content below. Then, save and close the file:
+After the folder structure is in place, create a new file named `setup.py` in the project root folder and add the content below. Then, save and close the file:
 
 ```python
-"""Installation script for flask_api_tutorial application."""
+"""Installation script for flask-api-tutorial application."""
 from pathlib import Path
 from setuptools import setup, find_packages
 
 DESCRIPTION = (
     "Boilerplate Flask API with Flask-RESTPlus, SQLAlchemy, pytest, flake8, tox configured"
 )
+README = (Path(__file__).parent / "README.md").read_text()
 AUTHOR = "Aaron Luna"
 AUTHOR_EMAIL = "admin@aaronluna.dev"
 PROJECT_URLS = {
@@ -316,6 +326,8 @@ EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
 setup(
     name="flask-api-tutorial",
     description=DESCRIPTION,
+    long_description=README,
+    long_description_content_type="text/markdown",
     version="0.1",
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
@@ -326,7 +338,7 @@ setup(
     project_urls=PROJECT_URLS,
     packages=find_packages(where="src"),
     package_dir={"": "src"},
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     install_requires=INSTALL_REQUIRES,
     extras_require=EXTRAS_REQUIRE,
 )
@@ -381,7 +393,7 @@ The `flask_api_tutorial.util` package contains general-purpose utlity classes an
 
 ### `Result` Class
 
-[In a previous post](/blog/error-handling-python-result-class/), I demonstrated and explained the merits of incorporating principles from functional programming, with the `Result` class as a useful example. We will use this class frequently, so please read the linked post. When you finish that, create a new file in `flask_api_tutorial/util` named `result.py` and add the content below:
+[In a previous post](/blog/error-handling-python-result-class/), I demonstrated and explained the merits of incorporating principles from functional programming, with the `Result` class as a useful example. We will use this class frequently, so please read the linked post. When you finish that, create a new file in `src/flask_api_tutorial/util` named `result.py` and add the content below:
 
 ```python
 """This module provides classes and exceptions for representing the outcome of an operation."""
@@ -460,7 +472,7 @@ class Result:
 
 If you've spent anytime programming in Python, there is a 100% chance that you have encountered an annoying issue with `datetime`, `timezone` and/or `timedelta` objects. The `datetime_util` module contains helper functions for converting `datetime` objects from naive to timezone-aware, formatting `datetime` and `timedelta` objects as strings and a `namedtuple` named `timespan` that represents the difference between two `datetime` values but provides more data than the set of attributes provided by the `timedelta` class.
 
-Create a new file in `flask_api_tutorial/util` named `datetime_util.py` and add the content below:
+Create a new file in `src/flask_api_tutorial/util` named `datetime_util.py` and add the content below:
 
 ```python
 """Helper functions for datetime, timezone and timedelta objects."""
@@ -762,7 +774,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from .config import get_config
+from flask_api_tutorial.config import get_config
 
 cors = CORS()
 db = SQLAlchemy()
@@ -846,7 +858,7 @@ Let's verify that the config classes work as expected when we create an instance
 """Unit tests for environment config settings."""
 import os
 
-from app import create_app
+from flask_api_tutorial import create_app
 from flask_api_tutorial.config import SQLITE_DEV, SQLITE_PROD, SQLITE_TEST
 
 

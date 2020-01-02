@@ -2494,6 +2494,55 @@ table.aws-hosting-costs {
   transform: rotate(90deg);
 }
 
+#project-repo {
+  background-color: var(--project-repo-bg-color);
+  padding: 7px 10px;
+  margin: 0 0 10px;
+  border-radius: 4px;
+}
+
+#project-repo .title {
+  color: var(--project-repo-title-color);
+  font-size: 1.1em;
+  margin: 0 0 5px;
+}
+
+#project-repo .message {
+  color: var(--project-repo-message-color);
+  font-size: 0.9em;
+  font-weight: 400;
+  margin: 0 0 10px;
+}
+
+#project-repo .message a,
+#project-repo ul a {
+  color: var(--project-repo-link-color);
+}
+
+
+#project-repo .message a {
+  font-weight: 700;
+}
+
+
+#project-repo ul a {
+  font-weight: 400;
+}
+
+#project-repo ul {
+  list-style: none;
+  font-size: 1.1em;
+  margin: 0 0 0 5px;
+}
+
+#project-repo ul li {
+  margin: 0 0 10px;
+}
+
+#project-repo ul li:last-child {
+  margin: 0 0 5px;
+}
+
 #menu {
   display: flex;
   flex-flow: row nowrap;
