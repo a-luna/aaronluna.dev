@@ -26,11 +26,12 @@
   --purple3: #ae81ff;
   --orange1: #d97502;
   --orange2: #FFB86C;
+  --orange3: #fd971f;
   --gold1: #ffc107;
   --gold2: #ffd147;
   --gold3: #e5b965;
   --pink1: #d60552;
-  --pink2: #f92472;
+  --pink2: #f92672;
   --pink3: #ff2c6d;
   --red: #f72f39;
   --magenta1: #f60ef2;
@@ -75,7 +76,7 @@
   --home-p-color: var(--body-text-color);
   --home-hr-color: var(--accent-color2);
   --home-h4-color: var( --header-color);
-  --home-recent-post-date-color: var(--body-text-color);
+  --home-recent-post-date-color: var(--header-color);
   --home-card-bg-color: var(--widget-bg-color);
 
   /* /blog */
@@ -83,12 +84,12 @@
 
   /* Categories */
   --aws: var(--purple3);
-  --devops: var(--pink2);
+  --devops: var(--magenta1);
   --dotnet: var(--blue1);
   --flask: var(--red);
-  --hugo: var(--magenta1);
-  --javascript: var(--teal2);
-  --tutorial-series: var(--gold2);
+  --hugo: var(--teal2);
+  --javascript: var(--gold2);
+  --tutorial-series: var(--pink2);
   --linux: var(--orange1);
   --python: var(--green1);
   --virtualization: var(--orange2);

@@ -55,10 +55,12 @@ html {
 
 body {
   font-family: roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.95em;
   font-weight: 400;
   background: var(--site-bg-color);
   color: var(--body-text-color);
   margin: 0;
+  line-height: 1.6;
 }
 
 pre,
@@ -66,12 +68,8 @@ code {
   font-family: roboto mono, SFMono-Regular, Menlo, courier new, monospace;
 }
 
-nav {
-  line-height: 1em;
-}
-
 main {
-  margin: 0 2em 0 0;
+  margin: 0 20px 0 0;
 }
 
 main.list {
@@ -105,7 +103,7 @@ ol li p {
 
 .wrapper {
   background: var(--page-bg-color);
-  padding: 1em 25px 0 25px;
+  padding: 20px 20px 0 20px;
   border: none;
   width: 100%;
 }
@@ -113,7 +111,7 @@ ol li p {
 .primary {
   font-size: 1em;
   flex: 1 0 68%;
-  margin: 1.5em 0 0;
+  margin: 0;
 }
 
 .post__header {
@@ -127,7 +125,6 @@ ol li p {
 
 .content p {
   font-size: 1em;
-  line-height: 1.6;
 }
 
 .list .content {
@@ -142,7 +139,7 @@ ol li p {
 #widgets div {
   background-color: var(--widget-bg-color);;
   border-radius: 4px;
-  margin: 0 0 1em;
+  margin: 0 0 20px;
   padding: 7px 10px;
 }
 
@@ -188,7 +185,6 @@ ol li p {
   color: var(--white2);
   font-size: 1.2em;
   margin: 5px 0;
-  line-height: 17px;
 }
 
 #showcase p {
@@ -245,8 +241,8 @@ ol li p {
 .blog-list .main__content {
   background-color: #323232;
   border-bottom: 2px dotted #7f7f7f;
-  margin: 0 0 10px;
-  padding: 0 0 25px;
+  margin: 0 0 20px;
+  padding: 0 0 20px;
 }
 
 .about-me .post__header {
@@ -436,7 +432,7 @@ h1.post__title {
 
 h3,
 h4 {
-  font-size: 1.15em;
+  font-size: 1.25em;
 }
 
 .list__header a {
@@ -460,6 +456,7 @@ h4 {
 .content h4 {
   font-weight: 400;
   margin: 1.5em 0 0.5em;
+  line-height: 1.2;
 }
 
 .content h2 code,
@@ -640,8 +637,8 @@ a:active:hover {
 
 .widget li {
   padding: 0;
-  margin: 5px 0 0;
-  line-height: 1.3;
+  margin: 7px 0;
+  line-height: 1.2;
 }
 
 .widget-categories li a {
@@ -720,11 +717,11 @@ span.italics.requirements {
 }
 
 .purple {
-  color: #ae81ff;
+  color: var(--purple3);
 }
 
 .blue {
-  color: #2196f3;
+  color: var(--blue3);
 }
 
 .note {
@@ -739,23 +736,27 @@ span.italics.requirements {
 }
 
 .orange {
-  color: #fd971f;
+  color: var(--orange3);
 }
 
 .light-blue {
-  color: #6fc1ff;
+  color: var(--blue2);
 }
 
 .white {
-  color: #d8d8d8;
+  color: var(--off-white2);
 }
 
 .gray {
-  color: #7f7f7f;
+  color: var(--mid-gray2);
 }
 
 .pink {
-  color: #f92672;
+  color: var(--pink2);
+}
+
+.teal {
+  color: var(--teal2);
 }
 
 p .fa,
@@ -804,7 +805,6 @@ div.alert,
 div.note,
 div.requirements {
   font-size: 0.9em;
-  line-height: 1.5;
   margin: 10px 0 15px 0;
   border-radius: 4px;
   overflow-wrap: normal;
@@ -904,7 +904,6 @@ div.requirements {
 
 .code-details ul {
   font-size: 0.95em;
-  line-height: 1.5;
   margin: 5px 0 0 20px;
 }
 
@@ -1336,7 +1335,7 @@ figcaption {
 }
 
 .warning {
-  color: #f92672;
+  color: var(--pink2);
   border: none;
   background-color: var(--widget-bg-color);
 }
@@ -1350,7 +1349,7 @@ figcaption {
 }
 
 .warning__headline {
-  color: #f92672;
+  color: var(--pink2);
   font-size: 2em;
   font-weight: 700;
   margin: 10px 0 1em;
@@ -1469,6 +1468,7 @@ figcaption {
 }
 
 .tutorial .post__header {
+  font-size: 0.95em;
   border: none;
   margin: 0;
   padding: 0;
@@ -1562,8 +1562,8 @@ figcaption {
 
 .list__item {
   border-bottom: 2px dotted #7f7f7f;
-  margin: 0 0 10px;
-  padding: 0 0 10px;
+  margin: 0 0 20px;
+  padding: 0 0 20px;
 }
 
 #showcase .list__item {
@@ -1961,7 +1961,7 @@ input {
   display: flex;
   width: 100%;
   flex-flow: column nowrap;
-  margin: 1.5em 0 0;
+  margin: 0;
   padding: 0;
 }
 
@@ -2070,7 +2070,7 @@ input {
 
 .search-error-message {
   font-style: italic;
-  color: #f92672;
+  color: var(--pink2);
   text-align: center;
   margin: auto;
   line-height: 14px;
@@ -2693,14 +2693,13 @@ header,
 
 .home h1 {
   color: var(--home-title-color);
-  font-size: 2.6em;
-  font-weight: 400;
+  font-size: 2.8em;
   margin: 0 0 10px;
 }
 
 .home header p {
-  font-size: 1.8em;
-  font-weight: 100;
+  font-size: 2em;
+  font-weight: 500;
   color: var(--home-lead-color);
   font-style: normal;
   margin: 0 0 20px;
@@ -2708,7 +2707,7 @@ header,
 
 .home p {
   color: var(--home-p-color);
-  font-size: 1.5em;
+  font-size: 1.6em;
   line-height: 22px;
 }
 
@@ -2733,7 +2732,7 @@ header,
 #recent-posts-wrapper h4,
 #featured-projects-wrapper h4 {
   color: var(--home-h4-color);
-  font-size: 2.3em;
+  font-size: 2.5em;
   text-transform: lowercase;
   margin: 25px auto 10px 1px;
 }
@@ -2742,16 +2741,16 @@ header,
 #featured-projects {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
 .recent-post,
 .github-repo {
   display: flex;
   flex-flow: column nowrap;
-  flex: 0 1 30%;
+  flex: 0 1 45%;
   background-color: var(--home-card-bg-color);
-  margin: 10px 0;
+  margin: 10px;
   padding: 10px 15px;
   border: 1px solid var(--home-card-bg-color);
   border-radius: 4px;
@@ -2759,9 +2758,9 @@ header,
 
 .recent-post .post-meta-date .meta__text {
   color: var(--home-recent-post-date-color);
-  font-size: 14px;
+  font-size: 1.6em;
   line-height: 23px;
-  margin: 0 0 5px;
+  margin: 0 0 10px;
 }
 
 .list__meta {
@@ -2774,23 +2773,23 @@ header,
 
 .list__header .post-meta-date .meta__text,
 .post__header .post-meta-date .meta__text {
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .list__header .post-meta-date .meta__text {
   color: var(--list-header-date-color);
   margin: 0;
-  letter-spacing: 0.5px;
 }
 
-.post__header .post-meta-date {
+.post__header .post-meta-date,
+.recent-post .post-meta-date {
   margin: 0 0 5px 0;
 }
 
 .recent-post .post-title {
   display: block;
-  font-size: 16px;
-  line-height: 23px;
+  font-size: 2em;
+  line-height: 26px;
   margin: 0 0 auto 0;
 }
 
@@ -2831,14 +2830,14 @@ header,
 .post__meta a.post-category,
 #showcase a.post-category {
   --cat-color: var(--accent-color2);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--black2);
   background-color: var(--cat-color);
   border: 1px solid var(--cat-color);
   border-radius: 4px;
-  margin: 3px 7px 3px 0;
-  padding: 1px 5px;
+  margin: 3px 10px 3px 0;
+  padding: 2px 7px;
   white-space: nowrap;
 }
 
@@ -2966,7 +2965,7 @@ header,
 
 #home-blog-link,
 #view-on-github-link {
-  font-size: 2em;
+  font-size: 2.5em;
   color: var(--link-color);
   padding: 5px 7px;
   margin: 15px auto 5px auto;
@@ -3042,18 +3041,6 @@ header,
   margin: 0 3px;
 }
 
-.orange {
-  color: #fd971f;
-}
-
-.purple {
-  color: #ae81ff;
-}
-
-.green {
-  color: #a9fb68;
-}
-
 .search-results {
   flex: 1 0 68%;
   margin: 1.5em 0 3em 0;
@@ -3089,8 +3076,8 @@ header,
   cursor: pointer;
   font-size: 13px;
   color: #323232;
-  background-color: #f92672;
-  border: 1px solid #f92672;
+  background-color: var(--pink2);
+  border: 1px solid var(--pink2);
   border-radius: 4px;
   line-height: 13px;
   margin: 0;
@@ -3102,9 +3089,9 @@ header,
 #search-header .button:active,
 #search-header .button:focus,
 #search-header .button:active:hover {
-  color: #f92672;
+  color: var(--pink2);
   background-color: #323232;
-  border: 1px solid #f92672;
+  border: 1px solid var(--pink2);
 }
 
 .fade {
@@ -3245,10 +3232,6 @@ blockquote td {
     margin: 10px auto;
   }
 
-  #home-blog-link,
-  #view-on-github-link {
-    margin: 5px auto;
-  }
 
   .wrapper {
     padding: 1em;
@@ -3333,19 +3316,6 @@ blockquote td {
 
   .about-me .content {
     margin: 0 0.5em 0 1em;
-  }
-
-  body,
-  .content p {
-    line-height: 1.4;
-  }
-
-  #showcase p {
-    line-height: 1.5;
-  }
-
-  .blog-list {
-    line-height: 1.6;
   }
 
   h1 {
@@ -3472,6 +3442,17 @@ blockquote td {
 }
 
 @media screen and (max-width: 500px) {
+  .home .post {
+    margin: 0 1em;
+  }
+  .recent-post,
+  .recent-post:first-child,
+  .recent-post:last-child,
+  .github-repo,
+  .github-repo:first-child,
+  .github-repo:last-child {
+    width: 90%;
+  }
   .post-nav-flex-item-prev,
   .post-nav-flex-item-next {
     flex: 1 0 100%;

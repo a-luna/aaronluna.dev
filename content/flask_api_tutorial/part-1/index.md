@@ -95,9 +95,7 @@ The PyJWT package trims all padding characters ("=") from the JWT components. Th
 
 ## Project Dependencies
 
-The installation script for our application will allow the user to install dependencies that are only needed to run the test set and/or contribute to the development of the app. This is an extremely common option for a Python application, and in fact this is how we will install the application before we even begin working on the actual functionality. For a good description of the process we will use to enable this installation option, please read <a href="https://codefellows.github.io/sea-python-401d4/lectures/python_packaging_1.html#specifying-dependencies" target="_blank">this section from <span class="italics">An Introduction to Python Packaging</span></a>.
-
-The `[dev]` installation option for our project will install a code formatter, linter, the unit testing framework and a few pytest plugins. Let's discuss these tools as well as some of the most important packages that we will use in this project.
+Let's discuss these tools as well as some of the most important packages that we will use in this project.
 
 ### PyJWT
 
@@ -126,6 +124,12 @@ I know, it sounds like magic. <a href="https://docs.sqlalchemy.org/en/13/core/en
 ### Flask-Migrate (Alembic)
 
 <a href="https://pypi.org/project/alembic/" target="_blank">Alembic</a> is a database migrations tool created by the author of SQLAlchemy, and <a href="https://flask-migrate.readthedocs.io/en/latest/" target="_blank">Flask-Migrate</a> is a Flask extension that adds Alembic's operations to the Flask CLI. A database migration is a set of changes to a database schema (e.g., add new table, update foreign key relationships, etc.), similar to a commit in a version-control system. With Flask-Migrate, each migration is represented as a script of SQL statements, allowing you to "upgrade" a database to apply the schema changes or "downgrade" and undo the changes. This makes the process of deploying database changes to a production environment safe and easy; simply create a migration script when your changes have been tested and verified, then run the migration script in the production environment to apply the changes.
+
+## Development Dependencies
+
+The installation script for our application will allow the user to install dependencies that are only needed to run the test set and/or contribute to the development of the app. This is an extremely common option for a Python application, and in fact this is how we will install the application before we even begin working on the actual functionality. For a good description of the process we will use to enable this installation option, please read <a href="https://codefellows.github.io/sea-python-401d4/lectures/python_packaging_1.html#specifying-dependencies" target="_blank">this section from <span class="italics">An Introduction to Python Packaging</span></a>.
+
+The `[dev]` installation option for our project will install a code formatter, linter, the unit testing framework and a few pytest plugins.
 
 ### Pytest
 
