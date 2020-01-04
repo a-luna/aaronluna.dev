@@ -1370,7 +1370,7 @@ figcaption {
   display: flex;
   flex-flow: row nowrap;
   align-self: flex-start;
-  margin: auto 0 auto 10px;
+  margin: auto 0 auto 20px;
   flex: 0 0 auto;
 }
 
@@ -1388,7 +1388,7 @@ figcaption {
 }
 
 #social ul {
-  font-size: 1.3em;
+  font-size: 1.4em;
   list-style-type: none;
   margin: 1px 0;
   padding: 0;
@@ -2495,9 +2495,8 @@ table.aws-hosting-costs {
 }
 
 #project-repo {
-  background-color: var(--project-repo-bg-color);
-  padding: 7px 10px;
-  margin: 0 0 10px;
+  background-color: var(--page-bg-color);
+  margin: 10px 0;
   border-radius: 4px;
 }
 
@@ -2579,7 +2578,7 @@ header,
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
-  padding: 0 0 0 25px;
+  padding: 0 0 0 30px;
 }
 
 .site-name {
@@ -2622,7 +2621,7 @@ header,
 }
 
 #site-name {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .site-social,
@@ -2648,7 +2647,7 @@ header,
   flex-flow: row nowrap;
   justify-content: flex-end;
   align-items: center;
-  font-size: 0.9em;
+  font-size: 1em;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -2992,12 +2991,13 @@ header,
 }
 
 .repo-top {
-  font-size: 16px;
+  font-size: 1.8em;
   margin: 0 0 5px 0;
+  line-height: 1.2;
 }
 
 .repo-top .fa {
-  font-size: 18px;
+  font-size: 22px;
 }
 
 .repo-top .fa:hover,
@@ -3008,25 +3008,30 @@ header,
 }
 
 .repo-middle {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 1.5em;
+  line-height: 1.4;
   margin: 0 0 auto 0;
 }
 
 .repo-bottom {
-  font-size: 14px;
+  font-size: 16px;
+  line-height: 16px;
   margin: 10px 0 0 0;
 }
 
-.repo-language {
-  line-height: 14px;
+.repo-bottom .fa {
+  font-size: 16px;
+}
+
+.language-name {
+  font-size: 15px;
 }
 
 .repo-stats-wrapper,
 .repo-stats {
   display: flex;
   flex-flow: row nowrap;
-  line-height: 14px;
+  line-height: 16px;
 }
 
 .repo-stats {
@@ -3034,11 +3039,12 @@ header,
 }
 
 .repo-language .fa {
-  margin: 0 5px;
+  font-size: 17px;
+  margin: 0 5px 0 0;
 }
 
 .repo-stats .fa {
-  margin: 0 3px;
+  margin: 0 5px;
 }
 
 .search-results {
@@ -3373,11 +3379,15 @@ blockquote td {
 
   .site-menu {
     margin: 0;
-    padding: 0 14px 0 0;
+    padding: 0 25px 0 0;
   }
 
   .menu-bar {
-    padding: 0 0 0 14px;
+    padding: 0 0 0 25px;
+  }
+
+  .site-menu ul {
+    font-size: 1em;
   }
 
   .site-menu a {
@@ -3386,38 +3396,41 @@ blockquote td {
   }
 }
 
-@media screen and (max-width: 560px) {
-  #menu {
-    font-size: 13px;
-  }
+@media screen and (max-width: 700px) {
   #site-name {
-    font-size: 16px;
+    font-size: 1.2em;
   }
+
+  #social ul {
+    font-size: 1.2em;
+  }
+
+  .site-menu a {
+    font-size: 0.95em;
+  }
+}
+
+@media screen and (max-width: 580px) {
   .site-social a {
     padding: 0 5px;
   }
   .site-menu a {
     margin: 5px 2px 0;
   }
-}
 
-@media screen and (max-width: 520px) {
   #menu {
     font-size: 14px;
     flex-flow: column nowrap;
   }
 
   #site-name {
-    font-size: 18px;
-  }
-
-  #site-name {
+    font-size: 1.5em;
     flex: 1 0 45%;
   }
 
   .site-menu,
   .menu-bar {
-    padding: 3px 1em 0;
+    padding: 7px 1em 0;
   }
 
   .menu-bar {
@@ -3438,6 +3451,14 @@ blockquote td {
     margin: auto;
     flex: 1 0 45%;
     justify-content: center;
+  }
+
+  #social ul {
+    font-size: 1.55em;
+  }
+
+  #social ul li {
+    margin: 0 2px;
   }
 }
 
@@ -3470,5 +3491,18 @@ blockquote td {
 @media screen and (max-width: 350px) {
   .site-name-link {
     font-size: 1.1em;
+  }
+
+  #site-name {
+    font-size: 1.4em;
+  }
+
+  #social ul {
+    font-size: 1.3em;
+  }
+
+  .site-menu a {
+    font-size: 1em;
+    padding: 3px 5px;
   }
 }
