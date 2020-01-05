@@ -2858,7 +2858,7 @@ header,
   margin: 10px 0;
 }
 
-.post-category,
+a.post-category,
 .list__item a.post-category,
 .post__meta a.post-category,
 #showcase a.post-category {
@@ -2890,10 +2890,10 @@ header,
   text-transform: lowercase;
 }
 
-.post-category:hover,
-.post-category:focus,
-.post-category:active,
-.post-category:active:hover,
+a.post-category:hover,
+a.post-category:focus,
+a.post-category:active,
+a.post-category:active:hover,
 #widgets .post-category:hover,
 #widgets .post-category:focus,
 #widgets .post-category:active,
