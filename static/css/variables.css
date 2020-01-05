@@ -45,7 +45,7 @@
   --bot-padding-10: 0 0 10px 0;
 
   /* Theme Colors */
-  --site-bg-color: var(--dark-gray1);
+  --site-bg-color: var(--mid-gray1);
   --header-bg-color: var(--black1);
   --header-link-color1: var(--light-gray2);
   --header-link-color2: var(--white2);

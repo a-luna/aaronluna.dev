@@ -7,7 +7,7 @@ series_weight: 2
 series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 2"
 series_part_lead: "Database Models, Migrations and JWT Setup"
-categories: ["Flask", "Python"]
+categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: 'Part 2 covers the basics of SQLAlchemy, the Flask-SQLAlchemy extension, and the Flask-Migrate extension. The process of creating a new database table to store user information by defining a class and "registering" it with SQLAlchemy is demonstrated. Next, setting up a system that manages changes to a database schema is thoroughly explained and demonstrated. After initializing the database, functions to encode and decode JSON Web Tokens (JWTs) are created. This section concludes with an introduction to pytest fixtures and examples of several test cases that verify the ability to encode/decode JWTs issued by our API.'
 twitter:

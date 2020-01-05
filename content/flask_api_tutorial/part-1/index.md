@@ -7,7 +7,7 @@ series_weight: 1
 series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 1"
 series_part_lead: "Project Setup and Environment Configuration"
-categories: ["Flask", "Python"]
+categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: "In Part 1, the core concepts of REST and JWTs are introduced, project dependencies are described and installed, and the project is fully configured for prod/dev environments. The flask server and CLI are demonstrated to ensure the setup was performed correctly before moving on to Part 2."
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.1"

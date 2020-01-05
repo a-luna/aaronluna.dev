@@ -103,14 +103,14 @@ ol li p {
 
 .wrapper {
   background: var(--page-bg-color);
-  padding: 20px 20px 0 20px;
+  padding: 20px 30px 0 30px;
   border: none;
   width: 100%;
 }
 
 .primary {
   font-size: 1em;
-  flex: 1 0 68%;
+  flex: 1 0 67%;
   margin: 0;
 }
 
@@ -132,7 +132,7 @@ ol li p {
 }
 
 .sidebar {
-  flex: 1 0 30%;
+  flex: 1 0 31%;
   margin: 1em 0 0;
 }
 
@@ -182,9 +182,9 @@ ol li p {
 }
 
 #showcase .showcase-message {
-  color: var(--white2);
-  font-size: 1.2em;
-  margin: 5px 0;
+  color: var(--tutorial-series);
+  font-size: 1.3em;
+  line-height: 1.2;
 }
 
 #showcase p {
@@ -2495,15 +2495,15 @@ table.aws-hosting-costs {
 }
 
 #project-repo {
-  background-color: var(--page-bg-color);
-  margin: 10px 0;
-  border-radius: 4px;
+  background: var(--widget-bg-color);
+  border: none;
+  width: auto;
+  padding: 7px 10px;
 }
 
-#project-repo .title {
-  color: var(--project-repo-title-color);
-  font-size: 1.1em;
-  margin: 0 0 5px;
+.tutorial h2.github-accordian-button .pointer,
+.tutorial h2.github-accordian-button a {
+  color: var(--project-repo-link-color);
 }
 
 #project-repo .message {
@@ -2529,13 +2529,13 @@ table.aws-hosting-costs {
 }
 
 #project-repo ul {
-  list-style: none;
+  color: var(--project-repo-link-color);
   font-size: 1.1em;
-  margin: 0 0 0 5px;
+  margin: 0 0 0 25px;
 }
 
 #project-repo ul li {
-  margin: 0 0 10px;
+  margin: 0 0 5px;
 }
 
 #project-repo ul li:last-child {
@@ -2564,8 +2564,8 @@ table.aws-hosting-costs {
 
 .site-menu a {
   font-size: 1.1em;
-  padding: 10px;
-  margin: 0 5px;
+  padding: 7px;
+  margin: 0 8px;
 }
 
 header,
@@ -2589,7 +2589,7 @@ header,
 .menu-bar,
 .site-menu {
   flex: 0 0 50%;
-  line-height: 1;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
@@ -2633,11 +2633,11 @@ header,
 
 .site-name,
 .site-menu {
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
 }
 
 .site-menu {
-  padding: 0 25px 0 0;
+  padding: 0 30px 0 0;
 }
 
 .site-social ul,
@@ -2647,7 +2647,7 @@ header,
   flex-flow: row nowrap;
   justify-content: flex-end;
   align-items: center;
-  font-size: 1em;
+  font-size: 0.95em;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -2693,12 +2693,12 @@ header,
 
 .home h1 {
   color: var(--home-title-color);
-  font-size: 2.8em;
+  font-size: 2.9em;
   margin: 0 0 10px;
 }
 
 .home header p {
-  font-size: 2em;
+  font-size: 2.2em;
   font-weight: 500;
   color: var(--home-lead-color);
   font-style: normal;
@@ -2707,8 +2707,8 @@ header,
 
 .home p {
   color: var(--home-p-color);
-  font-size: 1.6em;
-  line-height: 22px;
+  font-size: 1.7em;
+  line-height: 1.6;
 }
 
 .home hr {
@@ -2758,7 +2758,7 @@ header,
 
 .recent-post .post-meta-date .meta__text {
   color: var(--home-recent-post-date-color);
-  font-size: 1.6em;
+  font-size: 1.65em;
   line-height: 23px;
   margin: 0 0 10px;
 }
@@ -2814,7 +2814,7 @@ header,
 }
 
 #widgets .post-categories {
-  margin: 0 0 2em 0
+  margin: 0 0 20px 0
 }
 
 .list__item .post-categories {
@@ -2848,12 +2848,11 @@ header,
 #widgets .post-category {
   color: var(--black2);
   border: 1px solid var(--cat-color);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
-  padding: 5px 5px;
-  margin: 5px 3px;
-  line-height: 14px;
-  flex: 1;
+  padding: 2px 7px;
+  margin: 5px;
+  flex: 1 0 40%;
   text-align: center;
   text-transform: lowercase;
 }
@@ -2992,13 +2991,13 @@ header,
 }
 
 .repo-top {
-  font-size: 1.8em;
+  font-size: 2em;
   margin: 0 0 5px 0;
   line-height: 1.2;
 }
 
 .repo-top .fa {
-  font-size: 22px;
+  font-size: 24px;
 }
 
 .repo-top .fa:hover,
@@ -3009,24 +3008,22 @@ header,
 }
 
 .repo-middle {
-  font-size: 1.5em;
+  font-size: 1.6em;
   line-height: 1.4;
-  margin: 0 0 auto 0;
+  margin: 3px 0 auto 0;
 }
 
 .repo-bottom {
-  font-size: 16px;
-  line-height: 16px;
   margin: 10px 0 0 0;
 }
 
 .repo-bottom .fa {
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .language-name {
   display: inline-block;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .repo-stats-wrapper,
@@ -3037,12 +3034,13 @@ header,
 }
 
 .repo-stats {
+  font-size: 17px;
   margin: 0 3px;
 }
 
 .repo-language .fa {
   font-size: 17px;
-  margin: 0 5px 0 0;
+  margin: 0 7px 0 0;
 }
 
 .repo-stats .fa {
@@ -3206,11 +3204,11 @@ blockquote td {
   }
 
   .home h1 {
-    font-size: 2.5em;
+    font-size: 2.8em;
   }
 
   .home header p {
-    font-size: 1.8em;
+    font-size: 2em;
   }
 
   #recent-posts-wrapper,
@@ -3408,18 +3406,26 @@ blockquote td {
   }
 
   .site-menu a {
-    padding: 3px 3px 8px 3px;
-    margin: 5px 5px 0;
+    padding: 7px;
+    margin: 0 5px;
   }
 }
 
 @media screen and (max-width: 580px) {
   #site-name {
-    font-size: 1em;
+    font-size: 0.95em;
+  }
+
+  #social {
+    margin: auto 0 auto 10px;
   }
 
   #social ul {
     font-size: 1em;
+  }
+
+  #social ul li a {
+    padding: 0 5px;
   }
 
   .site-menu a {
@@ -3427,8 +3433,8 @@ blockquote td {
   }
 
   .site-menu a {
-    padding: 5px 5px 8px 5px;
-    margin: 5px 5px 0;
+    padding: 8px 5px;
+    margin: 0 3px;
   }
 }
 
@@ -3441,25 +3447,25 @@ blockquote td {
   }
 
   #menu {
-    font-size: 14px;
     flex-flow: column nowrap;
   }
 
   #site-name {
-    font-size: 1.5em;
+    font-size: 1.4em;
     flex: 1 0 45%;
   }
 
-  .site-menu,
-  .menu-bar {
-    padding: 7px 1em 0;
+  .site-menu {
+    padding: 3px 1em 0;
   }
 
   .menu-bar {
+    padding: 5px 1em 0;
     justify-content: space-between;
   }
 
   .site-menu ul {
+    font-size: 1em;
     justify-content: space-between;
   }
 
@@ -3476,7 +3482,7 @@ blockquote td {
   }
 
   #social ul {
-    font-size: 1.55em;
+    font-size: 1.5em;
   }
 
   #social ul li {
