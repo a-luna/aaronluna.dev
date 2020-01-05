@@ -10,7 +10,6 @@
 
 {{- if $sidebar -}}
 <aside id="widgets" class="sidebar{{ if eq $sidebar "left" }} sidebar--left{{ end }}">
-{{ partial "search.html" . }}
 {{- $root := . }}
 {{- with (default .Site.Params.sidebar.widgets .Params.widgets) -}}
   {{- range $widget := . }}

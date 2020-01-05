@@ -103,14 +103,14 @@ ol li p {
 
 .wrapper {
   background: var(--page-bg-color);
-  padding: 20px 30px 0 30px;
+  padding: 30px 30px 0 30px;
   border: none;
   width: 100%;
 }
 
 .primary {
   font-size: 1em;
-  flex: 1 0 67%;
+  flex: 1 0 65%;
   margin: 0;
 }
 
@@ -132,7 +132,7 @@ ol li p {
 }
 
 .sidebar {
-  flex: 1 0 31%;
+  flex: 1 0 33%;
   margin: 1em 0 0;
 }
 
@@ -145,6 +145,11 @@ ol li p {
 
 #widgets .widget__content {
   margin: 0;
+}
+
+#post-categories .widget__content {
+  margin: 10px 0 0;
+  padding: 0;
 }
 
 .center {
@@ -352,7 +357,7 @@ h1.post__title {
   font-size: 0.95em;
   font-style: italic;
   color: #7f7f7f;
-  margin: 0 0 2em;
+  margin: 0 0 20px;
 }
 
 .article-badges {
@@ -1522,7 +1527,6 @@ figcaption {
 }
 
 .toc {
-  background: var(--widget-bg-color);
   border: none;
   width: auto;
   padding: 7px 10px;
@@ -1760,7 +1764,7 @@ a.post-nav__link:focus {
   border: none;
   font-size: 1em;
   padding: 0 5px;
-  margin: 0 0 10px;
+  margin: 0 0 20px;
 }
 
 #header-nav .post-nav-flex-item-prev,
@@ -1961,8 +1965,9 @@ input {
   display: flex;
   width: 100%;
   flex-flow: column nowrap;
-  margin: 0;
+  margin: 0 0 20px;
   padding: 0;
+  min-width: 256px;
 }
 
 .widget__title {
@@ -1978,7 +1983,6 @@ input {
 
 #api-tutorial {
   padding: 7px 10px;
-  background-color: var(--widget-bg-color);
 }
 
 #api-tutorial ul {
@@ -2420,42 +2424,20 @@ table.aws-hosting-costs {
 }
 
 .accordian {
-  margin: 0 0 10px;
+  margin: 0 0 20px;
 }
 
-.accordian h2 {
-  font-size: 1.1em;
-  line-height: 1;
-  margin: auto 0;
-  padding: 7px 5px;
-}
-
-.accordian h2 a {
-  color: var(--blog-link-color);
-  margin: 0 0 0 1px;
-}
-
-.tutorial .accordian h2 a {
-  color: var(--tut-link-color);
-}
-
-.accordian h2 a:hover,
-.accordian h2 a:focus,
-.accordian h2 a:active,
-.accordian h2 a:active:hover {
-  color: var(--blog-link-color);
-}
-
-.tutorial .accordian h2 a:hover,
-.tutorial .accordian h2 a:focus,
-.tutorial .accordian h2 a:active,
-.tutorial .accordian h2 a:active:hover {
-  color: var(--tut-link-color);
+.accordian section,
+#github-accordian section {
+  overflow: hidden;
 }
 
 .accordian section {
-  background-color: #323232;
-  overflow: hidden;
+  background-color: var(--accordian-content-bg-color);
+}
+
+#github-accordian section {
+  background-color: var(--gitrepo-content-bg-color);
 }
 
 .accordian section:first-child {
@@ -2472,62 +2454,104 @@ table.aws-hosting-costs {
   height: 29px;
 }
 
-.accordian .pointer {
-  color: var(--blog-link-color);
+.accordian section h2,
+.tutorial .accordian section h2
+#github-accordian section h2 {
+  font-size: 1.1em;
+  line-height: 1;
+  margin: auto 0;
+  padding: 7px 5px;
+  cursor: pointer;
+}
+
+.accordian section h2 a,
+.tutorial .accordian section h2 a,
+#github-accordian section h2 a {
+  margin: 0 0 0 1px;
+}
+
+.accordian section h2,
+.tutorial .accordian section h2 {
+  color: var(--accordian-header-text-color);
+  background-color: var(--accordian-header-bg-color);
+}
+
+#github-accordian section h2 {
+  color: var(--gitrepo-header-text-color);
+  background-color: var(--gitrepo-header-bg-color);
+}
+
+.accordian section h2 a,
+.accordian section h2 a:visited,
+.accordian .pointer,
+.tutorial .accordian section h2 a,
+.tutorial .accordian section h2 a:visited,
+.tutorial .accordian .pointer {
+  color: var(--accordian-header-text-color);
+}
+
+
+#github-accordian section h2 a,
+#github-accordian section h2 a:visited,
+#github-accordian .pointer {
+  color: var(--gitrepo-header-text-color);
+}
+
+.accordian section:not(.ac_hidden) h2,
+.accordian section:not(.ac_hidden) h2 a,
+.accordian section:not(.ac_hidden) .pointer,
+.tutorial .accordian section:not(.ac_hidden) h2,
+.tutorial .accordian section:not(.ac_hidden) h2 a,
+.tutorial .accordian section:not(.ac_hidden) .pointer {
+  color: var(--accordian-header-toggled-text-color);
+  background-color: var(--accordian-header-toggled-bg-color);
+}
+
+#github-accordian section:not(.ac_hidden) h2,
+#github-accordian section:not(.ac_hidden) h2 a,
+#github-accordian section:not(.ac_hidden) .pointer {
+  color: var(--gitrepo-header-toggled-text-color);
+  background-color: var(--gitrepo-header-toggled-bg-color);
+}
+
+.accordian .pointer,
+.tutorial .accordian .pointer,
+#github-accordian .pointer {
   font-size: 0.72727em;
   margin: auto 5px;
-}
-
-.tutorial .accordian .pointer {
-  color: var(--tut-link-color)
-}
-
-.accordian section h2 {
-  background-color: var(--widget-bg-color);
-}
-
-.accordian section:not(.ac_hidden) h2 {
-  background-color: #444;
 }
 
 .accordian section:not(.ac_hidden) .pointer {
   transform: rotate(90deg);
 }
 
+.accordian-content,
+.tutorial .accordian-content {
+  background-color: var(--accordian-content-bg-color);
+}
+
+#github-accordian .accordian-content {
+  background-color: var(--gitrepo-content-bg-color);
+}
+
+.accordian-content a,
+.tutorial .accordian-content a,
+#github-accordian .accordian-content a {
+  color: var(--accordian-content-link-color);
+}
+
+#github-accordian .accordian-content a {
+  color: var(--gitrepo-content-link-color);
+}
+
 #project-repo {
-  background: var(--widget-bg-color);
-  border: none;
-  width: auto;
+  font-size: 0.95em;
   padding: 7px 10px;
 }
 
-.tutorial h2.github-accordian-button .pointer,
-.tutorial h2.github-accordian-button a,
-.tutorial h2.github-accordian-button a:hover,
-.tutorial h2.github-accordian-button a:focus,
-.tutorial h2.github-accordian-button a:active,
-.tutorial h2.github-accordian-button a:active:hover,
-.tutorial h2.github-accordian-button a:visited {
-  color: var(--project-repo-link-color);
-}
-
 #project-repo .message {
-  color: var(--project-repo-message-color);
-  font-size: 0.9em;
-  font-weight: 400;
-  margin: 0 0 10px;
+  margin: 5px 0;
 }
-
-#project-repo .message a,
-#project-repo ul a {
-  color: var(--project-repo-link-color);
-}
-
-
-#project-repo .message a {
-  font-weight: 700;
-}
-
 
 #project-repo ul a {
   font-weight: 400;
@@ -2535,7 +2559,6 @@ table.aws-hosting-costs {
 
 #project-repo ul {
   color: var(--project-repo-link-color);
-  font-size: 1.1em;
   margin: 0 0 0 25px;
 }
 
@@ -2615,7 +2638,6 @@ header,
 
 #menu .site-menu a.active {
   color: var(--header-link-color2);
-  border-bottom: 1px solid var(--header-link-color2);
 }
 
 #menu .site-name-link {
@@ -2692,8 +2714,6 @@ header,
 
 .home .content {
   margin: var(--no-margin);
-  padding: var(--bot-padding-10);
-  border-bottom: 2px dotted var(--home-hr-color);
 }
 
 .home h1 {
@@ -2729,6 +2749,10 @@ header,
   max-width: 875px;
   margin: 0 auto;
 }
+
+#recent-posts-wrapper {
+  padding: 10px 0 0 0;
+  border-top: 2px dotted var(--home-hr-color);}
 
 #featured-projects-wrapper {
   margin: 0 auto 15px auto;
@@ -2810,16 +2834,20 @@ header,
   display: flex;
   flex-flow: row wrap;
   justify-content: stretch;
-  background-color: var(--page-bg-color);
   padding: 0;
 }
 
+.list__item .post-categories {
+  background-color: var(--page-bg-color);
+}
+
+#widgets .post-categories,
 #showcase .post-categories {
   background-color: var(--widget-bg-color);
 }
 
 #widgets .post-categories {
-  margin: 0 0 20px 0
+  margin: 0;
 }
 
 .list__item .post-categories {
@@ -2866,6 +2894,10 @@ header,
 .post-category:focus,
 .post-category:active,
 .post-category:active:hover,
+#widgets .post-category:hover,
+#widgets .post-category:focus,
+#widgets .post-category:active,
+#widgets .post-category:active:hover,
 #showcase a.post-category:hover,
 #showcase a.post-category:focus,
 #showcase a.post-category:active,
@@ -2876,10 +2908,6 @@ header,
   font-weight: 700;
 }
 
-#widgets .post-category:hover,
-#widgets .post-category:focus,
-#widgets .post-category:active,
-#widgets .post-category:active:hover,
 .list__item a.post-category:hover,
 .list__item a.post-category:focus,
 .list__item a.post-category:active,
@@ -3218,7 +3246,7 @@ blockquote td {
 
   #recent-posts-wrapper,
   #featured-projects-wrapper {
-    margin: 0 auto 25px auto;
+    margin: 0 auto 5px auto;
   }
 
   #recent-posts-wrapper h4,
@@ -3245,11 +3273,11 @@ blockquote td {
 
 
   .wrapper {
-    padding: 1em;
+    padding: 20px;
   }
 
   .primary {
-    margin: 1em 0 0;
+    margin: 0;
   }
 
   .about-me .post {

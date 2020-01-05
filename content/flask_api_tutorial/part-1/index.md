@@ -1101,6 +1101,8 @@ Commands:
 
 ## Checkpoint
 
+{{< github_links >}}
+
 Most of the work done in this section wasn't related to any specific project requirements, but I think we can claim at least partial credit on one (the `ProductionConfig` settings define the token age as one hour and will be used when creating JWTs). The <span class="italics requirements">JWTs must expire after 1 hour (in production)</span> item has been marked as partially complete (<span class="fa fa-star-half-o goldenrod"></span>):
 
 <div class="requirements">

@@ -47,14 +47,14 @@
   /* Theme Colors */
   --site-bg-color: var(--mid-gray1);
   --header-bg-color: var(--black1);
-  --header-link-color1: var(--light-gray2);
-  --header-link-color2: var(--white2);
   --page-bg-color: var(--dark-gray1);
   --body-text-color: var(--off-white1);
   --header-anchor-link: var(--off-white1);
   --header-anchor-link-hover: var(--white2);
-  --widget-bg-color: var(--black2);
+  --widget-bg-color: var(--black1);
   --link-color: var(--blue2);
+  --header-link-color1: var(--light-gray2);
+  --header-link-color2: var(--link-color);
   --accent-color1: var(--blue2);
   --accent-color2: var(--mid-gray2);
   --code-text-color1: var(--green3);
@@ -139,8 +139,20 @@
   --step-list: var(--white2);
 
   /* Accordian Control */
-  --accordian-bg-color: var(--widget-bg-color);
-  --accordian-header-toggled-color: var(--dark-gray2);
+  --accordian-header-bg-color: var(--tut-link-color);
+  --accordian-header-text-color: var(--widget-bg-color);
+  --accordian-header-toggled-bg-color: var(--tut-link-color);
+  --accordian-header-toggled-text-color: var(--dark-gray2);
+  --accordian-content-bg-color: var(--widget-bg-color);
+  --accordian-content-link-color: var(--tut-link-color);
+
+  /* Github Links Box */
+  --gitrepo-header-bg-color: var(--tutorial-series);
+  --gitrepo-header-text-color: var(--widget-bg-color);
+  --gitrepo-header-toggled-bg-color: var(--tutorial-series);
+  --gitrepo-header-toggled-text-color: var(--widget-bg-color);
+  --gitrepo-content-bg-color: var(--widget-bg-color);
+  --gitrepo-content-link-color: var(--tutorial-series);
 
   /* Github Links Box */
   --project-repo-bg-color: var(--black2);

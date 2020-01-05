@@ -7,7 +7,6 @@
             {{ partial "post_nav_part_num.html" . }}
             {{ partial "api_tutorial_series.html" . }}
             {{ partial "api_tutorial_toc.html" . }}
-            {{ partial "api_tutorial_github.html" . }}
         </header>
         {{- if .Params.thumbnail }}
         <figure class="post__thumbnail">
@@ -19,4 +18,6 @@
         </div>
     </article>
 </main>
-{{ partial "post_nav_lead.html" . }} {{ partial "comments.html" . }} {{ end }}
+{{ partial "post_nav_lead.html" . }}
+{{ partial "comments.html" . }}
+{{ end }}

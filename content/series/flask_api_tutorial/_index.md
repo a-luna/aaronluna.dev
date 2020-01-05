@@ -20,7 +20,6 @@ twitter:
   creator: "@aaronlunadev"
   title: "How To: Create a Flask API with JWT-Based Authentication"
   description: "Step-by-step instructions and in-depth explanations to guide you through the process of creating a robust, production-quality REST API using Flask, Flask-RESTlus, pyjwt, SQLAlchemy and more."
-  image: "https://aaronluna.dev/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg"
 ---
 ## Project Overview
 
