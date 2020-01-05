@@ -2677,7 +2677,8 @@ header,
 }
 
 .home .post {
-  margin: 0 2em;
+  margin: 0 auto;
+  max-width: 750px;
 }
 
 .home header {
@@ -3024,6 +3025,7 @@ header,
 }
 
 .language-name {
+  display: inline-block;
   font-size: 15px;
 }
 
@@ -3386,17 +3388,13 @@ blockquote td {
     padding: 0 0 0 25px;
   }
 
-  .site-menu ul {
-    font-size: 1em;
-  }
-
   .site-menu a {
-    padding: 8px;
+    padding: 5px 5px 8px 5px;
     margin: 5px 5px 0;
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 650px) {
   #site-name {
     font-size: 1.2em;
   }
@@ -3408,9 +3406,33 @@ blockquote td {
   .site-menu a {
     font-size: 0.95em;
   }
+
+  .site-menu a {
+    padding: 3px 3px 8px 3px;
+    margin: 5px 5px 0;
+  }
 }
 
 @media screen and (max-width: 580px) {
+  #site-name {
+    font-size: 1em;
+  }
+
+  #social ul {
+    font-size: 1em;
+  }
+
+  .site-menu a {
+    font-size: 0.85em;
+  }
+
+  .site-menu a {
+    padding: 5px 5px 8px 5px;
+    margin: 5px 5px 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
   .site-social a {
     padding: 0 5px;
   }

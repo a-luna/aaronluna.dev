@@ -8,3 +8,19 @@
         {{- if .Param "url_git_rel_diff" }}<li><a href="{{ .Params.url_git_rel_diff }}">View Diff {{.Params.series_part}} &lt;-&gt; {{- if .NextInSection }}{{.NextInSection.Params.series_part}}{{- else }}N/A{{- end }}</a></li>{{- end }}
     </ul>
 </div>
+
+<!-- <div class="accordian">
+    <section class="github-accordian-section accordian-item {{ if .Param "toc" }}ac_hidden{{ end }}">
+        <h2 class="github-accordian-button accordian-button"><i class="fa fa-chevron-right pointer"></i><a class="series-accordian-button" href="#">Tutorial Sections</a></h2>
+        <div class="accordian-content">
+            <div id="api-tutorial">
+                <ul>
+                    <li><a href="/series/flask-api-tutorial/overview/">Project Overview</a></li>
+                    {{ range .Site.Taxonomies.series.flask_api_tutorial }}
+                    <li><a href="{{ .RelPermalink }}">{{ .Params.Lead }}</a></li>
+                    {{- end }}
+                </ul>
+            </div>
+        </div>
+    </section>
+</div> -->
