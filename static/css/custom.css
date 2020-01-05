@@ -2502,7 +2502,12 @@ table.aws-hosting-costs {
 }
 
 .tutorial h2.github-accordian-button .pointer,
-.tutorial h2.github-accordian-button a {
+.tutorial h2.github-accordian-button a,
+.tutorial h2.github-accordian-button a:hover,
+.tutorial h2.github-accordian-button a:focus,
+.tutorial h2.github-accordian-button a:active,
+.tutorial h2.github-accordian-button a:active:hover,
+.tutorial h2.github-accordian-button a:visited {
   color: var(--project-repo-link-color);
 }
 
