@@ -171,18 +171,34 @@ function getRequestDateFromCachedResponse(response) {
 function getFromCache(request, url) {
   return caches.open(CACHE_NAME).then(cache => {
     return cache.match(request).then(cachedResponse => {
-      return cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))
-      ? cachedResponse
-      : Promise.reject("no-match")
+      cachedResponseIsValid = cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))
+      if (cachedResponseIsValid) {
+        console.log(`retrieved cached response for: ${url}`);
+        return cachedResponse;
+      }
+      else {
+        console.log(`cache contains no-match for: ${url}`);
+        Promise.reject(`no-match: ${url}`);
+      }
     });
   });
 }
 
-function updateCache(request) {
-  return caches.open(CACHE_NAME).then(cache => {
-    return fetch(request).then(response => {
-      if (!response || response.status >= 400) return;
-      return cache.put(request, response);
+function updateCache(request, response) {
+  console.log(`adding cached response: ${request.url}`);
+  return caches.open(CACHE_NAME).then(cache => cache.put(request, response));
+}
+
+function fromNetwork(request) {
+  console.log(`requesting ${request.url} from network...`);
+  return new Promise((fulfill, reject) => {
+    fetch(request).then(response => {
+      if (!response || response.status >= 400) {
+        console.log(`fetch-error: CODE: ${response.status} (${request.url})`);
+        reject(`fetch-error: CODE: ${response.status} (${request.url})`);
+      }
+      console.log(`successfully retrieved ${request.url}`);
+      fulfill(response);
     });
   });
 }
@@ -191,11 +207,23 @@ self.addEventListener("fetch", function fetchHandler(event) {
   const { request } = event;
   const url = new URL(request.url);
   if (!SUPPORTED_METHODS.includes(request.method)) {
-    return Promise.reject("unsupported-request-type");
+    return Promise.reject(`unsupported-request-type: ${request.method} ${url}`);
   }
   if (!SUPPORTED_URL_SCHEMES.includes(url.protocol)) {
-    return Promise.reject("unsupported-url-scheme");
+    return Promise.reject(`unsupported-url-scheme: ${url}`);
   }
-  event.respondWith(getFromCache(request, url));
-  event.waitUntil(updateCache(request).catch(defaultResponse));
+  console.log(`intercepted fetch event for: ${url}`)
+  event.respondWith(getFromCache(request, url)
+    .catch(request => {
+      return fromNetwork(request)
+        .then(response => {
+          updateCache(request, response)
+            .then(() => {
+              console.log(`completed fetch event for: ${url}`);
+              return response;
+            })
+            .catch(defaultResponse);
+        })
+        .catch(defaultResponse);
+  }));
 });
