@@ -178,7 +178,16 @@ function getFromCache(request, url) {
       }
       else {
         console.log(`cache contains no-match for: ${url}`);
-        return Promise.reject(`no-match: ${url}`);
+        return fromNetwork(request, url)
+        .then(response => {
+          updateCache(request, url, response)
+            .then(() => {
+              console.log(`completed fetch event for: ${url}`);
+              return response;
+            })
+            .catch(defaultResponse);
+        })
+        .catch(defaultResponse);
       }
     });
   });
@@ -211,17 +220,20 @@ self.addEventListener("fetch", function fetchHandler(event) {
     return Promise.reject(`unsupported-url-scheme: ${url}`);
   }
   console.log(`intercepted fetch event for: ${url}`)
-  event.respondWith(getFromCache(request, url)
-    .catch(request => {
-      return fromNetwork(request, url)
-        .then(response => {
-          updateCache(request, url, response)
-            .then(() => {
-              console.log(`completed fetch event for: ${url}`);
+  event.respondWith(getFromCache(request, url).catch(defaultResponse));
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        return cache.match(event.request)
+          .then((cachedResponse) => {
+            return cachedResponse || fetch(event.request).then((response) => {
+              cache.put(event.request, response.clone());
               return response;
-            })
-            .catch(defaultResponse);
-        })
-        .catch(defaultResponse);
-  }));
+            });
+          });
+      })
+  );
 });
