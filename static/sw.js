@@ -179,15 +179,15 @@ function getFromCache(request, url) {
       else {
         console.log(`cache contains no-match for: ${url}`);
         return fromNetwork(request, url)
-        .then(response => {
-          updateCache(request, url, response)
-            .then(() => {
-              console.log(`completed fetch event for: ${url}`);
-              return response;
-            })
-            .catch(defaultResponse);
-        })
-        .catch(defaultResponse);
+          .then(response => {
+            updateCache(request, url, response.clone())
+              .then(() => {
+                console.log(`completed fetch event for: ${url}`);
+                return response;
+              })
+              .catch(defaultResponse);
+          })
+          .catch(defaultResponse);
       }
     });
   });
