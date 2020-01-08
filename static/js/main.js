@@ -1,9 +1,3 @@
-const toggleActiveMenuLink = function(link) {
-  if (location.href == link.href) {
-    link.classList.add("active");
-  }
-};
-
 const addLinksToHeaderElement = function(h) {
   h.insertAdjacentHTML(
     "beforeend",
@@ -49,9 +43,6 @@ const toggleGitLinksAccordian = function(event) {
     .classList.toggle("ac_hidden");
 };
 
-document
-  .querySelectorAll(".menu-link")
-  .forEach(link => toggleActiveMenuLink(link));
 document
   .querySelectorAll("article h2[id], article h3[id], article h4[id], article h5[id]")
   .forEach(h => addLinksToHeaderElement(h));

@@ -1,4 +1,4 @@
-{{ $allCSS := slice (resources.Get "css/style.css") (resources.Get "css/syntax.css") (resources.Get "css/fonts.css") (resources.Get "css/variables.css") (resources.Get "css/custom.css") }}
+{{ $allCSS := slice (resources.Get "css/font-awesome.min.css") (resources.Get "css/style.css") (resources.Get "css/syntax.css") (resources.Get "css/fonts.css") (resources.Get "css/variables.css") (resources.Get "css/custom.css") }}
 {{ if .Site.IsServer }}
     {{ if .Site.Params.process_dev_css }}
         {{ $CSS := $allCSS | resources.Concat "css/main.css" | postCSS }}

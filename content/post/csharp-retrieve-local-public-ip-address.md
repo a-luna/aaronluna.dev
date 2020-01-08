@@ -4,6 +4,7 @@ slug: "csharp-retrieve-local-public-ip-address"
 aliases:
     - /2018/03/16/csharp-retrieve-local-public-ip-address/
 date: "2018-03-16"
+menu_section: "blog"
 categories: ["dotnet"]
 ---
 

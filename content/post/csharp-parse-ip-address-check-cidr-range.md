@@ -4,6 +4,7 @@ slug: "csharp-parse-ip-address-check-cidr-range"
 aliases:
     - /2018/02/24/csharp-parse-ip-address-check-cidr-range/
 date: "2018-02-24"
+menu_section: "blog"
 categories: ["dotnet"]
 ---
 

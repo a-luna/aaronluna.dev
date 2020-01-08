@@ -4,6 +4,7 @@ slug: "packer-template-aws-ec2-ubuntu-nginx"
 aliases:
     - /2018/03/30/packer-template-aws-ec2-ubuntu-nginx/
 date: "2018-03-30"
+menu_section: "blog"
 categories: ["AWS", "DevOps"]
 ---
 

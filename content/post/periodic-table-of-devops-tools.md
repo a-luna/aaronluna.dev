@@ -4,6 +4,7 @@ slug: "periodic-table-of-devops-tools"
 aliases:
     - /2018/03/22/periodic-table-of-devops-tools/
 date: "2018-03-22"
+menu_section: "blog"
 categories: ["DevOps"]
 ---
 

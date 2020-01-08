@@ -7,6 +7,7 @@ series_weight: 3
 series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 3"
 series_part_lead: "API Configuration and User Registration"
+menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: ""

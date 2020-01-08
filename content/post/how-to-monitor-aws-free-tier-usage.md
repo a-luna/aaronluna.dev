@@ -4,6 +4,7 @@ slug: "how-to-monitor-aws-free-tier-usage"
 aliases:
     - /2018/01/15/how-to-monitor-aws-free-tier-usage/
 date: "2018-01-15"
+menu_section: "blog"
 categories: ["AWS"]
 ---
 

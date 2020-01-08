@@ -4,6 +4,7 @@ slug: "aws-hosting-cost-examples-linux-windows-ec2-rds"
 aliases:
     - /2018/01/18/aws-hosting-cost-examples-linux-windows-ec2-rds/
 date: "2018-01-18"
+menu_section: "blog"
 categories: ["AWS"]
 ---
 

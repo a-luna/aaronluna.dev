@@ -4,6 +4,7 @@ slug: "csharp-tpl-socket-methods"
 aliases:
     - /2018/02/04/csharp-tpl-socket-methods/
 date: "2018-02-04"
+menu_section: "blog"
 categories: ["dotnet"]
 ---
 

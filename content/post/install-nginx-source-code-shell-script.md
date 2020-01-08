@@ -4,6 +4,7 @@ slug: "install-nginx-source-code-shell-script"
 aliases:
     - /2018/01/22/install-nginx-source-code-shell-script/
 date: "2018-01-22"
+menu_section: "blog"
 categories: ["Linux"]
 ---
 

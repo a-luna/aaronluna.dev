@@ -4,6 +4,7 @@ slug: "casting-type-conversion-best-practices-c-sharp"
 aliases:
     - /2018/01/19/casting-type-conversion-best-practices-c-sharp/
 date: "2018-01-19"
+menu_section: "blog"
 categories: ["dotnet"]
 ---
 

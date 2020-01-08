@@ -2,6 +2,7 @@
 title: 'Hugo: Add Copy-to-Clipboard Button to Code Blocks with Vanilla JS'
 slug: hugo-add-copy-button-to-code-blocks-chroma-highlight
 date: '2019-11-13'
+menu_section: "blog"
 categories:
   - Hugo
   - JavaScript

@@ -7,6 +7,7 @@ series_weight: 4
 series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 4"
 series_part_lead: "JWT Authentication, Decorators and Blacklisting Tokens"
+menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: ""

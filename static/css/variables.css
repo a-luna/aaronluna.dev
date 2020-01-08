@@ -1,41 +1,44 @@
 :root {
   /* Color Pallette */
-  --black1: #202020;
-  --black2: #232326;
-  --black3: #2b2b2b;
-  --dark-gray1: #323232;
-  --dark-gray2: #444;
-  --mid-gray1: #666;
-  --mid-gray2:#7f7f7f;
-  --light-gray1: #909090;
-  --light-gray2: #b3b3b3;
-  --off-white1: #c4c4c4;
-  --off-white2: #d8d8d8;
-  --white1: #e2e2e2;
-  --white2: #f2f2f2;
-  --teal1: #08c4a8;
-  --teal2: #19f5d4;
-  --blue1: #57b6ff;
-  --blue2: #6fc1ff;
-  --blue3: #2196f3;
-  --green1: #73f906;
-  --green2: #98fa47;
-  --green3: #a9fb68;
-  --purple1: #600aff;
-  --purple2: #8b4dff;
-  --purple3: #ae81ff;
-  --orange1: #d97502;
-  --orange2: #FFB86C;
-  --orange3: #fd971f;
-  --gold1: #ffc107;
-  --gold2: #ffd147;
-  --gold3: #e5b965;
-  --pink1: #d60552;
-  --pink2: #f92672;
-  --pink3: #ff2c6d;
-  --red: #f72f39;
-  --magenta1: #f60ef2;
-  --magenta2: #fa72f8;
+  --black1: hsl(0, 0%, 13%);
+  --black2: hsl(240, 4%, 14%);
+  --black3: hsl(0, 0%, 17%);
+  --dark-gray1: hsl(0, 0%, 20%);
+  --dark-gray2: hsl(0, 0%, 27%);
+  --mid-gray1: hsl(0, 0%, 40%);
+  --mid-gray2:hsl(0, 0%, 50%);
+  --light-gray1: hsl(0, 0%, 56%);
+  --light-gray2: hsl(0, 0%, 70%);
+  --off-white1: hsl(0, 0%, 77%);
+  --off-white2: hsl(0, 0%, 85%);
+  --white1: hsl(0, 0%, 89%);
+  --white2: hsl(0, 0%, 95%);
+  --teal1: hsl(171, 92%, 40%);
+  --teal2: hsl(171, 92%, 53%);
+  --blue1: hsl(206, 100%, 57%);
+  --blue2: hsl(206, 100%, 72%);
+  --blue3: hsl(206, 100%, 67%);
+  --green1: hsl(93, 95%, 45%);
+  --green2: hsl(93, 95%, 60%);
+  --green3: hsl(93, 95%, 70%);
+  --purple1: hsl(261, 100%, 55%);
+  --purple2: hsl(261, 100%, 65%);
+  --purple3: hsl(261, 100%, 75%);
+  --orange1: hsl(32, 98%, 43%);
+  --orange2: hsl(32, 98%, 56%);
+  --orange3: hsl(31, 100%, 63%);
+  --orange4: hsl(31, 100%, 73%);
+  --gold1: hsl(45, 100%, 54%);
+  --gold2: hsl(45, 100%, 68%);
+  --gold3: rgb(229, 185, 102);
+  --pink1: hsl(338, 95%, 43%);
+  --pink2: hsl(338, 95%, 56%);
+  --pink3: hsl(342, 100%, 59%);
+  --red1: hsl(357, 93%, 45%);
+  --red2: hsl(357, 93%, 55%);
+  --magenta1: hsl(301, 93%, 41%);
+  --magenta2: hsl(301, 93%, 51%);
+  --magenta3: hsl(301, 93%, 71%);
 
   /* Spacing */
   --no-margin: 0;
@@ -54,7 +57,7 @@
   --widget-bg-color: var(--black1);
   --link-color: var(--blue2);
   --header-link-color1: var(--light-gray2);
-  --header-link-color2: var(--link-color);
+  --header-link-color2: var(--white2);
   --accent-color1: var(--blue2);
   --accent-color2: var(--mid-gray2);
   --code-text-color1: var(--green3);
@@ -62,6 +65,14 @@
   --blockquote-text-color: var(--green3);
   --blockquote-code-text-color: var(--body-text-color);
   --code-details-lineno: var(--white2);
+
+  /* Top Nav Menu */
+  --nav-link-color: var(--light-gray2);
+  --nav-hover-link-color: var(--white2);
+  --home-active-link-color: var(--white2);
+  --blog-active-link-color: var(--white2);
+  --tutorials-active-link-color: var(--white2);
+  --about-active-link-color: var(--white2);
 
   /* Headers */
   --header-color: var(--white2);
@@ -83,16 +94,26 @@
   --list-header-date-color: var(--header-color);
 
   /* Categories */
-  --aws: var(--purple3);
-  --devops: var(--magenta1);
-  --dotnet: var(--blue1);
-  --flask: var(--red);
+  --aws: var(--purple2);
+  --aws-hover: var(--purple1);
+  --devops: var(--magenta2);
+  --devops-hover: var(--magenta1);
+  --dotnet: var(--blue2);
+  --dotnet-hover: var(--blue1);
+  --flask: var(--red2);
+  --flask-hover: var(--red1);
   --hugo: var(--teal2);
+  --hugo-hover: var(--teal1);
   --javascript: var(--gold2);
+  --javascript-hover: var(--gold1);
   --tutorial-series: var(--pink2);
-  --linux: var(--orange1);
-  --python: var(--green1);
+  --tutorial-series-hover: var(--pink1);
+  --linux: var(--orange2);
+  --linux-hover: var(--orange1);
+  --python: var(--green2);
+  --python-hover: var(--green1);
   --virtualization: var(--orange2);
+  --virtualization-hover: var(--orange1);
 
   /* Section: Blog Posts */
   --blog-link-color: var(--accent-color1);
@@ -140,17 +161,17 @@
 
   /* Accordian Control */
   --accordian-header-bg-color: var(--tut-link-color);
-  --accordian-header-text-color: var(--widget-bg-color);
+  --accordian-header-text-color: var(--black2);
   --accordian-header-toggled-bg-color: var(--tut-link-color);
-  --accordian-header-toggled-text-color: var(--dark-gray2);
+  --accordian-header-toggled-text-color: var(--black2);
   --accordian-content-bg-color: var(--widget-bg-color);
   --accordian-content-link-color: var(--tut-link-color);
 
   /* Github Links Box */
   --gitrepo-header-bg-color: var(--tutorial-series);
-  --gitrepo-header-text-color: var(--widget-bg-color);
+  --gitrepo-header-text-color: var(--black2);
   --gitrepo-header-toggled-bg-color: var(--tutorial-series);
-  --gitrepo-header-toggled-text-color: var(--widget-bg-color);
+  --gitrepo-header-toggled-text-color: var(--black2);
   --gitrepo-content-bg-color: var(--widget-bg-color);
   --gitrepo-content-link-color: var(--tutorial-series);
 

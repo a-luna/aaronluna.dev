@@ -4,6 +4,7 @@ slug: "aws-free-usage-tier"
 aliases:
     - /2018/01/13/aws-free-usage-tier/
 date: "2018-01-13"
+menu_section: "blog"
 categories: ["AWS"]
 ---
 

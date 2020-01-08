@@ -14,6 +14,6 @@ sidebar: false
         <p>I also have extensive experience developing web applications with <strong>Flask</strong> and <strong>SQLAlchemy</strong>. Currently, I am learning <strong>Svelte</strong> and <strong>Sapper</strong>, which I am enjoying greatly since Svelte compiles down to vanilla Javascript, HTML and CSS.</p>
     </p>
     <p class="fa-bullet-list-item">
-        <span class="fa fa-handshake-o fa-bullet-icon"></span>I am always interested in hearing about new opportunities and taking on new projects, feel free to contact me <a href="mailto:admin@aaronluna.dev" target="_blank">via email</a>, <a href="https://www.linkedin.com/in/aaron-luna-reno-nv/" target="_blank">LinkedIn</a> or <a href="https://twitter.com/alunablog/" target="_blank">Twitter</a>. You can take a look at my <a href="https://github.com/a-luna" target="_blank">github repository</a> to see my personal projects.
+        <span class="fa fa-handshake-o fa-bullet-icon"></span>I am always interested in hearing about new opportunities and taking on new projects, feel free to contact me <a href="mailto:admin@aaronluna.dev" target="_blank">via email</a>, <a href="https://www.linkedin.com/in/aaron-luna-reno-nv/" target="_blank">LinkedIn</a> or <a href="https://twitter.com/alunablog/" target="_blank">Twitter</a>. You can take a look at my <a href="https://github.com/a-luna" target="_blank">github profile</a> to see my personal projects.
     </p>
 </div>

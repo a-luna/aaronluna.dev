@@ -8,19 +8,14 @@
         </div>
         {{- if .Site.Menus.main }}
             <nav class="site-menu">
-                <ul>
-                    {{- $currentNode := . }}
-                    {{- range sort .Site.Menus.main }}
-                        {{- if .Name }}
-                            <a id="{{ .Identifier }}" href="{{ .URL }}" class="menu-link">
-                                <li>{{ .Name }}</li>
-                            </a>
-                        {{- end }}
-                    {{- end }}
-                </ul>
+                {{- $currentPage := . }}
+                {{- range .Site.Menus.main }}
+                <a id="{{ .Identifier }}" href="{{ .URL | relURL }}" class="menu-link{{ if or (eq $currentPage.RelPermalink .URL) (eq $currentPage.Params.menu_section .Identifier) }} active{{ end }}">
+                    {{ .Name }}
+                </a>
+                {{- end }}
             </nav>
-        {{ else -}}
+        {{- end }}
     </div>
     <div class="divider"></div>
-    {{- end }}
 </header>

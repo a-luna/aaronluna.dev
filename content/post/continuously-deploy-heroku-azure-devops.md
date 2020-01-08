@@ -4,6 +4,7 @@ slug: "continuously-deploy-heroku-azure-devops"
 aliases:
     - /2019/01/20/continuously-deploy-heroku-azure-devops/
 date: "2019-01-20"
+menu_section: "blog"
 categories: ["DevOps"]
 ---
 
@@ -165,9 +166,11 @@ We can insert build or pipeline variables into our Powershell script by wrapping
 
 We have everything we need to create a Powershell script that pushes our latest changes to Heroku. If the name of your Heroku app is ``test_app`` and your pipeline variable containing your Heroku API token is named ``pat``, you would enter the following three lines into the Powershell task as shown in **Figure 12** (obviously, modify the script to match the name of your Heroku app and pipeline variable):
 
-{{< highlight none >}}git checkout $(Build.SourceBranchName)
+```cmd
+git checkout $(Build.SourceBranchName)
 git remote add heroku https://heroku:$(pat)@git.heroku.com/test_app.git
-git push heroku $(Build.SourceBranchName){{< /highlight >}}
+git push heroku $(Build.SourceBranchName)
+```
 
 <figure>
     <a href="/img/devops/azure_build_pipeline_12_powershell_script.jpg">
@@ -219,9 +222,9 @@ Note the revision number (``v60``) and commit ID (``3cced9be``) in the Powershel
 To sum up, Azure DevOps provides a simple way to create a continuous deployment process for your Heroku app. The most important points to remember are:
 
 <ul class="alert">
-<li>**Enable continuous integration** in the Triggers section of your build pipeline. If you forget to do this, your build process will fail to trigger when a new commit is made.</li>
-<li>**Create a Heroku API token** that is only used for authenticating automated deployment tasks.</li>
-<li>**Add the API token as a secret variable** to your build pipeline to prevent the token from being displayed in log messages.</li>
-<li>**Inspect the log messages** for your build if any errors occur.</li>
+<li><strong>Enable continuous integration</strong> in the Triggers section of your build pipeline. If you forget to do this, your build process will fail to trigger when a new commit is made.</li>
+<li><strong>Create a Heroku API token</strong> that is only used for authenticating automated deployment tasks.</li>
+<li><strong>Add the API token as a secret variable</strong> to your build pipeline to prevent the token from being displayed in log messages.</li>
+<li><strong>Inspect the log messages</strong> for your build if any errors occur.</li>
 </ul>
-I hope this post was helpful to you, let me know if you have any questions or suggestions in the commments!
+I hope this post was helpful to you, let me know if you have any questions or suggestions in the comments!

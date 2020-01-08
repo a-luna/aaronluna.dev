@@ -4,6 +4,7 @@ slug: "parallel-async-csharp-best-practices-tpl"
 aliases:
     - /2018/01/29/parallel-async-csharp-best-practices-tpl/
 date: "2018-01-29"
+menu_section: "blog"
 categories: ["dotnet"]
 ---
 

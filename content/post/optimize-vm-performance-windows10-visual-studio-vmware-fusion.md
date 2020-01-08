@@ -5,6 +5,7 @@ aliases:
     - /2018/01/26/optimize-om-performance-windows10-visual-studio-vmware-fusion/
     - /2018/01/26/optimize-vm-performance-windows10-visual-studio-vmware-fusion/
 date: "2018-01-26"
+menu_section: "blog"
 categories: ["Virtualization"]
 ---
 

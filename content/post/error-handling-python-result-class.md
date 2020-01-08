@@ -4,6 +4,7 @@ slug: "error-handling-python-result-class"
 aliases:
     - /2019/02/06/error-handling-python-result-class/
 date: "2019-02-06"
+menu_section: "blog"
 categories: ["Python"]
 ---
 

@@ -7,6 +7,7 @@ series_weight: 1
 series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 1"
 series_part_lead: "Project Setup and Environment Configuration"
+menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: "In Part 1, the core concepts of REST and JWTs are introduced, project dependencies are described and installed, and the project is fully configured for prod/dev environments. The flask server and CLI are demonstrated to ensure the setup was performed correctly before moving on to Part 2."
@@ -95,7 +96,7 @@ The PyJWT package trims all padding characters ("=") from the JWT components. Th
 
 ## Project Dependencies
 
-Let's discuss these tools as well as some of the most important packages that we will use in this project.
+My favorite thing about Python is that for any type of application or library you could possibly need, it's already been created and made available via `pip`. When it comes to tools for creating REST APIs and JWTs, there is a dizzying array of possibilities. I'd like to give a brief overview of the most important packages and Flask extensions that we will be using in this project.
 
 ### PyJWT
 
@@ -127,9 +128,11 @@ I know, it sounds like magic. <a href="https://docs.sqlalchemy.org/en/13/core/en
 
 ## Development Dependencies
 
-The installation script for our application will allow the user to install dependencies that are only needed to run the test set and/or contribute to the development of the app. This is an extremely common option for a Python application, and in fact this is how we will install the application before we even begin working on the actual functionality. For a good description of the process we will use to enable this installation option, please read <a href="https://codefellows.github.io/sea-python-401d4/lectures/python_packaging_1.html#specifying-dependencies" target="_blank">this section from <span class="italics">An Introduction to Python Packaging</span></a>.
+The installation script for our application will allow the user to install dependencies that are only needed to run the test set and/or contribute to the development of the app. This is an extremely common option for a Python application, and in fact this is how we will install the application to ensure that we are executing our test cases against the code as it would be installed by an end-user.
 
-The `[dev]` installation option for our project will install a code formatter, linter, the unit testing framework and a few pytest plugins.
+For a good description of the process we will use to enable this installation option, please read <a href="https://codefellows.github.io/sea-python-401d4/lectures/python_packaging_1.html#specifying-dependencies" target="_blank">this section from <span class="italics">An Introduction to Python Packaging</span></a>.
+
+The `[dev]` installation option for our project will install a code formatter, a linter, the unit testing framework, some pytest plugins and the pre-commit package which will automatically run the code formatter on all changed files. Next, for each of these tools, I will give a brief explanation of why I chose that specific tool/package.
 
 ### Pytest
 
@@ -137,18 +140,22 @@ I have a strong preference for <a href="https://pytest.org" target="_blank">pyte
 
 The other feature that sets pytest apart is <a href="https://pytest.readthedocs.io/en/latest/fixture.html#fixtures" target="_blank">fixtures</a>. Fixtures can be extremely complex but in the simplest case a fixture is just a function that constructs and returns a test object (e.g., a function named `db` that returns a mock database object). A fixture is created by decorating the function with `@pytest.fixture`:
 
-{{< highlight python >}}@pytest.fixture
+```python
+@pytest.fixture
 def db():
-    return MockDatabase(){{< /highlight >}}
+    return MockDatabase()
+```
 
 If we wish to use the mock database object in a test case, we simply add a parameter with the same name as the fixture (i.e., `db`) to the test case function as shown below:
 
-{{< highlight python >}}def test_new_user(db, email, password):
+```python
+def test_new_user(db, email, password):
     new_user = User(email=email, password=password)
     db.session.add(new_user)
     db.session.commit()
     user_exists = User.query.filter_by(email=email).first()
-    assert user_exists{{< /highlight >}}
+    assert user_exists
+```
 
 When this test executes, pytest will discover and call the fixture named `db`, making the mock database object available within the test case. This method of decoupling test code from the objects needed to execute the test code is an example of <a href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank">dependency injection</a>.
 
@@ -179,13 +186,12 @@ The location of your test code in relation to your app code is very important. T
       <ul>
         <li>This allows you to run your tests against an installed version of your application after executing either <code>pip install .</code> or <code>pip install -e .</code></li>
         <li>The <code>-e</code> flag installs the application in <span class="bold-text">editable mode</span>, which allows you to run your tests against your local development instance of your code. This saves you from having to re-install your application whenever a change is made, since your tests will be executed against the code that you modified.</li>
-        <li>How is this possible? Editable mode installs your application using a symlink to your dev code.</li>
       </ul>
     </li>
   </ul>
 </div>
 
-In addition to the requirements listed above, I am using a project structure with an isolated **src** folder for this project. The important thing about the **src** folder is that it is **not a Python package** (i.e., it does not contain a `__init__.py` file). **src** is located at the root of the project and contains only a single folder named `flask_api_tutorial` (which is a Python package).
+In addition to these requirements, I am using a project structure with an isolated **src** folder for this project. The important thing about the **src** folder is that it is **not a Python package** (i.e., it does not contain a `__init__.py` file). The **src** folder is located at the root of the project and contains only a single folder named `flask_api_tutorial`. This folder **is** a Python package and will contain all of our application code.
 
 The project root will also contain the **tests** folder, the `setup.py` file to install the application, configuration files, license, README, etc. Here's a visual to help if you're confused by my description:
 
@@ -199,17 +205,21 @@ The project root will also contain the **tests** folder, the `setup.py` file to 
 |   |- <span class="project-empty-file">__init__.py</span>
 |   |- <span class="project-empty-file">...</span>
 |
-|- <span class="project-empty-file">setup.py</span></div></pre>
+|- <span class="project-empty-file">setup.py</span>
+|- <span class="project-empty-file">README.md</span>
+|- <span class="project-empty-file">...</span></div></pre>
 
 There are numerous benefits that result from structuring your project in this manner. The most obvious is that you are forced to install your application through `pip` in order to run your tests. This ensures that your `setup.py` script correctly deploys the application, allowing any issues to be detected and fixed immediately.
 
-<a href="https://blog.ionelmc.ro/2014/05/25/python-packaging/" target="_blank"><span class="italics">Python Packaging</span> by Ionel Cristian Mărieș</a> provides an excellent argument in favor of the **src** layout. Similarly, <a href="https://hynek.me/articles/testing-packaging/" target="_blank"><span class="italics">Testing & Packaging</span> by Hynek Schlawack</a> is a recent article arguing in favor of the **src** layout. I strongly recommend reading both blog posts in their entirety.
+<a href="https://blog.ionelmc.ro/2014/05/25/python-packaging/" target="_blank"><span class="italics">Python Packaging</span> by Ionel Cristian Mărieș</a> provides an excellent argument in favor of the **src** layout. Similarly, <a href="https://hynek.me/articles/testing-packaging/" target="_blank"><span class="italics">Testing & Packaging</span> by Hynek Schlawack</a> is a more recent article arguing in favor of the **src** layout. I strongly recommend reading both blog posts in their entirety.
 
 ### Create Initial Folders & Files
 
-With those guidelines in mind, let's start by creating the folder layout for our application.
+With those guidelines in mind, let's start by creating the folder layout for our application along with all `__init__.py` files.
 
-You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask_api_tutorial`. In this section, we will work on everything marked as <code class="work-file">NEW CODE</code> in the chart below (all files will be empty at this point):
+You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask_api_tutorial`. In most projects using the src-folder structure, the root folder and the folder containing the application code within the src-folder will have the same name.
+
+In this section, we will work on everything marked as <code class="work-file">NEW CODE</code> in the chart below (all files will be empty at this point):
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">src</span>
@@ -272,6 +282,8 @@ Feel free to create the project structure manually or through the command line a
 <span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">mkdir tests && cd tests && touch __init__.py</span>
 <span class="cmd-prompt">flask_api_tutorial/tests $</span> <span class="cmd-input">cd ..</span>
 <span class="cmd-prompt">flask_api_tutorial $</span></code></pre>
+
+The github repository for this project contains a tagged release for every section of the tutorial. For example, the release tagged as **v0.1** contains everything from this section, **v0.2** contains everything from [Part 2](/series/flask-api-tutorial/part-2), etc.
 
 ### `README.md` and `.gitignore`
 

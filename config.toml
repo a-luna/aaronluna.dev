@@ -63,7 +63,7 @@ pygmentsUseClasses = true
     url = "/series/"
     weight = 3
   [[menu.main]]
-    identifier = "about-me"
+    identifier = "about"
     name = "About Me"
     url = "/about/"
     weight = 4
@@ -88,7 +88,7 @@ pygmentsUseClasses = true
     weight = 2
 
   [[menu.social]]
-    url = "https://twitter.com/alunablog/"
+    url = "https://twitter.com/aaronlunadev/"
     name = "twitter"
     weight = 3
 

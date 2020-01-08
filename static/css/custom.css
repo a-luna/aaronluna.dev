@@ -69,7 +69,7 @@ code {
 }
 
 main {
-  margin: 0 20px 0 0;
+  margin: 0 40px 0 0;
 }
 
 main.list {
@@ -110,7 +110,7 @@ ol li p {
 
 .primary {
   font-size: 1em;
-  flex: 1 0 65%;
+  flex: 1 0 63%;
   margin: 0;
 }
 
@@ -128,23 +128,24 @@ ol li p {
 }
 
 .list .content {
-  margin: 0 0 0.5em;
+  margin: 0 0 10px;
 }
 
 .sidebar {
-  flex: 1 0 33%;
-  margin: 1em 0 0;
+  flex: 0 0 35%;
+  margin: 0;
 }
 
 #widgets div {
-  background-color: var(--widget-bg-color);;
+  background-color: var(--widget-bg-color);
   border-radius: 4px;
   margin: 0 0 20px;
-  padding: 7px 10px;
+  padding: 10px;
 }
 
 #widgets .widget__content {
   margin: 0;
+  padding: 5px;
 }
 
 #post-categories .widget__content {
@@ -178,22 +179,18 @@ ol li p {
 }
 
 #showcase {
-  color: #c4c4c4;
-  background-color: var(--widget-bg-color);
-  font-weight: 400;
   margin: 0 auto;
-  padding: 10px 15px;
   border-radius: 4px;
 }
 
 #showcase .showcase-message {
-  color: var(--tutorial-series);
+  color: var(--pink2);
   font-size: 1.3em;
   line-height: 1.2;
 }
 
 #showcase p {
-  margin: 0 0 5px;
+  margin: 0 0 10px;
 }
 
 #showcase a {
@@ -246,8 +243,8 @@ ol li p {
 .blog-list .main__content {
   background-color: #323232;
   border-bottom: 2px dotted #7f7f7f;
-  margin: 0 0 20px;
   padding: 0 0 20px;
+  margin: 0 0 10px;
 }
 
 .about-me .post__header {
@@ -345,6 +342,7 @@ h1.post__title {
   font-size: 1.5em;
   color: var(--h1-color);
   font-weight: 500;
+  margin: 0 0 0 0;
 }
 
 .tutorial h1.post__title {
@@ -741,7 +739,7 @@ span.italics.requirements {
 }
 
 .orange {
-  color: var(--orange3);
+  color: var(--orange2);
 }
 
 .light-blue {
@@ -1566,7 +1564,7 @@ figcaption {
 
 .list__item {
   border-bottom: 2px dotted #7f7f7f;
-  margin: 0 0 20px;
+  margin: 0 0 10px;
   padding: 0 0 20px;
 }
 
@@ -1961,15 +1959,6 @@ input {
   margin: 0;
 }
 
-#widgets {
-  display: flex;
-  width: 100%;
-  flex-flow: column nowrap;
-  margin: 0 0 20px;
-  padding: 0;
-  min-width: 256px;
-}
-
 .widget__title {
   color: #e2e2e2;
   font-size: 1.45em;
@@ -2057,6 +2046,7 @@ input {
   margin: 0;
   top: 0;
   left: 0;
+  border-radius: 4px;
 }
 
 .search-error {
@@ -2434,20 +2424,11 @@ table.aws-hosting-costs {
 
 .accordian section {
   background-color: var(--accordian-content-bg-color);
+  border-radius: 4px;
 }
 
 #github-accordian section {
   background-color: var(--gitrepo-content-bg-color);
-}
-
-.accordian section:first-child {
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
-}
-
-.accordian section:last-child {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
 }
 
 .accordian section.ac_hidden {
@@ -2467,6 +2448,8 @@ table.aws-hosting-costs {
 .accordian section h2 a,
 .tutorial .accordian section h2 a,
 #github-accordian section h2 a {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
   margin: 0 0 0 1px;
 }
 
@@ -2488,8 +2471,8 @@ table.aws-hosting-costs {
 .tutorial .accordian section h2 a:visited,
 .tutorial .accordian .pointer {
   color: var(--accordian-header-text-color);
+  font-weight: 700;
 }
-
 
 #github-accordian section h2 a,
 #github-accordian section h2 a:visited,
@@ -2523,6 +2506,13 @@ table.aws-hosting-costs {
 
 .accordian section:not(.ac_hidden) .pointer {
   transform: rotate(90deg);
+}
+
+.accordian-content,
+.tutorial .accordian-content,
+#github-accordian .accordian-content  {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .accordian-content,
@@ -2617,27 +2607,35 @@ header,
 .menu-bar,
 .site-menu {
   flex: 0 0 50%;
-  line-height: 1.2;
+  line-height: 1.3;
   white-space: nowrap;
 }
 
 #menu a {
-  color: var(--header-link-color1);
+  color: var(--nav-link-color);
   text-decoration: none;
-  border-top: 1px solid var(--header-bg-color);
-  border-bottom: 1px solid var(--header-bg-color);
+  border: none;
 }
 
 #menu a:hover,
-#menu a:focus,
-#menu a:active,
-#menu a:active:hover {
-  color: var(--header-link-color2);
-  text-decoration: none;
+#menu a:focus {
+  color: var(--nav-hover-link-color);
 }
 
-#menu .site-menu a.active {
-  color: var(--header-link-color2);
+#menu #home.active {
+  color: var(--home-active-link-color);
+}
+
+#menu #blog.active {
+  color: var(--blog-active-link-color);
+}
+
+#menu #tutorials.active {
+  color: var(--tutorials-active-link-color);
+}
+
+#menu #about.active {
+  color: var(--about-active-link-color);
 }
 
 #menu .site-name-link {
@@ -2651,8 +2649,7 @@ header,
   font-size: 20px;
 }
 
-.site-social,
-.site-menu {
+.site-social {
   display: flex;
   flex-flow: column nowrap;
   margin: auto 0;
@@ -2663,12 +2660,8 @@ header,
   letter-spacing: 0.4px;
 }
 
-.site-menu {
-  padding: 0 30px 0 0;
-}
-
 .site-social ul,
-.site-menu ul,
+.site-menu,
 #sourcerer-header {
   display: flex;
   flex-flow: row nowrap;
@@ -2676,13 +2669,12 @@ header,
   align-items: center;
   font-size: 0.95em;
   list-style: none;
-  padding: 0;
+  padding: 0 30px 0 0;
   margin: 0;
   overflow: hidden;
 }
 
-.site-social ul li,
-.site-menu ul li {
+.site-social ul li {
   float: left;
   white-space: nowrap;
 }
@@ -2697,6 +2689,13 @@ header,
   text-align: center;
   text-transform: lowercase;
   text-decoration: none;
+}
+
+.divider {
+  height: 1px;
+  margin: 0;
+  background: var(--site-bg-color);
+  border: 0;
 }
 
 .home {
@@ -2810,7 +2809,10 @@ header,
   margin: 0;
 }
 
-.post__header .post-meta-date,
+.post__header .post-meta-date {
+  margin: 0 0 10px 0;
+}
+
 .recent-post .post-meta-date {
   margin: 0 0 5px 0;
 }
@@ -2835,14 +2837,10 @@ header,
   flex-flow: row wrap;
   justify-content: stretch;
   padding: 0;
-}
-
-.list__item .post-categories {
   background-color: var(--page-bg-color);
 }
 
-#widgets .post-categories,
-#showcase .post-categories {
+#widgets .post-categories {
   background-color: var(--widget-bg-color);
 }
 
@@ -2863,6 +2861,7 @@ a.post-category,
 .post__meta a.post-category,
 #showcase a.post-category {
   --cat-color: var(--accent-color2);
+  --cat-hover-color: var(--accent-color2);
   font-size: 15px;
   font-weight: 700;
   color: var(--black2);
@@ -2888,6 +2887,7 @@ a.post-category,
   flex: 1 0 40%;
   text-align: center;
   text-transform: lowercase;
+  min-width: 100px;
 }
 
 a.post-category:hover,
@@ -2902,8 +2902,8 @@ a.post-category:active:hover,
 #showcase a.post-category:focus,
 #showcase a.post-category:active,
 #showcase a.post-category:active:hover {
-  color: var(--cat-color);
-  background-color: var(--home-card-bg-color);
+  background-color: var(--cat-hover-color);
+  border: 1px solid var(--cat-hover-color);
   text-decoration: none;
   font-weight: 700;
 }
@@ -2916,8 +2916,8 @@ a.post-category:active:hover,
 .post__meta a.post-category:focus,
 .post__meta a.post-category:active,
 .post__meta a.post-category:active:hover {
-  color: var(--cat-color);
-  background-color: var(--page-bg-color);
+  background-color: var(--cat-hover-color);
+  border: 1px solid var(--cat-hover-color);
   text-decoration: none;
   font-weight: 700;
 }
@@ -2928,6 +2928,7 @@ a.post-category:active:hover,
 .post__meta .post-category.python,
 #showcase .post-category.python {
   --cat-color: var(--python);
+  --cat-hover-color: var(--python-hover);
 }
 
 .badge.devops,
@@ -2935,6 +2936,7 @@ a.post-category:active:hover,
 .list__item .post-category.devops,
 .post__meta .post-category.devops {
   --cat-color: var(--devops);
+  --cat-hover-color: var(--devops-hover);
 }
 
 .badge.aws,
@@ -2942,6 +2944,7 @@ a.post-category:active:hover,
 .list__item .post-category.aws,
 .post__meta .post-category.aws {
   --cat-color: var(--aws);
+  --cat-hover-color: var(--aws-hover);
 }
 
 .badge.hugo,
@@ -2949,6 +2952,7 @@ a.post-category:active:hover,
 .list__item .post-category.hugo,
 .post__meta .post-category.hugo {
   --cat-color: var(--hugo);
+  --cat-hover-color: var(--hugo-hover);
 }
 
 .badge.javascript,
@@ -2956,6 +2960,7 @@ a.post-category:active:hover,
 .list__item .post-category.javascript,
 .post__meta .post-category.javascript {
   --cat-color: var(--javascript);
+  --cat-hover-color: var(--javascript-hover);
 }
 
 .badge.dotnet,
@@ -2963,6 +2968,7 @@ a.post-category:active:hover,
 .list__item .post-category.dotnet,
 .post__meta .post-category.dotnet {
   --cat-color: var(--dotnet);
+  --cat-hover-color: var(--dotnet-hover);
 }
 
 .badge.linux,
@@ -2970,6 +2976,7 @@ a.post-category:active:hover,
 .list__item .post-category.linux,
 .post__meta .post-category.linux {
   --cat-color: var(--linux);
+  --cat-hover-color: var(--linux-hover);
 }
 
 .badge.flask,
@@ -2978,6 +2985,7 @@ a.post-category:active:hover,
 .post__meta .post-category.flask,
 #showcase .post-category.flask {
   --cat-color: var(--flask);
+  --cat-hover-color: var(--flask-hover);
 }
 
 .badge.virtualization,
@@ -2985,6 +2993,7 @@ a.post-category:active:hover,
 .list__item .post-category.virtualization,
 .post__meta .post-category.virtualization {
   --cat-color: var(--virtualization);
+  --cat-hover-color: var(--virtualization-hover);
 }
 
 .badge.tutorial-series,
@@ -2993,6 +3002,7 @@ a.post-category:active:hover,
 .post__meta .post-category.tutorial-series,
 #showcase .post-category.tutorial-series {
   --cat-color: var(--tutorial-series);
+  --cat-hover-color: var(--tutorial-series-hover);
 }
 
 #home-blog-link,
@@ -3216,7 +3226,7 @@ blockquote td {
   border: 1px solid var(--mid-gray1);
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 700px) {
   .pagination {
     justify-content: center;
   }
@@ -3291,10 +3301,6 @@ blockquote td {
 
   h1.post__title {
     font-size: 1.25rem;
-  }
-
-  #showcase {
-    padding: 7px 10px;
   }
 
   #toc-header {
@@ -3489,6 +3495,8 @@ blockquote td {
   }
 
   .site-menu {
+    font-size: 1em;
+    justify-content: space-between;
     padding: 3px 1em 0;
   }
 
@@ -3497,14 +3505,9 @@ blockquote td {
     justify-content: space-between;
   }
 
-  .site-menu ul {
-    font-size: 1em;
-    justify-content: space-between;
-  }
-
   .site-menu a {
     font-size: 1.1em;
-    padding: 5px 10px 7px;
+    padding: 5px 10px 10px;
     margin: 0 3px;
   }
 
