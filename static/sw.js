@@ -222,18 +222,3 @@ self.addEventListener("fetch", function fetchHandler(event) {
   console.log(`intercepted fetch event for: ${url}`)
   event.respondWith(getFromCache(request, url).catch(defaultResponse));
 });
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.match(event.request)
-          .then((cachedResponse) => {
-            return cachedResponse || fetch(event.request).then((response) => {
-              cache.put(event.request, response.clone());
-              return response;
-            });
-          });
-      })
-  );
-});
