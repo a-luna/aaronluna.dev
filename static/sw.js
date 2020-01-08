@@ -178,7 +178,7 @@ function getFromCache(request, url) {
       }
       else {
         console.log(`cache contains no-match for: ${url}`);
-        Promise.reject(`no-match: ${url}`);
+        return Promise.reject(`no-match: ${url}`);
       }
     });
   });
