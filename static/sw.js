@@ -184,19 +184,19 @@ function getFromCache(request, url) {
   });
 }
 
-function updateCache(request, response) {
-  console.log(`adding cached response: ${request.url}`);
+function updateCache(request, url, response) {
+  console.log(`adding cached response: ${url}`);
   return caches.open(CACHE_NAME).then(cache => cache.put(request, response));
 }
 
-function fromNetwork(request) {
-  console.log(`requesting ${request.url} from network...`);
+function fromNetwork(request, url) {
+  console.log(`requesting ${url} from network...`);
   return fetch(request).then(response => {
     if (!response || response.status >= 400) {
-      console.log(`fetch-error: CODE: ${response.status} (${request.url})`);
-      return Promise.reject(`fetch-error: CODE: ${response.status} (${request.url})`);
+      console.log(`fetch-error: CODE: ${response.status} (${url})`);
+      return Promise.reject(`fetch-error: CODE: ${response.status} (${url})`);
     }
-    console.log(`successfully retrieved ${request.url}`);
+    console.log(`successfully retrieved ${url}`);
     return response;
   });
 }
@@ -213,9 +213,9 @@ self.addEventListener("fetch", function fetchHandler(event) {
   console.log(`intercepted fetch event for: ${url}`)
   event.respondWith(getFromCache(request, url)
     .catch(request => {
-      return fromNetwork(request)
+      return fromNetwork(request, url)
         .then(response => {
-          updateCache(request, response)
+          updateCache(request, url, response)
             .then(() => {
               console.log(`completed fetch event for: ${url}`);
               return response;
