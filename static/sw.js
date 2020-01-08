@@ -191,15 +191,13 @@ function updateCache(request, response) {
 
 function fromNetwork(request) {
   console.log(`requesting ${request.url} from network...`);
-  return new Promise((fulfill, reject) => {
-    fetch(request).then(response => {
-      if (!response || response.status >= 400) {
-        console.log(`fetch-error: CODE: ${response.status} (${request.url})`);
-        reject(`fetch-error: CODE: ${response.status} (${request.url})`);
-      }
-      console.log(`successfully retrieved ${request.url}`);
-      fulfill(response);
-    });
+  return fetch(request).then(response => {
+    if (!response || response.status >= 400) {
+      console.log(`fetch-error: CODE: ${response.status} (${request.url})`);
+      return Promise.reject(`fetch-error: CODE: ${response.status} (${request.url})`);
+    }
+    console.log(`successfully retrieved ${request.url}`);
+    return response;
   });
 }
 
