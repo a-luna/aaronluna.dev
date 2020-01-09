@@ -1,5 +1,6 @@
 ---
-title: "You are not connected to the internet"
+title: "The internet"
+lead: "You are not connected to it"
 slug: "offline"
 type: "offline"
 ---

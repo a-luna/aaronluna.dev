@@ -1338,17 +1338,29 @@ figcaption {
 }
 
 .warning {
-  color: var(--pink2);
+  color: var(--off-white2);
+  font-size: 1.3em;
+  margin: 0;
   border: none;
   background-color: var(--widget-bg-color);
 }
 
 .warning__code {
+  color: var(--pink2);
   font-size: 6em;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 5px;
   margin: 0 0 10px;
+}
+
+.warning__code i {
+  color: var(--pink2);
+  font-size: 0.8em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 5px;
+  margin: 0 10px 20px;
 }
 
 .warning__headline {
@@ -1359,10 +1371,8 @@ figcaption {
   text-transform: uppercase;
 }
 
-.warning__text {
-  font-size: 1.3em;
-  color: #d8d8d8;
-  margin: 0;
+.offline .warning__headline {
+  margin: 10px 0;
 }
 
 :focus > .menu__btn-title {
