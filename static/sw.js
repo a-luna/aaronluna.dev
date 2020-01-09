@@ -146,12 +146,14 @@ self.addEventListener("fetch", function fetchHandler(event) {
   if (!SUPPORTED_METHODS.includes(request.method) || !SUPPORTED_URL_SCHEMES.includes(url.protocol)) {
     event.respondWith((async () => await getFromNetwork(request, false))());
   }
-  event.respondWith((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    const cachedResponse = await cache.match(request);
-    if (cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))) {
-      return cachedResponse;
-    }
-    return await getFromNetwork(request, true);
-  })());
+  else {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const cachedResponse = await cache.match(request);
+      if (cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))) {
+        return cachedResponse;
+      }
+      return await getFromNetwork(request, true);
+    })());
+  }
 });
