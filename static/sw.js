@@ -107,6 +107,7 @@ function getFileExtension(url) {
 
 async function getFromNetwork(request, cacheResponse) {
   try {
+    const cache = await caches.open(CACHE_NAME);
     const response = await fetch(request);
     if (!response) {
       return await cache.match(OFFLINE_PAGE);
@@ -147,7 +148,7 @@ self.addEventListener("fetch", function fetchHandler(event) {
   }
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
-    const cachedResponse = await cache.match(event.request);
+    const cachedResponse = await cache.match(request);
     if (cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))) {
       return cachedResponse;
     }
