@@ -1,4 +1,4 @@
-const CACHE_VERSION = 9;
+const CACHE_VERSION = 10;
 const CACHE_NAME = `content-v${CACHE_VERSION}`;
 const OFFLINE_PAGE = "/offline/index.html";
 const NOT_FOUND_PAGE = "/404.html";
@@ -105,6 +105,23 @@ function getFileExtension(url) {
   return extension.endsWith("/") ? "/" : extension;
 }
 
+async function getFromNetwork(request, cacheResponse) {
+  try {
+    const response = await fetch(request);
+    if (!response) {
+      return await cache.match(OFFLINE_PAGE);
+    }
+    if (!cacheResponse || response.status !== 200 || response.type !== 'basic') {
+      return response;
+    }
+    await cache.put(request, response.clone());
+    return response;
+  }
+  catch {
+    return await cache.match(OFFLINE_PAGE);
+  }
+}
+
 self.addEventListener("install", event => {
   event.waitUntil(Promise.all([installServiceWorker(), self.skipWaiting()]));
 });
@@ -122,45 +139,18 @@ self.addEventListener("activate", event => {
   );
 });
 
-function defaultResponse() {
-  return caches.match(OFFLINE_PAGE);
-}
-
 self.addEventListener("fetch", function fetchHandler(event) {
   const { request } = event;
   const url = new URL(request.url);
-  if (!SUPPORTED_METHODS.includes(request.method)) {
-    return Promise.reject(`unsupported-request-type: ${request.method} ${url}`);
+  if (!SUPPORTED_METHODS.includes(request.method) || !SUPPORTED_URL_SCHEMES.includes(url.protocol)) {
+    event.respondWith((async () => await getFromNetwork(request, false))());
   }
-  if (!SUPPORTED_URL_SCHEMES.includes(url.protocol)) {
-    return Promise.reject(`unsupported-url-scheme: ${url}`);
-  }
-  console.log(`intercepted fetch event for: ${url}`)
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
     const cachedResponse = await cache.match(event.request);
     if (cachedResponse && !isCachedResponseExpired(cachedResponse, getTTL(url))) {
-      console.log(`retrieved cached response for: ${url}`);
-      console.log(`completed fetch event for: ${url}`);
       return cachedResponse;
     }
-    if (cachedResponse) {
-      console.log(`cached response for ${url} is expired`)
-    }
-    else {
-      console.log(`cache contains no-match for: ${url}`);
-    }
-    console.log(`requesting ${url} from network...`);
-    const response = await fetch(event.request);
-    if (!response || response.status !== 200 || response.type !== 'basic') {
-      console.log(`fetch-error: ${response.type} CODE: ${response.status} (${url})`);
-      console.log(`completed fetch event for: ${url}`);
-      return response;
-    }
-    console.log(`successfully retrieved: ${url}`);
-    console.log(`adding response to cache: ${url}`);
-    await cache.put(event.request, response.clone());
-    console.log(`completed fetch event for: ${url}`);
-    return response;
+    return await getFromNetwork(request, true);
   })());
 });

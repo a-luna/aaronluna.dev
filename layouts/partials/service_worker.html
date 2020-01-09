@@ -1,3 +1,4 @@
+{{ if not .Site.IsServer }}
 <script>
     if('serviceWorker' in navigator) {
         navigator.serviceWorker
@@ -12,3 +13,4 @@
             });
     }
 </script>
+{{ end }}

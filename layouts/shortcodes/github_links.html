@@ -1,9 +1,9 @@
 <div class="accordian" id="github-accordian">
-    <section class="github-accordian-section accordian-item {{ if $.Page.Param "toc" }}ac_hidden{{ end }}">
+    <section class="github-accordian-section accordian-item">
         <h2 class="github-accordian-button accordian-button"><i class="fa fa-chevron-right pointer"></i><a class="github-accordian-button" href="#github-accordian">Github Repository</a></h2>
         <div class="accordian-content">
             <div id="project-repo">
-                <div class="message">The complete code for this project is <a href="https://github.com/a-luna/flask-api-tutorial" target="_blank">available on github</a>. Each section of the tutorial is available as a tagged release, please use the links below to access the code at the point when everything in {{ $.Page.Params.series_part }} has been completed:</div>
+                <div class="message">The complete code for this project is <a href="https://github.com/a-luna/flask-api-tutorial" target="_blank">available on github</a>. The repository contains <a href="https://github.com/a-luna/flask-api-tutorial/releases" target="_blank">a tagged release for each section</a> of the tutorial, please use the links below to either browse or download the code as it should be after everything in <strong>{{ $.Page.Params.series_part }}</strong> has been completed:</div>
                 <ul>
                     <li><a href="{{ $.Page.Params.url_git_rel_browse }}" target="_blank">View Code</a></li>
                     <li><a href="{{ $.Page.Params.url_git_rel_zip }}">Download .zip file</a></li>

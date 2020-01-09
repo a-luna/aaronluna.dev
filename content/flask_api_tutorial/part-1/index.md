@@ -283,7 +283,9 @@ Feel free to create the project structure manually or through the command line a
 <span class="cmd-prompt">flask_api_tutorial/tests $</span> <span class="cmd-input">cd ..</span>
 <span class="cmd-prompt">flask_api_tutorial $</span></code></pre>
 
-The github repository for this project contains a tagged release for every section of the tutorial. For example, the release tagged as **v0.1** contains everything from this section, **v0.2** contains everything from [Part 2](/series/flask-api-tutorial/part-2), etc.
+The beginning and end of each section will contain github links to the project repository:
+
+{{< github_links >}}
 
 ### `README.md` and `.gitignore`
 

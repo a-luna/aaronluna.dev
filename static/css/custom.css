@@ -2534,6 +2534,10 @@ table.aws-hosting-costs {
   color: var(--gitrepo-content-link-color);
 }
 
+#github-accordian .accordian-content .message a {
+  font-weight: 700;
+}
+
 #project-repo {
   font-size: 0.95em;
   padding: 7px 10px;

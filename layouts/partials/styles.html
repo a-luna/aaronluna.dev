@@ -4,7 +4,7 @@
         {{ $CSS := $allCSS | resources.Concat "bundle.css" | postCSS }}
         <link rel="stylesheet" href="{{ $CSS.RelPermalink }}" media="screen">
     {{ else }}
-        {{ range .Site.Params.customCSS -}}
+        {{ range $allCSS -}}
             <link rel="stylesheet" href="{{ . | relURL }}">
         {{- end }}
     {{ end }}
