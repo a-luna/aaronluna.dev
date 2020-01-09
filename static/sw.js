@@ -107,19 +107,19 @@ function getFileExtension(url) {
 
 async function getFromNetwork(request, cacheResponse) {
   try {
-    const cache = await caches.open(CACHE_NAME);
     const response = await fetch(request);
     if (!response) {
-      return await cache.match(OFFLINE_PAGE);
+      return await caches.match(OFFLINE_PAGE);
     }
     if (!cacheResponse || response.status !== 200 || response.type !== 'basic') {
       return response;
     }
+    const cache = await caches.open(CACHE_NAME);
     await cache.put(request, response.clone());
     return response;
   }
   catch {
-    return await cache.match(OFFLINE_PAGE);
+    return await caches.match(OFFLINE_PAGE);
   }
 }
 
