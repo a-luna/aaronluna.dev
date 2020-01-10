@@ -73,7 +73,9 @@ main {
 }
 
 main.home {
-  margin: 0;
+  margin: 0 auto;
+  max-width: 750px;
+  width: 80%;
 }
 
 main.list {
@@ -3471,7 +3473,7 @@ blockquote td {
   }
 }
 
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 600px) {
   #site-name {
     font-size: 0.95em;
   }
@@ -3548,6 +3550,9 @@ blockquote td {
 }
 
 @media screen and (max-width: 500px) {
+  main.home {
+    width: 100%;
+  }
   .home .post {
     margin: 0 1em;
   }
