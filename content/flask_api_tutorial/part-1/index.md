@@ -203,7 +203,7 @@ Before we write any app code, let's customize the rules used by black. Create a 
 
 ```toml
 [tool.black]
-line-length = 99
+line-length = 89
 target-version = ['py37']
 include = '\.pyi?$'
 exclude =  '''
@@ -225,7 +225,7 @@ exclude =  '''
 '''
 ```
 
-I prefer to increase the maximum line length to 99. The black maintainers recommend a line-length of roughly 90, but you should use whatever line length works best for you. `target-version` controls which Python versions Black-formatted code should target. `include` and `exclude` are both regular expressions that match files and folders to format with black and exclude from formatting.
+I prefer to increase the maximum line length to 89. The black maintainers recommend a line-length of roughly 90, but you should use whatever line length works best for you. `target-version` controls which Python versions Black-formatted code should target. `include` and `exclude` are both regular expressions that match files and folders to format with black and exclude from formatting.
 
 ### Pre-commit Configuration
 
@@ -269,7 +269,8 @@ norecursedirs =
     .vscode
     migrations
     venv
-flake8-max-line-length = 99
+flake8-max-line-length = 89
+flake8-max-doc-length = 99
 flake8-ignore = E203, E266, E501, W503
 flake8-max-complexity = 18
 ```
@@ -285,9 +286,9 @@ We are obviously making many configuration decisions in this file. Please note t
     <li><strong>Line 10: </strong>The <code>--flake8</code> flag reports linting changes that are suggested by flake8. This option is only available because we will install the pytest-flake8 plugin as a dev requirement.</li>
     <li><strong>Line 12: </strong>This option should be self-explanatory, I prefer to enable verbose output for all test results.</li>
     <li><strong>Lines 13-18: </strong>The <span class="bold-text">norecursedirs</span> config option tells pytest to not look for test code in the specified list of folders. This makes pytest run much faster since the total number of locations to search is greatly reduced.</li>
-    <li><strong>Line 19: </strong>This and all config options that begin with <code>flake8</code> only apply to the pytest-flake8 plugin. <code>flake8-max-line-length</code> is set to 99 to enforce the same style rule I have customized in my black configuration.</li>
-    <li><strong>Line 20: </strong><code>flake8-ignore</code> tells pytest-flake8 to never report instances of the specified rule violations. This list is copied from the <code>flake8</code> <a href="https://github.com/python/black/blob/master/.flake8" target="_blank">config settings in black</a>, which supressses these errors since the rules they enfore violate PEP8.</li>
-    <li><strong>Line 21: </strong><code>flake8-max-complexity</code> sets the allowed threshold for cyclomatic complexity. If any function is more complex than the specified value, a flake8 error will be reported in the test results.</li>
+    <li><strong>Line 19: </strong>This and all config options that begin with <code>flake8</code> only apply to the pytest-flake8 plugin. <code>flake8-max-line-length</code> is set to 89 to enforce the same style rule I have customized in my black configuration.</li>
+    <li><strong>Line 21: </strong><code>flake8-ignore</code> tells pytest-flake8 to never report instances of the specified rule violations. This list is copied from the <code>flake8</code> <a href="https://github.com/python/black/blob/master/.flake8" target="_blank">config settings in black</a>, which supressses these errors since the rules they enfore violate PEP8.</li>
+    <li><strong>Line 22: </strong><code>flake8-max-complexity</code> sets the allowed threshold for cyclomatic complexity. If any function is more complex than the specified value, a flake8 error will be reported in the test results.</li>
   </ul>
 </div>
 
@@ -838,13 +839,18 @@ For each configuration, we verify that the value of `SECRET_KEY` is not equal to
   </div>
 </div>
 
-We can run these tests (and our static-analysis tools) with the `pytest` command:
+We can run these tests (and our static-analysis tools) with the `tox` command. This has the added benefit of verifying that the `setup.py` file correctly installs our application:
 
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pytest</span>
-<span class="cmd-results">================================================== test session starts ===================================================
-platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Desktop/flask_api_tutorial/venv/bin/python
-cachedir: .pytest_cache
-rootdir: /Users/aaronluna/Desktop/flask_api_tutorial, inifile: pytest.ini
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">tox</span>
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
+py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
+py37 run-test-pre: PYTHONHASHSEED='3969784365'
+py37 run-test: commands[0] | pytest
+================================================== test session starts ===================================================
+platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+cachedir: .tox/py37/.pytest_cache
+rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
 plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
 collected 29 items
 
@@ -878,7 +884,10 @@ tests/test_config.py::test_config_development PASSED                            
 tests/test_config.py::test_config_testing PASSED                                                                   [ 96%]
 tests/test_config.py::test_config_production PASSED                                                                [100%]
 
-=================================================== 29 passed in 4.17s ===================================================</span></code></pre>
+=================================================== 29 passed in 4.17s ===================================================
+________________________________________________________ summary _________________________________________________________
+  py37: commands succeeded
+  congratulations :)</span></code></pre>
 
 ## Flask CLI/Application Entry Point
 

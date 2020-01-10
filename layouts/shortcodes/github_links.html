@@ -8,7 +8,7 @@
                     <li><a href="{{ $.Page.Params.url_git_rel_browse }}" target="_blank">View Code</a></li>
                     <li><a href="{{ $.Page.Params.url_git_rel_zip }}">Download .zip file</a></li>
                     <li><a href="{{ $.Page.Params.url_git_rel_tar }}">Download .tar.gz file</a></li>
-                    {{- if $.Page.Param "url_git_rel_diff" }}<li><a href="{{ $.Page.Params.url_git_rel_diff }}">View Diff {{$.Page.Params.series_part}} &lt;-&gt; {{- if $.Page.NextInSection }}{{$.Page.NextInSection.Params.series_part}}{{- else }}N/A{{- end }}</a></li>{{- end }}
+                    {{- if $.Page.Param "url_git_rel_diff" }}<li><a href="{{ $.Page.Params.url_git_rel_diff }}">Diff {{$.Page.Params.series_part}} &lt;-&gt;&nbsp;{{- if $.Page.NextInSection }}{{$.Page.NextInSection.Params.series_part}}{{- else }}N/A{{- end }}</a></li>{{- end }}
                 </ul>
             </div>
         </div>
