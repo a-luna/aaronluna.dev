@@ -8,7 +8,11 @@
         {{ end }}
     </header>
     <div class="content main__content clearfix">
-        {{ if eq .Params.series_part "Overview" }} {{ partial "api_tutorial_series.html" . }} {{ end }} {{ .Content }}
+        {{ if eq .Params.series_part "Overview" }}
+            {{ partial "api_tutorial_series.html" . }}
+            {{ partial "api_tutorial_toc.html" . }}
+        {{ end }}
+        {{ .Content }}
     </div>
     {{ if not (eq .Params.series_part "Overview") }} {{- range (.Paginator 10).Pages }} {{- .Render "summary" }} {{- end }} {{ end }}
 </main>

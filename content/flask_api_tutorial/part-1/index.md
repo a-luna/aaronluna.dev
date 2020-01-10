@@ -21,160 +21,6 @@ twitter:
   title: "How To: Create a Flask API with JWT-Based Authentication (Part 1: Project Setup and Environment Configuration)"
   description: "In Part 1, the core concepts of REST and JWTs are introduced, project dependencies are described and installed, and the project is fully configured for prod/dev environments. The flask server and CLI are demonstrated to ensure the setup was performed correctly before moving on to Part 2."
 ---
-## Introduction
-
-It is my goal to make this tutorial series as informative and all-encompassing as possible. However, the content is targeted towards intermediate-level users of Python and Flask. I created a small test to quickly check your level of experience, please read the instructions below:
-
-<div class="steps">
-  <ol>
-    <li>Create a new Python 3.7 virtual environment and install the project dependencies from the <code>requirements.txt</code> file (using <code>pip</code>). Then, activate the virtual environment.</li>
-    <li>Create a method named <code>login</code> and bind it to the URL <strong>/login/</strong>, users are allowed to submit <code>GET</code> and <code>POST</code> requests to this URL. For a <code>GET</code>, this method should render the <code>login.html</code> template. For a <code>POST</code>, inspect the form data and attempt to authenticate the user based on the submitted credentials.</li>
-  </ol>
-</div>
-
-If every word makes sense to you and you could explain the CLI commands needed to perform **Step 1**, and the code needed to implement the route in **Step 2**, congratulations! You should have no problem understanding this tutorial. If you have an idea of how to perform these instructions but you're not 100% confident, I suggest looking through the docs/articles listed below until you have it all figured out:
-
-<ul class="list-of-links">
-  <li><a href="https://docs.python.org/3/tutorial/venv.html" target="_blank">Virtual Environments and Packages (The Python Tutorial)</a></li>
-  <li><a href="http://flask.pocoo.org/docs/1.0/quickstart/" target="_blank">Quickstart (Flask Documentation)</a></li>
-  <li><a href="https://realpython.com/python-virtual-environments-a-primer/" target="_blank">Python Virtual Environments: A Primer (Real Python)</a></li>
-</ul>
-
-If the instructions make absolutely zero sense to you, I have no idea how you ended up reading a series of articles about designing and creating a Flask API. You're welcome to stay, but I would suggest doing something more productive and enjoyable with your time.
-
-Ok, since we are all on the same page, let's discuss some of the core concepts we will be using in this project.
-
-### Statelessness
-
-I have made the conscious decision NOT to refer to this series as a REST API tutorial. Seemingly every API and every how-to article on API design written in the last few years proclaims itself RESTful. This trend is a disservice to the depth and complexity that Roy Fielding laid out in his doctoral thesis introducing and defining REST. I will go into further detail on this subject in [Part 3](/series/flask-api-tutorial/part-3/) when we begin configuring the API.
-
-However, I think it is important to point out where I am attempting to adhere to the requirements/constraints of REST. One of these constaints is **statelessness**. Statelessness is an essential characteristic of a RESTful system, but it can be a confusing concept at first.
-
-Obviously both the client and server in any hypothetical system keep state; they just keep different types of state. For example, a web browser keeps track of each web page visited as well as the current page; in a RESTful system, this is called **application state**. If the website is a banking application, the server hosting the website keeps track of which bank accounts have been accessed or modified; this is called  **resource state**. "Statelessness" is meant to convey that the server doesn't care about the client's application state, and therefore no data about the client's application state should be stored by the server.
-
-This has obvious implications for authentication scenarios since in a RESTful system the server does not store any information about which users are currently logged in. Therefore, in order to access a protected resource a client must must include authentication information with every request. In order to avoid including the client's password with every request, a common practice is for the server to generate an access token when user credentials have been verified. Now, when the client sends a request for access to a protected resource, the token is included in the request header and verified by the server. The most common format for authorization tokens is the JSON Web Token, which we will take a look at in the next section.
-
-### JSON Web Tokens
-
-JSON Web Token (JWT) is an <a href="https://tools.ietf.org/html/rfc7519" target="_blank">open IETF standard</a> that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. JWTs are made up of three parts: header, payload and signature. These are converted to a URL-safe base64-encoded string and concatenated together. Each part is separated by "." (the <a href="http://www.fileformat.info/info/unicode/char/2e/index.htm" target="_blank">full-stop</a> or period character).
-
-The **header** will identify the object as a JWT and also identify the algorithm used to generate the signature (e.g., `{"typ": "JWT", "alg": "HS256"}`). The conversion to URL-safe base64-encoded string is shown below:
-
-<pre><code><span class="green">      ASCII: </span><span class="goldenrod">{"t</span>  <span class="blue">yp"</span>  <span class="goldenrod">:"J</span>  <span class="blue">WT"</span>  <span class="goldenrod">,"a</span>  <span class="blue">lg"</span>  <span class="goldenrod">:"H</span>  <span class="blue">S25</span>  <span class="goldenrod">6"}</span>
-<span class="green">URLSAFE-B64: </span><span class="goldenrod">eyJ0</span> <span class="blue">eXAi</span> <span class="goldenrod">OiJK</span> <span class="blue">V1Qi</span> <span class="goldenrod">LCJh</span> <span class="blue">bGci</span> <span class="goldenrod">OiJS</span> <span class="blue">UzI1</span> <span class="goldenrod">NiJ9</span></code></pre>
-
-The **payload** is made up of various **claims**, which are key/value pairs containing information about the user and the key itself. There are many claims which are predefined (called <a href="https://tools.ietf.org/html/rfc7519#section-4.1" target="_blank">registered claims</a>), but you are free to create your own as well.
-
-Usually, the payload contains the time when the token was issued and the time when the token expires. These are registered claims and are identified by `iat` and `exp`, respectively. Datetime values must be expressed as "seconds since the epoch", and python contains <a href="https://docs.python.org/3/library/time.html" target="_blank">built-in functions</a> for converting `datetime` objects to this numeric format. However, the PyJWT package will take care of this conversion for you when creating a token.
-
-Another registered claim is `sub` (subject) which is meant to represent the entity that the token was issued to. When a user registers with the API, a random UUID value is generated and stored in the database which will be used as the value for `sub`.
-
-An example payload containing these three claims would be: `{"sub": "570eb73b-b4b4-4c86-b35d-390b47d99bf6", "exp": 1555873759, "iat": 1555872854}`. The conversion to URL-safe base64-encoded string is shown below:
-
-<pre><code><span class="green">      ASCII: </span><span class="goldenrod">{"s</span>  <span class="blue">ub"</span>  <span class="goldenrod">:"5</span>  <span class="blue">70e</span>  <span class="goldenrod">b73</span>  <span class="blue">b-b</span>  <span class="goldenrod">4b4</span>  <span class="blue">-4c</span>  <span class="goldenrod">86-</span>  <span class="blue">b35</span>  <span class="goldenrod">d-3</span>  <span class="blue">90b</span>  <span class="goldenrod">47d</span>  <span class="blue">99b</span>  <span class="goldenrod">f6"</span>  <span class="blue">,"e</span>  <span class="goldenrod">xp"</span>  <span class="blue">:15</span>  <span class="goldenrod">558</span>  <span class="blue">737</span>  <span class="goldenrod">59,</span>  <span class="blue">"ia</span>  <span class="goldenrod">t":</span>  <span class="blue">155</span>  <span class="goldenrod">587</span>  <span class="blue">285</span>  <span class="goldenrod">4}</span>
-<span class="green">URLSAFE-B64: </span><span class="goldenrod">eyJz</span> <span class="blue">dWIi</span> <span class="goldenrod">OiI1</span> <span class="blue">NzBl</span> <span class="goldenrod">Yjcz</span> <span class="blue">Yi1i</span> <span class="goldenrod">NGI0</span> <span class="blue">LTRj</span> <span class="goldenrod">ODYt</span> <span class="blue">YjM1</span> <span class="goldenrod">ZC0z</span> <span class="blue">OTBi</span> <span class="goldenrod">NDdk</span> <span class="blue">OTli</span> <span class="goldenrod">ZjYi</span> <span class="blue">LCJl</span> <span class="goldenrod">eHAi</span> <span class="blue">OjE1</span> <span class="goldenrod">NTU4</span> <span class="blue">NzM3</span> <span class="goldenrod">NTks</span> <span class="blue">Imlh</span> <span class="goldenrod">dCI6</span> <span class="blue">MTU1</span> <span class="goldenrod">NTg3</span> <span class="blue">Mjg1</span> <span class="goldenrod">NH0=</span></code></pre>
-
-The cryptographic **signature** is calculated from the header and payload which ensures that the information in both parts has not been modified. The conversion to URL-safe base64-encoded string is shown below:
-
-<pre><code><span class="green">        HEX: </span><span class="goldenrod">c88b51</span> <span class="blue">cb57fc</span> <span class="goldenrod">521fff</span> <span class="blue">0baf19</span> <span class="goldenrod">162dba</span> <span class="blue">b7d3e6</span> <span class="goldenrod">c2395b</span> <span class="blue">90512b</span> <span class="goldenrod">1f1847</span> <span class="blue">4f3ec5</span> <span class="goldenrod">672e</span>
-<span class="green">URLSAFE-B64: </span><span class="goldenrod">yItR</span>   <span class="blue">y1f8</span>   <span class="goldenrod">Uh__</span>   <span class="blue">C68Z</span>   <span class="goldenrod">Fi26</span>   <span class="blue">t9Pm</span>   <span class="goldenrod">wjlb</span>   <span class="blue">kFEr</span>   <span class="goldenrod">HxhH</span>   <span class="blue">Tz7F</span>   <span class="goldenrod">Zy4=</code></pre>
-
-Combining these into a JWT would result in the following token:
-
-<div class="command"><code><span class="white">eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI1NzBlYjczYi1iNGI0LTRjODYtYjM1ZC0zOTBiNDdkOTliZjYiLCJleHAiOjE1NTU4NzM3NTksImlhdCI6MTU1NTg3Mjg1NH0.yItRy1f8Uh__C68ZFi26t9PmwjlbkFErHxhHTz7FZy4</span></code></div>
-
-The PyJWT package trims all padding characters ("=") from the JWT components. The payload and signature each originally had one such character that is not present in the final version shown above.
-
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>Base64-encoded strings may look like gibberish, but <strong><u>DO NOT</u></strong> make the mistake of assuming that the payload data has been encrypted. <strong><u>NEVER</u></strong> include any sensitive data (e.g., user password, payment info) in the JWT payload since it can be easily decoded by anyone.</p>
-  </div>
-</div>
-
-## Project Dependencies
-
-My favorite thing about Python is that for any type of application or library you could possibly need, it's already been created and made available via `pip`. When it comes to tools for creating REST APIs and JWTs, there is a dizzying array of possibilities. I'd like to give a brief overview of the most important packages and Flask extensions that we will be using in this project.
-
-### PyJWT
-
-<a href="https://pyjwt.readthedocs.io/en/latest/" target="_blank">PyJWT</a> is the package we will use to generate and decode JSON Web Tokens (JWTs).
-
-### Flask-RESTPlus
-
-<a href="https://flask-restplus.readthedocs.io/en/stable/" target="_blank">Flask-RESTPlus</a> is a Flask extension that makes creating APIs simple (in fact, most of the configuration can be done with decorators). This extension provides helpful tools for marshalling data from custom Python objects to an appropriate format for sending as a HTTP response. As you would expect, there are also tools for parsing data from HTTP requests into basic and custom Python datatypes. However, my favorite feature is the visual, interactive documentation that is automatically generated for you using <a href="https://swagger.io/tools/swagger-ui/" target="_blank">Swagger UI</a>.
-
-### OpenAPI/Swagger UI
-
-The <a href="https://www.openapis.org" target="_blank">OpenAPI Initiative (OAI)</a> is an organization that aims to curate a single format for documenting API services. The OpenAPI format was originally known as the <a href="https://docs.swagger.io/spec.html" target="_blank">Swagger Specification</a>. <a href="https://swagger.io/tools/swagger-ui/" target="_blank">Swagger UI</a> is an extremely useful tool that generates a webpage from an OpenAPI/Swagger spec, providing visual documentation for your API that allows anybody to test your API methods, construct requests, inspect responses, etc.
-
-### Flask-CORS
-
-<a href="https://flask-cors.readthedocs.io/en/latest/" target="_blank">Flask-CORS</a> is a Flask extension for handling Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible. Using this extension to enable CORS for all routes (as is the case in this project) is extremely simple. As you will see shortly, the entire process involves initializing the extension with the Flask application instance with default values.
-
-### Flask-SQLAlchemy
-
-<a href="http://flask-sqlalchemy.palletsprojects.com/en/2.x/" target="_blank">Flask-SQLAlchemy</a> is a Flask extension that adds support for <a href="https://www.sqlalchemy.org/" target="_blank">SQLAlchemy</a> and makes integrating the ORM with your Flask application simple. If you are unfamiliar with SQLAlchemy, the description below from the official documentation is a perfect summation:
-
-<blockquote cite="https://docs.sqlalchemy.org/en/13/orm/tutorial.html"><p>The <strong>SQLAlchemy Object Relational Mapper</strong> presents a method of associating user-defined Python classes with database tables, and instances of those classes (objects) with rows in their corresponding tables. It includes a system that transparently synchronizes all changes in state between objects and their related rows, called a unit of work, as well as a system for expressing database queries in terms of the user defined classes and their defined relationships between each other.</p></blockquote>
-
-I know, it sounds like magic. <a href="https://docs.sqlalchemy.org/en/13/core/engines.html" target="_blank">Another key feature</a> of SQLALchemy is that the type of database you use (MySQL, SQLite, PostgreSQL, etc.) is almost completely irrelevent (it comes into play if you need to use a feature that is only supported by a specific backend). For example, you could have your API configured to use a PostgreSQL database in production, and use a simple SQLite file as the backend in your test and development environments. There would be no need to change any code to support each configuration, which, again sounds like magic.
-
-### Flask-Migrate (Alembic)
-
-<a href="https://pypi.org/project/alembic/" target="_blank">Alembic</a> is a database migrations tool created by the author of SQLAlchemy, and <a href="https://flask-migrate.readthedocs.io/en/latest/" target="_blank">Flask-Migrate</a> is a Flask extension that adds Alembic's operations to the Flask CLI. A database migration is a set of changes to a database schema (e.g., add new table, update foreign key relationships, etc.), similar to a commit in a version-control system. With Flask-Migrate, each migration is represented as a script of SQL statements, allowing you to "upgrade" a database to apply the schema changes or "downgrade" and undo the changes. This makes the process of deploying database changes to a production environment safe and easy; simply create a migration script when your changes have been tested and verified, then run the migration script in the production environment to apply the changes.
-
-## Development Dependencies
-
-The installation script for our application will allow the user to install dependencies that are only needed to run the test set and/or contribute to the development of the app. This is an extremely common option for a Python application, and in fact this is how we will install the application to ensure that we are executing our test cases against the code as it would be installed by an end-user.
-
-For a good description of the process we will use to enable this installation option, please read <a href="https://codefellows.github.io/sea-python-401d4/lectures/python_packaging_1.html#specifying-dependencies" target="_blank">this section from <span class="italics">An Introduction to Python Packaging</span></a>.
-
-The `[dev]` installation option for our project will install a code formatter, a linter, the unit testing framework, some pytest plugins and the pre-commit package which will automatically run the code formatter on all changed files. Next, for each of these tools, I will give a brief explanation of why I chose that specific tool/package.
-
-### Pytest
-
-I have a strong preference for <a href="https://pytest.org" target="_blank">pytest</a> as my testing framework. Compared to the built-in unittest library (or other frameworks like nose), pytest requires almost no boilerplate code (e.g., inheriting from `TestCase`) and relies solely on the built-in `assert` statement for verifying expected behavior. In contrast, with unittest you have to learn a new API with several different methods in order to "assert" the same expression (i.e., `self.assertEqual`, `self.assertFalse`, `self.assertIsNotNone`, etc.).
-
-The other feature that sets pytest apart is <a href="https://pytest.readthedocs.io/en/latest/fixture.html#fixtures" target="_blank">fixtures</a>. Fixtures can be extremely complex but in the simplest case a fixture is just a function that constructs and returns a test object (e.g., a function named `db` that returns a mock database object). A fixture is created by decorating the function with `@pytest.fixture`:
-
-```python
-@pytest.fixture
-def db():
-    return MockDatabase()
-```
-
-If we wish to use the mock database object in a test case, we simply add a parameter with the same name as the fixture (i.e., `db`) to the test case function as shown below:
-
-```python
-def test_new_user(db, email, password):
-    new_user = User(email=email, password=password)
-    db.session.add(new_user)
-    db.session.commit()
-    user_exists = User.query.filter_by(email=email).first()
-    assert user_exists
-```
-
-When this test executes, pytest will discover and call the fixture named `db`, making the mock database object available within the test case. This method of decoupling test code from the objects needed to execute the test code is an example of <a href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank">dependency injection</a>.
-
-### Black
-
-<a href="https://github.com/python/black" target="_blank">Black</a> is my preferred code formatter. Compared to YAPF or autopep8, black is deliberately opinionated and provides very few configuration options. With the other formatting tools, you have to spend time tweaking the configuration until it produces your desired format. With black, the only setting I tweak is the maximum line length (I increase it from 79 to 99).
-
-This has an additional benefit if you are collaborating with others on a code base, since enforcing consistent style/format is difficult when everyone is using different customized autopep8 settings. Having a consistent style throughout a project will make your team more productive since less time will be spent conforming to style and the code will become easier to digest visually.
-
-### Flake8
-
-Flake8 is my preferred code linter. While black reformats your code, it doesn't modify the behavior in any way (black verifies that the AST is not modified before applying any changes). Flake8 is actually a wrapper for three different static-analysis tools: pydocstyle (checks for compliance with PEP8 formatting rules, like black but stricter), PyFlakes (checks for programming errors that would only be caught at run-time) and mccabe (checks cyclomatic complexity).
-
-Flake8 can be configured in a multitude of ways, so getting the most out of it requires a bit of an investment. Applied correctly, flake8 will make your code easier to read, less bug-prone and more maintainable. We will explore my preferred flake8 settings later in this tutorial.
-
-### Tox
-
-<a href="https://tox.readthedocs.io/en/latest/" target="_blank">Tox is a very powerful tool</a> that can be used as a single entry point for various build, test and release activities. The most common use case for tox is validating the installation process for a project and running arbitrary commands (such as unit tests) within isolated virtual environments. This is extremely important if you need to support multiple Python versions, and extremely helpful since tox automates what would otherwise be a tedious, involved process.
-
 ## Project Structure
 
 The location of your test code in relation to your app code is very important. There are multiple valid ways to layout your project, and the pros and cons of various project layouts are collected as <a href="https://docs.pytest.org/en/latest/goodpractices.html" target="_blank">a helpful set of best practices</a> on the pytest documentation site. The specific recommendations that I have applied to this project are given below:
@@ -250,6 +96,7 @@ In this section, we will work on everything marked as <code class="work-file">NE
 |
 |- <span class="work-file">.env</span>
 |- <span class="work-file">.gitignore</span>
+|- <span class="work-file">.pre-commit-config.yaml</span>
 |- <span class="work-file">pyproject.toml</span></div>
 |- <span class="work-file">pytest.ini</span>
 |- <span class="work-file">README.md</span>
@@ -354,7 +201,7 @@ SECRET_KEY="\x1ah\xe9\x00\x04\x1d>\x00\x14($\x17\x90\x1f?~?\xdc\xe9\x91U\xd2\xb5
 
 Before we write any app code, let's customize the rules used by black. Create a file named `pyproject.toml` in the project root folder and add the following content:
 
-```ini
+```toml
 [tool.black]
 line-length = 99
 target-version = ['py37']
@@ -379,6 +226,25 @@ exclude =  '''
 ```
 
 I prefer to increase the maximum line length to 99. The black maintainers recommend a line-length of roughly 90, but you should use whatever line length works best for you. `target-version` controls which Python versions Black-formatted code should target. `include` and `exclude` are both regular expressions that match files and folders to format with black and exclude from formatting.
+
+### Pre-commit Configuration
+
+Wouldn't it be helpful if there was a way to make sure that all of the code within a commit had been formatted with `black` before the changes were pushed to the remote server? That way, the project will never contain code with different formatting styles, making everything nice and uniform.
+
+There is a really easy way to do this thanks to <a href="https://git-scm.com/book/gr/v2/Customizing-Git-Git-Hooks" target="_blank">git hooks</a>. There are many different hooks available but the one we are interested in is the pre-commit hook. We can use this hook by providing a script that determines whether the commit is rejected or allowed to proceed.
+
+Thankfully, all of the work has been done for us by the folks behind the `pre-commit` package that we will install shortly. In order to run `black` on all files being committed, create a new file named `.pre-commit-config.yaml` in the project root folder and enter the content below:
+
+```yaml
+repos:
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+        language_version: python3.7
+```
+
+The workflow that results from running this script is as follows: if any file in the commit is not correctly formatted, the commit will be rejected and `black` will apply any necessary changes. Then, you simply update your commit to include the formatting changes, submit it again and this time the commit will be made.
 
 ### Pytest Configuration
 
@@ -427,9 +293,34 @@ We are obviously making many configuration decisions in this file. Please note t
 
 ### Tox Configuration
 
-### Installation Script
+The last configuration file we need is for Tox. The main reason we are using tox is because it allows us to test our src-folder project structure in the proper manner. Right now, the configuration we use will be very simple. Create a new file named `tox.ini` in the project root folder and add the content below:
 
-After the folder structure is in place, create a new file named `setup.py` in the project root folder and add the content below. Then, save and close the file:
+```ini
+[tox]
+envlist = py37
+
+[testenv]
+deps =
+    black
+    flake8
+    pydocstyle
+    pytest
+    pytest-black
+    pytest-clarity
+    pytest-dotenv
+    pytest-flake8
+    pytest-flask
+
+commands = pytest
+```
+
+This file tells tox to install the packages listed under `deps` (as well as our application) in a new, isolated virtual environment running Python 3.7 and run a single command: `pytest`.
+
+That's all of the configuration files we need! We still need to create another file in the project root folder, though.
+
+## Installation Script
+
+Next, create a new file named `setup.py` in the project root folder and add the content below. Then, save and close the file:
 
 ```python
 """Installation script for flask-api-tutorial application."""
@@ -437,9 +328,11 @@ from pathlib import Path
 from setuptools import setup, find_packages
 
 DESCRIPTION = (
-    "Boilerplate Flask API with Flask-RESTPlus, SQLAlchemy, pytest, flake8, tox configured"
+    "Boilerplate Flask API with Flask-RESTPlus, SQLAlchemy, pytest, flake8, "
+    "tox configured"
 )
-README = (Path(__file__).parent / "README.md").read_text()
+APP_ROOT = Path(__file__).parent
+README = (APP_ROOT / "README.md").read_text()
 AUTHOR = "Aaron Luna"
 AUTHOR_EMAIL = "admin@aaronluna.dev"
 PROJECT_URLS = {
@@ -461,9 +354,10 @@ INSTALL_REQUIRES = [
     "urllib3",
 ]
 EXTRAS_REQUIRE = {
-    "tests": [
+    "dev": [
         "black",
         "flake8",
+        "pre-commit",
         "pydocstyle",
         "pytest",
         "pytest-black",
@@ -474,8 +368,6 @@ EXTRAS_REQUIRE = {
         "tox",
     ]
 }
-EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + ["pre-commit"]
-
 
 setup(
     name="flask-api-tutorial",
@@ -508,8 +400,7 @@ Finally, install the `flask-api-tutorial` application in editable mode:
 <span class="cmd-comment"># removed package install messages...</span>
 <span class="cmd-results">Installing collected packages: MarkupSafe, Jinja2, itsdangerous, click, Werkzeug, Flask, Six, pycparser, cffi, bcrypt, Flask-Bcrypt, Flask-Cors, SQLAlchemy, Flask-SQLAlchemy, Mako, python-dateutil, python-editor, alembic, Flask-Migrate, more-itertools, zipp, importlib-metadata, attrs, pyrsistent, jsonschema, pytz, aniso8601, flask-restplus, PyJWT, python-dotenv, urllib3, idna, certifi, chardet, requests, regex, appdirs, pathspec, toml, typed-ast, black, pycodestyle, entrypoints, mccabe, pyflakes, flake8, snowballstemmer, pydocstyle, py, pyparsing, packaging, pluggy, wcwidth, pytest, pytest-black, termcolor, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask, filelock, virtualenv, tox, pyyaml, nodeenv, cfgv, aspy.yaml, identify, pre-commit, flask-api-tutorial
   Running setup.py develop for flask-api-tutorial
-Successfully installed Flask-1.1.1 Flask-Bcrypt-0.7.1 Flask-Cors-3.0.8 Flask-Migrate-2.5.2 Flask-SQLAlchemy-2.4.1 Jinja2-2.10.3 Mako-1.1.0 MarkupSafe-1.1.1 PyJWT-1.7.1 SQLAlchemy-1.3.12 Six-1.13.0 Werkzeug-0.16.0 alembic-1.3.2 aniso8601-8.0.0 appdirs-1.4.3 aspy.yaml-1.3.0 attrs-19.3.0 bcrypt-3.1.7 black-19.10b0 certifi-2019.11.28 cffi-1.13.2 cfgv-2.0.1 chardet-3.0.4 click-7.0 entrypoints-0.3 filelock-3.0.12 flake8-3.7.9 flask-api-tutorial flask-restplus-0.13.0 identify-1.4.9 idna-2.8 importlib-metadata-1.3.0 itsdangerous-1.1.0 jsonschema-3.2.0 mccabe-0.6.1 more-itertools-8.0.2 nodeenv-1.3.3 packaging-19.2 pathspec-0.7.0 pluggy-0.13.1 pre-commit-1.20.0 py-1.8.1 pycodestyle-2.5.0 pycparser-2.19 pydocstyle-5.0.1 pyflakes-2.1.1 pyparsing-2.4.6 pyrsistent-0.15.6 pytest-5.3.2 pytest-black-0.3.7 pytest-clarity-0.2.0a1 pytest-dotenv-0.4.0 pytest-flake8-1.0.4 pytest-flask-0.15.0 python-dateutil-2.8.1 python-dotenv-0.10.3 python-editor-1.0.4 pytz-2019.3 pyyaml-5.2 regex-2019.12.20 requests-2.22.0 snowballstemmer-2.0.0 termcolor-1.1.0 toml-0.10.0 tox-3.14.3 typed-ast-1.4.0 urllib3-1.25.7 virtualenv-16.7.9 wcwidth-0.1.7 zipp-0.6.0</span>
-<span class="cmd-venv">(venv) flask_api_tutorial $</span></code></pre>
+Successfully installed Flask-1.1.1 Flask-Bcrypt-0.7.1 Flask-Cors-3.0.8 Flask-Migrate-2.5.2 Flask-SQLAlchemy-2.4.1 Jinja2-2.10.3 Mako-1.1.0 MarkupSafe-1.1.1 PyJWT-1.7.1 SQLAlchemy-1.3.12 Six-1.13.0 Werkzeug-0.16.0 alembic-1.3.2 aniso8601-8.0.0 appdirs-1.4.3 aspy.yaml-1.3.0 attrs-19.3.0 bcrypt-3.1.7 black-19.10b0 certifi-2019.11.28 cffi-1.13.2 cfgv-2.0.1 chardet-3.0.4 click-7.0 entrypoints-0.3 filelock-3.0.12 flake8-3.7.9 flask-api-tutorial flask-restplus-0.13.0 identify-1.4.9 idna-2.8 importlib-metadata-1.3.0 itsdangerous-1.1.0 jsonschema-3.2.0 mccabe-0.6.1 more-itertools-8.0.2 nodeenv-1.3.3 packaging-19.2 pathspec-0.7.0 pluggy-0.13.1 pre-commit-1.20.0 py-1.8.1 pycodestyle-2.5.0 pycparser-2.19 pydocstyle-5.0.1 pyflakes-2.1.1 pyparsing-2.4.6 pyrsistent-0.15.6 pytest-5.3.2 pytest-black-0.3.7 pytest-clarity-0.2.0a1 pytest-dotenv-0.4.0 pytest-flake8-1.0.4 pytest-flask-0.15.0 python-dateutil-2.8.1 python-dotenv-0.10.3 python-editor-1.0.4 pytz-2019.3 pyyaml-5.2 regex-2019.12.20 requests-2.22.0 snowballstemmer-2.0.0 termcolor-1.1.0 toml-0.10.0 tox-3.14.3 typed-ast-1.4.0 urllib3-1.25.7 virtualenv-16.7.9 wcwidth-0.1.7 zipp-0.6.0</span></code></pre>
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -520,9 +411,14 @@ Successfully installed Flask-1.1.1 Flask-Bcrypt-0.7.1 Flask-Cors-3.0.8 Flask-Mig
   </div>
 </div>
 
+Next, run the `pre-commit install` command to actually add the hooks to the local `.git` folder:
+
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pre-commit install</span>
+<span class="cmd-results">pre-commit installed at .git/hooks/pre-commit</span></code></pre>
+
 ## `flask_api_tutorial.util` Package
 
-The `flask_api_tutorial.util` package contains general-purpose utlity classes and functions that we will use througout this project. They are not related to the main topics of this tutorial, so let's get them out of the way before we begin working on the actual project.
+The `flask_api_tutorial.util` package contains general-purpose utlity classes and functions that we will use throughout this project. They are not related to the main topics of this tutorial, so let's get them out of the way before we begin working on the actual project.
 
 ### `Result` Class
 
@@ -735,8 +631,6 @@ def get_timespan(td):
 
 ## Environment Configuration
 
-### `get_config` Function
-
 Next, create a file named `config.py` in the `src/flask_api_tutorial` folder and add the content below. Save the file:
 
 ```python {linenos=table}
@@ -842,7 +736,8 @@ As long as `python-dotenv` is installed, when the `flask` command is run any env
 
 In the `src/flask_api_tutorial` folder's `__init__.py` file, add the following content and save the file:
 
-{{< highlight python >}}"""Flask app initialization via factory pattern."""
+```python
+"""Flask app initialization via factory pattern."""
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
@@ -865,11 +760,12 @@ def create_app(config_name):
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
-    return app{{< /highlight >}}
+    return app
+```
 
 We are using the <a href="http://flask.pocoo.org/docs/0.12/patterns/appfactories/" target="_blank">application factory pattern</a> to create instances of our app. This makes creating different versions of our application with different settings simple, just provide the type of environment you wish to use as the `config_name` parameter to the `create_app` function. This value retrieves the configuration settings using the `get_config` function we created in `config.py`.
 
-After creating the Flask app and applying the config settings, we initialize the extension objects (`cors`, `db`, `migrate`, `bcrypt`) by calling each object's `init_app` method with the newly-created Flask app. By doing this, no application-specific state is stored on the extension object, so one extension object can be used for multiple apps.
+After creating the Flask app and applying the config settings, we initialize the extension objects (`cors`, `db`, `migrate`, `bcrypt`) by calling each object's `init_app` method and passing in the newly-created Flask app to the method. By doing this, no application-specific state is stored on the extension object, so one extension object can be used for multiple apps.
 
 You should recognize all of the Flask extensions from the first section of this post, except for Flask-Bcrypt. This extension provides bcrypt hashing utitlities which will be used to securely store and verify user passwords.
 
@@ -945,38 +841,44 @@ For each configuration, we verify that the value of `SECRET_KEY` is not equal to
 We can run these tests (and our static-analysis tools) with the `pytest` command:
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pytest</span>
-<span class="cmd-results">=============================================== test session starts ================================================
-platform darwin -- Python 3.7.4, pytest-5.0.1, py-1.8.0, pluggy-0.12.0 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
+<span class="cmd-results">================================================== test session starts ===================================================
+platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Desktop/flask_api_tutorial/venv/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
+rootdir: /Users/aaronluna/Desktop/flask_api_tutorial, inifile: pytest.ini
 plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
-collected 23 items
+collected 29 items
 
-run.py::BLACK PASSED                                                                                         [  4%]
-run.py::FLAKE8 PASSED                                                                                        [  8%]
-setup.py::BLACK PASSED                                                                                       [ 13%]
-setup.py::FLAKE8 PASSED                                                                                      [ 17%]
-app/__init__.py::BLACK PASSED                                                                                [ 21%]
-app/__init__.py::FLAKE8 PASSED                                                                               [ 26%]
-app/config.py::BLACK PASSED                                                                                  [ 30%]
-app/config.py::FLAKE8 PASSED                                                                                 [ 34%]
-app/api/__init__.py::BLACK PASSED                                                                            [ 39%]
-app/api/__init__.py::FLAKE8 PASSED                                                                           [ 43%]
-app/api/auth/__init__.py::BLACK PASSED                                                                       [ 47%]
-app/api/auth/__init__.py::FLAKE8 PASSED                                                                      [ 52%]
-app/api/widgets/__init__.py::BLACK PASSED                                                                     [ 56%]
-app/api/widgets/__init__.py::FLAKE8 PASSED                                                                    [ 60%]
-app/models/__init__.py::BLACK PASSED                                                                         [ 65%]
-app/models/__init__.py::FLAKE8 PASSED                                                                        [ 69%]
-app/util/__init__.py::BLACK PASSED                                                                           [ 73%]
-app/util/__init__.py::FLAKE8 PASSED                                                                          [ 78%]
-test/test_config.py::BLACK PASSED                                                                            [ 82%]
-test/test_config.py::FLAKE8 PASSED                                                                           [ 86%]
-test/test_config.py::test_config_development PASSED                                                          [ 91%]
-test/test_config.py::test_config_testing PASSED                                                              [ 95%]
-test/test_config.py::test_config_production PASSED                                                           [100%]
+run.py::BLACK PASSED                                                                                               [  3%]
+run.py::FLAKE8 PASSED                                                                                              [  6%]
+setup.py::BLACK PASSED                                                                                             [ 10%]
+setup.py::FLAKE8 PASSED                                                                                            [ 13%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                   [ 17%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                  [ 20%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                                     [ 24%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                    [ 27%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                               [ 31%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                              [ 34%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                          [ 37%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                         [ 41%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                       [ 44%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                      [ 48%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                            [ 51%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                           [ 55%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                              [ 58%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                             [ 62%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                         [ 65%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                        [ 68%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                                [ 72%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                               [ 75%]
+tests/__init__.py::BLACK PASSED                                                                                    [ 79%]
+tests/__init__.py::FLAKE8 PASSED                                                                                   [ 82%]
+tests/test_config.py::BLACK PASSED                                                                                 [ 86%]
+tests/test_config.py::FLAKE8 PASSED                                                                                [ 89%]
+tests/test_config.py::test_config_development PASSED                                                               [ 93%]
+tests/test_config.py::test_config_testing PASSED                                                                   [ 96%]
+tests/test_config.py::test_config_production PASSED                                                                [100%]
 
-============================================ 23 passed in 2.79 seconds =============================================</span></code></pre>
+=================================================== 29 passed in 4.17s ===================================================</span></code></pre>
 
 ## Flask CLI/Application Entry Point
 
@@ -1038,7 +940,8 @@ Commands:
 
 Open `run.py` and add the following content:
 
-{{< highlight python "linenos=table" >}}"""Flask CLI/Application entry point."""
+```python {linenos=table}
+"""Flask CLI/Application entry point."""
 import os
 
 from app import create_app, db
@@ -1048,7 +951,8 @@ app = create_app(os.getenv("FLASK_ENV", "development"))
 
 @app.shell_context_processor
 def shell():
-    return {"db": db}{{< /highlight >}}
+    return {"db": db}
+```
 
 Please note the following about `run.py` (a.k.a the application entry point):
 
@@ -1063,8 +967,8 @@ Please note the following about `run.py` (a.k.a the application entry point):
 The `shell` method in the `run.py` file is decorated with `@app.shell_context_processor`. This is the method that executes when we run `flask shell`. According to the `flask --help` documentation this command "Runs a shell in the app context." If you are not sure what this means, consider the examples below:
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">python</span>
-<span class="cmd-results">Python 3.7.4 (default, May  7 2019, 00:14:38)
-[Clang 10.0.1 (clang-1001.0.46.4)] on darwin
+<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+[Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">app</span>
 <span class="cmd-repl-results">Traceback (most recent call last):
@@ -1083,8 +987,8 @@ NameError: name 'db' is not defined</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">exit()</span></code></pre>
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
-<span class="cmd-results">Python 3.7.4 (default, May  7 2019, 00:14:38)
-[Clang 10.0.1 (clang-1001.0.46.4)] on darwin
+<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+[Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 App: app [development]
 Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">app</span>
@@ -1095,9 +999,11 @@ Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
 
 In the regular Python interpreter, the `app` and `db` objects are not recognized unless explicitly imported. But when we start the interpreter using `flask shell` the `app` object is imported automatically. This is nice, but what makes `flask shell` really useful is the ability to import a dictionary of objects that will be automatically imported in the Python interpreter. We configure this dictionary as the return value of the `shell_context_processor` function:
 
-{{< highlight python >}}@app.shell_context_processor
+```python
+@app.shell_context_processor
 def shell():
-    return {"db": db}{{< /highlight >}}
+    return {"db": db}
+```
 
 In [Part 2](/series/flask-api-tutorial/part-2/), as we add model classes for each database table, we will add the models to this dictionary so they will be available to us in the shell context without importing them manually. The `shell_context_processor` function must return a dictionary and not a list. This allows you to control the names used in the shell, since the dictionary key for each object will be used as the name.
 
@@ -1128,8 +1034,6 @@ Commands:
   shell   Run a shell in the app context.</span></code></pre>
 
 ## Checkpoint
-
-{{< github_links >}}
 
 Most of the work done in this section wasn't related to any specific project requirements, but I think we can claim at least partial credit on one (the `ProductionConfig` settings define the token age as one hour and will be used when creating JWTs). The <span class="italics requirements">JWTs must expire after 1 hour (in production)</span> item has been marked as partially complete (<span class="fa fa-star-half-o goldenrod"></span>):
 
