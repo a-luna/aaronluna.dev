@@ -215,7 +215,7 @@ There are numerous benefits that result from structuring your project in this ma
 
 ### Create Initial Folders & Files
 
-With those guidelines in mind, let's start by creating the folder layout for our application along with all `__init__.py` files.
+With those guidelines in mind, let's start by creating the folder layout for our application (and also create empty `__init__.py` files for each Python package).
 
 You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask_api_tutorial`. In most projects using the src-folder structure, the root folder and the folder containing the application code within the src-folder will have the same name.
 
@@ -287,9 +287,145 @@ The beginning and end of each section will contain github links to the project r
 
 {{< github_links >}}
 
+### Create Virtual Environment
+
+Next, create a new virtual environment by whatever method you prefer (this project requires Python 3.6+). I use `pyenv` to manage multiple installations of Python since various projects must support and be tested against different or multiple versions. For a quick and easy guide to setting up and using `pyenv`, check out <a href="https://hackernoon.com/reaching-python-development-nirvana-bb5692adf30c" target="_blank">this article from Hacker Noon</a>.
+
+Even if you do not use `pyenv`, the process to create and activate a virtual environment will be similar to the steps below:
+
+<pre><code><span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python --version</span>
+<span class="cmd-results">Python 2.7.14</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">pyenv local 3.7.5</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python --version</span>
+<span class="cmd-results">Python 3.7.5</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python -m venv venv</span>
+<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">source venv/bin/activate</span>
+<span class="cmd-venv">(venv) flask_api_tutorial $</span></code></pre>
+
+After activating the new virtual environment, upgrade `pip`, `setuptools` and `wheel`:
+
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pip install --upgrade pip setuptools wheel</span>
+<span class="cmd-comment"># removed package upgrade messages...</span>
+<span class="cmd-results">Successfully installed pip-19.3.1 setuptools-43.0.0 wheel-0.33.6</span></code></pre>
+
+## Configuration Files
+
+If you are familiar with the Python ecosystem, you have probably noticed that the root folder for any project that is more complex than a to-do list is filled with various configuration files, a `README.md`, a license file, `requirements.txt`, etc. Unfortunately, this project will be no different. Let's get these out of the way right now.
+
+At this point, I recommend switching to your IDE of choice for Python development. I am a huge fan of <a href="https://code.visualstudio.com" target="_blank">VSCode</a>, so that is what I will be using.
+
 ### `README.md` and `.gitignore`
 
-Create two empty files in the project root folder: one named `README.md` and the other named `.gitignore`. Feel free to copy the versions in the github repository for this project. I am not providing an example to copy & paste since people tend to very opinionated about what files/folders they include in their `.gitignore`. The version I am using is customized from <a href="https://github.com/github/gitignore/blob/master/Python.gitignore" target="_blank">this official example `.gitignore` file for Python projects</a>.
+Create two empty files in the project root folder: one named `README.md` and the other named `.gitignore`. Feel free to copy the versions in the github repository for this project. I am not providing an example to copy & paste since people tend to very opinionated about what files/folders they include in their `.gitignore`. The version I am using is customized from <a href="https://github.com/github/gitignore/blob/master/Python.gitignore" target="_blank">this example `.gitignore` file for Python projects from the official github repository</a>.
+
+### `.env` File
+
+Create a file named `.env` in the project root folder and add the values below. Save the file:
+
+```ini
+FLASK_APP=run.py
+FLASK_ENV=development
+SECRET_KEY="please change me"
+```
+
+`FLASK_APP` is the filepath (or module import-path) where the Flask application object is located (<a href="http://flask.pocoo.org/docs/1.0/cli/#application-discovery" target="_blank">More info on <code>FLASK_APP</code></a>).
+
+`FLASK_ENV` only has two valid values: `development` and `production`. Setting `FLASK_ENV=development` enables the interactive debugger and automatic file reloader (<a href="http://flask.pocoo.org/docs/1.0/config/#environment-and-debug-features" target="_blank">More info on <code>FLASK_ENV</code></a>).
+
+The `SECRET_KEY` will be used to sign our JSON authorization tokens. The value you choose for this key should be a long, random string of bytes. <span class="emphasis">It is absolutely vital that this value remains secret</span> since anyone who knows the value can generate authorization keys for your API. <a href="http://flask.pocoo.org/docs/1.0/config/?highlight=secret_key#SECRET_KEY" target="_blank">The recommended way</a> to generate a `SECRET_KEY` is to use the Python interpreter:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">python</span>
+<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+[Clang 11.0.0 (clang-1100.0.33.8)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">import os</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">os.urandom(24)</span>
+<span class="cmd-repl-results">b'\x1ah\xe9\x00\x04\x1d>\x00\x14($\x17\x90\x1f?~?\xdc\xe9\x91U\xd2\xb5\xd7'</span></code></pre>
+
+Update your `.env` file to use the random value you generated. Save the changes:
+
+```ini
+FLASK_APP=run.py
+FLASK_ENV=development
+SECRET_KEY="\x1ah\xe9\x00\x04\x1d>\x00\x14($\x17\x90\x1f?~?\xdc\xe9\x91U\xd2\xb5\xd7"
+```
+
+### Black Configuration
+
+Before we write any app code, let's customize the rules used by black. Create a file named `pyproject.toml` in the project root folder and add the following content:
+
+```ini
+[tool.black]
+line-length = 99
+target-version = ['py37']
+include = '\.pyi?$'
+exclude =  '''
+/(
+    \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.pytest_cache
+    | \.tox
+    | \.vscode
+    | __pycache__
+    | _build
+    | buck-out
+    | build
+    | dist
+    | venv
+)/
+'''
+```
+
+I prefer to increase the maximum line length to 99. The black maintainers recommend a line-length of roughly 90, but you should use whatever line length works best for you. `target-version` controls which Python versions Black-formatted code should target. `include` and `exclude` are both regular expressions that match files and folders to format with black and exclude from formatting.
+
+### Pytest Configuration
+
+Before we begin writing any test code, let's configure how pytest reports test results and setup some of the plugins that we installed. Create a file named `pytest.ini` in the project root folder and enter the content below:
+
+```ini {linenos=table}
+[pytest]
+addopts =
+    # generate report with details of all (non-pass) test results
+    -ra
+    # show local variables in tracebacks
+    --showlocals
+    # report formatting changes suggested by black
+    --black
+    # report linting issues with flake8
+    --flake8
+    # verbose output
+    --verbose
+norecursedirs =
+    .git
+    .pytest_cache
+    .vscode
+    migrations
+    venv
+flake8-max-line-length = 99
+flake8-ignore = E203, E266, E501, W503
+flake8-max-complexity = 18
+```
+
+We are obviously making many configuration decisions in this file. Please note the following:
+
+<div class="code-details">
+  <ul>
+    <li><strong>Line 2: </strong>The <span class="bold-text">addopts</span> config option <span class="bold-text">add</span>s the specified <span class="bold-text">opt</span>ion<span class="bold-text">s</span> to the set of command line arguments whenever <code>pytest</code> is executed by the user. In other words, if <code>addopts = -ra --showlocals</code>, executing the command <code>pytest test_config.py</code> would actually execute <code>pytest -ra --showlocals test_config.py</code>.</li>
+    <li><strong>Line 4: </strong>The <code>-r</code> flag generates a "short test summary info" section at the end of the test session making it easier to see all the non-pass test results. The <code>-a</code> flag means "all except passes".</li>
+    <li><strong>Line 6: </strong>The <code>--showlocals</code> flag adds all local variable values to the traceback for all test failures.</li>
+    <li><strong>Line 8: </strong>The <code>--black</code> flag reports formatting changes that are suggested by black. This option is only available because we will install the pytest-black plugin as a dev requirement.</li>
+    <li><strong>Line 10: </strong>The <code>--flake8</code> flag reports linting changes that are suggested by flake8. This option is only available because we will install the pytest-flake8 plugin as a dev requirement.</li>
+    <li><strong>Line 12: </strong>This option should be self-explanatory, I prefer to enable verbose output for all test results.</li>
+    <li><strong>Lines 13-18: </strong>The <span class="bold-text">norecursedirs</span> config option tells pytest to not look for test code in the specified list of folders. This makes pytest run much faster since the total number of locations to search is greatly reduced.</li>
+    <li><strong>Line 19: </strong>This and all config options that begin with <code>flake8</code> only apply to the pytest-flake8 plugin. <code>flake8-max-line-length</code> is set to 99 to enforce the same style rule I have customized in my black configuration.</li>
+    <li><strong>Line 20: </strong><code>flake8-ignore</code> tells pytest-flake8 to never report instances of the specified rule violations. This list is copied from the <code>flake8</code> <a href="https://github.com/python/black/blob/master/.flake8" target="_blank">config settings in black</a>, which supressses these errors since the rules they enfore violate PEP8.</li>
+    <li><strong>Line 21: </strong><code>flake8-max-complexity</code> sets the allowed threshold for cyclomatic complexity. If any function is more complex than the specified value, a flake8 error will be reported in the test results.</li>
+  </ul>
+</div>
+
+### Tox Configuration
 
 ### Installation Script
 
@@ -364,28 +500,7 @@ setup(
 
 If you are unfamiliar with the structure or operation of the `setup.py` file, <a href="https://github.com/pypa/sampleproject/blob/master/setup.py" target="_blank">I recommend bookmarking this example from the PyPA</a> which is fully documented with comments explaining every keyword-argument that the `setup` function supports, which kwargs are required or optional, etc.
 
-### Create Virtual Environment
-
-Next, create a new virtual environment by whatever method you prefer (this project requires Python 3.6+). I use `pyenv` to manage multiple installations of Python since various projects must support and be tested against different or multiple versions. For a quick and easy guide to setting up and using `pyenv`, check out <a href="https://hackernoon.com/reaching-python-development-nirvana-bb5692adf30c" target="_blank">this article from Hacker Noon</a>.
-
-Even if you do not use `pyenv`, the process to create and activate a virtual environment will be similar to the steps below:
-
-<pre><code><span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python --version</span>
-<span class="cmd-results">Python 2.7.14</span>
-<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">pyenv local 3.7.5</span>
-<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python --version</span>
-<span class="cmd-results">Python 3.7.5</span>
-<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">python -m venv venv</span>
-<span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">source venv/bin/activate</span>
-<span class="cmd-venv">(venv) flask_api_tutorial $</span></code></pre>
-
-At this point, <a href="https://packaging.python.org/guides/tool-recommendations/" target="_blank">the PyPA recommends</a> using `pipenv` for installing and managing project dependencies. However, my various encounters with `pipenv` and "Pipfiles" have been frustrating, slow, and generally not a smooth experience. Therefore, I will be using `pip` throughout this tutorial.
-
-After activating the new virtual environment, upgrade `pip`, `setuptools` and `wheel`:
-
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pip install --upgrade pip setuptools wheel</span>
-<span class="cmd-comment"># removed package upgrade messages...</span>
-<span class="cmd-results">Successfully installed pip-19.3.1 setuptools-43.0.0 wheel-0.33.6</span></code></pre>
+## Install `flask-api-tutorial`
 
 Finally, install the `flask-api-tutorial` application in editable mode:
 
@@ -620,64 +735,6 @@ def get_timespan(td):
 
 ## Environment Configuration
 
-At this point, I recommend switching to your IDE of choice for Python development. I am a huge fan of <a href="https://code.visualstudio.com" target="_blank">VSCode</a>, so that is what I will be using.
-
-### `.env` File
-
-First, create a file named `.env` in the project root folder and add the values below. Save the file:
-
-```ini
-FLASK_APP=run.py
-FLASK_ENV=development
-SECRET_KEY="please change me"
-```
-
-`FLASK_APP` is the filepath (or module import-path) where the Flask application object is located (<a href="http://flask.pocoo.org/docs/1.0/cli/#application-discovery" target="_blank">More info on <code>FLASK_APP</code></a>).
-
-`FLASK_ENV` only has two valid values: `development` and `production`. Setting `FLASK_ENV=development` enables the interactive debugger and automatic file reloader (<a href="http://flask.pocoo.org/docs/1.0/config/#environment-and-debug-features" target="_blank">More info on <code>FLASK_ENV</code></a>).
-
-The `SECRET_KEY` will be used to sign our JSON authorization tokens. The value you choose for this key should be a long, random string of bytes. <span class="emphasis">It is absolutely vital that this value remains secret</span> since anyone who knows the value can generate authorization keys for your API. <a href="http://flask.pocoo.org/docs/1.0/config/?highlight=secret_key#SECRET_KEY" target="_blank">The recommended way</a> to generate a `SECRET_KEY` is to use the Python interpreter:
-
-<pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">import os</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">os.urandom(24)</span>
-<span class="cmd-repl-results">b'\x1ah\xe9\x00\x04\x1d>\x00\x14($\x17\x90\x1f?~?\xdc\xe9\x91U\xd2\xb5\xd7'</span></code></pre>
-
-Update your `.env` file to use the random value you generated. Save the changes:
-
-{{< highlight ini >}}FLASK_APP=run.py
-FLASK_ENV=development
-SECRET_KEY="\x1ah\xe9\x00\x04\x1d>\x00\x14($\x17\x90\x1f?~?\xdc\xe9\x91U\xd2\xb5\xd7"{{< /highlight >}}
-
-### Black Configuration
-
-Before we write any app code, let's customize the rules used by black. Create a file named `pyproject.toml` in the project root folder and add the following content:
-
-```ini
-[tool.black]
-line-length = 99
-target-version = ['py37']
-include = '\.pyi?$'
-exclude =  '''
-/(
-    \.eggs
-    | \.git
-    | \.hg
-    | \.mypy_cache
-    | \.pytest_cache
-    | \.tox
-    | \.vscode
-    | __pycache__
-    | _build
-    | buck-out
-    | build
-    | dist
-    | venv
-)/
-'''
-```
-
-I prefer to increase the maximum line length to 99. The black maintainers recommend a line-length of roughly 90, but you should use whatever line length works best for you and your team. `target-version` controls which Python versions Black-formatted code should target. `include` and `exclude` are both regular expressions that match files and folders to (respectively) format with black and exclude from formatting.
-
 ### `get_config` Function
 
 Next, create a file named `config.py` in the `src/flask_api_tutorial` folder and add the content below. Save the file:
@@ -823,49 +880,6 @@ You should recognize all of the Flask extensions from the first section of this 
   <div class="note-message">
     <p>By initializing the Flask-CORS extension as shown, CORS support for all domains and for all origins for all routes has been enabled.</p>
   </div>
-</div>
-
-## Pytest Configuration
-
-Before we begin writing any test code, let's configure how pytest reports test results and setup some of the plugins that we installed. Create a file named `pytest.ini` in the project root folder and enter the content below:
-
-{{< highlight ini "linenos=table" >}}[pytest]
-addopts =
-    # generate report with details of all (non-pass) test results
-    -ra
-    # show local variables in tracebacks
-    --showlocals
-    # report formatting changes suggested by black
-    --black
-    # report linting issues with flake8
-    --flake8
-    # verbose output
-    --verbose
-norecursedirs =
-    .git
-    .pytest_cache
-    .vscode
-    migrations
-    venv
-flake8-max-line-length = 99
-flake8-ignore = E203, E266, E501, W503
-flake8-max-complexity = 18{{< /highlight >}}
-
-We are obviously making many configuration decisions in this file. Please note the following:
-
-<div class="code-details">
-  <ul>
-    <li><strong>Line 2: </strong>The <span class="bold-text">addopts</span> config option <span class="bold-text">add</span>s the specified <span class="bold-text">opt</span>ion<span class="bold-text">s</span> to the set of command line arguments whenever <code>pytest</code> is executed by the user. In other words, if <code>addopts = -ra --showlocals</code>, executing the command <code>pytest test_config.py</code> would actually execute <code>pytest -ra --showlocals test_config.py</code>.</li>
-    <li><strong>Line 4: </strong>The <code>-r</code> flag generates a "short test summary info" section at the end of the test session making it easier to see all the non-pass test results. The <code>-a</code> flag means "all except passes".</li>
-    <li><strong>Line 6: </strong>The <code>--showlocals</code> flag adds all local variable values to the traceback for all test failures.</li>
-    <li><strong>Line 8: </strong>The <code>--black</code> flag reports formatting changes that are suggested by black. This option is only available because we installed the pytest-black plugin as a dev requirement.</li>
-    <li><strong>Line 10: </strong>The <code>--flake8</code> flag reports linting changes that are suggested by flake8. This option is only available because we installed the pytest-flake8 plugin as a dev requirement.</li>
-    <li><strong>Line 12: </strong>This option should be self-explanatory, I prefer to enable verbose output for all test results.</li>
-    <li><strong>Lines 13-18: </strong>The <span class="bold-text">norecursedirs</span> config option tells pytest to not look for test code in the specified list of folders. This makes pytest run much faster since the total number of locations to search is greatly reduced.</li>
-    <li><strong>Line 19: </strong>This and all config options that begin with <code>flake8</code> only apply to the pytest-flake8 plugin. <code>flake8-max-line-length</code> is set to 99 to enforce the same style rule I have customized in my black configuration.</li>
-    <li><strong>Line 20: </strong><code>flake8-ignore</code> tells pytest-flake8 to never report instances of the specified rule violations. This list is copied from the <code>flake8</code> <a href="https://github.com/python/black/blob/master/.flake8" target="_blank">config settings in black</a>, which supressses these errors since the rules they enfore violate PEP8.</li>
-    <li><strong>Line 21: </strong><code>flake8-max-complexity</code> sets the allowed threshold for cyclomatic complexity. If any function is more complex than the specified value, a flake8 error will be reported in the test results.</li>
-  </ul>
 </div>
 
 ## Unit Tests: `test_config.py`

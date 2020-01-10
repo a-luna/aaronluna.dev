@@ -80,7 +80,8 @@ Whenever we need to declare a new database model (i.e., create a new database ta
 
 Create a new file `user.py` in the `models` folder and add the content below:
 
-{{< highlight python "linenos=table" >}}"""Class definition for User model."""
+```python {linenos=table}
+"""Class definition for User model."""
 from datetime import datetime, timezone
 from uuid import uuid4
 
@@ -130,7 +131,8 @@ class User(db.Model):
 
     @classmethod
     def find_by_public_id(cls, public_id):
-        return cls.query.filter_by(public_id=public_id).first(){{< /highlight >}}
+        return cls.query.filter_by(public_id=public_id).first()
+```
 
 The `User` class demonstrates several important concepts for creating database models in SQLAlchemy:
 
@@ -226,11 +228,13 @@ The `User` class demonstrates several important concepts for creating database m
 
 Did you notice that we never defined a <code>&#95;&#95;init&#95;&#95;</code> method? That’s because SQLAlchemy adds an implicit constructor to all model classes which accepts keyword arguments for all its columns and relationships. If you decide to override the constructor for any reason, make sure to keep accepting <code>&#42;&#42;kwargs</code> and call the super constructor with those <code>&#42;&#42;kwargs</code> to preserve this behavior:
 
-{{< highlight python >}}class User(db.Model):
+```python
+class User(db.Model):
     # ...
     def __init__(**kwargs):
         super(User, self).__init__(**kwargs)
-        # do custom stuff{{< /highlight >}}
+        # do custom stuff
+```
 
 ### Creating The First Migration
 
@@ -249,7 +253,8 @@ The Flask-Migrate extension adds a new set of commands to the Flask CLI grouped 
 
 In order for Flask-Migrate to detect the `User` model, we must import it in the `run.py` module. Open `run.py` in the project root folder and make the changes highlighted below:
 
-{{< highlight python "linenos=table,hl_lines=5 12" >}}"""Flask CLI/Application entry point."""
+```python {linenos=table,hl_lines=[5,12]}
+"""Flask CLI/Application entry point."""
 import os
 
 from app import create_app, db
@@ -260,7 +265,8 @@ app = create_app(os.getenv("FLASK_ENV", "development"))
 
 @app.shell_context_processor
 def shell():
-    return {"db": db, "User": User}{{< /highlight >}}
+    return {"db": db, "User": User}
+```
 
 <div class="code-details">
     <ul>
