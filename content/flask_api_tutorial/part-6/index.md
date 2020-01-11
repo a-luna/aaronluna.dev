@@ -11,6 +11,11 @@ menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: ""
+git_release_name: "v0.6"
+url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.6"
+url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.6.zip"
+url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.6.tar.gz"
+url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.5...v0.6"
 twitter:
   card: "summary"
   creator: "@aaronlunadev"

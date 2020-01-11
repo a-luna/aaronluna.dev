@@ -120,7 +120,7 @@
 
   /* Section: Tutorial */
   --tut-link-color: var(--accent-color1);
-  --tut-requirements :var(--gold1);
+  --tut-requirements :var(--body-text-color);
 
   /* Comments */
   --comments-bg: var(--widget-bg-color);

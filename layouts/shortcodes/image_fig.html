@@ -1,0 +1,10 @@
+{{ $original := .Page.Resources.GetMatch (printf "*%s*" (.Get 0)) }}
+{{ $width := .Get 1 }}
+{{ $resized := $original.Resize $width }}
+
+<figure>
+    <a href="{{ $original.RelPermalink }}">
+        <img src="{{ $resized.RelPermalink }}" width="{{ $resized.Width }}" height="{{ $resized.Height }}" alt="{{ $original.Title }}">
+    </a>
+    <figcaption><p>{{ $original.Title }}</p></figcaption>
+</figure>

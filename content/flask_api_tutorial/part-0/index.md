@@ -185,7 +185,7 @@ When this test executes, pytest will discover and call the fixture named `db`, m
 
 ### Black
 
-<a href="https://github.com/python/black" target="_blank">Black</a> is my preferred code formatter. Compared to YAPF or autopep8, black is deliberately opinionated and provides very few configuration options. With the other formatting tools, you have to spend time tweaking the configuration until it produces your desired format. With black, the only setting I tweak is the maximum line length (I increase it from 79 to 99).
+<a href="https://github.com/python/black" target="_blank">Black</a> is my preferred code formatter. Compared to YAPF or autopep8, black is deliberately opinionated and provides very few configuration options. With the other formatting tools, you have to spend time tweaking the configuration until it produces your desired format. With black, the only setting I tweak is the maximum line length (I increase it from 79 to 89).
 
 This has an additional benefit if you are collaborating with others on a code base, since enforcing consistent style/format is difficult when everyone is using different customized autopep8 settings. Having a consistent style throughout a project will make your team more productive since less time will be spent conforming to style and the code will become easier to digest visually.
 
@@ -202,3 +202,5 @@ Flake8 can be configured in a multitude of ways, so getting the most out of it r
 ## Conclusion
 
 That's all of the introductory/background information that is needed for this project. Click below to begin working on the application!
+
+{{< api_tutorial_all_github_links >}}

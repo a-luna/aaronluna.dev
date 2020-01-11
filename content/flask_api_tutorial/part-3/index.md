@@ -11,6 +11,33 @@ menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: ""
+git_release_name: "v0.3"
+url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.3"
+url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.3.zip"
+url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.3.tar.gz"
+url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.2...v0.3"
+resources:
+  - name: img1
+    src: images/p03-01-empty-api.jpg
+    title: Figure 1 - Swagger UI without API Routes
+  - name: img2
+    src: images/p03-02-swagger-ui.jpg
+    title: Figure 2 - Swagger UI with api.auth_register endpoint
+  - name: img3
+    src: images/p03-03-register-endpoint.jpg
+    title: Figure 3 - api.auth_register endpoint expanded
+  - name: img4
+    src: images/p03-04-register-endpoint.jpg
+    title: Figure 4 - api.auth_register endpoint ready to test
+  - name: img5
+    src: images/p03-05-register-response.jpg
+    title: Figure 5 - New user successfully registered (Swagger UI)
+  - name: img6
+    src: images/p03-06-conflict-409.jpg
+    title: Figure 6 - Email address already registered
+  - name: img7
+    src: images/p03-07-register-response-cli.jpg
+    title: Figure 7 - New user successfully registered (CLI)
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
@@ -20,6 +47,8 @@ twitter:
 ## Project Structure
 
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
+
+{{< github_links >}}
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">app</span>
@@ -162,20 +191,15 @@ The best way to accomplish this is with <a href="http://flask.pocoo.org/docs/1.0
 
 ### `api_bp` Blueprint
 
-In the `app/api/__init__.py` file, add the following content:
+In the `src/flask_api_tutorial/api/__init__.py` file, add the following content:
 
-{{< highlight python "linenos=table" >}}"""API blueprint configuration."""
+```python {linenos=table}
+"""API blueprint configuration."""
 from flask import Blueprint
 from flask_restplus import Api
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
-authorizations = {
-  "Bearer": {
-    "type": "apiKey",
-    "in": "header",
-    "name": "Authorization"
-  }
-}
+authorizations = {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}}
 
 api = Api(
     api_bp,
@@ -184,7 +208,8 @@ api = Api(
     description="Welcome to the Swagger UI documentation for the Widget API",
     doc="/ui",
     authorizations=authorizations,
-){{< /highlight >}}
+)
+```
 
 There are a few important things to note about how we are configuring the `api` and `api_bp` objects:
 
@@ -194,7 +219,7 @@ There are a few important things to note about how we are configuring the `api` 
           <p><strong>Line 5: </strong>This is where we create the Flask blueprint object for our API. The first parameter, <code>"api"</code>, is the name of the blueprint. All API endpoint names will be prefixed with this value (e.g., <code>api.func_name</code>). The <code>url_prefix</code> value makes all API routes begin with <code>/api/v1</code> (e.g., <code>api/v1/auth/login</code>).</p>
       </li>
       <li>
-          <p><strong>Lines 6, 20: </strong>The API will implement <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer token authentication</a>. This dictionary value is passed to the Flask-RESTPlus <code>Api</code> constructor which adds the authorization to the Swagger UI page. This creates a "Authorize" button in the Swagger UI that prompts you to enter a Bearer token value (i.e., JWT value). After providing a token, all API methods that require authorization will automatically send the token in the Authorization field of the request header.</p>
+          <p><strong>Lines 6, 14: </strong>The API will implement <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer token authentication</a>. This dictionary value is passed to the Flask-RESTPlus <code>Api</code> constructor which adds the authorization to the Swagger UI page. This creates a "Authorize" button in the Swagger UI that prompts you to enter a Bearer token value (i.e., JWT value). After providing a token, all API methods that require authorization will automatically send the token in the Authorization field of the request header.</p>
           <div class="note note-flex">
             <div class="note-icon">
               <i class="fa fa-pencil"></i>
@@ -205,27 +230,28 @@ There are a few important things to note about how we are configuring the `api` 
           </div>
       </li>
       <li>
-        <p><strong>Line 15: </strong>Passing the <code>api_bp</code> blueprint object to the Flask-RESTPlus <code>Api</code> constructor links the two objects and is how all API routes become prefixed with the <code>url_prefix</code> value from <code>api_bp</code>. Later, we will import the <code>api_bp</code> object in the <code>run</code> module and register the blueprint with the Flask application object to complete the process of configuring the API.</p>
+        <p><strong>Line 9: </strong>Passing the <code>api_bp</code> blueprint object to the Flask-RESTPlus <code>Api</code> constructor links the two objects and is how all API routes become prefixed with the <code>url_prefix</code> value from <code>api_bp</code>. Later, we will import the <code>api_bp</code> object in the <code>run</code> module and register the blueprint with the Flask application object to complete the process of configuring the API.</p>
       </li>
       <li>
-        <p><strong>Lines 16-18: </strong>All of these string values are displayed in the Swagger UI.</p>
+        <p><strong>Lines 10-12: </strong>All of these string values are displayed in the Swagger UI.</p>
       </li>
       <li>
-        <p><strong>Line 19: </strong>The <code>doc</code> value controls the URL path of the Swagger UI. With this value, the Swagger UI path is <code>/api/v1/ui</code>.</p>
+        <p><strong>Line 13: </strong>The <code>doc</code> value controls the URL path of the Swagger UI. With this value, the Swagger UI path is <code>/api/v1/ui</code>.</p>
       </li>
     </ul>
 </div>
 
-The next step in configuring the API is registering the `api_bp` blueprint with our Flask application. The correct place to do this is within the `create_app` method in the `app/__init__.py` file. Open this file and add the highlighted lines below:
+The next step in configuring the API is registering the `api_bp` blueprint with our Flask application. The correct place to do this is within the `create_app` method in the `src/flask_api_tutorial/__init__.py` file. Open this file and add the highlighted lines below:
 
-{{< highlight python "linenos=table,hl_lines=20-22" >}}"""Flask app initialization via factory pattern."""
+```python {linenos=table,hl_lines=["20-22"]}
+"""Flask app initialization via factory pattern."""
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from app.config import get_config
+from flask_api_tutorial.config import get_config
 
 cors = CORS()
 db = SQLAlchemy()
@@ -237,7 +263,7 @@ def create_app(config_name):
     app = Flask("flask-api-tutorial")
     app.config.from_object(get_config(config_name))
 
-    from app.api import api_bp
+    from flask_api_tutorial.api import api_bp
 
     app.register_blueprint(api_bp)
 
@@ -245,11 +271,12 @@ def create_app(config_name):
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
-    return app{{< /highlight >}}
+    return app
+```
 
 The placement of the import statement is deliberate. To avoid a circular import, we do not want the `app.api` package to be imported <span class="bold-text">unless</span> the `create_app` method is invoked.
 
-It's a good idea to make sure that everything still works and we have not broken anything, so run the unit tests with `pytest`. They should all pass. Then, run `flask routes` to see the new URL routes that have been registered in our application:
+It's a good idea to make sure that everything still works and we have not broken anything, so run the unit tests with `tox`. They should all pass. Then, run `flask routes` to see the new URL routes that have been registered in our application:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
 <span class="cmd-results">Endpoint             Methods  Rule
@@ -257,35 +284,30 @@ It's a good idea to make sure that everything still works and we have not broken
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json
-restplus_doc.static  GET      /swaggerui/<path:filename>
-static               GET      /static/<path:filename></span></code></pre>
+restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
+static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 The first four routes in the list were added by registering the `api_bp` blueprint with our application. Next, run `flask run` to start the development server and point your browser to `http://localhost:5000/api/v1/ui` (if you are using a different port or hostname on your dev machine, adjust accordingly).
 
-You should see something similar to the screenshot below. Note that the URL path, API version, title and description are taken directly from values we provided to the `Api` constructor in the `app/api/__init__.py` file.
+You should see something similar to the screenshot below. Note that the URL path, API version, title and description are taken directly from values we provided to the `Api` constructor in the `src/flask_api_tutorial/api/__init__.py` file.
 
-<figure>
-    <a href="/img/flask-api-tutorial/p03-01-empty-api.jpg">
-        <img src="/img/flask-api-tutorial/p03-01-empty-api.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 1 - Swagger UI without API Routes</p></figcaption>
-</figure>
+{{< image_fig img1 "600x q90" >}}
 
 ### API Namespaces
 
-In the same way that we can organize our Flask project with **blueprints**, we can organize our Flask-RESTPlus API with **namespace** objects. Our API will contain two namespaces: `auth_ns` and `widget_ns`, which correspond to the `app.api.auth` and `app.api.widgets` packages, respectively. For now, we will focus on `auth_ns`, since this is the namespace that handles authentication requests.
+In the same way that we can organize our Flask project with **blueprints**, we can organize our Flask-RESTPlus API with **namespace** objects. Our API will contain two namespaces: `auth_ns` and `widget_ns`, which correspond to the `flask_api_tutorial.api.auth` and `flask_api_tutorial.api.widgets` packages, respectively. For now, we will focus on `auth_ns`, since this is the namespace that handles authentication requests.
 
-Currently, the `app/api/auth` folder only contains the `__init__.py` file. We need to create 3 new files in the `auth` folder: `business.py`, `dto.py` and `endpoints.py`. Run the command below from the project root folder to create the files (or create them yourself however you wish):
+Currently, the `src/flask_api_tutorial/api/auth` folder only contains the `__init__.py` file. We need to create 3 new files in the `auth` folder: `business.py`, `dto.py` and `endpoints.py`. Run the command below from the project root folder to create the files (or create them yourself however you wish):
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">cd app/api/auth && touch business.py dto.py endpoints.py</span>
-<span class="cmd-venv">(venv) flask-api-tutorial/app/api/auth $</span> <span class="cmd-input">ls -al</span>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">cd src/flask_api_tutorial/api/auth && touch business.py dto.py endpoints.py</span>
+<span class="cmd-venv">(venv) flask-api-tutorial/src/flask_api_tutorial/api/auth $</span> <span class="cmd-input">ls -al</span>
 <span class="cmd-results">total 8
-drwxr-xr-x  7 aaronluna  staff  224 Jun 30 01:20 .
-drwxr-xr-x  5 aaronluna  staff  160 Jun 27 02:47 ..
--rw-r--r--  1 aaronluna  staff    0 Jun 29 13:05 __init__.py
--rw-r--r--  1 aaronluna  staff    0 Jun 30 01:20 business.py
--rw-r--r--  1 aaronluna  staff    0 Jun 30 01:20 dto.py
--rw-r--r--  1 aaronluna  staff    0 Jun 30 01:20 endpoints.py</span></code></pre>
+drwxr-xr-x  7 aaronluna  staff  224 Dec 30 01:20 .
+drwxr-xr-x  5 aaronluna  staff  160 Dec 27 02:47 ..
+-rw-r--r--  1 aaronluna  staff    0 Dec 29 13:05 __init__.py
+-rw-r--r--  1 aaronluna  staff    0 Dec 30 01:20 business.py
+-rw-r--r--  1 aaronluna  staff    0 Dec 30 01:20 dto.py
+-rw-r--r--  1 aaronluna  staff    0 Dec 30 01:20 endpoints.py</span></code></pre>
 
 All of these files are standard for any Flask-RESTPlus API namespace package that I create. These files perform specific roles that are common to request handling and response formatting:
 
@@ -319,7 +341,7 @@ Documenting the expected format of request and response data has an additional b
 
 Flask-RESTPlus provides the `RequestParser` class as a way to parse data from the Flask `request` object. For each value to be parsed, we add an instance of the `Argument` class to the `RequestParser`. The `Argument` class is very flexible and is configured by the parameters listed below:
 
-<div style="font-size: 0.9em; padding: 5px; line-height: 1.5">
+<div style="font-size: 0.95em; padding: 5px">
   <ul>
     <li><strong>name: </strong>The name of the argument to parse from the request.</li>
     <li><strong>default: </strong>The value to use if the argument is not found in the request, default value is <code>None</code>.</li>
@@ -338,7 +360,7 @@ I recommend reading and fully understanding the documentation explaining <a href
 
 ### Defining API Models
 
-For POST and PUT requests that create a new resource or update an existing resource in a collection, you should instruct the client to send the resource as a JSON object in the request body. You can define the expected API model by creating a `dict` object where the keys are the names of the attributes on the JSON object and the values are a class that will validate and convert the attribute to the required data type.
+For `POST` and `PUT` requests that create a new resource or update an existing resource in a collection, you should instruct the client to send the resource as a JSON object in the request body. You can define the expected API model by creating a `dict` object where the keys are the names of the attributes on the JSON object and the values are a class that will validate and convert the attribute to the required data type.
 
 In the same way that the `inputs` module provides primitive data types and a set of predefined data formats to specify the `type` of each `RequestParser` `Argument`, the `fields` module fulfills the same role for `model` objects. You can find <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#models" target="_blank">a list of pre-defined</a> `fields` in the API documentation. You can also easily create your own custom `field` by subclassing `fileds.Raw`, <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#custom-fields-multiple-values" target="_blank">as shown in the Flask-RESTPlus docs</a>.
 
@@ -413,7 +435,7 @@ We will implement each endpoint in the same way, following the steps listed belo
     </div>
     </li>
     <li>Document the <code>Resource</code> class and all methods <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">as explained in the Flask-RESTPlus docs</a>. Most of the content on the Swagger UI page is generated by decorating your concrete <code>Resource</code> classes and their methods.</li>
-    <li>Utilize the business logic created in Step 2 within the approprate HTTP methods to process the request.</li>
+    <li>Utilize the business logic created in <strong>Step 2</strong> within the approprate HTTP methods to process the request.</li>
     <li>Create unit tests to verify that the input validation provided by the request parsers/API models is working correctly, and verify the endpoint behaves as expected.</li>
   </ol>
 </div>
@@ -426,28 +448,22 @@ The first resource we create will handle the process of registering a new user a
 
 ### `auth_reqparser` Request Parser
 
-When a new user attempts to register, what data is required? The way our `User` model is defined, the value for `email` must be unique (i.e., two users cannot register with the same email address). The only other value which is provided by the user is their password, which is not stored in the database (the actual password is ony needed to create the `password_hash` value and to authenticate a user attempting to login). Open `app/api/auth/dto.py`, add the content below and save the file:
+When a new user attempts to register, what data is required? The way our `User` model is defined, the value for `email` must be unique (i.e., two users cannot register with the same email address). The only other value which is provided by the user is their password, which is not stored in the database (the actual password is ony needed to create the `password_hash` value and to authenticate a user attempting to login). Open `src/flask_api_tutorial/api/auth/dto.py`, add the content below and save the file:
 
-{{< highlight python >}}"""Parsers and serializers for /auth API endpoints."""
+```python
+"""Parsers and serializers for /auth API endpoints."""
 from flask_restplus.inputs import email
 from flask_restplus.reqparse import RequestParser
 
 
 auth_reqparser = RequestParser(bundle_errors=True)
 auth_reqparser.add_argument(
-    name="email",
-    type=email(),
-    location="form",
-    required=True,
-    nullable=False
+    name="email", type=email(), location="form", required=True, nullable=False
 )
 auth_reqparser.add_argument(
-    name="password",
-    type=str,
-    location="form",
-    required=True,
-    nullable=False
-){{< /highlight >}}
+    name="password", type=str, location="form", required=True, nullable=False
+)
+```
 
 The first thing to note here is the parameter `bundle_errors=True` when we instantiate `auth_reqparser`. This value is false by default, which means that only a single error is reported whenever the request data fails validation. I prefer to have all error messages reported for all arguments in our request parser.
 
@@ -485,26 +501,26 @@ For any response containing sensitive information (e.g., access tokens, credenti
 Content-Type: application/json;charset=UTF-8
 Cache-Control: no-store
 Pragma: no-cache
-
 {
- "access_token":"2YotnFZFEjr1zCsicMWpAA",
- "token_type":"example",
- "expires_in":3600,
- "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
- "example_parameter":"example_value"
+&nbsp;&nbsp;"access_token": "2YotnFZFEjr1zCsicMWpAA",
+&nbsp;&nbsp;"token_type": "example",
+&nbsp;&nbsp;"expires_in": 3600,
+&nbsp;&nbsp;"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
+&nbsp;&nbsp;"example_parameter": "example_value"
 }</code></pre>
 </blockquote>
 
-Open `app/api/auth/business.py`, add the content below and save the file:
+Open `src/flask_api_tutorial/api/auth/business.py`, add the content below and save the file:
 
-{{< highlight python "linenos=table" >}}"""Business logic for /auth API endpoints."""
+```python {linenos=table}
+"""Business logic for /auth API endpoints."""
 from http import HTTPStatus
 
 from flask import current_app, jsonify
 from flask_restplus import abort
 
-from app import db
-from app.models.user import User
+from flask_api_tutorial import db
+from flask_api_tutorial.models.user import User
 
 
 def process_registration_request(email, password):
@@ -531,7 +547,8 @@ def _get_token_expire_time():
     token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")
     token_age_m = current_app.config.get("TOKEN_EXPIRE_MINUTES")
     expires_in_seconds = token_age_h * 3600 + token_age_m * 60
-    return expires_in_seconds if not current_app.config["TESTING"] else 5{{< /highlight >}}
+    return expires_in_seconds if not current_app.config["TESTING"] else 5
+```
 
 <div class="code-details">
   <ul>
@@ -588,15 +605,16 @@ In an application that adheres to the [principles of REST](#understanding-rest),
 
 
 
-[According to the table defining the API endpoints for the `auth_ns` namespace](#auth-ns-endpoints), users can register for a new account by sending a `POST` request to `/api/v1/auth/register`. To create this API endpoint, open `app/api/auth/endpoints.py`, add the content below and save the file:
+[According to the table defining the API endpoints for the `auth_ns` namespace](#auth-ns-endpoints), users can register for a new account by sending a `POST` request to `/api/v1/auth/register`. To create this API endpoint, open `src/flask_api_tutorial/api/auth/endpoints.py`, add the content below and save the file:
 
-{{< highlight python "linenos=table" >}}"""API endpoint definitions for /auth namespace."""
+```python {linenos=table}
+"""API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.auth.dto import auth_reqparser
-from app.api.auth.business import process_registration_request
+from flask_api_tutorial.api.auth.dto import auth_reqparser
+from flask_api_tutorial.api.auth.business import process_registration_request
 
 auth_ns = Namespace(name="auth", validate=True)
 
@@ -615,7 +633,8 @@ class RegisterUser(Resource):
         request_data = auth_reqparser.parse_args()
         email = request_data.get("email")
         password = request_data.get("password")
-        return process_registration_request(email, password){{< /highlight >}}
+        return process_registration_request(email, password)
+```
 
 <div class="code-details">
     <ul>
@@ -635,7 +654,7 @@ class RegisterUser(Resource):
       <li>
         <p><strong>Line 16: </strong>The <code>expect</code> decorator is used to specify the data that the server expects the client to send in the HTTP request. The first argument can be either a request parser or an API model that defines the expected input model. The optional second argument is a bool value named <code>validate</code>. If <code>validate=True</code>, the request data will be checked to make sure it matches the expected input model.</p>
         <p>You can also control validation behavior for an entire namespace, which we did when the <code>auth_ns</code> namespace was created in <span class="bold-text">Line 9</span>. You can also define this behavior for the entire API when instantiating the <code>api</code> object, or by setting the value of the app configuration setting <code>RESTPLUS_VALIDATE</code>. You can override the validation behavior for each method using the <code>expect</code> decorator.</p>
-        <p>We are using the <code>auth_reqparser</code> we created in <code>app/api/auth/dto.py</code>. In the Swagger UI, this renders a form with textboxes for the email and password values and also enforces the rules we configured for each argument. If we had used an API model, the Swagger UI instead renders a single textbox and an example of the expected JSON.</p>
+        <p>We are using the <code>auth_reqparser</code> we created in <code>src/flask_api_tutorial/api/auth/dto.py</code>. In the Swagger UI, this renders a form with textboxes for the email and password values and also enforces the rules we configured for each argument. If we had used an API model, the Swagger UI instead renders a single textbox and an example of the expected JSON.</p>
       </li>
       <li>
         <p><strong>Line 17-20: </strong>The <code>response</code> decorator is solely for documentation purposes, removing these lines would have no impact on the behavior of this API endpoint. Still, you should document all of the response codes that can possibly be received from this endpoint. The second argument is a string value explaining why the client's request resulted in the response code that was sent, and is included in the Swagger UI page.</p>
@@ -657,23 +676,17 @@ class RegisterUser(Resource):
 
 ### Add `auth_ns` Namespace to `api`
 
-In order to register the `auth_ns` namespace with the `api` object, open `app/api/__init__.py` and add the highlighted lines (<strong>Line 5</strong> and <strong>Line 25</strong>):
+In order to register the `auth_ns` namespace with the `api` object, open `src/flask_api_tutorial/api/__init__.py` and add the highlighted lines (<strong>Line 5</strong> and <strong>Line 19</strong>):
 
-{{< highlight python "linenos=table,hl_lines=5 25" >}}"""API blueprint configuration."""
+```python {linenos=table,hl_lines=[5,19]}
+"""API blueprint configuration."""
 from flask import Blueprint
 from flask_restplus import Api
 
-from app.api.auth.endpoints import auth_ns
-
+from flask_api_tutorial.api.auth.endpoints import auth_ns
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
-authorizations = {
-  "Bearer": {
-    "type": "apiKey",
-    "in": "header",
-    "name": "Authorization"
-  }
-}
+authorizations = {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}}
 
 api = Api(
     api_bp,
@@ -683,7 +696,9 @@ api = Api(
     doc="/ui",
     authorizations=authorizations,
 )
-api.add_namespace(auth_ns, path="/auth"){{< /highlight >}}
+
+api.add_namespace(auth_ns, path="/auth")
+```
 
 The `path` parameter in the `add_namespace` method sets the prefix for all endpoints in the `auth_ns` namepsace. This, along with the `url_prefix` value in **Line 8**, is why all URL routes in the `auth_ns` namespace begin with `/api/v1/auth`.
 
@@ -710,39 +725,19 @@ The presence of the `api.auth_register` endpoint in the list of routes confirms 
 
 Start the development server by running `flask run` and point your browser to `http://localhost:5000/api/v1/ui` to check out the Swagger UI:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p03-02-swagger-ui.jpg">
-        <img src="/img/flask-api-tutorial/p03-02-swagger-ui.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 2 - Swagger UI with <code>/auth/register</code> endpoint</p></figcaption>
-</figure>
+{{< image_fig img2 "500x q80" >}}
 
 You can click anywhere on the green bar to expand the component. It might not seem like a huge deal, but everything you see was automatically generated by Flask-RESTPlus (from the `api` object, `auth_ns` object, `auth_reqparser`, `RegisterUser`, etc):
 
-<figure>
-    <a href="/img/flask-api-tutorial/p03-03-register-endpoint.jpg">
-        <img src="/img/flask-api-tutorial/p03-03-register-endpoint.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 3 - <code>/auth/register</code> endpoint expanded</p></figcaption>
-</figure>
+{{< image_fig img3 "500x q80" >}}
 
 If you'd like to send a request, click the **Try It Out** button. Then, enter any valid email address and any value for password and click **Execute**:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p03-04-register-endpoint.jpg">
-        <img src="/img/flask-api-tutorial/p03-04-register-endpoint.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 4 - <code>/auth/register</code> endpoint ready to test</p></figcaption>
-</figure>
+{{< image_fig img4 "500x q80" >}}
 
 You should receive a response with status code 201 `HTTPStatus.CREATED` if the email address is formatted correctly (this is the only validation process being performed by `auth_reqparser`):
 
-<figure>
-    <a href="/img/flask-api-tutorial/p03-05-register-response.jpg">
-        <img src="/img/flask-api-tutorial/p03-05-register-response.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 5 - New user successfully registered (Swagger UI)</p></figcaption>
-</figure>
+{{< image_fig img5 "500x q80" >}}
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -755,12 +750,7 @@ You should receive a response with status code 201 `HTTPStatus.CREATED` if the e
 
 If you attempt to register with an email address that already exists in the database, you should receive a response with status code 409 `HTTPStatus.CONFLICT`. You can also test the API with a command-line tool (e.g., httpie, curl, wget, etc):
 
-<figure>
-    <a href="/img/flask-api-tutorial/p03-06-conflict-409.jpg">
-        <img src="/img/flask-api-tutorial/p03-06-conflict-409.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 6 - Email address already registered</p></figcaption>
-</figure>
+{{< image_fig img6 "500x q95" >}}
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -773,34 +763,20 @@ If you attempt to register with an email address that already exists in the data
 
 Here's an example of a successful request using httpie. Note that on the command-line or Swagger UI the response from the server is always formatted as JSON:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p03-07-register-response-cli.jpg">
-        <img src="/img/flask-api-tutorial/p03-07-register-response-cli.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 7 - New user successfully registered (CLI)</p></figcaption>
-</figure>
+{{< image_fig img7 "500x q95" >}}
 
 Everything appears to be working correctly for the `/register` endpoint. Next, we will figure out how to create unit tests that interact with the API.
 
 ### Unit Tests: `test_auth_register.py`
 
-In the [previous post](/series/flask-api-tutorial/part-2/#global-test-fixtures-code-conftest-py-code), I explained the meaning and purpose of the `app` and `client` test fixtures. In order to make an HTTP request to the Flask application, you need to include `client` as a parameter of your test function.
+Before we start writing test cases for the newly-created endpoint, we need to add a function to `tests/util.py`. Open the file and add the lines highlighted below (**Lines 8-13**):
 
-To demonstrate how the `client` object can be used to interact with the API, create a new file `test_auth_register.py` in the `test` foder, add the content below and save the file:
-
-{{< highlight python "linenos=table" >}}"""Unit tests for api.auth_register API endpoint."""
-from http import HTTPStatus
-
+```python {linenos=table,hl_lines=["8-13"]}
+"""Shared functions and constants for unit tests."""
 from flask import url_for
-
-from app.models.user import User
 
 EMAIL = "new_user@email.com"
 PASSWORD = "test1234"
-SUCCESS = "successfully registered"
-BAD_REQUEST = "Input payload validation failed"
-REQ_PARAMETER_MISSING = "Missing required parameter in the post body"
-EMAIL_ALREADY_EXISTS = f"{EMAIL} is already registered"
 
 
 def register_user(test_client, email=EMAIL, password=PASSWORD):
@@ -809,6 +785,40 @@ def register_user(test_client, email=EMAIL, password=PASSWORD):
         data=f"email={email}&password={password}",
         content_type="application/x-www-form-urlencoded",
     )
+```
+
+Let's take a moment and discuss the `register_user` function. Understanding how we are using this method to test our API is absolutely vital to successfully completing this project:
+
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Line 8: </strong>This function is not a test case (since the name does not begin with <code>test_</code>). <code>register_user</code> takes a Flask test client instance, and values for <code>email</code> and <code>password</code> as parameters. The test client instance must always be passed when using this function, but <code>email</code> and <code>password</code> will use the default values if none are specified.</p>
+      </li>
+      <li>
+        <p><strong>Line 9: </strong>The <a href="https://werkzeug.palletsprojects.com/en/0.15.x/test/#werkzeug.test.Client" target="_blank">Flask test client</a> allows us to make HTTP requests. In order to register a new user, we must send a <code>POST</code> request to the <code>api.auth_register</code> endpoint. To do so, we call the test client's <code>post</code> method. The test client is capable of sending requests for all HTTP method types: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code>, <code>head</code> and <code>trace.</code></p>
+      </li>
+      <li>
+        <p><strong>Line 10: </strong>The first argument to the <code>post</code> method is the URL is the target of our request. Since the target URL is within our Flask application, we can dynamically construct the URL using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.url_for" target="_blank">the <code>url_for</code> function</a>. This is really useful because it allows us to create links within our application without hardcoding any part of the path. All we need to do to use the <code>url_for</code> function is provide the name of the API endpoint, and voila, the URL is dynamically generated and provided to the <code>post</code> method.</p>
+      </li>
+      <li>
+        <p><strong>Line 11: </strong>For a <code>POST</code> request, the server expects the data to be sent in the request body. Since we are simulating a form submission, we must format the data as a series of name/value pairs, each pair separated by an ampersand (&), and for each pair, the name is separated from the value by an equals (=) sign.</p>
+      </li>
+      <li>
+        <p><strong>Line 12: </strong>This is how we specify the value of the <code>Content-Type</code> HTTP header. The value of this header is very important because it tells the server what type of data is being sent. The value <code>application/x-www-form-urlencoded</code> tells the server that the request contains form data encoded as URL parameters.</p>
+      </li>
+    </ul>
+</div>
+
+Wow, that required a lot more detail than I originally anticipated. I hope it helps you understand how the test client is used within our test cases to interact with the API. Next, create a new file `test_auth_register.py` in the `tests` folder, add the content below and save the file:
+
+```python {linenos=table}
+"""Unit tests for api.auth_register API endpoint."""
+from http import HTTPStatus
+
+from flask_api_tutorial.models.user import User
+from tests.util import EMAIL, register_user
+
+SUCCESS = "successfully registered"
 
 
 def test_auth_register(client, db):
@@ -825,92 +835,97 @@ def test_auth_register(client, db):
     user_dict = result.value
     assert not user_dict["admin"]
     user = User.find_by_public_id(user_dict["public_id"])
-    assert user and user.email == EMAIL{{< /highlight >}}
+    assert user and user.email == EMAIL
+```
 
-This is the first time we are creating a test case that sends requests to an API endpoint, so let's go through the `test_auth_register` function and explain everything that is being done:
+In the [previous post](/series/flask-api-tutorial/part-2/#global-test-fixtures-code-conftest-py-code), I explained the meaning and purpose of the `app` and `client` test fixtures. In order to send and receive HTTP requests from our API, the test function must include `client` as a parameter.
+
+Let's go through the `test_auth_register` function and explain what is being tested:
 
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Line 8-9: </strong>Rather than copy the same values over and over, I defined <code>EMAIL</code> and <code>PASSWORD</code> as global variables since they will be used multiple times throughout this test set.</p>
+      <p><strong>Line 5: </strong>The `register_user` function which we just dissected and documented is imported.</p>
     </li>
     <li>
-      <p><strong>Line 10-13: </strong>These error messages are stored in variables to save horizontal space and avoid splitting a single statement across two lines.</p>
+      <p><strong>Line 7: </strong>This string value will occur multiple times in the test cases we created in this test file, but it will not occur in any other test cases, so we do not need to refactor it and move it to the `tests/util.py` file.</p>
     </li>
     <li>
-      <p><strong>Line 16: </strong>This function is not a test case (since the name does not begin with <code>test_</code>). <code>register_user</code> takes a Flask test client instance, and values for <code>email</code> and <code>password</code> as parameters. The test client instance must always be passed when using this function, but <code>email</code> and <code>password</code> will use the default values if none are specified.</p>
-    </li>
-    <li>
-      <p><strong>Line 17: </strong>The <a href="https://werkzeug.palletsprojects.com/en/0.15.x/test/#werkzeug.test.Client" target="_blank">Flask test client</a> allows us to make HTTP requests. In order to register a new user, we must send a <code>POST</code> request to the <code>api.auth_register</code> endpoint. To do so, we call the test client's <code>post</code> method. The test client is capable of sending requests for all HTTP method types: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code>, <code>head</code> and <code>trace.</code></p>
-    </li>
-    <li>
-      <p><strong>Line 18: </strong>The first argument to the <code>post</code> method is the request URL. Since the target URL is within our Flask application, we can dynamically construct the URL using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.url_for" target="_blank">the <code>url_for</code> function</a>. This is really useful because it allows us to create links within our application without hardcoding any part of the path. All we need to do to use the <code>url_for</code> function is provide the name of the API endpoint, and voila, the URL is dynamically generated and provided to the <code>post</code> method.</p>
-    </li>
-    <li>
-      <p><strong>Line 19: </strong>For a <code>POST</code> request, the server expects the data to be sent in the request body. Since we are simulating a form submission, we must format the data as a series of name/value pairs, each pair separated by an ampersand (&), and for each pair, the name is separated from the value by an equals (=) sign.</p>
-    </li>
-    <li>
-      <p><strong>Line 20: </strong>This is how we specify the value of the <code>Content-Type</code> HTTP header. The value of this header is very important because it tells the server what type of data is being sent. The value <code>application/x-www-form-urlencoded</code> tells the server that the request contains form data encoded as URL parameters.</p>
-    </li>
-    <li>
-      <p><strong>Line 24: </strong><code>test_auth_register</code> is a test case, and <code>client</code> and <code>db</code> are test fixtures defined in <code>conftest.py</code>. The reason for invoking the <code>client</code> fixture is obvious &mdash; we need it to test the API. However, the reason for invoking <code>db</code> is not so obvious since it isn't actually being called in the test function. This fixture initializes the database by creating tables for each database model class (the only model class at this point is <code>User</code>).</p>
+      <p><strong>Line 10: </strong><code>test_auth_register</code> is a test case, and <code>client</code> and <code>db</code> are test fixtures defined in <code>conftest.py</code>. The reason for invoking the <code>client</code> fixture is obvious &mdash; we need it to test the API. However, the reason for invoking <code>db</code> is not so obvious since it isn't actually being called in the test function. This fixture initializes the database by creating tables for each database model class (the only model class at this point is <code>User</code>).</p>
       <p>In this test case, we are sending a request to register a new user and expecting the request to succeed. This will only work if the database has been initialized and the <code>site_user</code> table exists in the database since the SQLAlchemy extension will attempt to execute a <code>INSERT INTO site_user...</code> SQL statement.</p>
       <p><span class="emphasis">BOTTOM LINE</span> &mdash; Invoking the <code>db</code> fixture is necessary for any test cases that add or modify database objects.</p>
     </li>
     <li>
-      <p><strong>Line 25: </strong>We start off the test case by submitting the registration request with the default values. This is really the only action performed in this test case, the rest of the code just verifies the server response to the registration request.</p>
+      <p><strong>Line 11: </strong>We start off the test case by submitting the registration request with the default values. This is really the only action performed in this test case, the rest of the code just verifies the server response to the registration request.</p>
     </li>
     <li>
-      <p><strong>Line 26: </strong>Next, we verify that the HTTP status code of the server response is 201 <code>HTTPStatus.CREATED</code> which indicates that a new user was created in the database.</p>
+      <p><strong>Line 12: </strong>Next, we verify that the HTTP status code of the server response is 201 <code>HTTPStatus.CREATED</code> which indicates that a new user was created in the database.</p>
     </li>
     <li>
-      <p><strong>Line 27-28: </strong>These two lines verify that the <code>status</code> and <code>message</code> attributes exist in the response JSON and that the values indicate that the user was successfully registered.</p>
+      <p><strong>Line 13-14: </strong>These two lines verify that the <code>status</code> and <code>message</code> attributes exist in the response JSON and that the values indicate that the user was successfully registered.</p>
     </li>
     <li>
-      <p><strong>Line 29: </strong>This <code>assert</code> statement verifies that the <code>token_type</code> attribute exists in the response JSON and that the value is <code>bearer</code>.</p>
+      <p><strong>Line 15: </strong>This <code>assert</code> statement verifies that the <code>token_type</code> attribute exists in the response JSON and that the value is <code>bearer</code>.</p>
     </li>
     <li>
-      <p><strong>Line 30: </strong>This <code>assert</code> statement verifies that the <code>expires_in</code> attribute exists in the response JSON and that the value is <code>5</code>.</p>
+      <p><strong>Line 16: </strong>This <code>assert</code> statement verifies that the <code>expires_in</code> attribute exists in the response JSON and that the value is <code>5</code>.</p>
     </li>
     <li>
-      <p><strong>Line 31-32: </strong>Next, we verify that the <code>access_token</code> exists and retrieve the <code>access_token</code>.</p>
+      <p><strong>Line 17-18: </strong>Next, we verify that the <code>access_token</code> exists and retrieve the <code>access_token</code>.</p>
     </li>
     <li>
-      <p><strong>Line 33-36: </strong>Next, we call <code>User.decode_access_token</code> and verify the operation was successful. Then, we retrieve the <code>user_dict</code> and verify that the token (for the user that we just registered) does not have administrator priveleges.</p>
+      <p><strong>Line 19-22: </strong>Next, we call <code>User.decode_access_token</code> and verify the operation was successful. Then, we retrieve the <code>user_dict</code> and verify that the token (for the user that we just registered) does not have administrator priveleges.</p>
     </li>
     <li>
-      <p><strong>Line 37-38: </strong>The next thing we do is call <code>User.find_by_public_id</code> with the <code>public_id</code> value decoded from <code>access_token</code>. This verifies that the user we registered actually exists within the database. Using the object from the database, we verify that the email address for the user matches the value submitted in the original HTTP request.</p>
+      <p><strong>Line 23-24: </strong>The next thing we do is call <code>User.find_by_public_id</code> with the <code>public_id</code> value decoded from <code>access_token</code>. This verifies that the user we registered actually exists within the database. Using the object from the database, we verify that the email address for the user matches the value submitted in the original HTTP request.</p>
     </li>
   </ul>
 </div>
 
-If `test_auth_register` works correctly, that verifies the "happy path" for the `api.auth_register` endpoint. We obviously need to test scenarios where a registration request is not successful, as well. To verify the expected behavior when a registration request is sent for an email address that has already been registered, add the content below and save the file:
+`test_auth_register` verifies the "happy path" for the `api.auth_register` endpoint. We obviously need to test scenarios where a registration request is not successful, as well. Before we create the next test case, update `test_auth_register.py` to import the `PASSWORD` value from `tests/util.py` (**Line 5**) and define a new string value (**Line 8**):
 
-{{< highlight python "linenos=table,linenostart=41" >}}def test_auth_register_email_already_registered(client, db):
+```python {linenos=table,hl_lines=[5,8]}
+"""Unit tests for api.auth_register API endpoint."""
+from http import HTTPStatus
+
+from flask_api_tutorial.models.user import User
+from tests.util import EMAIL, PASSWORD, register_user
+
+SUCCESS = "successfully registered"
+EMAIL_ALREADY_EXISTS = f"{EMAIL} is already registered"
+```
+
+To verify the expected behavior when a registration request is sent for an email address that has already been registered, add the content below and save the file:
+
+```python {linenos=table,linenostart=28}
+def test_auth_register_email_already_registered(client, db):
     user = User(email=EMAIL, password=PASSWORD)
     db.session.add(user)
     db.session.commit()
     response = register_user(client)
     assert response.status_code == HTTPStatus.CONFLICT
     assert "status" in response.json and response.json["status"] == "fail"
-    assert "message" in response.json and response.json["message"] == EMAIL_ALREADY_EXISTS
+    assert (
+        "message" in response.json and response.json["message"] == EMAIL_ALREADY_EXISTS
+    )
     assert "token_type" not in response.json
     assert "expires_in" not in response.json
-    assert "access_token" not in response.json{{< /highlight >}}
+    assert "access_token" not in response.json
+```
 
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Line 42-45: </strong>The first thing we do in this test case is manually create a <code>User</code> instance and add it to the database. Then, we send the same registration request that was sent in the previous test case.</p>
+      <p><strong>Line 29-32: </strong>The first thing we do in this test case is manually create a <code>User</code> instance and add it to the database. Then, we send the same registration request that was sent in the previous test case.</p>
     </li>
     <li>
-      <p><strong>Line 47: </strong>Since a <code>User</code> already exists in the database with the same email address that is sent in the registration request, the response code 409 (<code>HTTPStatus.CONFLICT</code>) indicates that the request could not be completed, but the user might be able to resolve the source of the conflict and resubmit the request.</p>
+      <p><strong>Line 33: </strong>Since a <code>User</code> already exists in the database with the same email address that is sent in the registration request, the response code 409 (<code>HTTPStatus.CONFLICT</code>) indicates that the request could not be completed, but the user might be able to resolve the source of the conflict and resubmit the request.</p>
     </li>
     <li>
-      <p><strong>Line 48-49: </strong>Next, we verify that "status" and "message" attributes exist in the JSON object sent in the response body and the value for each indicates that the registration request was not successful.</p>
+      <p><strong>Line 34-37: </strong>Next, we verify that "status" and "message" attributes exist in the JSON object sent in the response body and the value for each indicates that the registration request was not successful.</p>
     </li>
     <li>
-      <p><strong>Line 50-52: </strong>The final three lines verify that the "token_type", "expires_in" and "access_token" attributes are not present in the JSON object sent in the response body.</p>
+      <p><strong>Line 38-40: </strong>The final three lines verify that the "token_type", "expires_in" and "access_token" attributes are not present in the JSON object sent in the response body.</p>
     </li>
   </ul>
 </div>
@@ -944,7 +959,7 @@ The last test case we will cover at this point is where the client submits an em
   <span class="purple">"message"</span>: <span class="light-blue">"Input payload validation failed"</span>
 }</span></span></code></pre>
 
-You might notice that none of the code we wrote for the `api.auth_register` endpoint generated the response above. That is because this response was automatically generated by Flask-RESTPlus based on the `auth_reqparser` we configured in `/app/api/auth.dto.py`.
+You might notice that none of the code we wrote for the `api.auth_register` endpoint generated the response above. That is because this response was automatically generated by Flask-RESTPlus based on the `auth_reqparser` we configured in `src/flask_api_tutorial/api/auth/dto.py`.
 
 <div class="alert alert-flex">
   <div class="alert-icon">
@@ -957,9 +972,42 @@ You might notice that none of the code we wrote for the `api.auth_register` endp
 
 Whenever a request is rejected because of one or more `RequestParser` arguments failed validation, the format of the response will always contain a **message** attribute equal to <code>"Input payload validation failed"</code> and a an **errors** attribute with the value being another embedded list. The embedded list contains an entry for each argument in the parser that failed validation, with the name of the argument as the attribute name and the value equal to a message describing the failure that occurred.
 
-The information above should make writing the test case pretty easy. Add the content below and save the file:
+The information above should make writing the test case pretty easy. Since the error message for an invalid parameter will occur in nearly every set of test cases we create, we need to add it to `tests/util.py` (**Line 6**):
 
-{{< highlight python "linenos=table,linenostart=54" >}}def test_auth_register_invalid_email(client):
+```python {linenos=table,hl_lines=[6]}
+"""Shared functions and constants for unit tests."""
+from flask import url_for
+
+EMAIL = "new_user@email.com"
+PASSWORD = "test1234"
+BAD_REQUEST = "Input payload validation failed"
+
+
+def register_user(test_client, email=EMAIL, password=PASSWORD):
+    return test_client.post(
+        url_for("api.auth_register"),
+        data=f"email={email}&password={password}",
+        content_type="application/x-www-form-urlencoded",
+    )
+```
+
+We need to import this value into `test_auth_register.py` (**Line 5**):
+
+```python {linenos=table,hl_lines=[5]}
+"""Unit tests for api.auth_register API endpoint."""
+from http import HTTPStatus
+
+from flask_api_tutorial.models.user import User
+from tests.util import EMAIL, PASSWORD, BAD_REQUEST, register_user
+
+SUCCESS = "successfully registered"
+EMAIL_ALREADY_EXISTS = f"{EMAIL} is already registered"
+```
+
+Next, add the content below to `test_auth_register.py` and save the file:
+
+```python {linenos=table,linenostart=43}
+def test_auth_register_invalid_email(client):
     invalid_email = "first last"
     response = register_user(client, email=invalid_email)
     assert response.status_code == HTTPStatus.BAD_REQUEST
@@ -970,17 +1018,96 @@ The information above should make writing the test case pretty easy. Add the con
     assert "errors" in response.json
     assert "password" not in response.json["errors"]
     assert "email" in response.json["errors"]
-    assert response.json["errors"]["email"] == f"{invalid_email} is not a valid email"{{< /highlight >}}
+    assert response.json["errors"]["email"] == f"{invalid_email} is not a valid email"
+```
 
 I don't think there's anything that needs to be explained since most of it is the same as the previous test case, and the difference in the response JSON was explained thoroughly.
 
-<p class="emphasis orange">TODO: LINK TO GITHUB REPO NEEDED BELOW</p>
-There are quite a few more test cases that we need to create for the <code>api.auth_register</code> endpoint. I will not go through any more at this point, since you can find the full set in the github repo. Also, it's a great exercise to try to define the necessary test coverage yourself.
+There are quite a few more test cases that we need to create for the <code>api.auth_register</code> endpoint. I will not go through any more at this point, since you can find the full set in the github repo. Also, trying to define the necessary test coverage yourself is a very worthwhile exercise.
 
-You should run <code>pytest</code> to make sure the new test case passes and that nothing else broke because of the changes:
+You should run <code>tox</code> to make sure the new test cases all pass and that nothing else broke because of the changes:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pytest</span>
-<span class="cmd-warning">TEST RESULTS NEEDED!</span></code></pre>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Desktop/flask_api_tutorial/setup.py
+py37 inst-nodeps: /Users/aaronluna/Desktop/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
+py37 run-test-pre: PYTHONHASHSEED='2150258145'
+py37 run-test: commands[0] | pytest
+================================================== test session starts ===================================================
+platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Desktop/flask_api_tutorial/.tox/py37/bin/python
+cachedir: .tox/py37/.pytest_cache
+rootdir: /Users/aaronluna/Desktop/flask_api_tutorial, inifile: pytest.ini
+plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+collected 52 items
+
+run.py::BLACK SKIPPED                                                                                              [  1%]
+run.py::FLAKE8 SKIPPED                                                                                             [  3%]
+setup.py::BLACK SKIPPED                                                                                            [  5%]
+setup.py::FLAKE8 SKIPPED                                                                                           [  7%]
+src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                                  [  9%]
+src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                                                 [ 11%]
+src/flask_api_tutorial/config.py::BLACK SKIPPED                                                                    [ 13%]
+src/flask_api_tutorial/config.py::FLAKE8 SKIPPED                                                                   [ 15%]
+src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                                              [ 17%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                                             [ 19%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                                         [ 21%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                                        [ 23%]
+src/flask_api_tutorial/api/auth/business.py::BLACK SKIPPED                                                         [ 25%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 SKIPPED                                                        [ 26%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                              [ 28%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                             [ 30%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK SKIPPED                                                        [ 32%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 SKIPPED                                                       [ 34%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                                      [ 36%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                                     [ 38%]
+src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                                           [ 40%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                                          [ 42%]
+src/flask_api_tutorial/models/user.py::BLACK SKIPPED                                                               [ 44%]
+src/flask_api_tutorial/models/user.py::FLAKE8 SKIPPED                                                              [ 46%]
+src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                                             [ 48%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                                            [ 50%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK SKIPPED                                                        [ 51%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 SKIPPED                                                       [ 53%]
+src/flask_api_tutorial/util/result.py::BLACK SKIPPED                                                               [ 55%]
+src/flask_api_tutorial/util/result.py::FLAKE8 SKIPPED                                                              [ 57%]
+tests/__init__.py::BLACK SKIPPED                                                                                   [ 59%]
+tests/__init__.py::FLAKE8 SKIPPED                                                                                  [ 61%]
+tests/conftest.py::BLACK SKIPPED                                                                                   [ 63%]
+tests/conftest.py::FLAKE8 SKIPPED                                                                                  [ 65%]
+tests/test_auth_register.py::BLACK PASSED                                                                          [ 67%]
+tests/test_auth_register.py::FLAKE8 PASSED                                                                         [ 69%]
+tests/test_auth_register.py::test_auth_register PASSED                                                             [ 71%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                    [ 73%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                               [ 75%]
+tests/test_config.py::BLACK SKIPPED                                                                                [ 76%]
+tests/test_config.py::FLAKE8 SKIPPED                                                                               [ 78%]
+tests/test_config.py::test_config_development PASSED                                                               [ 80%]
+tests/test_config.py::test_config_testing PASSED                                                                   [ 82%]
+tests/test_config.py::test_config_production PASSED                                                                [ 84%]
+tests/test_user.py::BLACK SKIPPED                                                                                  [ 86%]
+tests/test_user.py::FLAKE8 SKIPPED                                                                                 [ 88%]
+tests/test_user.py::test_encode_access_token PASSED                                                                [ 90%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                        [ 92%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                        [ 94%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                        [ 96%]
+tests/util.py::BLACK SKIPPED                                                                                       [ 98%]
+tests/util.py::FLAKE8 SKIPPED                                                                                      [100%]
+
+==================================================== warnings summary ====================================================
+src/flask_api_tutorial/api/auth/business.py::BLACK
+  /Users/aaronluna/Desktop/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, MutableMapping
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+================================================ short test summary info =================================================
+SKIPPED [20] /Users/aaronluna/Desktop/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
+SKIPPED [20] /Users/aaronluna/Desktop/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
+======================================= 12 passed, 40 skipped, 1 warning in 7.13s ========================================
+________________________________________________________ summary _________________________________________________________
+  py37: commands succeeded
+  congratulations :)</span></code></pre>
+
+The warning that is generated from Flask-RESTPlus is a very minor issue with the manner in which one of their modules is importing a type from the standard library. This has no effect on the operation of the API and will be fixed very soon in an upcoming release. I will update this test result when it has been fixed.
 
 ## Checkpoint
 
@@ -989,14 +1116,14 @@ Once again, we only implemented a small number of features from the requirements
 <div class="requirements">
   <p class="title">User Management/JWT Authentication</p>
   <div class="fa-bullet-list">
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
+    <p class="fa-bullet-list-item in-progress""><span class="fa fa-star-half-o fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
   </div>
@@ -1010,6 +1137,7 @@ Once again, we only implemented a small number of features from the requirements
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>

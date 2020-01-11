@@ -693,12 +693,15 @@ article p strong {
 }
 
 .green {
-  color: #a9fb68;
+  color: var(--green3);
 }
 
 .steps .emphasis {
   font-weight: 700;
   color: var(--step-list);
+}
+.steps .green .emphasis {
+  color: var(--green3);
 }
 
 .steps .pink .emphasis {
@@ -721,9 +724,12 @@ article p strong {
 .alert p strong,
 .alert p .emphasis,
 .alert p .bold-text,
-.alert p .bold-italics,
-span.italics.requirements {
+.alert p .bold-italics {
   color: var(--alert-box);
+}
+
+span.italics.requirements {
+  font-weight: 700;
 }
 
 .purple {
@@ -903,7 +909,6 @@ div.command {
 }
 
 div.requirements {
-  border: 1px solid var(--tut-requirements);
   background: var(--widget-bg-color);
   padding: 10px 10px 5px;
 }
@@ -1012,10 +1017,10 @@ blockquote p code {
 }
 
 div.steps {
+  color: var(--pink3);
   border: none;
   margin: 0 0 1em;
   padding: 5px;
-  line-height: 1.5;
 }
 
 .note ul li:last-child {
@@ -1300,6 +1305,7 @@ blockquote.rfc .bold-text {
 }
 
 .rfc pre {
+  font-size: 1em;
   border: 0;
   padding: 0;
   margin: 1em 1em 1em 2em;
@@ -1693,6 +1699,14 @@ a.pagination__item--next {
   position: absolute;
   left: -20px;
   margin: 3px 0 0;
+}
+
+.requirements .in-progress {
+  color: var(--blue2);
+}
+
+.requirements .complete {
+  color: var(--gold2);
 }
 
 .post-nav-flex-item-prev,
@@ -2142,8 +2156,26 @@ input {
   color: var(--accent-color1);
 }
 
+#all-github-links table tr td {
+  text-align: center;
+  padding: 5px 10px 3px 10px;
+  font-size: 1em;
+  line-height: 1;
+}
+
+#all-github-links .fa {
+  font-size: 1.2em;
+}
+
+#all-github-links .fa:hover,
+#all-github-links .fa:active,
+#all-github-links .fa:focus,
+#all-github-links .fa:active:hover {
+  color: var(--body-text-color)
+}
+
 table code {
-  color: #d8d8d8;
+  color: var(--off-white2);
   background-color: inherit;
 }
 

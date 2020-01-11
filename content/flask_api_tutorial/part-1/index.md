@@ -11,6 +11,7 @@ menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: "In Part 1, the core concepts of REST and JWTs are introduced, project dependencies are described and installed, and the project is fully configured for prod/dev environments. The flask server and CLI are demonstrated to ensure the setup was performed correctly before moving on to Part 2."
+git_release_name: "v0.1"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.1"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.1.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.1.tar.gz"
@@ -66,6 +67,8 @@ With those guidelines in mind, let's start by creating the folder layout for our
 You can name your root folder whatever you like (represented by the top-level "." node below), or you can be just like me and use `flask_api_tutorial`. In most projects using the src-folder structure, the root folder and the folder containing the application code within the src-folder will have the same name.
 
 In this section, we will work on everything marked as <code class="work-file">NEW CODE</code> in the chart below (all files will be empty at this point):
+
+{{< github_links >}}
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">src</span>
@@ -129,10 +132,6 @@ Feel free to create the project structure manually or through the command line a
 <span class="cmd-prompt">flask_api_tutorial $</span> <span class="cmd-input">mkdir tests && cd tests && touch __init__.py</span>
 <span class="cmd-prompt">flask_api_tutorial/tests $</span> <span class="cmd-input">cd ..</span>
 <span class="cmd-prompt">flask_api_tutorial $</span></code></pre>
-
-The beginning and end of each section will contain github links to the project repository:
-
-{{< github_links >}}
 
 ### Create Virtual Environment
 
@@ -426,7 +425,7 @@ The `flask_api_tutorial.util` package contains general-purpose utlity classes an
 [In a previous post](/blog/error-handling-python-result-class/), I demonstrated and explained the merits of incorporating principles from functional programming, with the `Result` class as a useful example. We will use this class frequently, so please read the linked post. When you finish that, create a new file in `src/flask_api_tutorial/util` named `result.py` and add the content below:
 
 ```python
-"""This module provides classes and exceptions for representing the outcome of an operation."""
+"""The Result class represents the outcome of an operation."""
 
 
 class Result:
@@ -458,7 +457,7 @@ class Result:
         return not self.success
 
     def on_success(self, func, *args, **kwargs):
-        """Continuation method. Pass result of successful operation (if any) to function."""
+        """Pass result of successful operation (if any) to subsequent function."""
         if self.failure:
             return self
         if self.value:
@@ -466,7 +465,7 @@ class Result:
         return func(*args, **kwargs)
 
     def on_failure(self, func, *args, **kwargs):
-        """Continuation method. Pass error message from failed operation to function."""
+        """Pass error message from failed operation to subsequent function."""
         if self.success:
             return self.value if self.value else None
         if self.error:
@@ -474,7 +473,7 @@ class Result:
         return func(*args, **kwargs)
 
     def on_both(self, func, *args, **kwargs):
-        """Continuation method. Pass result of operation (if any) to function."""
+        """Pass result (either succeeded/failed) to subsequent function."""
         if self.value:
             return func(self.value, *args, **kwargs)
         return func(*args, **kwargs)
@@ -533,7 +532,7 @@ timespan = namedtuple(
 
 
 def utc_now():
-    """Get the current UTC date and time with the microsecond value normalized to zero."""
+    """Current UTC date and time with the microsecond value normalized to zero."""
     return datetime.now(timezone.utc).replace(microsecond=0)
 
 
@@ -561,7 +560,8 @@ def make_tzaware(dt, use_tz=None, localize=True):
 
 def dtaware_fromtimestamp(timestamp, use_tz=None):
     """Time-zone aware datetime object from UNIX timestamp."""
-    timestamp_aware = datetime.fromtimestamp(timestamp).replace(tzinfo=get_local_utcoffset())
+    timestamp_naive = datetime.fromtimestamp(timestamp)
+    timestamp_aware = timestamp_naive.replace(tzinfo=get_local_utcoffset())
     return timestamp_aware.astimezone(use_tz) if use_tz else timestamp_aware
 
 
@@ -578,7 +578,10 @@ def format_timespan_digits(ts):
     """Format a timespan namedtuple as a string resembling a digital display."""
     if ts.days:
         day_or_days = "days" if ts.days > 1 else "day"
-        return f"{ts.days} {day_or_days}, {ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
+        return (
+            f"{ts.days} {day_or_days}, "
+            f"{ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
+        )
     if ts.seconds:
         return f"{ts.hours:02d}:{ts.minutes:02d}:{ts.seconds:02d}"
     return f"00:00:00.{ts.total_microseconds}"
@@ -813,7 +816,9 @@ def test_config_production():
     app = create_app("production")
     assert app.config["SECRET_KEY"] != "open sesame"
     assert not app.config["TESTING"]
-    assert app.config["SQLALCHEMY_DATABASE_URI"] == os.getenv("DATABASE_URL", SQLITE_PROD)
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == os.getenv(
+        "DATABASE_URL", SQLITE_PROD
+    )
     assert app.config["TOKEN_EXPIRE_HOURS"] == 1
     assert app.config["TOKEN_EXPIRE_MINUTES"] == 0
 ```
@@ -1053,7 +1058,7 @@ Most of the work done in this section wasn't related to any specific project req
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>

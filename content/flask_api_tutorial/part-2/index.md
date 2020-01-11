@@ -11,6 +11,7 @@ menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 summary: 'Part 2 covers the basics of SQLAlchemy, the Flask-SQLAlchemy extension, and the Flask-Migrate extension. The process of creating a new database table to store user information by defining a class and "registering" it with SQLAlchemy is demonstrated. Next, setting up a system that manages changes to a database schema is thoroughly explained and demonstrated. After initializing the database, functions to encode and decode JSON Web Tokens (JWTs) are created. This section concludes with an introduction to pytest fixtures and examples of several test cases that verify the ability to encode/decode JWTs issued by our API.'
+git_release_name: "v0.2"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.2"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.2.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.2.tar.gz"
@@ -24,6 +25,8 @@ twitter:
 ## Project Structure
 
 The chart below shows the folder structure that was created in [Part 1](/series/flask-api-tutorial/part-1/#project-structure). In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from Part 1 but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
+
+{{< github_links >}}
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">app</span>
@@ -69,10 +72,6 @@ The chart below shows the folder structure that was created in [Part 1](/series/
 <div class="key-item project-empty-file">EMPTY FILE</div>
 </div>
 </div></pre>
-
-You can access the code for this section of the tutorial at the github repository:
-
-{{< github_links >}}
 
 ## Database Models and Migrations with Flask-SQLAlchemy
 
@@ -552,7 +551,7 @@ Here a few more things to note about the fixtures we defined in `conftest.py`:
 
 ### Unit Test: `test_encode_access_token`
 
-We are finally ready to write test code that verifies the `encode_access_token` method. Create a new file in the `test` folder named `test_user.py` and add the following content (ensure that `test_user.py` and `conftest.py` are in the same folder):
+We are finally ready to write test code that verifies the `encode_access_token` method. Create a new file in the `tests` folder named `test_user.py` and add the following content (ensure that `test_user.py` and `conftest.py` are in the same folder):
 
 ```python
 """Unit tests for User model class."""
@@ -947,12 +946,12 @@ I promise that the pace will pick up, since we have again made very little progr
   <div class="fa-bullet-list">
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>New users can register by providing an email address and password</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
   </div>
