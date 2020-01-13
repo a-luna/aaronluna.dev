@@ -1,4 +1,4 @@
-{{- if .Site.Params.post_navigation }} {{- if or (.PrevInSection) (.NextInSection) }}
+{{- if .Site.Params.post_navigation }} {{- if ne .Params.series_part "Overview" }} {{- if or (.PrevInSection) (.NextInSection) }}
 <div class="post-nav flex-container">
     {{- if .NextInSection }}
     <div class="post-nav-flex-item-prev">
@@ -32,4 +32,4 @@
     </div>
     {{- end }}
 </div>
-{{- end }} {{- end }}
+{{- end }} {{- end }} {{- end }}

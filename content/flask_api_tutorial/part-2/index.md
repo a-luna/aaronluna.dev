@@ -29,40 +29,45 @@ The chart below shows the folder structure that was created in [Part 1](/series/
 {{< github_links >}}
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
-|- <span class="project-folder">app</span>
-|   |- <span class="project-folder">api</span>
-|   |   |- <span class="project-folder">auth</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |
-|   |   |- <span class="project-folder">widgets</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |
-|   |- <span class="project-folder">models</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="work-file">user.py</span>
-|   |
-|   |- <span class="project-folder">util</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">datetime_util.py</span>
-|   |   |- <span class="unmodified-file">result.py</span>
-|   |
-|   |- <span class="unmodified-file">__init__.py</span>
-|   |- <span class="unmodified-file">config.py</span>
+|- <span class="project-folder">src</span>
+|   |- <span class="project-folder">flask_api_tutorial</span>
+|       |- <span class="project-folder">api</span>
+|       |   |- <span class="project-folder">auth</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |
+|       |   |- <span class="project-folder">widgets</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |
+|       |- <span class="project-folder">models</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="work-file">user.py</span>
+|       |
+|       |- <span class="project-folder">util</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">datetime_util.py</span>
+|       |-  |- <span class="unmodified-file">result.py</span>
+|       |
+|       |- <span class="unmodified-file">__init__.py</span>
+|       |- <span class="unmodified-file">config.py</span>
 |
-|- <span class="project-folder">test</span>
+|- <span class="project-folder">tests</span>
+|   |- <span class="project-empty-file">__init_.py</span>
 |   |- <span class="work-file">conftest.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>
 |   |- <span class="work-file">test_user.py</span>
+|   |- <span class="work-file">util.py</span>
 |
 |- <span class="unmodified-file">.env</span>
+|- <span class="unmodified-file">.gitignore</span>
+|- <span class="unmodified-file">.pre-commit-config.yaml</span>
+|- <span class="unmodified-file">pyproject.toml</span>
 |- <span class="unmodified-file">pytest.ini</span>
+|- <span class="unmodified-file">README.md</span>
 |- <span class="work-file">run.py</span>
 |- <span class="unmodified-file">setup.py</span>
-|- <span class="unmodified-file">pyproject.toml</span>
-|- <span class="unmodified-file">requirements.txt</span>
-|- <span class="unmodified-file">requirements_dev.txt</span></div>
+|- <span class="unmodified-file">tox.ini</span></div>
 <div class="project-structure-key-wrapper">
 <div class="project-structure-key">
 <div class="key-item key-label">KEY:</div>

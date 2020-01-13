@@ -15,7 +15,7 @@
                     {{ range .Site.Taxonomies.series.flask_api_tutorial }}
                     {{- if not (eq .Params.series_part "Overview") }}
                     <tr>
-                        <td>{{ .Params.series_part }}</td>
+                        <td><a href="{{ .RelPermalink }}">{{ .Params.series_part }}</a></td>
                         <td><a href="{{ .Params.url_git_rel_browse }}" target="_blank" title="View code for {{ .Params.series_part }}">{{ .Params.git_release_name }}</a></td>
                         <td><a href="{{ .Params.url_git_rel_zip }}" target="_blank" title="Download .zip file"><i class="fa fa-download"></i></a></td>
                         <td><a href="{{ .Params.url_git_rel_tar }}" target="_blank" title="Download .tar.gz file"><i class="fa fa-download"></i></a></td>

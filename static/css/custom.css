@@ -2026,6 +2026,11 @@ input {
   text-decoration: underline;
 }
 
+#api-tutorial .current-section {
+  color: var(--body-text-color);
+  font-weight: 700;
+}
+
 #categories .widget__title {
   font-size: 1.45em;
   border-bottom: 1px solid var(--accent-color1);

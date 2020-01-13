@@ -10,7 +10,7 @@ series_part_lead: "API Configuration and User Registration"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: ""
+summary: "Part 3 provides an introduction to Flask-RESTPlus."
 git_release_name: "v0.3"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.3"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.3.zip"
@@ -51,44 +51,49 @@ The chart below shows the folder structure for this section of the tutorial. In 
 {{< github_links >}}
 
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
-|- <span class="project-folder">app</span>
-|   |- <span class="project-folder">api</span>
-|   |   |- <span class="project-folder">auth</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |   |- <span class="work-file">business.py</span>
-|   |   |   |- <span class="work-file">dto.py</span>
-|   |   |   |- <span class="work-file">endpoints.py</span>
-|   |   |
-|   |   |- <span class="project-folder">widgets</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |
-|   |   |- <span class="work-file">__init__.py</span>
-|   |
-|   |- <span class="project-folder">models</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">user.py</span>
-|   |
-|   |- <span class="project-folder">util</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">datetime_util.py</span>
-|   |   |- <span class="unmodified-file">result.py</span>
-|   |
-|   |- <span class="work-file">__init__.py</span>
-|   |- <span class="unmodified-file">config.py</span>
+|- <span class="project-folder">src</span>
+|   |- <span class="project-folder">flask_api_tutorial</span>
+|       |- <span class="project-folder">api</span>
+|       |   |- <span class="project-folder">auth</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |   |- <span class="work-file">business.py</span>
+|       |   |   |- <span class="work-file">dto.py</span>
+|       |   |   |- <span class="work-file">endpoints.py</span>
+|       |   |
+|       |   |- <span class="project-folder">widgets</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |
+|       |   |- <span class="work-file">__init__.py</span>
+|       |
+|       |- <span class="project-folder">models</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">user.py</span>
+|       |
+|       |- <span class="project-folder">util</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">datetime_util.py</span>
+|       |-  |- <span class="unmodified-file">result.py</span>
+|       |
+|       |- <span class="work-file">__init__.py</span>
+|       |- <span class="unmodified-file">config.py</span>
 |
-|- <span class="project-folder">test</span>
+|- <span class="project-folder">tests</span>
+|   |- <span class="project-empty-file">__init_.py</span>
 |   |- <span class="unmodified-file">conftest.py</span>
 |   |- <span class="work-file">test_auth_register.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>
 |   |- <span class="unmodified-file">test_user.py</span>
+|   |- <span class="work-file">util.py</span>
 |
 |- <span class="unmodified-file">.env</span>
+|- <span class="unmodified-file">.gitignore</span>
+|- <span class="unmodified-file">.pre-commit-config.yaml</span>
+|- <span class="unmodified-file">pyproject.toml</span>
 |- <span class="unmodified-file">pytest.ini</span>
+|- <span class="unmodified-file">README.md</span>
 |- <span class="unmodified-file">run.py</span>
 |- <span class="unmodified-file">setup.py</span>
-|- <span class="unmodified-file">pyproject.toml</span>
-|- <span class="unmodified-file">requirements.txt</span>
-|- <span class="unmodified-file">requirements_dev.txt</span></div>
+|- <span class="unmodified-file">tox.ini</span></div>
 <div class="project-structure-key-wrapper">
 <div class="project-structure-key">
 <div class="key-item key-label">KEY:</div>
@@ -187,7 +192,7 @@ There are several approaches to API versioning, but the one I prefer is the most
 
 Just like every other extension, Flask-RESTPlus can be initialized with a Flask application object (i.e., `api.init_app(app)` -- doing so would place the API at the website root). However, in most applications we would rather have the API routes configured with a prefix such as <code>/api/v1</code> to enforce our versioning system.
 
-The best way to accomplish this is with <a href="http://flask.pocoo.org/docs/1.0/blueprints/#why-blueprints" target="_blank">Flask blueprints</a>. Typically, blueprints are used to factor a large, monolithic Flask application into a set of blueprints. Using a blueprint to register our Flask-RESTPlus API with the Flask application will allow us to define a `url_prefix` for the API endpoints.
+The best way to accomplish this is with <a href="http://flask.pocoo.org/docs/1.0/blueprints/#why-blueprints" target="_blank">Flask blueprints</a>. Typically, blueprints are used to factor a large, monolithic Flask application into logical groupings based on the functional areas of your website. Using a blueprint to isolate the API will allow us to define a `url_prefix` for the API endpoints.
 
 ### `api_bp` Blueprint
 

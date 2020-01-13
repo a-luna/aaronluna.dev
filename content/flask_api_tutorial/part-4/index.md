@@ -16,6 +16,37 @@ url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.4"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.4.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.4.tar.gz"
 url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.3...v0.4"
+resources:
+  - name: img1
+    src: images/p04-01-login-endpoint.jpg
+    title: Figure 1 - Swagger UI with /auth/login endpoint
+  - name: img2
+    src: images/p04-02-swagger-ui-auth.jpg
+    title: Figure 2 - Swagger UI with /auth/user endpoint
+  - name: img3
+    src: images/p04-03-auth-user-no-token-swagger.jpg
+    title: Figure 3 - Endpoint requires authorization (Swagger UI)
+  - name: img4
+    src: images/p04-04-retrieve-access-token-swagger.jpg
+    title: Figure 4 - Retrieve access token from response body (Swagger UI)
+  - name: img5
+    src: images/p04-05-configure-access-token-swagger.jpg
+    title: Figure 5 - Configure Swagger UI access token
+  - name: img6
+    src: images/p04-06-close-authorizations-dialog-swagger.jpg
+    title: Figure 6 - Access token configuration complete
+  - name: img7
+    src: images/p04-07-lock-icons-swagger.jpg
+    title: Figure 7 - Authorization required icons are locked after configuring access token
+  - name: img8
+    src: images/p04-08-auth-user-success-swagger.jpg
+    title: Figure 8 - Request for /auth/user successful (Swagger UI)
+  - name: img9
+    src: images/p04-09-auth-user-token-expired-swagger.jpg
+    title: Figure 9 - Request failed (Token expired)
+  - name: img10
+    src: images/p04-10-auth-user-invalid-token-swagger.jpg
+    title: Figure 10 - Request failed (Invalid token)
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
@@ -23,6 +54,8 @@ twitter:
   description: ""
 ---
 ## Project Structure
+
+{{< github_links >}}
 
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
 
@@ -90,9 +123,10 @@ Why is this the case? The data required to register a new user or authenticate a
 
 When a user sends a login request and their credentials are successfully validated, the server must return an HTTP response that includes an access token. As we saw when we implemented the registration process, any response that includes sensitive information (e.g., an access token) must satisfy all <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">OAuth 2.0 requirements</a>, which we thoroughly documented and implemented [in Part 3](/series/flask-api-tutorial/part-3/#process-registration-request). The implementation for the response to a successful login request will be nearly identical.
 
-Open `app/api/auth/business.py`, add the content below and save the file:
+Open `src/flask_api_tutorial/api/auth/business.py`, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=31" >}}def process_login_request(email, password):
+```python {linenos=table,linenostart=31}
+def process_login_request(email, password):
     user = User.find_by_email(email)
     if not user or not user.check_password(password):
         abort(HTTPStatus.UNAUTHORIZED, "email or password does not match", status="fail")
@@ -107,7 +141,8 @@ Open `app/api/auth/business.py`, add the content below and save the file:
     response.status_code = HTTPStatus.OK
     response.headers["Cache-Control"] = "no-store"
     response.headers["Pragma"] = "no-cache"
-    return response{{< /highlight >}}
+    return response
+  ```
 
 The first thing we do in this function is call `User.find_by_email` with the email address provided by the user. If no user exists with this email address, the current request is aborted with a response including 401 `HTTPStatus.UNAUTHORIZED`.
 
@@ -117,19 +152,25 @@ If the password is verified, then the response is almost exactly the same as a s
 
 ### `LoginUser` Resource
 
-The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `app/api/auth/endpoints.py` to include the `process_login_request` function that we just created (**Line 7** below):
+The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `app/api/auth/endpoints.py` to include the `process_login_request` function that we just created (**Line 9**):
 
-{{< highlight python "linenos=table,hl_lines=7" >}}"""API endpoint definitions for /auth namespace."""
+```python {linenos=table,hl_lines=[9]}
+"""API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.auth.dto import auth_reqparser
-from app.api.auth.business import process_registration_request, process_login_request{{< /highlight >}}
+from flask_api_tutorial.api.auth.dto import auth_reqparser
+from flask_api_tutorial.api.auth.business import (
+    process_registration_request,
+    process_login_request,
+)
+```
 
 Next, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=29" >}}@auth_ns.route("/login", endpoint="auth_login")
+```python {linenos=table,linenostart=32}
+@auth_ns.route("/login", endpoint="auth_login")
 class LoginUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/login."""
 
@@ -143,17 +184,18 @@ class LoginUser(Resource):
         request_data = auth_reqparser.parse_args()
         email = request_data.get("email")
         password = request_data.get("password")
-        return process_login(email, password){{< /highlight >}}
+        return process_login_request(email, password)
+  ```
 
 There are two minor differences in the implementation of the `LoginUser` resource and the `RegisterUser` resource:
 
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Line 29: </strong>The <code>@auth_ns.route</code> decorator binds this resource to the <code>/api/v1/auth/login</code> URL route.</p>
+      <p><strong>Line 32: </strong>The <code>@auth_ns.route</code> decorator binds this resource to the <code>/api/v1/auth/login</code> URL route.</p>
     </li>
     <li>
-      <p><strong>Line 34: </strong>The HTTP status codes for successfully registering a new user and successfully authenticating an existing user are 201 <code>HTTPStatus.CREATED</code> and 200 <code>HTTPStatus.OK</code> , respectively.</p>
+      <p><strong>Line 37: </strong>The HTTP status codes for successfully registering a new user and successfully authenticating an existing user are 201 <code>HTTPStatus.CREATED</code> and 200 <code>HTTPStatus.OK</code> , respectively.</p>
     </li>
   </ul>
 </div>
@@ -173,51 +215,40 @@ static               GET      /static/<path:filename></span></code></pre>
 
 The Swagger UI should also be updated to include the new API endpoint:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-01-login-endpoint.jpg">
-        <img src="/img/flask-api-tutorial/p04-01-login-endpoint.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 1 - Swagger UI with <code>/auth/login</code> endpoint</p></figcaption>
-</figure>
+{{< image_fig img1 "500x q95" >}}
 
 Finally, let's create unit tests to verify the login process is working correctly.
 
 ### Unit Tests: <code>test_auth_login.py</code>
 
-Create a new file `test_auth_login.py` in the `test` foder, add the content below and save the file:
+First, we need to create a function that sends a post request to the new endpoint we just created. Since this function will be used by nearly all of our test cases, we place it in the `tests/util.py` file:
 
-{{< highlight python "linenos=table" >}}"""Unit tests for api.auth_login API endpoint."""
-from http import HTTPStatus
-
-from flask import url_for
-
-from app.models.user import User
-
-EMAIL = "new_user@email.com"
-PASSWORD = "test1234"
-SUCCESS = "successfully logged in"
-UNAUTHORIZED = "email or password does not match"
-
-
-def register_user(test_client, email=EMAIL, password=PASSWORD):
-    return test_client.post(
-        url_for("api.auth_register"),
-        data=f"email={email}&password={password}",
-        content_type="application/x-www-form-urlencoded",
-    )
-
-
+```python {linenos=table,linenostart=17}
 def login_user(test_client, email=EMAIL, password=PASSWORD):
     return test_client.post(
         url_for("api.auth_login"),
         data=f"email={email}&password={password}",
         content_type="application/x-www-form-urlencoded",
     )
+```
+
+Hopefully this looks familiar to you since it is nearly the same as the `register_user` function. Next, create a new file named `test_auth_login.py` in the `tests` folder, add the content below and save the file:
+
+```python {linenos=table}
+"""Unit tests for api.auth_login API endpoint."""
+from http import HTTPStatus
+
+from flask_api_tutorial.models.user import User
+from tests.util import EMAIL, register_user, login_user
+
+SUCCESS = "successfully logged in"
+UNAUTHORIZED = "email or password does not match"
 
 
-def test_auth_login(client, db):
+def test_login(client, db):
     register_user(client)
     response = login_user(client)
+    assert response.status_code == HTTPStatus.OK
     assert "status" in response.json and response.json["status"] == "success"
     assert "message" in response.json and response.json["message"] == SUCCESS
     assert "access_token" in response.json
@@ -228,17 +259,17 @@ def test_auth_login(client, db):
     assert not user_dict["admin"]
     user = User.find_by_public_id(user_dict["public_id"])
     assert user and user.email == EMAIL
-    assert response.status_code == HTTPStatus.OK
 
 
-def test_auth_login_email_does_not_exist(client, db):
+def test_login_email_does_not_exist(client, db):
     response = login_user(client)
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == UNAUTHORIZED
     assert "access_token" not in response.json
-    assert response.status_code == HTTPStatus.UNAUTHORIZED{{< /highlight >}}
+```
 
-Everything in this file should be simple to understand since it is so similar to the test set we just created. Run  `pytest` and make sure no failures occur.
+Everything in this file should be simple to understand since it is so similar to the test set we just created. Run  `tox` and make sure no failures occur.
 
 ## Decorators
 

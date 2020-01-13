@@ -4,8 +4,13 @@
         <div class="accordian-content">
             <div id="api-tutorial">
                 <ul>
+                    {{- $currentPage := . }}
                     {{ range .Site.Taxonomies.series.flask_api_tutorial }}
-                    <li><a href="{{ .RelPermalink }}">{{ .Params.Lead }}</a></li>
+                        {{- if ne $currentPage.RelPermalink .RelPermalink }}
+                            <li><a href="{{ .RelPermalink }}">{{ .Params.Lead }}</a></li>
+                        {{- else }}
+                            <span class="current-section"><li>{{ .Params.Lead }}</li></span>
+                        {{- end }}
                     {{- end }}
                 </ul>
             </div>
