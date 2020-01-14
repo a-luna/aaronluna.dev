@@ -1282,22 +1282,24 @@ blockquote .bold-text {
   color: var(--blockquote-text-color);
 }
 
-blockquote.rfc .bold-text {
-  color: #2196f3;
+blockquote.rfc .bold-text,
+.code-details ul li blockquote strong {
+  color: var(--rfc-bold-text-color);
+  text-transform: none;
 }
 
 
 blockquote.rfc {
-  color: #2196f3;
+  color: var(--rfc-text-color);
   font-size: 0.85em;
   font-weight: 400;
-  border-left: 2px solid #2196f3;
+  border-left: 2px solid var(--rfc-text-color);
   padding: 5px 10px;
   margin: 0 0 1em 1em;
 }
 
 blockquote.rfc .bold-text {
-  color: #2196f3;
+  color: var(--rfc-text-color);
 }
 
 .code-details blockquote {

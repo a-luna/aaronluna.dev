@@ -63,6 +63,8 @@
   --code-text-color1: var(--green3);
   --code-text-color2: var(--off-white1);
   --blockquote-text-color: var(--green3);
+  --rfc-text-color: var(--blue1);
+  --rfc-bold-text-color: var(--blue2);
   --blockquote-code-text-color: var(--body-text-color);
   --code-details-lineno: var(--white2);
 

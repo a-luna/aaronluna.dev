@@ -152,7 +152,7 @@ If the password is verified, then the response is almost exactly the same as a s
 
 ### `LoginUser` Resource
 
-The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `app/api/auth/endpoints.py` to include the `process_login_request` function that we just created (**Line 9**):
+The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `src/flask_api_tutorial/api/auth/endpoints.py` to include the `process_login_request` function that we just created (**Line 9**):
 
 ```python {linenos=table,hl_lines=[9]}
 """API endpoint definitions for /auth namespace."""
@@ -210,8 +210,8 @@ api.auth_register    POST     /api/v1/auth/register
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json
-restplus_doc.static  GET      /swaggerui/<path:filename>
-static               GET      /static/<path:filename></span></code></pre>
+restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
+static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 The Swagger UI should also be updated to include the new API endpoint:
 
@@ -219,7 +219,7 @@ The Swagger UI should also be updated to include the new API endpoint:
 
 Finally, let's create unit tests to verify the login process is working correctly.
 
-### Unit Tests: <code>test_auth_login.py</code>
+### Unit Tests: `test_auth_login.py`
 
 First, we need to create a function that sends a post request to the new endpoint we just created. Since this function will be used by nearly all of our test cases, we place it in the `tests/util.py` file:
 
@@ -255,9 +255,9 @@ def test_login(client, db):
     access_token = response.json["access_token"]
     result = User.decode_access_token(access_token)
     assert result.success
-    user_dict = result.value
-    assert not user_dict["admin"]
-    user = User.find_by_public_id(user_dict["public_id"])
+    token_payload = result.value
+    assert not token_payload["admin"]
+    user = User.find_by_public_id(token_payload["public_id"])
     assert user and user.email == EMAIL
 
 
@@ -283,16 +283,17 @@ Let's take a break from implementing the API endpoints in the `auth_ns` namespac
 
 It might seem weird to recommend a Stack Overflow post as a general-purpose guide, but I think you will be pleasantly surprised if you visit the page.
 
-Create a new file `decorator.py` in `/app/api/auth` and add the content below:
+Create a new file named `decorator.py` in `src/flask_api_tutorial/api/auth` and add the content below:
 
-{{< highlight python "linenos=table" >}}"""Decorators that decode and verify authorization tokens."""
+```python {linenos=table}
+"""Decorators that decode and verify authorization tokens."""
 from functools import wraps
 from http import HTTPStatus
 
 from flask import jsonify, request
 from flask_restplus import abort
 
-from app.models.user import User
+from flask_api_tutorial.models.user import User
 
 _REALM_REGULAR_USERS = "registered_users@mydomain.com"
 _REALM_ADMIN_USERS = "admin_users@mydomain.com"
@@ -318,7 +319,7 @@ def admin_token_required(f):
     def decorated(*args, **kwargs):
         token_payload = _check_access_token(admin_only=True)
         if not token_payload["admin"]:
-            _abort_admin_token_required()
+            _admin_token_required()
         for name, val in token_payload.items():
             setattr(decorated, name, val)
         return f(*args, **kwargs)
@@ -329,12 +330,12 @@ def admin_token_required(f):
 def _check_access_token(admin_only):
     token = request.headers.get("Authorization")
     if not token:
-        _abort_no_access_token(admin_only)
-    payload = User.decode_access_token(token).on_failure(_abort_invalid_token, admin_only)
+        _no_access_token(admin_only)
+    payload = User.decode_access_token(token).on_failure(_invalid_token, admin_only)
     return payload
 
 
-def _abort_no_access_token(admin_only):
+def _no_access_token(admin_only):
     response = jsonify(status="fail", message="Unauthorized")
     response.status_code = HTTPStatus.UNAUTHORIZED
     realm = _REALM_ADMIN_USERS if admin_only else _REALM_REGULAR_USERS
@@ -342,7 +343,7 @@ def _abort_no_access_token(admin_only):
     abort(response)
 
 
-def _abort_invalid_token(message, admin_only):
+def _invalid_token(message, admin_only):
     response = jsonify(status="fail", message=f"{message}")
     response.status_code = HTTPStatus.UNAUTHORIZED
     realm = _REALM_ADMIN_USERS if admin_only else _REALM_REGULAR_USERS
@@ -354,7 +355,7 @@ def _abort_invalid_token(message, admin_only):
     abort(response)
 
 
-def _abort_admin_token_required():
+def _admin_token_required():
     response = jsonify(status="fail", message="You are not an administrator")
     response.status_code = HTTPStatus.FORBIDDEN
     response.headers["WWW-Authenticate"] = (
@@ -362,34 +363,36 @@ def _abort_admin_token_required():
         f'error="insufficient_scope", '
         f'error_description="You are not an administrator"'
     )
-    abort(response){{< /highlight >}}
+    abort(response)
+```
 
-There are multiple things I want to point out about the purpose of these decorators and how they effect decorated functions:
+The decorators defined in this module are responsible for implementing key parts of the Bearer token authentication model. It is important to understand how they are designed and how this design is driven by the need to obey the specifications from <a href="https://tools.ietf.org/html/rfc6750" target="_blank">RFC6750</a>:
 
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Lines 14, 27: </strong>This module exposes two decorators, <code>@token_required</code> and <code>@admin_token_required</code>. Hopefully, the purpose of these is self-explanatory. If access to any method/function needs to be restricted to users who have a valid <code>access_token</code>, simply decorate it with <code>@token_required</code>. If access needs to be restricted solely to users who have a valid <code>access_token</code> <span class="emphasis">AND</span> admin priveleges, decorate the method with <code>@admin_token_required</code> instead.</p>
+      <p><strong>Lines 14, 27: </strong>This module exposes two decorators, <code>@token_required</code> and <code>@admin_token_required</code>. If access to a method/function needs to be restricted to users who have a valid <code>access_token</code>, simply decorate it with <code>@token_required</code>. If access needs to be restricted solely to users who have a valid <code>access_token</code> <span class="emphasis">AND</span> administrator privileges, decorate the method with <code>@admin_token_required</code> instead.</p>
     </li>
     <li>
-      <p><strong>Lines 19, 32: </strong>The first thing both decorators do is call the <code>_check_access_token</code> function. This function returns a <code>user_dict</code> object if an <code>access_token</code> was sent in the request header <span class="emphasis">AND</span> the token was successfully decoded. If no <code>access_token</code> was sent or the token is invalid/expired, the current request is aborted.</p>
+      <p><strong>Lines 19, 32: </strong>The first thing both decorators do is call the <code>_check_access_token</code> function. This function returns a <code>token_payload</code> object if an <code>access_token</code> was sent in the request header <span class="emphasis">AND</span> the token was successfully decoded. If no <code>access_token</code> was sent or the token is invalid/expired, the current request is aborted.</p>
     </li>
     <li>
-      <p><strong>Lines 20-21, 35-36: </strong>Both decorators pass the contents of <code>user_dict</code> to the decorated function in the same way &mdash; by iterating over the dictionary items and (for each item) setting an attribute on the decorated function (attribute name = dict item key) to the items value. This allows the decorated function to access the user's <code>public_id</code>, the <code>access_token</code> string value, etc.</p>
-      <p>If that explanation was confusing, it should make more sense after we apply the decorator to a function, which will happen very shortly.</p>
+      <p><strong>Lines 20-21, 35-36: </strong>Both decorators pass the contents of <code>token_payload</code> to the decorated function in the same way &mdash; by iterating over the dictionary items and (for each item) creating a new attribute on the decorated function (attribute name = dict item key, attribute value = dict item value). This allows the decorated function to access the user's <code>public_id</code>, the <code>access_token</code> string value, etc.</p>
+      <p>If that explanation was confusing, it should make more sense after we apply the decorator to a function and step through the code, which will happen very shortly.</p>
     </li>
     <li>
       <p><strong>Lines 43-45: </strong>Within the <code>_check_access_token</code> function, <code>request</code> is the global <code>flask.request</code> object, which allows us to access the headers from the current request, among other things. For more info, check out <a href="https://flask.palletsprojects.com/en/1.1.x/reqcontext/" target="_blank">the Flask docs</a>. If no token is found in the header's <code>Authorization</code> field, the current request is aborted to prevent access to the requested resource.</p>
     </li>
     <li>
-      <p><strong>Line 46: </strong>This line demonstrates how <code>Result</code> objects can be used to chain a sequence of function calls based on the outcome of the previous operation. If the call to <code>User.decode_access_token</code> was successful, the <code>result.value</code> from the decoded token is returned to the decorator function. If the token was not decoded successfully, then the <code>on_failure</code> method passes <code>result.error</code> from the failed operation to <code>_abort_invalid_token</code>.</p>
+      <p><strong>Line 46: </strong>This line demonstrates how <code>Result</code> objects can be used to chain a sequence of function calls based on the outcome of the previous operation. If the call to <code>User.decode_access_token</code> was successful, the <code>result.value</code> from the decoded token is returned to the decorator function. If the token was not decoded successfully, then the <code>on_failure</code> method passes <code>result.error</code> from the failed operation to <code>_invalid_token</code>.</p>
     </li>
     <li>
-      <p><strong>Lines 50-55: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the request does not include an <code>access_token</code> in the header, then the request will be aborted by calling <code>_abort_no_access_token</code>.</p>
-      <p>The <code>jsonify</code> function basically calls <code>json.dumps</code> and turns the JSON into a HTTP response (the <a href="https://flask.palletsprojects.com/en/1.1.x/api/?highlight=jsonify#flask.json.jsonify" target="_blank">actual behavior</a> is more nuanced than that). Creating a response object manually is necessary if you need to add a custom header, which is required whenever a request for a protected resource does not contain an access token. <a href="https://tools.ietf.org/html/rfc6750#section-3" target="_blank">Per Section 3 of RFC6750</a> (the specification doc for Bearer token authentication):</p>
-      <blockquote class="rfc">If the protected resource request does not include authentication credentials or does not contain an access token that enables access to the protected resource, the resource server MUST include the HTTP
-   "WWW-Authenticate" response header field ... If the request lacks any authentication information (e.g., the client
-   was unaware that authentication is necessary or attempted using an unsupported authentication method), the resource server SHOULD NOT include an error code or other error information.
+      <p><strong>Lines 50-55: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the request does not include an <code>access_token</code> in the header, then the request will be aborted by calling <code>_no_access_token</code>.</p>
+      <p>The <code>jsonify</code> function (in a nutshell) calls <code>json.dumps</code> and turns the JSON into a HTTP response (the <a href="https://flask.palletsprojects.com/en/1.1.x/api/?highlight=jsonify#flask.json.jsonify" target="_blank">actual behavior</a> is more nuanced than that). Creating a response object manually is necessary if you need to add a custom header, which is required whenever a request for a protected resource does not contain an access token.</p>
+      <P><a href="https://tools.ietf.org/html/rfc6750#section-3" target="_blank">Per Section 3 of RFC6750</a>:</P>
+      <blockquote class="rfc">If the protected resource request does not include authentication credentials or does not contain an access token that enables access to the protected resource, <strong>the resource server MUST include the HTTP
+   "WWW-Authenticate" response header field</strong> ... If the request lacks any authentication information (e.g., the client
+   was unaware that authentication is necessary or attempted using an unsupported authentication method), the resource server <strong>SHOULD NOT</strong> include an error code or other error information.
         <p>For example:</p>
         <p style="margin: 0 0 0 1em"><code>HTTP/1.1 401 Unauthorized<br>
      WWW-Authenticate: Bearer realm="example"</code></p>
@@ -397,27 +400,27 @@ There are multiple things I want to point out about the purpose of these decorat
       <p>RFC6750 also states that <code>WWW-Authenticate: Bearer</code> "MUST be followed by one or more
    auth-param values" and goes on to suggest that "a <span class="bold-text">realm</span> attribute MAY be included to indicate the scope of
    protection". <a href="https://tools.ietf.org/html/rfc2617#section-3.2.1" target="_blank">Section 3.2.1 of RFC2167</a> (HTTP Authentication: Basic and Digest Access Authentication) defines the <span class="bold-text">realm</span> attribute:</p>
-      <blockquote class="rfc">realm
+      <blockquote class="rfc"><strong>realm</strong>
         <p style="margin: 0 0 0 1em">A string to be displayed to users so they know which username and password to use. This string should contain at least the name of the host performing the authentication and might additionally indicate the collection of users who might have access. An example might be "registered_users@gotham.news.com".</p>
       </blockquote>
       <p>If a request is recieved without an access token in the request header, the <span class="bold-text">realm</span> attribute in the <span class="bold-text">WWW-Authenticate</span> field of the response header will communicate the access level necessary for the requested resource &mdash; either <code>registered_users@mydomain.com</code> or <code>admin_users@mydomain.com</code>.</p>
     </li>
     <li>
-      <p><strong>Line 58: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the <code>access_token</code> is invalid or expired, then the request will be aborted by calling <code>_abort_invalid_token</code>.</p>
+      <p><strong>Line 58: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the <code>access_token</code> is invalid or expired, then the request will be aborted by calling <code>_invalid_token</code>.</p>
     </li>
     <li>
       <p><strong>Lines 62-65: </strong>The required response to a request where the token failed authentication is given in <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">Section 3.1 of RFC6750</a>:</p>
-      <blockquote class="rfc">If the protected resource request included an access token and failed authentication, the resource server SHOULD include the "error" attribute to provide the client with the reason why the access request was declined ... In addition, the resource server MAY include the "error_description" attribute to provide developers a human-readable explanation that is not meant to be displayed to end-users.
+      <blockquote class="rfc">If the protected resource request included an access token and failed authentication, <strong>the resource server SHOULD include the "error" attribute</strong> to provide the client with the reason why the access request was declined ... In addition, <strong>the resource server MAY include the "error_description" attribute</strong> to provide developers a human-readable explanation that is not meant to be displayed to end-users.
       <p>For example, ... in response to a protected resource request with an authentication attempt using an expired access token:</p>
       <p style="margin: 0 0 0 1em"><code>HTTP/1.1 401 Unauthorized<br>
      WWW-Authenticate: Bearer realm="example", error="invalid_token", error_description="The access token expired"</code></p></blockquote>
     </li>
     <li>
-      <p><strong>Line 70: </strong>If a function is decorated with <code>@admin_token_required</code> and the <code>access_token</code> is decoded successfully <span class="emphasis">BUT</span> the user does not have administrator priveleges, then the request will be aborted by calling <code>_abort_admin_token_required</code>.</p>
+      <p><strong>Line 70: </strong>If a function is decorated with <code>@admin_token_required</code> and the <code>access_token</code> is decoded successfully <span class="emphasis">BUT</span> the user does not have administrator priveleges, then the request will be aborted by calling <code>_admin_token_required</code>.</p>
     </li>
     <li>
-      <p><strong>Lines 73-76: </strong>The required response to a request where the token was successfully decoded but the user does not have administrator priveleges is nearly the same as the required response to a request where the token failed authentication. The "error" attribute of the response should be <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">"insufficient_scope"</a>, and the HTTP status code is 403 <code>HTTPStatus.FORBIDDEN</code> rather than 401 <code>HTTPStatus.UNAUTHORIZED</code>:</p>
-      <blockquote class="rfc">insufficient_scope
+      <p><strong>Lines 73-76: </strong>The required response to a request where the token was successfully decoded but the user does not have administrator privileges is nearly the same as the required response to a request where the token failed authentication. The "error" attribute of the response should be <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">"insufficient_scope"</a>, and the HTTP status code is 403 <code>HTTPStatus.FORBIDDEN</code> rather than 401 <code>HTTPStatus.UNAUTHORIZED</code>:</p>
+      <blockquote class="rfc"><strong>insufficient_scope</strong>
       <p style="margin: 0 0 0 1em">The request requires higher privileges than provided by the access token.  The resource server SHOULD respond with the HTTP 403 (Forbidden) status code and MAY include the "scope" attribute with the scope necessary to access the protected resource.</p></blockquote>
     </li>
   </ul>
@@ -427,7 +430,7 @@ Let's see how we can apply the <code>@token_required</code> decorator to the rem
 
 ## `api.auth_user` Endpoint
 
-The purpose of this endpoint is to verify that the `access_token` held by the logged-in user is currently valid, and if so, to return a representation of the current user containing the `email`, `public_id`, `admin` and `registered_on` attributes from the `User` model class.
+The purpose of this endpoint is to verify that the `access_token` issued to the logged-in user is currently valid, and if so, to return a representation of the current user containing the `email`, `public_id`, `admin` and `registered_on` attributes from the `User` model class.
 
 The way we implement this endpoint will demonstrate a few new concepts:
 
@@ -439,17 +442,20 @@ The way we implement this endpoint will demonstrate a few new concepts:
 
 ### `user_model` API Model
 
-The first thing we need to do is create an API model for the `User` class. In `/app/api/auth/dto.py`, update the import statements to incude the `Model` class from `flask_restplus` and the `String` and `Boolean` classes from the `flask_restplus.fields` module (**Lines 2-3** below):
+The first thing we need to do is create an API model for the `User` class. In `src/flask_api_tutorial/api/auth/dto.py`, update the import statements to incude the `Model` class from `flask_restplus` and the `String` and `Boolean` classes from the `flask_restplus.fields` module (**Lines 2-3**):
 
-{{< highlight python "linenos=table,hl_lines=2-3" >}}"""Parsers and serializers for /auth API endpoints."""
+```python {linenos=table,hl_lines=["2-3"]}
+"""Parsers and serializers for /auth API endpoints."""
 from flask_restplus import Model
 from flask_restplus.fields import String, Boolean
 from flask_restplus.inputs import email
-from flask_restplus.reqparse import RequestParser{{< /highlight >}}
+from flask_restplus.reqparse import RequestParser
+```
 
 Next, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=24" >}}user_model = Model(
+```python {linenos=table,linenostart=16}
+user_model = Model(
     "User",
     {
         "email": String,
@@ -458,13 +464,14 @@ Next, add the content below and save the file:
         "registered_on": String(attribute="registered_on_str"),
         "token_expires_in": String,
     },
-){{< /highlight >}}
+)
+```
 
 `"User"` is the name of the API Model, and this value will be used to identify the JSON object in the Swagger UI page. Please read <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html" target="_blank">the Flask-RESTPlus documentation</a> for detailed examples of creating API models. Basically, an API model is a dictionary where the keys are the names of attributes on the object that we need to serialize, and the values are a class from the `fields` module that formats the value of the attibute on the object to ensure that it can be safely included in the HTTP response.
 
-Any other attributes of the object are considered private and will not be included in the JSON. If the name of the attribute on the object is different than the name that you wish to use in the JSON, specify the name of the attribute on the object using the `attribute` parameter, which is what we are doing for `registered_on` in the code above.
+Any other attributes of the object are considered private and will not be included in the JSON. If the name of the attribute on the object is different than the name that you wish to use in the JSON, specify the name of the attribute on the object using the `attribute` parameter, which is what we are doing for `registered_on` in the code above (**Line 22**).
 
-You probably notice that the `User` class has attributes named `registered_on` and `registered_on_str`, a `datetime` and `str` value, respectively. `registered_on_str` is the `datetime` value formatted as a consise, easy-to-read string. We want to use the string version in our JSON, but would rather use `registered_on` as the name, rather than `registered_on_str`. Specifying `attribute="registered_on_str"` in the `fields.String` constructor acheives this.
+You may have noticed that the `User` class has attributes named `registered_on` and `registered_on_str`, a `datetime` and `str` value, respectively. `registered_on_str` is the `datetime` value formatted as a concise, easy-to-read string. We want to use the string version in our JSON, but would rather use `registered_on` as the name, rather than `registered_on_str`. Specifying `attribute="registered_on_str"` in the `fields.String` constructor achieves this.
 
 The last attribute in the `User` API model is named `token_expires_in`, but the `User` db model does not contain an attribute that matches this in any way. So why would we define an API model with a value that doesn't exist on the object being modeled?
 
@@ -474,34 +481,42 @@ The Flask-RESTPlus docs contain a <a href="https://flask-restplus.readthedocs.io
 
 ### `get_logged_in_user` Function
 
-Our next task is to create the business logic for the `api.auth_user` endpoint. The first thing we need to do is verify that the access token included in the request is valid. Sounds like a job for the `@token_required` decorator that we just created!
+Our next task is to create the business logic for the `api.auth_user` endpoint. The first thing we need to do is verify that the access token included in the request is valid. Sounds like a job for the `@token_required` decorator!
 
-Open `/app/api/auth/business.py` and update the import statements to include the `@token_required` decorator and a few helper functions from the `datetime_util` module (<strong>Line 8</strong> and <strong>Line 10</strong>).
+Open `src/flask_api_tutorial/api/auth/business.py` and update the import statements to include the `@token_required` decorator and a few helper functions from the `datetime_util` module (<strong>Line 8</strong> and <strong>Line 10</strong>).
 
-{{< highlight python "linenos=table,hl_lines=8 10" >}}"""Business logic for /auth API endpoints."""
+```python {linenos=table,hl_lines=[8,10]}
+"""Business logic for /auth API endpoints."""
 from http import HTTPStatus
 
 from flask import current_app, jsonify
 from flask_restplus import abort
 
-from app import db
-from app.api.auth.decorator import token_required
-from app.models.user import User
-from app.util.datetime_util import remaining_fromtimestamp, format_timespan_digits{{< /highlight >}}
+from flask_api_tutorial import db
+from flask_api_tutorial.api.auth.decorator import token_required
+from flask_api_tutorial.models.user import User
+from flask_api_tutorial.util.datetime_util import (
+    remaining_fromtimestamp,
+    format_timespan_digits,
+)
+```
 
 Then, add the decorated function:
 
-{{< highlight python "linenos=table,linenostart=51" >}}@token_required
+```python {linenos=table,linenostart=54}
+@token_required
 def get_logged_in_user():
     public_id = get_logged_in_user.public_id
     user = User.find_by_public_id(public_id)
     expires_at = get_logged_in_user.expires_at
     user.token_expires_in = format_timespan_digits(remaining_fromtimestamp(expires_at))
-    return user{{< /highlight >}}
+    return user
+```
 
-Thanks to the `@token_required` decorator, if the request header does not contain an access token or the access token was sent but is invalid/expired, then `get_logged_in_user` is never actually executed (unless a valid token is found, the current request is aborted before calling the wrapped function). So what's the deal with **Line 53** above? It isn't very obvious, so let's break it down line-by-line. First, look at the code for `@token_required`:
+Thanks to the `@token_required` decorator, if the request header does not contain an access token or the access token was sent but is invalid/expired, the `get_logged_in_user` function is never actually executed (unless a valid token is found, the current request is aborted before calling the wrapped function). So what's the deal with **Line 56** above? It isn't very obvious, so let's break it down line-by-line. First, look at the code for `@token_required`:
 
-{{< highlight python "linenos=table,linenostart=14" >}}def token_required(f):
+```python {linenos=table,linenostart=14}
+def token_required(f):
     """Allow access to the wrapped function if the request header contains a valid access token."""
 
     @wraps(f)
@@ -511,13 +526,15 @@ Thanks to the `@token_required` decorator, if the request header does not contai
             setattr(decorated, name, val)
         return f(*args, **kwargs)
 
-    return decorated{{< /highlight >}}
+    return decorated
+```
 
-After successfully decoding the token in **Line 19**, the function iterates over the items in `user_dict`. Each item's name and value are then used to call `setattr` on `decorated` (remember, `decorated` is the wrapped function, in this case `get_logged_in_user`).
+After successfully decoding the token in **Line 19**, the function iterates over the items in `token_payload`. Each item's name and value are then used to call `setattr` on `decorated` (remember, `decorated` is the wrapped function, in this case `get_logged_in_user`).
 
-The code below shows the value of all local variables while iterating over `user_dict`'s items:
+The code below shows the value of all local variables while iterating over `token_payload`'s items:
 
-{{< highlight python >}}# f = <function get_logged_in_user at 0x1080a1ef0>
+```python
+# f = <function get_logged_in_user at 0x1080a1ef0>
 @wraps(f)
 def decorated(*args, **kwargs):
     # decorated = <function get_logged_in_user at 0x1080a1f80>
@@ -544,67 +561,76 @@ def decorated(*args, **kwargs):
     # val = 1565075425
         setattr(decorated, name, val)
         # decorated.expires_at = 1565075425
-    return f(*args, **kwargs){{< /highlight >}}
+    return f(*args, **kwargs)
+```
 
-The important thing to grasp is that we are creating attributes on the `get_logged_in_user` function for each item in `user_dict`. I've isolated the lines from above that only report the value of the `decorated` variable (which is the `get_logged_in_user` function):
+The important thing to grasp is that we are creating attributes on the `get_logged_in_user` function for each item in `token_payload`. I've isolated the lines from above that only report the value of the `decorated` object (which is the `get_logged_in_user` function):
 
-{{< highlight python >}}
+```python
 # decorated = <function get_logged_in_user at 0x1080a1f80>
 # decorated.public_id = '77e8570c-5432-4a5a-9a5d-71915604a0db
 # decorated.admin = False
 # decorated.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE...HNlfQ.wNvDzYMiY70wWm4xmt698G1WYgPPup6OH1NrcsfaXy0'
-# decorated.expires_at = 1565075425{{< /highlight >}}
+# decorated.expires_at = 1565075425
+```
 
 Let's again look at the code for `get_logged_in_user`:
 
-{{< highlight python "linenos=table,linenostart=51" >}}@token_required
+```python {linenos=table,linenostart=54}
+@token_required
 def get_logged_in_user():
     public_id = get_logged_in_user.public_id
     user = User.find_by_public_id(public_id)
     expires_at = get_logged_in_user.expires_at
     user.token_expires_in = format_timespan_digits(remaining_fromtimestamp(expires_at))
-    return user{{< /highlight >}}
+    return user
+```
 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 53: </strong>When this line is executed, the process of iterating over <code>user_dict.items()</code> has taken place and the value of <code>get_logged_in_user.public_id</code> contains <code>user_dict["public_id"]</code> (identifies the user the token was issued for), which was decoded from <code>access_token</code> in the request header.</p>
+        <p><strong>Line 56: </strong>When this line is executed, <code>get_logged_in_user.public_id</code> contains the value of <code>token_payload["public_id"]</code>, which was decoded from the <code>access_token</code> sent in the request header.</p>
       </li>
       <li>
-        <p><strong>Line 54: </strong>Retrieve the <code>User</code> from the database with the same <code>public_id</code> that was decoded from the token.</p>
+        <p><strong>Line 57: </strong>Retrieve the <code>User</code> object from the database that matches the <code>public_id</code> decoded from the token.</p>
       </li>
       <li>
-        <p><strong>Lines 55-56: </strong><code>get_logged_in_user.expires_at</code> contains<code>user_dict['expires_at']</code>, which is a timestamp stored as an integer. The timestamp is equal to the time when the token expires, and we use the <code>app.util.datetime_util.remaining_fromtimestamp</code> method to calculate the time remaining until the token expires. Finally, we format the time remaining as a string value using the <code>app.util.datetime_util.format_timespan_digits</code> method. We store the formatted string in a new attribute named <code>token_expires_in</code>, which we defined as a field in the <code>user_model</code> API model that we created in the <code>app.api.auth.dto</code> module.</p>
+        <p><strong>Lines 58: </strong><code>get_logged_in_user.expires_at</code> contains the value of <code>token_payload['expires_at']</code>, which is a timestamp stored as an integer. This value determines when the token is considered to be expired.</p>
+      </li>
+      <li>
+        <p><strong>Lines 59: </strong>We can use the <code>remaining_fromtimestamp</code> function to calculate the time remaining until a token expires. Since this function returns a <code>timespan</code> object (this is a custom namedtuple defined in the <code>datetime_util</code> module), we format it as a string value using <code>format_timespan_digits</code>.</p>
+        <p>Finally, we store the formatted string in a new attribute named <code>token_expires_in</code>, which we defined as a field in the <code>user_model</code> API model that we created in the <code>flask_api_tutorial.api.auth.dto</code> module.</p>
       </li>
     </ul>
 </div>
 
-Whew! That was a lot of detail for a simple function. Let's keep things moving and define the concrete `Resource` class for the `api.auth_user` endpoint.
+Whew! That was a lot of detail for a simple function. The next step is to define the concrete `Resource` class for the `api.auth_user` endpoint.
 
 ### `GetUser` Resource
 
-Next, open `/app/api/auth/endpoints.py` and make the changes listed below to the highlighted line numbers:
+Next, open `src/flask_api_tutorial/api/auth/endpoints.py` and update the import statements to include the `user_model` we created in the `flask_api_tutorial.api.auth.dto` module (**Line 6**) and the `get_logged_in_user` function we created in `flask_api_tutorial.api.auth.business` (**Line 10**). We also need to register `user_model` with the `auth_ns` namespace (**Line 14**):
 
-{{< highlight python "linenos=table,hl_lines=6 10 14" >}}"""API endpoint definitions for /auth namespace."""
+```python {linenos=table,hl_lines=[6,10,14]}
+"""API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.auth.dto import auth_reqparser, user_model
-from app.api.auth.business import (
+from flask_api_tutorial.api.auth.dto import auth_reqparser, user_model
+from flask_api_tutorial.api.auth.business import (
     process_registration_request,
     process_login_request,
     get_logged_in_user,
 )
 
 auth_ns = Namespace(name="auth", validate=True)
-auth_ns.models[user_model.name] = user_model{{< /highlight >}}
+auth_ns.models[user_model.name] = user_model
+```
 
-Update the import statements to include the `user_model` we just created in `app.api.auth.dto` (**Line 6**) and the `get_logged_in_user` function in `app.api.auth.business` (**Line 10**). We also need to register `user_model` with the `auth_ns` namespace (**Line 14**).
+Next, add the content below and save the file (this is the same file, `src/flask_api_tutorial/api/auth/endpoints.py`):
 
-Next, add the content below and save the file (this is the same file, `/app/api/auth/endpoints.py`):
-
-{{< highlight python "linenos=table,linenostart=51" >}}@auth_ns.route("/user", endpoint="auth_user")
+```python {linenos=table,linenostart=51}
+@auth_ns.route("/user", endpoint="auth_user")
 class GetUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/user."""
 
@@ -615,20 +641,21 @@ class GetUser(Resource):
     @auth_ns.marshal_with(user_model)
     def get(self):
         """Validate access token and return user info."""
-        return get_logged_in_user(){{< /highlight >}}
+        return get_logged_in_user()
+```
 
 There are a few new concepts to note:
 
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Line 55: </strong><a href="#api-blueprint">When we configured the <code>api</code> object</a>, we specified that the <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer authentication scheme</a> would be used. In order to mark an HTTP method of a <code>Resource</code> class as a protected resource that requires authorization, we decorate the HTTP method with <code>@doc</code> and set the value of the <code>security</code> parameter to <code>"Bearer"</code>.</p>
+      <p><strong>Line 55: </strong><a href="#api-blueprint">When we configured the <code>api</code> object</a>, we specified that the <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer authentication scheme</a> would be used. In order to mark an HTTP method as a protected resource that requires authorization, we decorate the HTTP method with <code>@auth_ns.doc</code> and set the value of the <code>security</code> parameter to <code>"Bearer"</code>.</p>
     </li>
     <li>
-      <p><strong>Line 56: </strong>The <code>response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page along with response code 200 as an example response body.</p>
+      <p><strong>Line 56: </strong>The <code>@auth_ns.response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page as an example response body for requests that produce a status code 200 <code>HTTPStatus.OK</code>.</p>
     </li>
     <li>
-      <p><strong>Line 59: </strong>The <code>marshal_with</code> decorator is how we tell Flask-RESTPlus to filter the data returned from this method against the provided API model (<code>user_model</code>), and validate the data against the set of fields configured in the API model.</p>
+      <p><strong>Line 59: </strong>The <code>@auth_ns.marshal_with</code> decorator is how we tell Flask-RESTPlus to filter the data returned from this method against the provided API model (<code>user_model</code>), and validate the data against the set of fields configured in the API model.</p>
     </li>
     <li>
       <p><strong>Line 62: </strong>Remember, <code>get_logged_in_user</code> returns a <code>User</code> object. Without the <code>@marshal_with</code> decorator, this would produce a server error since we are not returning an HTTP response object as expected. The <code>@marshal_with</code> decorator creates the JSON using the <code>user_model</code> and assigns status code 200 <code>HTTPStatus.OK</code> before returning the response.</p>
@@ -647,51 +674,35 @@ api.auth_register    POST     /api/v1/auth/register
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json
-restplus_doc.static  GET      /swaggerui/<path:filename>
-static               GET      /static/<path:filename></span></code></pre>
+restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
+static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 By now, you should know what's next: unit tests for the `api.auth_user` endpoint.
 
-### Unit Tests: <code>test_auth_user.py</code>
+### Unit Tests: `test_auth_user.py`
 
-Create a new file `test_auth_user.py` in the `test` foder, add the content below and save the file:
+As with the two previous API endpoints, the first thing we need to do is create a function to send a `GET` request to the `api.auth_user` endpoint. Open the `tests/util.py` file and add the function below:
 
-{{< highlight python "linenos=table" >}}"""Unit tests for api.auth_user API endpoint."""
+```python {linenos=table,linenostart=25}
+def get_user(test_client, access_token):
+    return test_client.get(
+        url_for("api.auth_user"), headers={"Authorization": f"Bearer {access_token}"}
+    )
+```
+
+Up to this point, we have used the test client to only send `POST` requests, however the `api.auth_user` endpoint only responds to `GET` requests. To accomplish this, we simply use the test client's `get` method rather than the `post` method.
+
+The `api.auth_user` endpoint requires a valid access token to be included in the request header's `Authorization` field. We have already used `dict` objects to construct response headers, and we can also use a `dict` as the value of the `headers` argument. The `access_token` is provided as a parameter to the `get_user` function, and the format of the `Authorization` field is specified in <a href="https://tools.ietf.org/html/rfc6750#section-2.1" target="_blank">Section 2.1 of RFC6750</a>: "Bearer" plus a single whitespace followed by the access token in url-safe base64 encoding.
+
+Next, create a new file named `test_auth_user.py` in the `tests` folder, add the content below and save the file:
+
+```python {linenos=table}
+"""Unit tests for api.auth_user API endpoint."""
 import time
 from http import HTTPStatus
 
 from flask import url_for
-
-EMAIL = "new_user@email.com"
-PASSWORD = "test1234"
-SUCCESS = "successfully logged in"
-TOKEN_EXPIRED = "Access token expired. Please log in again."
-WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
-WWW_AUTH_EXPIRED_TOKEN = (
-    f'{WWW_AUTH_NO_TOKEN}, error="invalid_token", error_description="{TOKEN_EXPIRED}"'
-)
-
-
-def register_user(test_client, email=EMAIL, password=PASSWORD):
-    return test_client.post(
-        url_for("api.auth_register"),
-        data=f"email={email}&password={password}",
-        content_type="application/x-www-form-urlencoded",
-    )
-
-
-def login_user(test_client, email=EMAIL, password=PASSWORD):
-    return test_client.post(
-        url_for("api.auth_login"),
-        data=f"email={email}&password={password}",
-        content_type="application/x-www-form-urlencoded",
-    )
-
-
-def get_user(test_client, access_token):
-    return test_client.get(
-        url_for("api.auth_user"), headers=dict(Authorization=f"Bearer {access_token}")
-    )
+from tests.util import EMAIL, register_user, login_user, get_user
 
 
 def test_auth_user(client, db):
@@ -702,60 +713,82 @@ def test_auth_user(client, db):
     response = get_user(client, access_token)
     assert response.status_code == HTTPStatus.OK
     assert "email" in response.json and response.json["email"] == EMAIL
-    assert "admin" in response.json and not response.json["admin"]{{< /highlight >}}
+    assert "admin" in response.json and not response.json["admin"]
+```
+`test_auth_user` is the "happy path" for the <code>api.auth_user</code> endpoint, so we start by registering a new user and logging in. The response from the login request contains an access token, so we retrieve it and send it with the request to get the logged-in user info.
 
-Please note the following about the `test_auth_user` test case:
+After verifying that the response from the `api.auth_user` endpoint indicates the request was successful, we check that the response includes the correct user info. Since the response includes the user email and the admin flag, we verify that the email matches the email address we used to register the user and the admin flag should be `False`.
 
-<div class="code-details">
-  <ul>
-    <li>
-      <p><strong>Line 33: </strong>The <code>get_user</code> function takes a Flask test client and an access token as parameters, the test client sends an HTTP <code>GET</code> request to the <code>api.auth_user</code> endpoint with the access token in the <code>Authorization</code> field of the request header.</p>
-    </li>
-    <li>
-      <p><strong>Line 34: </strong>Up to this point, we have only used the test client to send <code>POST</code> requests, however the <code>api.auth_user</code> endpoint only supports the <code>GET</code> method.</p>
-    </li>
-    <li>
-      <p><strong>Line 35: </strong>To send the access token in the request header, we use the <code>header</code> parameter and supply a <code>dict</code> where each item becomes an attribute that is sent in the request header.</p>
-    </li>
-    <li>
-      <p><strong>Lines 40-43: </strong><code>test_auth_user</code> is the "happy path" for the <code>api.auth_user</code> endpoint, so we start by registering a new user and logging in. The response from the login request contains an access token, so we retrieve it and send it with the request to get the logged-in user info.</p>
-    </li>
-    <li>
-      <p><strong>Lines 46-47: </strong>After verifying that the response from the <code>api.auth_user</code> endpoint indicates the request was successful, we check that the response includes the correct user info. Since the response includes the user email and the admin flag, we verify that the email matches the email address we used to register the user and the admin flag should be <code>False</code>.</p>
-    </li>
-  </ul>
-</div>
+I'm sure by now you're getting used to the pattern I use to write test cases. Since we created the test case for the happy path, it's time to think about all the ways we could send a request that does not succeed. Since `api.auth_user` is a protected resource, we should get an error if we send a `GET` request without an access token in the request header.
 
-I'm sure by now you're getting used to the pattern I use to write test cases. Since we created the test case for the happy path, it's time to think about all the ways we could send a request that does not succeed. Since `api.auth_user` is a protected resource, we should get an error if we send a `GET` request without an access token in the request header. Copy the test case below and add it to `test_auth_user.py`:
+First, add the string value highlighted in **Line 8** below go `test_auth_user.py`. This is the value we expect to receive in the `WWW-Authenticate` header field if a request is sent to a protected resource without an access token.
 
-{{< highlight python "linenos=table,linenostart=50" >}}def test_auth_user_no_token(client, db):
+```python {linenos=table,hl_lines=[8]}
+"""Unit tests for api.auth_user API endpoint."""
+import time
+from http import HTTPStatus
+
+from flask import url_for
+from tests.util import EMAIL, register_user, login_user, get_user
+
+WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
+```
+
+Copy the test case below and add it to `test_auth_user.py`:
+
+```python {linenos=table,linenostart=22}
+def test_auth_user_no_token(client, db):
     response = client.get(url_for("api.auth_user"))
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == "Unauthorized"
     assert "WWW-Authenticate" in response.headers
-    assert response.headers["WWW-Authenticate"] == WWW_AUTH_NO_TOKEN{{< /highlight >}}
+    assert response.headers["WWW-Authenticate"] == WWW_AUTH_NO_TOKEN
+```
 
 There are a few things to note about this test case:
 
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Line 51: </strong>The first thing we do is send a <code>GET</code> request without any headers using the test client.</p>
+      <p><strong>Line 23: </strong>The first thing we do is send a <code>GET</code> request using the test client to the <code>api.auth_user</code> endpoint without any headers.</p>
     </li>
     <li>
-      <p><strong>Lines 53-54: </strong>These two lines verify that the status and message attributes exist in the response JSON and that the values indicate that the request did not succeed because the requested resource requires authorization which was not included in the request.</p>
+      <p><strong>Line 24: </strong>The expected response code when a request is sent to a protected resource without an access token is 401 <code>HTTPStatus.UNAUTHORIZED</code>.</p>
     </li>
     <li>
-      <p><strong>Lines 55-56: </strong>Per RFC6750, when a request for a protected resource does not include an access token, the response must include a custom header <code>WWW-Authenticate</code>. We <a href="#decorators">previously explained</a> the different values that this header must include based on whether or not the request included any authorization details, so please look back at the <a href="#decorators">Decorators</a> section for more details.</p>
+      <p><strong>Lines 25-26: </strong>These two lines verify that the <strong>status</strong> and <strong>message</strong> attributes exist in the response JSON and that the values indicate that the request did not succeed because the requested resource requires authorization which was not included in the request.</p>
+    </li>
+    <li>
+      <p><strong>Lines 27-28: </strong>We <a href="#decorators">previously explained</a> the different values that the <code>WWW-Authenticate</code> header must include based on whether or not the request was successfully authorized, so please refer back to the <a href="#decorators">Decorators</a> section if you are unclear why this is the expected value.</p>
       <p>When a request for a protected resource does not include an access token, <code>WWW-Authenticate</code> must only include the <span class="bold-text">realm</span> attribute and must not contain any error information.</p>
     </li>
   </ul>
 </div>
 
-Let's do one more. In [Part 2](/series/flask-api-tutorial/part-2/#decode-access-token-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired. Copy the test case below and add it to `test_auth_user.py`:
+Let's do one more. In [Part 2](/series/flask-api-tutorial/part-2/#decode-access-token-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired.
 
-{{< highlight python "linenos=table,linenostart=59" >}}def test_auth_user_expired_token(client, db):
+First, add the highlighted string values to `test_auth_user.py` after the import statements (**Line 8** and **Lines 10-12**):
+
+```python {linenos=table,hl_lines=[8,"10-12"]}
+"""Unit tests for api.auth_user API endpoint."""
+import time
+from http import HTTPStatus
+
+from flask import url_for
+from tests.util import EMAIL, register_user, login_user, get_user
+
+TOKEN_EXPIRED = "Access token expired. Please log in again."
+WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
+WWW_AUTH_EXPIRED_TOKEN = (
+    f'{WWW_AUTH_NO_TOKEN}, error="invalid_token", error_description="{TOKEN_EXPIRED}"'
+)
+```
+
+Then, add the content below:
+
+```python {linenos=table,linenostart=35}
+def test_auth_user_expired_token(client, db):
     register_user(client)
     response = login_user(client)
     assert "access_token" in response.json
@@ -766,23 +799,27 @@ Let's do one more. In [Part 2](/series/flask-api-tutorial/part-2/#decode-access-
     assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == TOKEN_EXPIRED
     assert "WWW-Authenticate" in response.headers
-    assert response.headers["WWW-Authenticate"] == WWW_AUTH_EXPIRED_TOKEN{{< /highlight >}}
+    assert response.headers["WWW-Authenticate"] == WWW_AUTH_EXPIRED_TOKEN
+```
 
 As always, please note the following:
 
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Lines 60-63: </strong>The first four lines of this test case are the same as the happy path test case <code>test_auth_user</code>. We register a new user, login and retrieve the <code>access_token</code> from the sucessful login response.</p>
+      <p><strong>Lines 36-39: </strong>The first four lines of this test case are the same as the happy path test case <code>test_auth_user</code>. We register a new user, login and retrieve the <code>access_token</code> from the sucessful login response.</p>
     </li>
     <li>
-      <p><strong>Lines 64: </strong>We suspend execution of the test case for six seconds to ensure the access token is expired.</p>
+      <p><strong>Lines 40: </strong>We suspend execution of the test case for six seconds to ensure the access token is expired.</p>
     </li>
     <li>
-      <p><strong>Lines 67-68: </strong>These two lines verify that the status and message attributes exist in the response JSON and that the values indicate that the request did not succeed because the requested resource requires authorization which was not included in the request.</p>
+      <p><strong>Line 42: </strong>The expected response code when a request is sent to a protected resource with an expired access token is 401 <code>HTTPStatus.UNAUTHORIZED</code>.</p>
     </li>
     <li>
-      <p><strong>Lines 69-70: </strong>We verify that the <code>WWW-Authenticate</code> header contains the <span class="bold-text">realm</span> attribute as well as the <span class="bold-text">error</span> attribute and the <span class="bold-text">error_description</span> attribute.</p>
+      <p><strong>Lines 43-44: </strong>These two lines verify that the status and message attributes exist in the response JSON and that the values indicate that the request did not succeed because the access token sent by the client is expired.</p>
+    </li>
+    <li>
+      <p><strong>Lines 45-46: </strong>We verify that the <code>WWW-Authenticate</code> header contains the <span class="bold-text">realm</span> attribute as well as the <span class="bold-text">error</span> attribute and the <span class="bold-text">error_description</span> attribute.</p>
     </li>
   </ul>
 </div>
@@ -795,12 +832,7 @@ We just demonstrated how to make a request for a protected resource in code (usi
 
 Did you check out the Swagger UI page after implementing the `/auth/user` endpoint? Fire up the development server with `flask run` and navigate to `http://localhost:5000/api/v1/ui`:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg">
-        <img src="/img/flask-api-tutorial/p04-02-swagger-ui-auth.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 2 - Swagger UI with <code>/auth/user</code> endpoint</p></figcaption>
-</figure>
+{{< image_fig img2 "500x q95" >}}
 
 You may have already seen this and wondered, why is the `GET` `/auth/user` component the only one with a lock icon (<span class="fa fa-unlock-alt"></span>), or more accurately, a unlocked lock icon? And does it have anything to do with that button labeled **Authorize** that also has a lock icon?
 
@@ -826,79 +858,39 @@ The two are in fact related. The lock icon indicates that the API endpoint requi
 
 Let's see what happens if we attempt to send a request to `/auth/user` as the component is currently configured. First, expand the component by clicking anywhere on the blue bar, click **Try it out**, then click **Execute**:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-03-auth-user-no-token-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-03-auth-user-no-token-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 3 - Endpoint requires authorization (Swagger UI)</p></figcaption>
-</figure>
+{{< image_fig img3 "500x q95" >}}
 
 We already knew that this would be the response since we created a test case (`test_auth_user_no_token`) to verify that sending a request to the `api.auth_user` endpoint without an access token would not succeed. So how do we get an access token and how do we send it in the request header with Swagger UI?
 
 Getting an access token is easy, just register a new user <span class="emphasis">OR</span> login with an existing user and the response will include a token in the <code>access_token</code> field. Copy the access token from the **Response body** text box:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-04-retrieve-access-token-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-04-retrieve-access-token-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 4 - Retrieve access token from response body (Swagger UI)</p></figcaption>
-</figure>
+{{< image_fig img4 "500x q95" >}}
 
 Next, click the **Authorize** button above the API routes (1). A dialog box will appear titled **Avaialable authorizations**. Paste the access token that was copied from the **Response body** text box into the **Value** text box in the dialog (2). Click **Authorize** (3):
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-05-configure-access-token-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-05-configure-access-token-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 5 - Configure Swagger UI access token</p></figcaption>
-</figure>
+{{< image_fig img5 "500x q95" >}}
 
 After clicking **Authorize**, the button text changes to **Logout**, and the **Value** text box is replaced by a label of asterisk characters (see below). Click **Close** to dismiss the dialog and return to the Swagger UI:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-06-close-authorizations-dialog-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-06-close-authorizations-dialog-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 6 - Access token configuration complete</p></figcaption>
-</figure>
+{{< image_fig img6 "500x q95" >}}
 
 Notice that with the access token successfully configured, the lock icons have changed from being unlocked (<span class="fa fa-unlock-alt"></span>) to locked (<span class="fa fa-lock"></span>):
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-07-lock-icons-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-07-lock-icons-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 7 - Authorization required icons are locked after configuring access token</p></figcaption>
-</figure>
+{{< image_fig img7 "500x q95" >}}
 
 Let's send a request to the `api.auth_user` endpoint again, now that the access token will be sent in the request header:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-08-auth-user-success-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-08-auth-user-success-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 8 - Request for <code>/auth/user</code> successful (Swagger UI)</p></figcaption>
-</figure>
+{{< image_fig img8 "500x q95" >}}
 
 As you can see, the access token is sent in the `Authorization` field of the request header, as required by the specification doc for Bearer Token Authentication (RFC6750).
 
 With the `development` environment configuration settings, all access tokens expire fifteen minutes after being issued. If a request is sent with an expired access token, both the response body and header should contain error messages explaining why the request was not succesful:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-09-auth-user-token-expired-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-09-auth-user-token-expired-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 9 - Request failed: Token expired</p></figcaption>
-</figure>
+{{< image_fig img9 "500x q95" >}}
 
 Similarly, try changing any part of an access token (even just a single character) and updating the value in the **Available authorizations** dialog box. The request will be rejected and the response will contain a different error message than the message for an expired token or for not sending an access token at all:
 
-<figure>
-    <a href="/img/flask-api-tutorial/p04-10-auth-user-invalid-token-swagger.jpg">
-        <img src="/img/flask-api-tutorial/p04-10-auth-user-invalid-token-swagger.jpg" style="width:500px" alt="">
-    </a>
-    <figcaption><p>Figure 10 - Request failed: Invalid token</p></figcaption>
-</figure>
+{{< image_fig img10 "500x q95" >}}
 
 That's all you need to do to automatically include the access token when a request is made to a protected resource. Let's figure out how to do the same with httpie.
 
@@ -1198,13 +1190,13 @@ def decode_access_token(access_token):
     if BlacklistedToken.check_blacklist(access_token):
         error = "Token blacklisted. Please log in again."
         return Result.Fail(error)
-    user_dict = dict(
+    token_payload = dict(
         public_id=payload["sub"],
         admin=payload["admin"],
         token=access_token,
         expires_at=payload["exp"],
     )
-    return Result.Ok(user_dict){{< /highlight >}}
+    return Result.Ok(token_payload){{< /highlight >}}
 
 With that out of the way, we can create the concrete `Resource` class for the `api.auth_logout` endpoint.
 
