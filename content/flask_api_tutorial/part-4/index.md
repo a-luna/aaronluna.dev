@@ -55,39 +55,39 @@ twitter:
 ---
 ## Project Structure
 
-{{< github_links >}}
-
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
 
-<pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
-|- <span class="project-folder">app</span>
-|   |- <span class="project-folder">api</span>
-|   |   |- <span class="project-folder">auth</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |   |- <span class="work-file">business.py</span>
-|   |   |   |- <span class="work-file">decorator.py</span>
-|   |   |   |- <span class="work-file">dto.py</span>
-|   |   |   |- <span class="work-file">endpoints.py</span>
-|   |   |
-|   |   |- <span class="project-folder">widgets</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |
-|   |   |- <span class="unmodified-file">__init__.py</span>
-|   |
-|   |- <span class="project-folder">models</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="work-file">token_blacklist.py</span>
-|   |   |- <span class="unmodified-file">user.py</span>
-|   |
-|   |- <span class="project-folder">util</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">datetime_util.py</span>
-|   |   |- <span class="unmodified-file">result.py</span>
-|   |
-|   |- <span class="unmodified-file">__init__.py</span>
-|   |- <span class="unmodified-file">config.py</span>
+{{< github_links >}}<pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
+|- <span class="project-folder">src</span>
+|   |- <span class="project-folder">flask_api_tutorial</span>
+|       |- <span class="project-folder">api</span>
+|       |   |- <span class="project-folder">auth</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |   |- <span class="work-file">business.py</span>
+|       |   |   |- <span class="work-file">decorator.py</span>
+|       |   |   |- <span class="work-file">dto.py</span>
+|       |   |   |- <span class="work-file">endpoints.py</span>
+|       |   |
+|       |   |- <span class="project-folder">widgets</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |
+|       |   |- <span class="unmodified-file">__init__.py</span>
+|       |
+|       |- <span class="project-folder">models</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="work-file">token_blacklist.py</span>
+|       |-  |- <span class="work-file">user.py</span>
+|       |
+|       |- <span class="project-folder">util</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">datetime_util.py</span>
+|       |-  |- <span class="unmodified-file">result.py</span>
+|       |
+|       |- <span class="unmodified-file">__init__.py</span>
+|       |- <span class="unmodified-file">config.py</span>
 |
-|- <span class="project-folder">test</span>
+|- <span class="project-folder">tests</span>
+|   |- <span class="project-empty-file">__init_.py</span>
 |   |- <span class="unmodified-file">conftest.py</span>
 |   |- <span class="work-file">test_auth_login.py</span>
 |   |- <span class="work-file">test_auth_logout.py</span>
@@ -95,14 +95,17 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |- <span class="work-file">test_auth_user.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>
 |   |- <span class="unmodified-file">test_user.py</span>
+|   |- <span class="work-file">util.py</span>
 |
 |- <span class="unmodified-file">.env</span>
+|- <span class="unmodified-file">.gitignore</span>
+|- <span class="unmodified-file">.pre-commit-config.yaml</span>
+|- <span class="unmodified-file">pyproject.toml</span>
 |- <span class="unmodified-file">pytest.ini</span>
+|- <span class="unmodified-file">README.md</span>
 |- <span class="work-file">run.py</span>
 |- <span class="unmodified-file">setup.py</span>
-|- <span class="unmodified-file">pyproject.toml</span>
-|- <span class="unmodified-file">requirements.txt</span>
-|- <span class="unmodified-file">requirements_dev.txt</span></div>
+|- <span class="unmodified-file">tox.ini</span></div>
 <div class="project-structure-key-wrapper">
 <div class="project-structure-key">
 <div class="key-item key-label">KEY:</div>
@@ -681,9 +684,21 @@ By now, you should know what's next: unit tests for the `api.auth_user` endpoint
 
 ### Unit Tests: `test_auth_user.py`
 
-As with the two previous API endpoints, the first thing we need to do is create a function to send a `GET` request to the `api.auth_user` endpoint. Open the `tests/util.py` file and add the function below:
+As with the two previous API endpoints, before we write any test cases we need to update the `tests/util.py` file with any error/success message string values and functions that will be re-used across the test set. Add `WWW_AUTH_NO_TOKEN` on **Line 8**:
 
-```python {linenos=table,linenostart=25}
+```python {linenos=table,hl_lines=[8]}
+"""Shared functions and constants for unit tests."""
+from flask import url_for
+
+EMAIL = "new_user@email.com"
+PASSWORD = "test1234"
+BAD_REQUEST = "Input payload validation failed"
+WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
+```
+
+Then, reate a function to send a `GET` request to the `api.auth_user` endpoint. Open the `tests/util.py` file and add the function below:
+
+```python {linenos=table,linenostart=26}
 def get_user(test_client, access_token):
     return test_client.get(
         url_for("api.auth_user"), headers={"Authorization": f"Bearer {access_token}"}
@@ -721,17 +736,15 @@ After verifying that the response from the `api.auth_user` endpoint indicates th
 
 I'm sure by now you're getting used to the pattern I use to write test cases. Since we created the test case for the happy path, it's time to think about all the ways we could send a request that does not succeed. Since `api.auth_user` is a protected resource, we should get an error if we send a `GET` request without an access token in the request header.
 
-First, add the string value highlighted in **Line 8** below go `test_auth_user.py`. This is the value we expect to receive in the `WWW-Authenticate` header field if a request is sent to a protected resource without an access token.
+First, update the import statements to include `WWW_AUTH_NO_TOKEN` from `tests.util` **(Line 6)**. This is the value we expect to receive in the `WWW-Authenticate` header field if a request is sent to a protected resource without an access token.
 
-```python {linenos=table,hl_lines=[8]}
+```python {linenos=table,hl_lines=[6]}
 """Unit tests for api.auth_user API endpoint."""
 import time
 from http import HTTPStatus
 
 from flask import url_for
-from tests.util import EMAIL, register_user, login_user, get_user
-
-WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
+from tests.util import EMAIL, WWW_AUTH_NO_TOKEN, register_user, login_user, get_user
 ```
 
 Copy the test case below and add it to `test_auth_user.py`:
@@ -768,26 +781,27 @@ There are a few things to note about this test case:
 
 Let's do one more. In [Part 2](/series/flask-api-tutorial/part-2/#decode-access-token-function), when we created test cases for the `User` class we used the `time.sleep` method to cause an access token to expire. If we send a request to the `api.auth_user` endpoint with an expired token, we should receive an error indicating that the token is expired.
 
-First, add the highlighted string values to `test_auth_user.py` after the import statements (**Line 8** and **Lines 10-12**):
+First, add the highlighted string values to `test_auth_user.py` after the import statements **(Lines 8-13)**:
 
-```python {linenos=table,hl_lines=[8,"10-12"]}
+```python {linenos=table,hl_lines=["8-13"]}
 """Unit tests for api.auth_user API endpoint."""
 import time
 from http import HTTPStatus
 
 from flask import url_for
-from tests.util import EMAIL, register_user, login_user, get_user
+from tests.util import EMAIL, WWW_AUTH_NO_TOKEN, register_user, login_user, get_user
 
 TOKEN_EXPIRED = "Access token expired. Please log in again."
-WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
 WWW_AUTH_EXPIRED_TOKEN = (
-    f'{WWW_AUTH_NO_TOKEN}, error="invalid_token", error_description="{TOKEN_EXPIRED}"'
+    f"{WWW_AUTH_NO_TOKEN}, "
+    'error="invalid_token", '
+    f'error_description="{TOKEN_EXPIRED}"'
 )
 ```
 
 Then, add the content below:
 
-```python {linenos=table,linenostart=35}
+```python {linenos=table,linenostart=36}
 def test_auth_user_expired_token(client, db):
     register_user(client)
     response = login_user(client)
@@ -836,7 +850,7 @@ Did you check out the Swagger UI page after implementing the `/auth/user` endpoi
 
 You may have already seen this and wondered, why is the `GET` `/auth/user` component the only one with a lock icon (<span class="fa fa-unlock-alt"></span>), or more accurately, a unlocked lock icon? And does it have anything to do with that button labeled **Authorize** that also has a lock icon?
 
-The two are in fact related. The lock icon indicates that the API endpoint requires authorization, and the `GET` `/auth/user` component is the only one with a lock icon because the `GetUser.get` method is the only resource method that we decorated with `@doc(security="Bearer")`. "Bearer" is the name of the security object that we created in `/app/api/__init__.py` and provided to the `Api` constructor, which causes the **Authorize** button to appear.
+The two are in fact related. The lock icon indicates that the API endpoint requires authorization, and the `GET` `/auth/user` component is the only one with a lock icon because the `GetUser.get` method is the only resource method that we decorated with `@doc(security="Bearer")`. "Bearer" is the name of the security object that we created in `src/flask_api_tutorial/api/__init__.py` and provided to the `Api` constructor, which causes the **Authorize** button to appear.
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -852,7 +866,7 @@ The two are in fact related. The lock icon indicates that the API endpoint requi
     <i class="fa fa-exclamation-triangle"></i>
   </div>
   <div class="alert-message">
-    <p>There's one more thing to note about the Swagger UI page, the <code>User</code> model is shown at the bottom of the page (also on the <code>/auth/user</code> component under <strong>Responses</strong>). Any API model that you register with the API or an API namespcace will be rendered in this location (we registered <code>user_model</code> with the <code>auth_ns</code> namespace in <code>/app/api/auth/endpoints.py</code>).</p>
+    <p>There's one more thing to note about the Swagger UI page, the <code>User</code> model is shown at the bottom of the page (also on the <code>/auth/user</code> component under <strong>Responses</strong>). Any API model that you register with the API or an API namespcace will be rendered in this location (we registered <code>user_model</code> with the <code>auth_ns</code> namespace in <code>src/flask_api_tutorial/api/auth/endpoints.py</code>).</p>
   </div>
 </div>
 
@@ -1010,13 +1024,14 @@ Even though access tokens are typically configured to expire less than a day aft
 
 ### `BlacklistedToken` DB Model
 
-Create a new file `token_blacklist.py` in `/app/models` and add the content below:
+Create a new file `token_blacklist.py` in `src/flask_api_tutorial/models` and add the content below:
 
-{{< highlight python "linenos=table" >}}"""Class definition for BlacklistedToken."""
-from datetime import datetime, timezone
+```python {linenos=table}
+"""Class definition for BlacklistedToken."""
+from datetime import timezone
 
-from app import db
-from app.util.datetime_util import utc_now, dtaware_fromtimestamp
+from flask_api_tutorial import db
+from flask_api_tutorial.util.datetime_util import utc_now, dtaware_fromtimestamp
 
 
 class BlacklistedToken(db.Model):
@@ -1034,7 +1049,13 @@ class BlacklistedToken(db.Model):
         self.expires_at = dtaware_fromtimestamp(expires_at, use_tz=timezone.utc)
 
     def __repr__(self):
-        return f"<BlacklistToken token={self.token}>"{{< /highlight >}}
+        return f"<BlacklistToken token={self.token}>"
+
+    @classmethod
+    def check_blacklist(cls, token):
+        exists = cls.query.filter_by(token=token).first()
+        return True if exists else False
+```
 
 The `BlacklistedToken` class is pretty simple, but please note the following:
 
@@ -1044,8 +1065,8 @@ The `BlacklistedToken` class is pretty simple, but please note the following:
         <p><strong>Line 14: </strong><code>token</code> is the string value of the access token.</p>
       </li>
       <li>
-        <p><strong>Line 15: </strong>Notice that we are capturing the current time with <code>utc_now</code>, which is a function from the <code>app.util.datetime_util</code> module. What is the difference between using this function which returns a timezone-aware <code>datetime</code> object and <code>datetime.utcnow</code> which returns a naive <code>datetime</code>? Consider the REPL commands below:</p>
-        <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app.util.datetime_util import utc_now</span>
+        <p><strong>Line 15: </strong>Notice that we are capturing the current time with <code>utc_now</code>, which is a function from the <code>flask_api_tutorial.util.datetime_util</code> module. What is the difference between using this function which returns a timezone-aware <code>datetime</code> object and <code>datetime.utcnow</code> which returns a naive <code>datetime</code>? Consider the REPL commands below:</p>
+        <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from flask_api_tutorial.util.datetime_util import utc_now</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from datetime import datetime</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">utc_now()</span>
 <span class="cmd-repl-results">datetime.datetime(2019, 8, 8, 9, 52, 4, tzinfo=datetime.timezone.utc)</span>
@@ -1073,19 +1094,21 @@ The `BlacklistedToken` class is pretty simple, but please note the following:
 
 In order to register the <code>BlacklistedToken</code> model with the Flask application, we need to make a couple changes to `run.py` in the project root folder:
 
-{{< highlight python "linenos=table,hl_lines=5 13" >}}"""Flask CLI/Application entry point."""
+```python {linenos=table,hl_lines=[5,13]}
+"""Flask CLI/Application entry point."""
 import os
 
-from app import create_app, db
-from app.models.token_blacklist import BlacklistedToken
-from app.models.user import User
+from flask_api_tutorial import create_app, db
+from flask_api_tutorial.models.token_blacklist import BlacklistedToken
+from flask_api_tutorial.models.user import User
 
 app = create_app(os.getenv("FLASK_ENV", "development"))
 
 
 @app.shell_context_processor
 def shell():
-    return {"db": db, "User": User, "BlacklistedToken": BlacklistedToken}{{< /highlight >}}
+    return {"db": db, "User": User, "BlacklistedToken": BlacklistedToken}
+```
 
 <div class="code-details">
     <ul>
@@ -1106,14 +1129,15 @@ First, run <code>flask db migrate</code> and add a message explaining the change
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'token_blacklist'
-  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/8fa4b4909211_add_blacklistedtoken_model.py ... done</span></code></pre>
+  Generating
+  /Users/aaronluna/Projects/flask_api_tutorial/migrations/versions/97f449048b52_add_blacklistedtoken_model.py ...  done</span></code></pre>
 
 Next, run <code>flask db upgrade</code> to run the migration script and add the new table to the database:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade 19789d38041f -> 8fa4b4909211, add BlacklistedToken model</span></code></pre>
+INFO  [alembic.runtime.migration] Running upgrade 5789387e80dd -> 97f449048b52, add BlacklistedToken model</span></code></pre>
 
 With the `BlacklistedToken` class fully implemented, we have everything we need to create the business logic for the `api.auth_logout` endpoint.
 
@@ -1121,23 +1145,29 @@ With the `BlacklistedToken` class fully implemented, we have everything we need 
 
 After receiving a logout request containing a valid, unexpired token, the server then proceeds to create a `BlasklistedToken` object, add it to the database and commit the changes. Then, the server sends an HTTP response indicating that the logout request succeeded.
 
-The function that performs this process will be defined in`/app/api/auth/business.py`. Open that file and update the import statements to include the `BlacklistedToken` class: (**Line 9**)
+The function that performs this process will be defined in`src/flask_api_tutorial/api/auth/business.py`. Open that file and update the import statements to include the `BlacklistedToken` class: (**Line 9**)
 
-{{< highlight python "linenos=table,hl_lines=9" >}}"""Business logic for /auth API endpoints."""
+```python {linenos=table,hl_lines=[9]}
+"""Business logic for /auth API endpoints."""
 from http import HTTPStatus
 
 from flask import current_app, jsonify
 from flask_restplus import abort
 
-from app import db
-from app.api.auth.decorator import token_required
-from app.models.token_blacklist import BlacklistedToken
-from app.models.user import User
-from app.util.datetime_util import remaining_fromtimestamp, format_timespan_digits{{< /highlight >}}
+from flask_api_tutorial import db
+from flask_api_tutorial.api.auth.decorator import token_required
+from flask_api_tutorial.models.token_blacklist import BlacklistedToken
+from flask_api_tutorial.models.user import User
+from flask_api_tutorial.util.datetime_util import (
+    remaining_fromtimestamp,
+    format_timespan_digits,
+)
+```
 
 Next, add the `process_logout_request` function and save the file:
 
-{{< highlight python "linenos=table,linenostart=61" >}}@token_required
+```python {linenos=table,linenostart=64}
+@token_required
 def process_logout_request():
     access_token = process_logout_request.token
     expires_at = process_logout_request.expires_at
@@ -1145,7 +1175,8 @@ def process_logout_request():
     db.session.add(blacklisted_token)
     db.session.commit()
     response_dict = dict(status="success", message="successfully logged out")
-    return response_dict, HTTPStatus.OK{{< /highlight >}}
+    return response_dict, HTTPStatus.OK
+```
 
 As explained in the [Decorators](#decorators) section of this post, the `access_token` and `expires_at` attributes on `process_logout_request` come from decoding the access token's payload, which takes place whenever the `@token_required` decorator is used (these values are required to create the `BlacklistedToken` object). Then, a HTTP response indicating the operation succeeded is sent to the client.
 
@@ -1153,9 +1184,10 @@ As explained in the [Decorators](#decorators) section of this post, the `access_
 
 There's one more process we need to update in order to make the blacklist fully functional. Currently, when verifying an access token, it is only rejected by the server if the token is invalid or expired. Now, the server must also check if the token has been blacklisted before processing the client's request.
 
-Open `/app/models/user.py` and update the import statements to include the `BlacklistedToken` class: (**Line 10**)
+Open `src/flask_api_tutorial/models/user.py` and update the import statements to include the `BlacklistedToken` class: (**Line 10**)
 
-{{< highlight python "linenos=table,hl_lines=10" >}}"""Class definition for User model."""
+```python {linenos=table,hl_lines=[10]}
+"""Class definition for User model."""
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
@@ -1163,14 +1195,21 @@ import jwt
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from app import db, bcrypt
-from app.models.token_blacklist import BlacklistedToken
-from app.util.datetime_util import get_local_utcoffset, make_tzaware, localized_dt_string
-from app.util.result import Result{{< /highlight >}}
+from flask_api_tutorial import db, bcrypt
+from flask_api_tutorial.models.token_blacklist import BlacklistedToken
+from flask_api_tutorial.util.datetime_util import (
+    utc_now,
+    get_local_utcoffset,
+    make_tzaware,
+    localized_dt_string,
+)
+from flask_api_tutorial.util.result import Result
+```
 
 We need to modify the `decode_access_token` method to reurn a `Result` object indicating the token has been blacklisted if that is the case. Add **Lines 76-78** and save the changes:
 
-{{< highlight python "linenos=table,linenostart=59,hl_lines=18-20" >}}@staticmethod
+```python {linenos=table,linenostart=59,hl_lines=["18-20"]}
+@staticmethod
 def decode_access_token(access_token):
     if isinstance(access_token, bytes):
         access_token = access_token.decode("ascii")
@@ -1196,30 +1235,34 @@ def decode_access_token(access_token):
         token=access_token,
         expires_at=payload["exp"],
     )
-    return Result.Ok(token_payload){{< /highlight >}}
+    return Result.Ok(token_payload)
+```
 
 With that out of the way, we can create the concrete `Resource` class for the `api.auth_logout` endpoint.
 
 ### `LogoutUser` Resource
 
-Open `/app/api/auth/endpoints.py` and update the import statements to include the `process_logout_request` function we just created (**Line 11** below):
+Open `src/flask_api_tutorial/api/auth/endpoints.py` and update the import statements to include the `process_logout_request` function we just created **(Line 11)**:
 
-{{< highlight python "linenos=table,hl_lines=11" >}}"""API endpoint definitions for /auth namespace."""
+```python {linenos=table,hl_lines=[11]}
+"""API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.auth.dto import auth_reqparser, user_model
-from app.api.auth.business import (
+from flask_api_tutorial.api.auth.dto import auth_reqparser, user_model
+from flask_api_tutorial.api.auth.business import (
     process_registration_request,
     process_login_request,
     get_logged_in_user,
     process_logout_request,
-){{< /highlight >}}
+)
+```
 
 Next, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=66" >}}@auth_ns.route("/logout", endpoint="auth_logout")
+```python {linenos=table,linenostart=66}
+@auth_ns.route("/logout", endpoint="auth_logout")
 class LogoutUser(Resource):
     """Handles HTTP requests to URL: /auth/logout."""
 
@@ -1230,7 +1273,8 @@ class LogoutUser(Resource):
     @auth_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     def post(self):
         """Add token to blacklist, deauthenticating the current user."""
-        return process_logout_request(){{< /highlight >}}
+        return process_logout_request()
+```
 
 This should all look very familiar, the only difference between the `LogoutUser` and `GetUser` is the HTTP method name (`post` vs `get`). Also, `GetUser` returned a JSON object which we defined in `user_model` and `LogoutUser` returns a regular HTTP response.
 
@@ -1238,43 +1282,14 @@ This should all look very familiar, the only difference between the `LogoutUser`
 
 Finally, we need to create tests for the `api.auth_logout` endpoint. The "happy path" test case shown below simply registers a new user, logs in and then logs out. Create a new file `/test/test_auth_logout.py` and add the content below:
 
-{{< highlight python "linenos=table" >}}"""Unit tests for api.auth_logout API endpoint."""
+```python {linenos=table}
+"""Unit tests for api.auth_logout API endpoint."""
 from http import HTTPStatus
 
-from flask import url_for
+from flask_api_tutorial.models.token_blacklist import BlacklistedToken
+from tests.util import register_user, login_user, logout_user
 
-from app.models.token_blacklist import BlacklistedToken
-
-EMAIL = "new_user@email.com"
-PASSWORD = "test1234"
 SUCCESS = "successfully logged out"
-TOKEN_BLACKLISTED = "Token blacklisted. Please log in again."
-WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
-WWW_AUTH_BLACKLISTED_TOKEN = (
-    f'{WWW_AUTH_NO_TOKEN}, error="invalid_token", error_description="{TOKEN_BLACKLISTED}"'
-)
-
-
-def register_user(test_client, email=EMAIL, password=PASSWORD):
-    return test_client.post(
-        url_for("api.auth_register"),
-        data=f"email={email}&password={password}",
-        content_type="application/x-www-form-urlencoded",
-    )
-
-
-def login_user(test_client, email=EMAIL, password=PASSWORD):
-    return test_client.post(
-        url_for("api.auth_login"),
-        data=f"email={email}&password={password}",
-        content_type="application/x-www-form-urlencoded",
-    )
-
-
-def logout_user(test_client, access_token):
-    return test_client.post(
-        url_for("api.auth_logout"), headers=dict(Authorization=f"Bearer {access_token}")
-    )
 
 
 def test_logout(client, db):
@@ -1290,32 +1305,52 @@ def test_logout(client, db):
     assert "message" in response.json and response.json["message"] == SUCCESS
     blacklist = BlacklistedToken.query.all()
     assert len(blacklist) == 1
-    assert access_token == blacklist[0].token{{< /highlight >}}
+    assert access_token == blacklist[0].token
+```
 
 There are a few things in this test case that we are seeing for the fist time, please note:
 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 45-46: </strong>After retrieving the <code>access_token</code>, we verify that the <code>blacklist</code> is currently empty (i.e., no tokens have been blacklisted at this point).</p>
+        <p><strong>Line 15-16: </strong>After retrieving the <code>access_token</code>, we verify that the <code>blacklist</code> is currently empty (i.e., no tokens have been blacklisted at this point).</p>
       </li>
       <li>
-        <p><strong>Line 47-50: </strong>We submit a request to the <code>api.auth_logout</code> endpoint and verify that the response indicates that the request succeeded.</p>
+        <p><strong>Line 17-20: </strong>We submit a request to the <code>api.auth_logout</code> endpoint and verify that the response indicates that the request succeeded.</p>
       </li>
       <li>
-        <p><strong>Line 51-52: </strong>If the logout request succeeded, the token must have been added to the <code>blacklist</code>. The first way we verify this is by checking that the <code>blacklist</code> now contains one token.</p>
+        <p><strong>Line 21-22: </strong>If the logout request succeeded, the token must have been added to the <code>blacklist</code>. The first way we verify this is by checking that the <code>blacklist</code> now contains one token.</p>
       </li>
       <li>
-        <p><strong>Line 53: </strong>Finally, we verify that the blacklisted token is the same <code>access_token</code> that was submitted with the logout request.</p>
+        <p><strong>Line 23: </strong>Finally, we verify that the blacklisted token is the same <code>access_token</code> that was submitted with the logout request.</p>
       </li>
     </ul>
 </div>
 
 We should definitely ensure that any requests for a protected resource using a blacklisted token does not succeed, and that the response indicates that the reason the request failed is due to the token being blacklisted.
 
+First, update the import statements to include the `WWW_AUTH_NO_TOKEN` string from `tests.util` **(Line 4)**, and then add the highlighted lines to `test_auth_logout.py`
+
+```python {linenos=table,hl_lines=[5,"8-13"]}
+"""Unit tests for api.auth_logout API endpoint."""
+from http import HTTPStatus
+
+from flask_api_tutorial.models.token_blacklist import BlacklistedToken
+from tests.util import WWW_AUTH_NO_TOKEN, register_user, login_user, logout_user
+
+SUCCESS = "successfully logged out"
+TOKEN_BLACKLISTED = "Token blacklisted. Please log in again."
+WWW_AUTH_BLACKLISTED_TOKEN = (
+    f"{WWW_AUTH_NO_TOKEN}, "
+    'error="invalid_token", '
+    f'error_description="{TOKEN_BLACKLISTED}"'
+)
+```
+
 This is the scenario contained in `test_logout_token_blacklisted`, below. Add the function to `test_auth_logout.py`:
 
-{{< highlight python "linenos=table,linenostart=56" >}}def test_logout_token_blacklisted(client, db):
+```python {linenos=table,linenostart=32}
+def test_logout_token_blacklisted(client, db):
     register_user(client)
     response = login_user(client)
     assert "access_token" in response.json
@@ -1327,43 +1362,138 @@ This is the scenario contained in `test_logout_token_blacklisted`, below. Add th
     assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == TOKEN_BLACKLISTED
     assert "WWW-Authenticate" in response.headers
-    assert response.headers["WWW-Authenticate"] == WWW_AUTH_BLACKLISTED_TOKEN{{< /highlight >}}
+    assert response.headers["WWW-Authenticate"] == WWW_AUTH_BLACKLISTED_TOKEN
+```
 
   <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 57-62: </strong>We begin by performing the same actions as the previous test case, registering a new user, logging in and finally logging out.</p>
+        <p><strong>Line 33-38: </strong>We begin by performing the same actions as the previous test case, registering a new user, logging in and finally logging out.</p>
       </li>
       <li>
-        <p><strong>Line 63-68: </strong>The second time we call <code>POST /api/v1/auth/logout</code> with the same <code>access_token</code>, the status code of the HTTP response is <code>401 HTTPStatus.UNAUTHORIZED</code>. This is the expected behavior since the token has not been tampered with, has not yet expired <span class="emphasis">BUT</span> has been added to the <code>token_blacklist</code>.</p>
+        <p><strong>Line 39-44: </strong>The second time we call <code>POST /api/v1/auth/logout</code> with the same <code>access_token</code>, the status code of the HTTP response is <code>401 HTTPStatus.UNAUTHORIZED</code>. This is the expected behavior since the token has not been tampered with, has not yet expired <span class="emphasis">BUT</span> has been added to the <code>token_blacklist</code>.</p>
       </li>
     </ul>
 </div>
 
-The full set of test cases for the `api.auth_logout` endpoint are available in the github repo. You should try to create test cases for as many different scenarios as you can think of and compare them to mine.
+There are plenty of necessary test cases that are missing from the current set. You should try to identify as many different scenarios as you can think of and create test cases. You should compare your set to the final version in the github repository.
 
-You should run <code>pytest</code> to make sure the new test case passes and that nothing else broke because of the changes:
+You should run <code>tox</code> to make sure the new test case passes and that nothing else broke because of the changes:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">pytest</span>
-<span class="cmd-warning">TEST RESULTS NEEDED!</span></code></pre>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
+py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
+py37 run-test-pre: PYTHONHASHSEED='3343573933'
+py37 run-test: commands[0] | pytest
+============================================== test session starts ==============================================
+platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+cachedir: .tox/py37/.pytest_cache
+rootdir: /Users/aaronluna/Desktop/flask_api_tutorial, inifile: pytest.ini
+plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+collected 69 items
+
+run.py::BLACK PASSED                                                                                      [  1%]
+run.py::FLAKE8 PASSED                                                                                     [  2%]
+setup.py::BLACK SKIPPED                                                                                   [  4%]
+setup.py::FLAKE8 SKIPPED                                                                                  [  5%]
+src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                         [  7%]
+src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                                        [  8%]
+src/flask_api_tutorial/config.py::BLACK SKIPPED                                                           [ 10%]
+src/flask_api_tutorial/config.py::FLAKE8 SKIPPED                                                          [ 11%]
+src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                                     [ 13%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                                    [ 14%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                                [ 15%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                               [ 17%]
+src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                 [ 18%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                [ 20%]
+src/flask_api_tutorial/api/auth/decorator.py::BLACK SKIPPED                                               [ 21%]
+src/flask_api_tutorial/api/auth/decorator.py::FLAKE8 SKIPPED                                              [ 23%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                     [ 24%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                    [ 26%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                [ 27%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                               [ 28%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                             [ 30%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                            [ 31%]
+src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                                  [ 33%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                                 [ 34%]
+src/flask_api_tutorial/models/token_blacklist.py::BLACK PASSED                                            [ 36%]
+src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 PASSED                                           [ 37%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                       [ 39%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                      [ 40%]
+src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                                    [ 42%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                                   [ 43%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK SKIPPED                                               [ 44%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 SKIPPED                                              [ 46%]
+src/flask_api_tutorial/util/result.py::BLACK SKIPPED                                                      [ 47%]
+src/flask_api_tutorial/util/result.py::FLAKE8 SKIPPED                                                     [ 49%]
+tests/__init__.py::BLACK SKIPPED                                                                          [ 50%]
+tests/__init__.py::FLAKE8 SKIPPED                                                                         [ 52%]
+tests/conftest.py::BLACK SKIPPED                                                                          [ 53%]
+tests/conftest.py::FLAKE8 SKIPPED                                                                         [ 55%]
+tests/test_auth_login.py::BLACK SKIPPED                                                                   [ 56%]
+tests/test_auth_login.py::FLAKE8 SKIPPED                                                                  [ 57%]
+tests/test_auth_login.py::test_login PASSED                                                               [ 59%]
+tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                          [ 60%]
+tests/test_auth_logout.py::BLACK PASSED                                                                   [ 62%]
+tests/test_auth_logout.py::FLAKE8 PASSED                                                                  [ 63%]
+tests/test_auth_logout.py::test_logout PASSED                                                             [ 65%]
+tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                           [ 66%]
+tests/test_auth_register.py::BLACK SKIPPED                                                                [ 68%]
+tests/test_auth_register.py::FLAKE8 SKIPPED                                                               [ 69%]
+tests/test_auth_register.py::test_auth_register PASSED                                                    [ 71%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                           [ 72%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                      [ 73%]
+tests/test_auth_user.py::BLACK PASSED                                                                     [ 75%]
+tests/test_auth_user.py::FLAKE8 PASSED                                                                    [ 76%]
+tests/test_auth_user.py::test_auth_user PASSED                                                            [ 78%]
+tests/test_auth_user.py::test_auth_user_no_token PASSED                                                   [ 79%]
+tests/test_auth_user.py::test_auth_user_expired_token PASSED                                              [ 81%]
+tests/test_config.py::BLACK SKIPPED                                                                       [ 82%]
+tests/test_config.py::FLAKE8 SKIPPED                                                                      [ 84%]
+tests/test_config.py::test_config_development PASSED                                                      [ 85%]
+tests/test_config.py::test_config_testing PASSED                                                          [ 86%]
+tests/test_config.py::test_config_production PASSED                                                       [ 88%]
+tests/test_user.py::BLACK SKIPPED                                                                         [ 89%]
+tests/test_user.py::FLAKE8 SKIPPED                                                                        [ 91%]
+tests/test_user.py::test_encode_access_token PASSED                                                       [ 92%]
+tests/test_user.py::test_decode_access_token_success PASSED                                               [ 94%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                               [ 95%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                               [ 97%]
+tests/util.py::BLACK PASSED                                                                               [ 98%]
+tests/util.py::FLAKE8 PASSED                                                                              [100%]
+
+=============================================== warnings summary ================================================
+src/flask_api_tutorial/api/auth/business.py::BLACK
+  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, MutableMapping
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+============================================ short test summary info ============================================
+SKIPPED [18] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
+SKIPPED [18] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
+================================== 33 passed, 36 skipped, 1 warning in 16.09s ===================================
+____________________________________________________ summary ____________________________________________________
+  py37: commands succeeded
+  congratulations :)</span></code></pre>
 
 ## Checkpoint
 
 As promised, we have implemented all of the required features in the **User Management/JWT Authentication** section of the requirements list:
 
 <div class="requirements">
-  <p class="title">User Management/JWT Authentication</p>
+  <p class="title complete">User Management/JWT Authentication</p>
   <div class="fa-bullet-list">
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
+    <p class="fa-bullet-list-item complete""><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star-fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
   </div>
   <p class="title">API Resource: Widget List</p>
   <div class="fa-bullet-list">
@@ -1372,10 +1502,10 @@ As promised, we have implemented all of the required features in the **User Mana
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can edit existing widgets</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>The widget model contains a "name" field which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>
