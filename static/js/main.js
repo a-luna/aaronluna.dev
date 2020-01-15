@@ -43,6 +43,13 @@ const toggleGitLinksAccordian = function(event) {
     .classList.toggle("ac_hidden");
 };
 
+const toggleApiRequirementsAccordian = function(event) {
+  event.stopPropagation();
+  document
+    .querySelector(".api-requirements-accordian-section")
+    .classList.toggle("ac_hidden");
+};
+
 document
   .querySelectorAll("article h2[id], article h3[id], article h4[id], article h5[id]")
   .forEach(h => addLinksToHeaderElement(h));
@@ -55,3 +62,6 @@ document
 document
   .querySelectorAll(".github-accordian-button")
   .forEach(button => button.addEventListener("click", toggleGitLinksAccordian));
+document
+  .querySelectorAll(".api-requirements-accordian-button")
+  .forEach(button => button.addEventListener("click", toggleApiRequirementsAccordian));

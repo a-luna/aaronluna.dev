@@ -1,3 +1,4 @@
+{{- if ne .Params.series_part "Overview" }}
 <div class="accordian">
     <section class="series-accordian-section accordian-item {{ if .Param "toc" }}ac_hidden{{ end }}">
         <h2 class="series-accordian-button accordian-button"><i class="fa fa-chevron-right pointer"></i><a class="series-accordian-button" href="#">Tutorial Sections</a></h2>
@@ -17,3 +18,4 @@
         </div>
     </section>
 </div>
+{{- end }}

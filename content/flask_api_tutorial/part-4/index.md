@@ -10,7 +10,7 @@ series_part_lead: "JWT Authentication, Decorators and Blacklisting Tokens"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: ""
+summary: "Part 4 completes the user authorization API by implementing login, logout and user verification API endpoints. The process to create a custom decorator that only allows access to users with a valid JWT is covered in-depth. How to send an HTTP request for a protected resource that includes a JWT is demonstrated with both Swagger UI and command-line tools. A new class/database model is introduced to create a token blacklist, to ensure that JWTs cannot be used after the user has logged out. Test cases are created and executed for all API endpoints covering successful and failed attempts to login/logout/retrieve user info."
 git_release_name: "v0.4"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.4"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.4.zip"
@@ -50,14 +50,16 @@ resources:
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
-  title: ""
-  description: ""
+  title: "How To: Create a Flask API with JWT-Based Authentication (Part 4: JWT Authentication, Decorators and Blacklisting Tokens)"
+  description: "Part 4 completes the user authorization API by implementing login, logout and user verification API endpoints. The process to create a custom decorator that only allows access to users with a valid JWT is covered in-depth. How to send an HTTP request for a protected resource that includes a JWT is demonstrated with both Swagger UI and command-line tools. A new class/database model is introduced to create a token blacklist, to ensure that JWTs cannot be used after the user has logged out. Test cases are created and executed for all API endpoints covering successful and failed attempts to login/logout/retrieve user info."
 ---
 ## Project Structure
 
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
 
-{{< github_links >}}<pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
+{{< github_links >}}
+
+<pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">src</span>
 |   |- <span class="project-folder">flask_api_tutorial</span>
 |       |- <span class="project-folder">api</span>
@@ -1493,7 +1495,7 @@ As promised, we have implemented all of the required features in the **User Mana
     <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
     <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
     <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
-    <p class="fa-bullet-list-item complete"><span class="fa fa-star-fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
   </div>
   <p class="title">API Resource: Widget List</p>
   <div class="fa-bullet-list">

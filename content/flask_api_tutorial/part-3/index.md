@@ -10,7 +10,7 @@ series_part_lead: "API Configuration and User Registration"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: "Part 3 provides an introduction to Flask-RESTPlus."
+summary: "Part 3 explains how to initialize the Flask-RESTPlus extension and how API routes/endpoints are defined. In order to create an endpoint for new user registration, the modules and classes available in Flask-RESTPlus for parsing and validating request data are explored and demonstrated. Additionally, the process for serializing Python objects in order to send them in an HTTP response is covered. After implementing the user registration API endpoint, test cases are created and executed to verify the registration process is working correctly."
 git_release_name: "v0.3"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.3"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.3.zip"
@@ -41,8 +41,8 @@ resources:
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
-  title: ""
-  description: ""
+  title: "How To: Create a Flask API with JWT-Based Authentication (Part 3: API Configuration and User Registration)"
+  description: "Part 3 explains how to initialize the Flask-RESTPlus extension and how API routes/endpoints are defined. In order to create an endpoint for new user registration, the modules and classes available in Flask-RESTPlus for parsing and validating request data are explored and demonstrated. Additionally, the process for serializing Python objects in order to send them in an HTTP response is covered. After implementing the user registration API endpoint, test cases are created and executed to verify the registration process is working correctly."
 ---
 ## Project Structure
 
@@ -1119,12 +1119,12 @@ The warning that is generated from Flask-RESTPlus is a very minor issue with the
 Once again, we only implemented a small number of features from the requirements list. It's not too surprising if you realize we only created one of the four `auth_ns` endpoints in this section. I think we have fully satisfied one requirement: <span class="italics requirements">New users can register by providing an email address and password</span>, and partially satisfied one more since the JWT is sent in the registration and login response: <span class="italics requirements">JWT is sent in access_token field of HTTP response after successful authentication with email/password</span>.
 
 <div class="requirements">
-  <p class="title">User Management/JWT Authentication</p>
+  <p class="title in-progress">User Management/JWT Authentication</p>
   <div class="fa-bullet-list">
     <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
     <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
-    <p class="fa-bullet-list-item in-progress""><span class="fa fa-star-half-o fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
     <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
     <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>

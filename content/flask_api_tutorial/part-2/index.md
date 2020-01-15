@@ -947,7 +947,7 @@ _______________________________________________ summary ________________________
 I promise that the pace will pick up, since we have again made very little progress on the API requirements. I believe it's fair to say that one item is completely implemented: <span class="italics requirements">JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</span>. I think we can also claim partial credit on two items: <span class="italics requirements">Requests must be rejected if JWT has been modified</span> and <span class="italics requirements">Requests must be rejected if JWT is expired</span>.
 
 <div class="requirements">
-  <p class="title">User Management/JWT Authentication</p>
+  <p class="title in-progress">User Management/JWT Authentication</p>
   <div class="fa-bullet-list">
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>New users can register by providing an email address and password</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>

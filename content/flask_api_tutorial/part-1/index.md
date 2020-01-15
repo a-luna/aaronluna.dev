@@ -1187,7 +1187,7 @@ Commands:
 Most of the work done in this section wasn't related to any specific project requirements, but I think we can claim at least partial credit on one (the `ProductionConfig` settings define the token age as one hour and will be used when creating JWTs). The <span class="italics requirements">JWTs must expire after 1 hour (in production)</span> item has been marked as partially complete (<span class="fa fa-star-half-o goldenrod"></span>):
 
 <div class="requirements">
-  <p class="title">User Management/JWT Authentication</p>
+  <p class="title in-progress">User Management/JWT Authentication</p>
   <div class="fa-bullet-list">
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>New users can register by providing an email address and password</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
