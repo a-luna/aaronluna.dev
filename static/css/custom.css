@@ -1017,10 +1017,11 @@ blockquote p code {
 }
 
 div.steps {
-  color: var(--pink3);
+  color: var(--magenta3);
   border: none;
   margin: 0 0 1em;
   padding: 5px;
+  font-size: 0.95em;
 }
 
 .note ul li:last-child {
