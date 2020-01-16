@@ -16,8 +16,19 @@
         <div class="content list__excerpt post__content clearfix">
             {{ .Summary }}
         </div>
-        <div class="github-links">
-            Github links for {{ .Params.series_part }}:&nbsp;&nbsp;<a href="{{ .Params.url_git_rel_browse }}" target="_blank" title="View code for {{ .Params.series_part }}">Browse Code</a>, <a href="{{ .Params.url_git_rel_zip }}" target="_blank" title="Download .zip file">.zip file</a>, <a href="{{ .Params.url_git_rel_tar }}" target="_blank" title="Download .tar.gz file">.tar.gz file</a>
+        <div class="github-links-wrapper">
+            <div class="github-links">
+                <div class="github-links-title">Github links:</div>
+                <div><a href="{{ .Params.url_git_rel_browse }}" target="_blank" title="View code for {{ .Params.series_part }}">View Code</a></div>
+                {{- if .Param "url_git_rel_diff" }}
+                <div><a href="{{ .Params.url_git_rel_diff }}" target="_blank" title="Diff report for {{ .Params.series_part }}">View Changes</a></div>
+                {{- end }}
+            </div>
+            <div class="github-links">
+                <div class="github-links-title">Download:</div>
+                <div><a href="{{ .Params.url_git_rel_zip }}" target="_blank" title="Download .zip file">.zip file</a></div>
+                <div><a href="{{ .Params.url_git_rel_tar }}" target="_blank" title="Download .tar.gz file">.tar.gz file</a></div>
+            </div>
         </div>
     </article>
     {{- end }}

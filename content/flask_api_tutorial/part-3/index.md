@@ -78,7 +78,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |- <span class="unmodified-file">config.py</span>
 |
 |- <span class="project-folder">tests</span>
-|   |- <span class="project-empty-file">__init_.py</span>
+|   |- <span class="project-empty-file">__init__.py</span>
 |   |- <span class="unmodified-file">conftest.py</span>
 |   |- <span class="work-file">test_auth_register.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>

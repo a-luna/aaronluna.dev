@@ -1502,6 +1502,57 @@ figcaption {
   padding: 0;
 }
 
+.tutorial .content .list__header {
+  background-color: var(--widget-bg-color);
+}
+
+.tutorial .content .list__title {
+  margin: 0 0 10px;;
+}
+
+.tutorial .content .list__item {
+  background-color: var(--widget-bg-color);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin: 0 0 20px;
+}
+
+.tutorial .content .list__item .content {
+  font-size: 0.95em;
+  margin: 0 0 10px;
+}
+
+.tutorial .content .list__item .github-links-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  font-style: italic;
+  font-size: 0.9em;
+  margin: 15px 0 0 0;
+  padding: 5px 0 0 0;
+  border-top: 1px dotted var(--accent-color2);
+}
+
+.tutorial .content .list__item .github-links-title {
+  margin: 0;
+  width: 75px;
+}
+
+.tutorial .content .list__item .github-links {
+  display: flex;
+  flex-flow: row nowrap;
+  align-self: flex-start;
+  flex: 1;
+  line-height: 1.2;
+}
+
+.tutorial .content .list__item .github-links div,
+.tutorial .content .list__item .github-links a {
+  font-weight: 700;
+  white-space: nowrap;
+  margin: 5px 10px 0 0;
+}
+
 .toc__menu nav {
   padding: 0;
 }

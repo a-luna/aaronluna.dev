@@ -229,7 +229,7 @@ In this section, we will work on everything marked as <code class="work-file">NE
 |       |- <span class="work-file">config.py</span>
 |
 |- <span class="project-folder">tests</span>
-|   |- <span class="project-empty-file">__init_.py</span>
+|   |- <span class="project-empty-file">__init__.py</span>
 |   |- <span class="work-file">test_config.py</span>
 |
 |- <span class="work-file">.env</span>

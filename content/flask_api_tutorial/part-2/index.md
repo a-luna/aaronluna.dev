@@ -53,7 +53,7 @@ The chart below shows the folder structure that was created in [Part 1](/series/
 |       |- <span class="unmodified-file">config.py</span>
 |
 |- <span class="project-folder">tests</span>
-|   |- <span class="project-empty-file">__init_.py</span>
+|   |- <span class="project-empty-file">__init__.py</span>
 |   |- <span class="work-file">conftest.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>
 |   |- <span class="work-file">test_user.py</span>

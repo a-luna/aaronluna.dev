@@ -26,9 +26,11 @@ My goal for this tutorial is to provide a detailed guide to designing and creati
 
 This is <span class="emphasis">NOT</span> a full-stack tutorial, creating a front-end that consumes the API is not covered. However, Flask-RESTPlus will automatically generate a Swagger UI webpage that allows anyone to send requests and inspect responses from the API.
 
-In addition to the user management and authentication functions, the API will contain a resource that registered users can interact with &mdash; a list of "widgets". This is intentionally generic, allowing you to use the final API code as boilerplate for any project.
+In addition to the user management and authentication functions, the API will contain a RESTful resource that registered users can manipulate with CRUD actions &mdash; a list of "widgets". Why did I decide to create widgets and not to-do items, or something real? Using a generic resource reinforces the idea that this code is boilerplate and could be easily adapted for use in a real-world API.
 
-Performing CRUD actions on an item from a collection and restricting access to a resource based on the user's assigned role/permissions are extremely common, and the code to do so is the same for a widget, blog post or whatever your API needs to expose to clients.
+Performing CRUD actions and restricting access based on a user's assigned role/permissions are extremely common requirements, and the code to do so is the same for a widget, blog post or anything else that you expose to clients via HTTP.
+
+The feature specification for the API is given below. I hope that the various methodologies and "best practices" that I present are well-founded and justified by the arguments I present for them. Any and all comments/criticism are appreciated, please feel free to <a href="https://github.com/a-luna/flask-api-tutorial/issues" target="blank">log issues in the github repository</a> for suggested improvements and/or any bugs that I missed.
 
 <div class="accordian" id="api-requirements">
   <section class="api-requirements-accordian-section accordian-item ac_hidden">
