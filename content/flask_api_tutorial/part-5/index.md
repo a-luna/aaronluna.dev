@@ -456,7 +456,7 @@ Next, we need to update `run.py` in order for the Flask-Migrate extension to rec
 Open `run.py` in the project root folder and update the import statements to include the `Widget` class **(Line 9)**. Then add the `Widget` class to the `dict` object that is returned by the `make_shell_context` function **(Line 16)**:
 
 ```python {linenos=table,hl_lines=[9,20]}
-}"""Flask CLI/Application entry point."""
+"""Flask CLI/Application entry point."""
 import os
 
 import click
