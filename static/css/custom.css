@@ -892,6 +892,11 @@ div.alert {
   background-color: var(--widget-bg-color);
 }
 
+div.steps div.alert,
+div.steps div.note {
+  background-color: var(--page-bg-color);
+}
+
 div.alert,
 div.note {
   padding: 5px;
@@ -1020,8 +1025,10 @@ div.steps {
   color: var(--magenta3);
   border: none;
   margin: 0 0 1em;
-  padding: 5px;
+  padding: 10px 15px 10px 10px;
   font-size: 0.95em;
+  background-color: var(--widget-bg-color);
+  border-radius: 4px;
 }
 
 .note ul li:last-child {
@@ -2410,7 +2417,7 @@ th.last-column,
 }
 
 .responsive td.table-footer {
-  line-height: 0.8;
+  line-height: 1.2;
 }
 
 .table-wrapper thead td {

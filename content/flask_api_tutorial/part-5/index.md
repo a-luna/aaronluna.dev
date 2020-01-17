@@ -26,39 +26,43 @@ twitter:
 
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
 
+{{< github_links >}}
+
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
-|- <span class="project-folder">app</span>
-|   |- <span class="project-folder">api</span>
-|   |   |- <span class="project-folder">auth</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |   |- <span class="unmodified-file">business.py</span>
-|   |   |   |- <span class="unmodified-file">decorator.py</span>
-|   |   |   |- <span class="unmodified-file">dto.py</span>
-|   |   |   |- <span class="unmodified-file">endpoints.py</span>
-|   |   |
-|   |   |- <span class="project-folder">widgets</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |   |- <span class="work-file">business.py</span>
-|   |   |   |- <span class="work-file">dto.py</span>
-|   |   |   |- <span class="work-file">endpoints.py</span>
-|   |   |
-|   |   |- <span class="work-file">__init__.py</span>
-|   |
-|   |- <span class="project-folder">models</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">token_blacklist.py</span>
-|   |   |- <span class="unmodified-file">user.py</span>,
-|   |   |- <span class="work-file">widget.py</span>
-|   |
-|   |- <span class="project-folder">util</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">datetime_util.py</span>
-|   |   |- <span class="unmodified-file">result.py</span>
-|   |
-|   |- <span class="unmodified-file">__init__.py</span>
-|   |- <span class="unmodified-file">config.py</span>
+|- <span class="project-folder">src</span>
+|   |- <span class="project-folder">flask_api_tutorial</span>
+|       |- <span class="project-folder">api</span>
+|       |   |- <span class="project-folder">auth</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |   |- <span class="unmodified-file">business.py</span>
+|       |   |   |- <span class="unmodified-file">decorator.py</span>
+|       |   |   |- <span class="unmodified-file">dto.py</span>
+|       |   |   |- <span class="unmodified-file">endpoints.py</span>
+|       |   |
+|       |   |- <span class="project-folder">widgets</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |   |- <span class="work-file">business.py</span>
+|       |   |   |- <span class="work-file">dto.py</span>
+|       |   |   |- <span class="work-file">endpoints.py</span>
+|       |   |
+|       |   |- <span class="work-file">__init__.py</span>
+|       |
+|       |- <span class="project-folder">models</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">token_blacklist.py</span>
+|       |-  |- <span class="unmodified-file">user.py</span>
+|       |-  |- <span class="work-file">widget.py</span>
+|       |
+|       |- <span class="project-folder">util</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">datetime_util.py</span>
+|       |-  |- <span class="unmodified-file">result.py</span>
+|       |
+|       |- <span class="unmodified-file">__init__.py</span>
+|       |- <span class="unmodified-file">config.py</span>
 |
-|- <span class="project-folder">test</span>
+|- <span class="project-folder">tests</span>
+|   |- <span class="project-empty-file">__init__.py</span>
 |   |- <span class="unmodified-file">conftest.py</span>
 |   |- <span class="unmodified-file">test_auth_login.py</span>
 |   |- <span class="unmodified-file">test_auth_logout.py</span>
@@ -66,14 +70,17 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |- <span class="unmodified-file">test_auth_user.py</span>
 |   |- <span class="unmodified-file">test_config.py</span>
 |   |- <span class="unmodified-file">test_user.py</span>
+|   |- <span class="unmodified-file">util.py</span>
 |
 |- <span class="unmodified-file">.env</span>
+|- <span class="unmodified-file">.gitignore</span>
+|- <span class="unmodified-file">.pre-commit-config.yaml</span>
+|- <span class="unmodified-file">pyproject.toml</span>
 |- <span class="unmodified-file">pytest.ini</span>
+|- <span class="unmodified-file">README.md</span>
 |- <span class="work-file">run.py</span>
 |- <span class="unmodified-file">setup.py</span>
-|- <span class="unmodified-file">pyproject.toml</span>
-|- <span class="unmodified-file">requirements.txt</span>
-|- <span class="unmodified-file">requirements_dev.txt</span></div>
+|- <span class="unmodified-file">tox.ini</span></div>
 <div class="project-structure-key-wrapper">
 <div class="project-structure-key">
 <div class="key-item key-label">KEY:</div>
@@ -196,28 +203,33 @@ Each endpoint can be configured to respond to a unique set of HTTP method types.
 
 ## `flask add-user` Command
 
-[Way back in Part 1](/series/flask-api-tutorial/part-1/#flask-cli-application-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a> which can be used to create powerful Python CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
+[Way back in Part 1](/series/flask-api-tutorial/part-1/#flask-cliapplication-entry-point), we discussed the Flask CLI and created the method that executes when the `flask shell` command is invoked. The Flask CLI is based on a project called <a href="https://palletsprojects.com/p/click/" target="_blank">Click</a> which can be used to create powerful Python CLI applications, and is easy to get started with thanks to <a href="https://click.palletsprojects.com" target="_blank">excellent documentation</a>.
 
 Currently, the `api/v1/auth/register` endpoint can only create regular (non-admin) users. We want to leave it this way since this endpoint is publically-accessible. However, we also need a way to create admin users since regular users cannot create, update or delete widget objects.
 
 There are a few different methods we could use to create admin users. Using the `flask shell` command, we can execute arbitrary Python code to create admin users. Or, we could create a function and store it in a file in our project, then run the function through the command-line. However, both of these methods are cumbersome and would require documentation if anyone else needed to create an admin user.
 
-My preferred solution is to expose a command in the Flask CLI that can create both regular and admin users. To do so, open `run.py` in the project root folder. First, update the import statements to include `click` (**Line 4** below):
+My preferred solution is to expose a command in the Flask CLI that can create both regular and admin users. To do so, open `run.py` in the project root folder. First, update the import statements to include `click` **(Line 4)**:
 
-{{< highlight python "linenos=table,hl_lines=4" >}}"""Flask CLI/Application entry point."""
+```python {linenos=table,hl_lines=[4]}
+"""Flask CLI/Application entry point."""
 import os
 
 import click
 
-from app import create_app, db
-from app.models.token_blacklist import BlacklistedToken
-from app.models.user import User{{< /highlight >}}
+from flask_api_tutorial import create_app, db
+from flask_api_tutorial.models.token_blacklist import BlacklistedToken
+from flask_api_tutorial.models.user import User
+```
 
 Then, add the content below and save the file:
 
-{{< highlight python "linenos=table,linenostart=18" >}}@app.cli.command("add-user", short_help="add a new user")
+```python {linenos=table,linenostart=18}
+@app.cli.command("add-user", short_help="add a new user")
 @click.argument("email")
-@click.option("--admin", is_flag=True, default=False, help="New user has administrator role")
+@click.option(
+    "--admin", is_flag=True, default=False, help="New user has administrator role"
+)
 @click.password_option(help="Do not set password on the command line!")
 def add_user(email, admin, password):
     """Add a new user to the database with email address = EMAIL."""
@@ -231,7 +243,8 @@ def add_user(email, admin, password):
     user_type = "admin user" if admin else "user"
     message = f"Successfully added new {user_type}:\n {new_user}"
     click.secho(message, fg="blue", bold=True)
-    return 0{{< /highlight >}}
+    return 0
+```
 
 <div class="note note-flex">
   <div class="note-icon">
@@ -330,15 +343,16 @@ As you can see, after running the command, the user is immediately prompted to c
 
 ## `Widget` DB Model
 
-Before we can begin implementing the API endpoints in **Table 1**, we need to create a database table to store `Widget` instances. To do so, we extend `db.Model` (just like we did for the `User` and `BlacklistedToken` classes). Create a new file `widget.py` in `/app/models` and add the content below:
+Before we can begin implementing the API endpoints in **Table 1**, we need to create a database table to store `Widget` instances. To do so, we extend `db.Model` (just like we did for the `User` and `BlacklistedToken` classes). Create a new file `widget.py` in `src/flask_api_tutorial/models` and add the content below:
 
-{{< highlight python "linenos=table" >}}"""Class definition for Widget model."""
+```python {linenos=table}
+"""Class definition for Widget model."""
 from datetime import datetime, timezone, timedelta
 
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from app import db
-from app.util.datetime_util import (
+from flask_api_tutorial import db
+from flask_api_tutorial.util.datetime_util import (
     utc_now,
     format_timedelta_str,
     get_local_utcoffset,
@@ -366,7 +380,9 @@ class Widget(db.Model):
 
     @hybrid_property
     def created_at_str(self):
-        created_at_utc = make_tzaware(self.created_at, use_tz=timezone.utc, localize=False)
+        created_at_utc = make_tzaware(
+            self.created_at, use_tz=timezone.utc, localize=False
+        )
         return localized_dt_string(created_at_utc, use_tz=get_local_utcoffset())
 
     @hybrid_property
@@ -390,7 +406,8 @@ class Widget(db.Model):
 
     @classmethod
     def find_by_name(cls, name):
-        return cls.query.filter_by(name=name).first(){{< /highlight >}}
+        return cls.query.filter_by(name=name).first()
+```
 
 To demonstrate the process of serializing a complex object to/from JSON, the `Widget` class includes attributes with as many different data types as possible. Additionally, the project requirements include various rules restricting which values are considered valid for the `name` and `deadline` attributes:
 
@@ -438,30 +455,37 @@ Next, we need to update `run.py` in order for the Flask-Migrate extension to rec
 
 Open `run.py` in the project root folder and update the import statements to include the `Widget` class **(Line 9)**. Then add the `Widget` class to the `dict` object that is returned by the `make_shell_context` function **(Line 16)**:
 
-{{< highlight python "linenos=table,hl_lines=9 16" >}}"""Flask CLI/Application entry point."""
+```python {linenos=table,hl_lines=[9,20]}
+}"""Flask CLI/Application entry point."""
 import os
 
 import click
 
-from app import create_app, db
-from app.models.token_blacklist import BlacklistedToken
-from app.models.user import User
-from app.models.widget import Widget
+from flask_api_tutorial import create_app, db
+from flask_api_tutorial.models.token_blacklist import BlacklistedToken
+from flask_api_tutorial.models.user import User
+from flask_api_tutorial.models.widget import Widget
 
 app = create_app(os.getenv("FLASK_ENV", "development"))
 
 
 @app.shell_context_processor
-def make_shell_context():
-    return {"db": db, "User": User, "BlacklistedToken": BlacklistedToken, "Widget": Widget}{{< /highlight >}}
+def shell():
+    return {
+        "db": db,
+        "User": User,
+        "BlacklistedToken": BlacklistedToken,
+        "Widget": Widget,
+    }
+```
 
 Next, run <code>flask db migrate</code> and add a message explaining the changes that will be made by executing this migration script:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget table"</span>
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget model"</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'widget'
-  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/fdd8ca8d8666_add_widget_table.py ... done</span></code></pre>
+  Generating /Users/aaronluna/Projects/flask_api_tutorial/migrations/versions/fdd8ca8d8666_add_widget_table.py ... done</span></code></pre>
 
 <div class="note note-flex">
     <div class="note-icon">
@@ -483,7 +507,7 @@ After the `widget` table has been added to the database, we can begin implementi
 
 ## Create Widget
 
-So where should we begin? In my opinion, the endpoint that should be implemented first is the endpoint responsible for the create operation, since without `Widget` objects there's nothing to be retrieved, updated or deleted. In [Part 3](/series/flask-api-tutorial/part-3/#auth-ns-endpoints) we followed the process below for each endpoint in the `auth_ns` namespace. We will follow the same process to implement the `widget_ns` endpoints in **Table 1**:
+So where should we begin? In my opinion, the endpoint that should be implemented first is the endpoint responsible for the create operation, since without `Widget` objects there's nothing to be retrieved, updated or deleted. In [Part 3](/series/flask-api-tutorial/part-3/#auth_ns-endpoints) we followed the process below for each endpoint in the `auth_ns` namespace. We will follow the same process to implement the `widget_ns` endpoints in **Table 1**:
 
 <div class="steps">
     <ol>
@@ -512,18 +536,20 @@ Step 1 says <span class="bold-italics">create request parsers/API models to vali
 
 When a client sends a request to create a new `Widget`, what data is required? Take a look at the attributes of the `Widget` class:
 
-{{< highlight python "linenos=table,linenostart=22,hl_lines=2-3 5" >}}id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+```python {linenos=table,linenostart=22,hl_lines=["2-3",5]}
+id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 name = db.Column(db.String(100), unique=True, nullable=False)
 info_url = db.Column(db.String(255))
 created_at = db.Column(db.DateTime, default=utc_now)
 deadline = db.Column(db.DateTime)
 
 owner_id = db.Column(db.Integer, db.ForeignKey("site_user.id"), nullable=False)
-owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
+owner = db.relationship("User", backref=db.backref("widgets"))
+```
 
 <p style="margin: 0 0 10px">The client must provide values for the three attributes highlighted above (<code>name</code>, <code>info_url</code> and <code>deadline</code>). What about the other attributes?</p>
 
-<div style="font-size: 0.9em; padding: 5px; line-height: 1.5">
+<div style="font-size: 0.95em; padding: 5px; line-height: 1.5">
     <ul>
       <li>
         <p><span class="bold-text">id: </span>This is the database table's primary key. The value is automatically set when a <code>Widget</code> is committed to the database (starting at one, then incrementing by one each time a <code>Widget</code> is added).</p>
@@ -542,11 +568,12 @@ owner = db.relationship("User", backref=db.backref("widgets")){{< /highlight >}}
     </ul>
 </div>
 
-Flask-RESTPlus includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. When we created the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth-reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` to verify if a value provided by the client is a valid email address. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
+Flask-RESTPlus includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. When we created the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth_reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` to verify if a value provided by the client is a valid email address. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
 
-Create a new file named `dto.py` in `app/api/widgets` and enter the content below:
+Create a new file named `dto.py` in `src/flask_api_tutorial/api/widgets` and enter the content below:
 
-{{< highlight python "linenos=table" >}}"""Parsers and serializers for /widgets API endpoints."""
+```python {linenos=table}
+"""Parsers and serializers for /widgets API endpoints."""
 import re
 from datetime import date, datetime, time, timezone
 
@@ -554,35 +581,36 @@ from dateutil import parser
 from flask_restplus.inputs import URL
 from flask_restplus.reqparse import RequestParser
 
-from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
+from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
 
 def widget_name(name):
     """Validation method for a string containing only letters, numbers, '-' and '_'."""
     if not re.compile(r"^[\w-]+$").match(name):
         raise ValueError(
-            f"'{name}' contains one or more invalid characters. Widget name must contain "
-            "only letters, numbers, hyphen and underscore characters."
+            f"'{name}' contains one or more invalid characters. Widget name must "
+            "contain only letters, numbers, hyphen and underscore characters."
         )
     return name
 
 
 def future_date_from_string(date_str):
-    """Validation method for a date formatted as a string, the date must NOT be in the past."""
+    """Validation method for a date in the future, formatted as a string."""
     try:
         parsed_date = parser.parse(date_str)
     except ValueError:
         raise ValueError(
-            f"Failed to parse '{date_str}' as a valid date. You can use any format recognized "
-            "by dateutil.parser. For example, all of the strings below are valid ways to "
-            "represent the same date: '2018-5-13' -or- '05/13/2018' -or- 'May 13 2018'."
+            f"Failed to parse '{date_str}' as a valid date. You can use any format "
+            "recognized by dateutil.parser. For example, all of the strings below "
+            "are valid ways to represent the same date: '2018-5-13' -or- '05/13/2018' "
+            "-or- 'May 13 2018'."
         )
 
     if parsed_date.date() < date.today():
         raise ValueError(
-            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. "
-            "However, this value must be a date in the future and "
-            f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
+            f"Successfully parsed {date_str} as "
+            f"{parsed_date.strftime(DATE_MONTH_NAME)}. However, this value must be a "
+            f"date in the future and {parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}"
         )
     deadline = datetime.combine(parsed_date.date(), time.max)
@@ -612,7 +640,8 @@ create_widget_reqparser.add_argument(
     location="form",
     required=True,
     nullable=False,
-){{< /highlight >}}
+)
+```
 
 Let's break this down by looking at how each of the attributes are validated by the code above:
 
@@ -620,30 +649,34 @@ Let's break this down by looking at how each of the attributes are validated by 
 
 None of <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank">the pre-defined types in the <code>flask_restplus.inputs</code> module</a> perform input validation that satisfies the requirements of the `name` attribute. Thankfully, <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#advanced-types-handling" target="_blank">Flask-RESTPlus provides a way to create custom types</a> that can be used in the same way. The example of a custom type shown below is taken from the documentation:
 
-{{< highlight python >}}def my_type(value):
+```python
+def my_type(value):
     '''Parse my type'''
     if not condition:
         raise ValueError('This is not my type')
-    return parse(value){{< /highlight >}}
+    return parse(value)
+```
 
-The term "type" is (IMO) misleading since we only need to create a function (not a class). The function must accept at least one parameter &mdash; the value provided by the client. If the value is successfully validated, the function must convert the value to the expected data type before returning it (in the case of the `name` attribute, the expected type is a string so no conversion is necessary). If the value provided by the client is invalid, the method must raise a `ValueError`.
+The term "type" is (IMO) misleading since we only need to create a function (not a class). The function must accept at least one parameter &mdash; the value provided by the client. If the value is successfully validated, the function must convert the value to the expected data type before returning it (in the case of the `name` attribute, the expected type is a string so no conversion is necessary). If the value provided by the client is invalid, the function must raise a `ValueError`.
 
 The `widget_name` function is adapted directly from the example shown above to satisfy the project requirements:
 
-{{< highlight python "linenos=table,linenostart=12" >}}def widget_name(name):
+```python {linenos=table,linenostart=12}
+def widget_name(name):
     """Validation method for a string containing only letters, numbers, '-' and '_'."""
     if not re.compile(r"^[\w-]+$").match(name):
         raise ValueError(
-            f"'{name}' contains one or more invalid characters. Widget name must contain "
-            "only letters, numbers, hyphen and underscore characters."
+            f"'{name}' contains one or more invalid characters. Widget name must "
+            "contain only letters, numbers, hyphen and underscore characters."
         )
-    return name{{< /highlight >}}
+    return name
+```
 
 <div class="code-details">
     <ul>
       <li>
         <p><strong>Line 14: </strong>The simplist way to implement our custom type is with a regular expression. The regex <code>^[\w-]+$</code> will match any string that consists of <span class="emphasis">ONLY</span> alphanumeric characters (which includes the underscore character) and the hyphen character.</p>
-        <p>The syntax of regular expressions is extremely dense. To make any regex easier to understand, we could compile it with the <code>re.VERBOSE</code> flag. This causes whitespace that is not within a character class to be ignored, allowing us to place comments within the regex to document the design and the effect of each component of the expression. For example, we could document our regex as shown below (I am only showing this for demonstration purposes, and have not modified the code in <code>app/api/widgets/dto.py</code>):</p>
+        <p>The syntax of regular expressions is extremely dense. To make any regex easier to understand, we could compile it with the <code>re.VERBOSE</code> flag. This causes whitespace that is not within a character class to be ignored, allowing us to place comments within the regex to document the design and the effect of each component of the expression. For example, we could document our regex as shown below (I am only showing this for demonstration purposes, and have not modified the code in <code>src/flask_api_tutorial/api/widgets/dto.py</code>):</p>
         <pre><code style="color: #f8f8f2">NAME_REGEX = re.compile(<span style="color: #ed9d13">r"""
     ^        # Matches the beginning of the string
     [\w-]    # Character class: \w matches all alphanumeric characters (including underscore), - matches the hyphen character
@@ -671,11 +704,11 @@ The `widget_name` function is adapted directly from the example shown above to s
 We can see how this function works by testing it in the `flask shell`:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
-<span class="cmd-repl-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
-[Clang 10.0.1 (clang-1001.0.46.4)] on darwin
+<span class="cmd-repl-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+[Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 App: flask-api-tutorial [development]
-Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app.api.widgets.dto import widget_name</span>
+Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from flask_api_tutorial.api.widgets.dto import widget_name</span>
 <span class="cmd-repl-comment"># 1. 'test' is a valid widget_name</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("test")</span>
 <span class="cmd-repl-results">'test'</span>
@@ -686,14 +719,14 @@ Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("some widget")</span>
 <span class="cmd-repl-results">Traceback (most recent call last):
   File "&lt;console&gt;", line 1, in &lt;module&gt;
-  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 18, in widget_name
+  File "/Users/aaronluna/Projects/flask_api_tutorial/src/flask_api_tutorial/api/widgets/dto.py", line 18, in widget_name
     f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
 <span class="cmd-warning">ValueError: 'some widget' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span>
 <span class="cmd-repl-comment"># 4. 't**&*&' is NOT a valid widget_name</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">widget_name("t**&*&")</span>
 <span class="cmd-repl-results">Traceback (most recent call last):
   File "&lt;console&gt;", line 1, in &lt;module&gt;
-  File "/Users/aaronluna/Projects/flask-api-tutorial/app/api/widgets/dto.py", line 18, in widget_name
+  File "/Users/aaronluna/Projects/flask_api_tutorial/src/flask_api_tutorial/api/widgets/dto.py", line 18, in widget_name
     f"'{name}' contains one or more invalid characters. Widget name must contain "</span>
 <span class="cmd-warning">ValueError: 't**&*&' contains one or more invalid characters. Widget name must contain only letters, numbers, hyphen and/or underscore characters.</span></code></pre>
 
@@ -701,25 +734,27 @@ The first test passes since **test** consists of only letters. The second test p
 
 Wait, let's back up. Didn't the requirement for the `name` attribute say that only **lowercase** letters were allowed? Yep, you got me. I kinda sort-of lied about **test_1-AZ** being a valid `widget_name`. But there is a reason why I did this, which will be revealed by the configuration of the argument object for the `name` attribute:
 
-{{< highlight python "linenos=table,linenostart=50" >}}create_widget_reqparser.add_argument(
+```python {linenos=table,linenostart=47}
+create_widget_reqparser.add_argument(
     "name",
     type=widget_name,
     location="form",
     required=True,
     nullable=False,
-    case_sensitive=False,
-){{< /highlight >}}
+    case_sensitive=True,
+)
+```
 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 52: </strong>All we need to do to use our custom type is set the value of the <code>type</code> parameter to the <code>widget_name</code> function.</p>
+        <p><strong>Line 49: </strong>All we need to do to use our custom type is set the value of the <code>type</code> parameter to the <code>widget_name</code> function.</p>
       </li>
       <li>
-        <p><strong>Lines 53-55: </strong>The <code>location</code>, <code>required</code> and <code>nullable</code> parameters should be familiar since we explained their purpose in <a href="/series/flask-api-tutorial/part-3/#request-parser-configuration">Part 3</a>.</p>
+        <p><strong>Lines 50-52: </strong>The <code>location</code>, <code>required</code> and <code>nullable</code> parameters should be familiar since we explained their purpose in <a href="/series/flask-api-tutorial/part-3/#request-parser-configuration">Part 3</a>.</p>
       </li>
       <li>
-        <p><strong>Line 56: </strong>This is the first time we are using the <code>case_sensitive</code> parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, by default, <code>case_sensitive=True</code>. If this value is <code>False</code> "this will convert all values to lowercase".</p>
+        <p><strong>Line 53: </strong>This is the first time we are using the <code>case_sensitive</code> parameter. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.reqparse.Argument" target="_blank">According to the documentation</a>, by default, <code>case_sensitive=True</code>. If this value is <code>False</code> "this will convert all values to lowercase".</p>
       </li>
     </ul>
 </div>
@@ -730,13 +765,15 @@ If the widget name contains only valid characters, it will be converted to lower
 
 #### `info_url` Argument
 
-{{< highlight python "linenos=table,linenostart=58" >}}create_widget_reqparser.add_argument(
+```python {linenos=table,linenostart=55}
+create_widget_reqparser.add_argument(
     "info_url",
     type=URL(schemes=["http", "https"]),
     location="form",
     required=True,
     nullable=False,
-){{< /highlight >}}
+)
+```
 
 The `info_url` attribute can be parsed using the pre-defined `URL` type from the `inputs` module, which can be configured in numerous ways. For example, it is possible to restrict the allowed values to a whitelist of domains and/or exclude a blacklist of domains. You can choose to perform a DNS lookup on the domain specified by the client and reject the value if the domain fails to resolve. <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.URL" target="_blank">Check out the documentation for the <code>URL</code> type</a> for even more ways you can control the allowed URL range/format.
 
@@ -751,7 +788,7 @@ The only restriction on `info_url` that we will employ is that the URL scheme mu
   </div>
 </div>
 
-There really isn't anything else to say about how the `info_url` attribute is parsed since we already covered using a pre-defined `input` type when we used the `email` type as part of the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth-reqparser-request-parser). So let's move on to something a bit more interesting.
+There really isn't anything else to say about how the `info_url` attribute is parsed since we already covered using a pre-defined `input` type when we used the `email` type as part of the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth_reqparser-request-parser). So let's move on to something a bit more interesting.
 
 #### `deadline` Argument
 
@@ -843,37 +880,40 @@ Luckily, I see no reason to impose such a restriction for this project. IMO, the
 
 Since `deadline` must be either the current date or a date in the future, I decided to name the custom type function for this attribute `future_date_from_string`. This function is more complex than `widget_name` since two separate validations must be peformed &mdash; parsing the input string to a `date` value and checking that the parsed date is not in the past:
 
-{{< highlight python "linenos=table,linenostart=23" >}}def future_date_from_string(date_str):
-    """Validate a string is formatted correctly as a datetime value that is not in the past."""
+```python {linenos=table,linenostart=22}
+def future_date_from_string(date_str):
+    """Validation method for a date in the future, formatted as a string."""
     try:
         parsed_date = parser.parse(date_str)
     except ValueError:
         raise ValueError(
-            f"Failed to parse '{date_str}' as a valid date. You can use any format recognized "
-            "by dateutil.parser. For example, all of the strings below are valid ways to "
-            "represent the same date: '2018-5-13' -or- '05/13/2018' -or- 'May 13 2018'."
+            f"Failed to parse '{date_str}' as a valid date. You can use any format "
+            "recognized by dateutil.parser. For example, all of the strings below "
+            "are valid ways to represent the same date: '2018-5-13' -or- '05/13/2018' "
+            "-or- 'May 13 2018'."
         )
 
     if parsed_date.date() < date.today():
         raise ValueError(
-            f"Successfully parsed {date_str} as {parsed_date.strftime(DATE_MONTH_NAME)}. "
-            "However, this value must be a date in the future and "
-            f"{parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
+            f"Successfully parsed {date_str} as "
+            f"{parsed_date.strftime(DATE_MONTH_NAME)}. However, this value must be a "
+            f"date in the future and {parsed_date.strftime(DATE_MONTH_NAME)} is BEFORE "
             f"{datetime.now().strftime(DATE_MONTH_NAME)}"
         )
     deadline = datetime.combine(parsed_date.date(), time.max)
     deadline_utc = make_tzaware(deadline, use_tz=timezone.utc)
-    return deadline_utc{{< /highlight >}}
+    return deadline_utc
+```
 
 There are a few things about the `future_date_from_string` function that are worth pointing out:
 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 26: </strong>The value provided by the user is passed to the <code>dateutil.parser.parse</code> method. If the <code>parser</code> is able to convert the string value to a <code>datetime</code> value it is stored in the <code>parsed_date</code> variable.</p>
+        <p><strong>Line 25: </strong>The value provided by the user is passed to the <code>dateutil.parser.parse</code> method. If the <code>parser</code> is able to convert the string value to a <code>datetime</code> value it is stored in the <code>parsed_date</code> variable.</p>
       </li>
       <li>
-        <p><strong>Lines 27-32: </strong>If the <code>dateutil.parser.parse</code> method is unable to parse the value provided by the user, it raises a <code>ValueError</code>. Since the error message that is generated isn't very descriptive, the original error is suppressed and another value error is raised with an error message that clearly explains why the value provided by the user was rejected and provides examples of string values that would be considered valid.</p>
+        <p><strong>Lines 26-32: </strong>If the <code>dateutil.parser.parse</code> method is unable to parse the value provided by the user, it raises a <code>ValueError</code>. Since the error message that is generated isn't very descriptive, the original error is suppressed and another value error is raised with an error message that clearly explains why the value provided by the user was rejected and provides examples of string values that would be considered valid.</p>
       </li>
       <li>
         <p><strong>Line 34: </strong>Per the project requirements, the date value that was provided by the user is compared to the current date, without considering the time component of either date when making the comparison. If the date provided by the user is less than (i.e., before) the current date, the value is rejected since this means the deadline has passed.</p>
@@ -885,20 +925,22 @@ There are a few things about the `future_date_from_string` function that are wor
         <p><strong>Line 41: </strong>Per the project requirements, the deadline value flips from "not passed" to "passed" at the stroke of midnight. To achieve this, we set the deadline by taking the date component of the value provided by the user and combining it with <code>time.max()</code>, which is a shortcut for a time value equal to <code>11:59:59 PM</code>.</p>
       </li>
       <li>
-        <p><strong>Lines 42-43: </strong>Since we need to ensure that any <code>datetime</code> value is timezone-aware before we add it to the database, we localize the value to UTC before returning it to the user. </p>
+        <p><strong>Lines 42-43: </strong>Since we need to ensure that any <code>datetime</code> value is timezone-aware before we add it to the database, we localize the value to UTC before it is returned and passed to the business logic.</p>
       </li>
     </ul>
 </div>
 
 We already know how to use a custom type, so the last thing we need to do is add an argument to our `create_widget_reqparser` with `type=future_date_from_string`;
 
-{{< highlight python "linenos=table,linenostart=65" >}}create_widget_reqparser.add_argument(
+```python {linenos=table,linenostart=62}
+create_widget_reqparser.add_argument(
     "deadline",
     type=future_date_from_string,
     location="form",
     required=True,
     nullable=False,
-){{< /highlight >}}
+)
+```
 
 Remember, we are [following the process](#create-widget) defined earlier to create each endpoint. We can now move on to step #2: **Define the business logic necessary to process the request if validation succeeds**.
 
@@ -919,18 +961,19 @@ Next, we need to define a function that performs the following actions:
    <p style="margin: 1em 0 0 1em">For 201 (Created) responses, the Location value refers to the primary resource created by the request.</p>
 </blockquote>
 
-Create a new file named `business.py` in `app/api/widgets` and enter the content below:
+Create a new file named `business.py` in `src/flask_api_tutorial/api/widgets` and enter the content below:
 
-{{< highlight python "linenos=table" >}}"""Business logic for /widgets API endpoints."""
+```python {linenos=table}
+"""Business logic for /widgets API endpoints."""
 from http import HTTPStatus
 
-from flask import jsonify
+from flask import jsonify, url_for
 from flask_restplus import abort
 
-from app import db
-from app.api.auth.decorator import admin_token_required
-from app.models.user import User
-from app.models.widget import Widget
+from flask_api_tutorial import db
+from flask_api_tutorial.api.auth.decorator import admin_token_required
+from flask_api_tutorial.models.user import User
+from flask_api_tutorial.models.widget import Widget
 
 
 @admin_token_required
@@ -947,7 +990,8 @@ def create_widget(widget_dict):
     response = jsonify(status="success", message=f"New widget added: {name}.")
     response.status_code = HTTPStatus.CREATED
     response.headers["Location"] = url_for("api.widget", name=name)
-    return response{{< /highlight >}}
+    return response
+```
 
 Let's take a look at how the `create_widget` function performs the tasks listed above:
 
@@ -960,7 +1004,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
         <p><strong>Line 14: </strong>After the request data has been parsed and validated, it is passed to the <code>create_widget</code> function as a <code>dict</code> object named <code>widget_dict</code>.</p>
       </li>
       <li>
-        <p><strong>Lines 15-18: </strong>The function starts by checking if a <code>widget</code> already exists with the same name provided in the request. If this is true, the request is aborted. The first argument to the <code>abort</code> function is the HTTP status code to include in the response. In this case, the appropriate response code is <code>HTTPStatus.CONFLICT</code> (409).</p>
+        <p><strong>Lines 15-18: </strong>The function starts by checking if a <code>widget</code> already exists with the same name provided in the request. If this is true, the request is aborted. The first argument to the <code>abort</code> function is the HTTP status code to include in the response. In this case, the appropriate response code is 409 <code>HTTPStatus.CONFLICT</code>.</p>
       </li>
       <li>
         <p><strong>Line 19: </strong><code>**</code> is the dictionary unpacking operator, you can find more info on it and the related list unpacking operator (<code>*</code>) in <a href="https://www.python.org/dev/peps/pep-0448/">PEP 448</a>. It is a concise way to pass the <code>name</code>, <code>info_url</code>, and <code>deadline</code> values to the <code>Widget</code> constructor.</p>
@@ -984,7 +1028,7 @@ Let's take a look at how the `create_widget` function performs the tasks listed 
         <p><strong>Line 24: </strong>As we have seen previously, if we need to include a custom field in the header of a response, we must create the response object manually. One way to do this is with the <code>flask.jsonify</code> function.</p>
       </li>
       <li>
-        <p><strong>Line 25: </strong>Since the request to create a new widget was successful, the correct HTTP status code for the response is <code>HTTPStatus.CREATED</code> (201).</p>
+        <p><strong>Line 25: </strong>Since the request to create a new widget was successful, the correct HTTP status code for the response is 201 <code>HTTPStatus.CREATED</code>.</p>
       </li>
       <li>
         <p><strong>Line 27: </strong>After ensuring that the response is configured with all required header fields, it is sent to the client.</p>
@@ -1004,15 +1048,16 @@ Next, we need to create the API endpoint for the create operation and incorporat
 
 ### `api.widget_list` Endpoint (POST Request)
 
-According to **Table 1**, the operation to create a <code>widget</code> is accessed by sending a <code>POST</code> request to the <code>api.widget_list</code> resource, located at <code>/api/v1/widgets</code>. To create this endpoint, create a new file <code>endpoints.py</code> in <code>app/api/widgets</code> and enter the content below:
+According to **Table 1**, the operation to create a <code>widget</code> is accessed by sending a <code>POST</code> request to the <code>api.widget_list</code> resource, located at <code>/api/v1/widgets</code>. To create this endpoint, create a new file <code>endpoints.py</code> in <code>src/flask_api_tutorial/api/widgets</code> and enter the content below:
 
-{{< highlight python "linenos=table" >}}"""API endpoint definitions for /widgets namespace."""
+```python {linenos=table}
+"""API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widgets.dto import create_widget_reqparser
-from app.api.widgets.business import create_widget
+from flask_api_tutorial.api.widgets.dto import create_widget_reqparser
+from flask_api_tutorial.api.widgets.business import create_widget
 
 widget_ns = Namespace(name="widgets", validate=True)
 
@@ -1032,7 +1077,8 @@ class WidgetList(Resource):
     def post(self):
         """Create a widget."""
         widget_dict = create_widget_reqparser.parse_args()
-        return create_widget(widget_dict){{< /highlight >}}
+        return create_widget(widget_dict)
+```
 
 There's nothing in the code above that we haven't already encountered and explained while implementing the `auth_ns` API endpoints. <a href="/series/flask-api-tutorial/part-3/#registeruser-resource">Click here</a> if you need a refresher on `Namespace` objects, `Resource` objects, `@doc`, `@response`, or `@expect` decorators, etc.
 
@@ -1050,14 +1096,15 @@ The important part is **Lines 26-27** where the `parse_args` method of `create_w
 
 ### Add `widget_ns` Namespace to `api`
 
-In order to register the `widget_ns` namespace with the `api` object, open `app/api/__init__.py` and add the highlighted lines (**Line 6** and **Line 27**):
+In order to register the `widget_ns` namespace with the `api` object, open `src/flask_api_tutorial/api/__init__.py` and add the highlighted lines (**Line 6** and **Line 27**):
 
-{{< highlight python "linenos=table,hl_lines=6 27" >}}"""API blueprint configuration."""
+```python {linenos=table,hl_lines=[6,28]}
+"""API blueprint configuration."""
 from flask import Blueprint
 from flask_restplus import Api
 
-from app.api.auth.endpoints import auth_ns
-from app.api.widgets.endpoints import widget_ns
+from flask_api_tutorial.api.auth.endpoints import auth_ns
+from flask_api_tutorial.api.widgets.endpoints import widget_ns
 
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
@@ -1077,8 +1124,10 @@ api = Api(
     doc="/ui",
     authorizations=authorizations,
 )
+
 api.add_namespace(auth_ns, path="/auth")
-api.add_namespace(widget_ns, path="/widgets"){{< /highlight >}}
+api.add_namespace(widget_ns, path="/widgets")
+```
 
 We can verify that the endpoint was created by running `flask routes`:
 
@@ -1105,32 +1154,32 @@ Normally, we would create unit tests to verify the endpoint does create `widget`
 Even though we only implemented one of the five CRUD operations specified in **Table 1**, we actually satisfied several of the remaining requirements. However, since we have not created any test coverage and confirmed that the process of creating a `widget` object is working correctly, these will be marked as only half-complete at this point:
 
 <div class="requirements">
-  <p class="title">User Management/JWT Authentication</p>
+  <p class="title complete">User Management/JWT Authentication</p>
   <div class="fa-bullet-list">
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
+    <p class="fa-bullet-list-item complete""><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
   </div>
-  <p class="title">API Resource: Widget List</p>
+  <p class="title in-progress">API Resource: Widget List</p>
   <div class="fa-bullet-list">
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>All users can retrieve a list of all widgets</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>All users can retrieve individual widgets by name</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can edit existing widgets</p>
     <p class="fa-bullet-list-item"><span class="fa fa-star-o fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star-half-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item in-progress"><span class="fa fa-star-half-o fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>
 </div>
 

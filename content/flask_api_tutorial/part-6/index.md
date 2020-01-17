@@ -327,7 +327,7 @@ The Flask-SQLAlchemy extension has <a href="https://flask-sqlalchemy.palletsproj
 <span class="cmd-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
 [Clang 10.0.1 (clang-1001.0.46.4)] on darwin
 App: flask-api-tutorial [development]
-Instance: /Users/aaronluna/Projects/flask-api-tutorial/instance</span>
+Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">len(Widget.query.all())</span>
 <span class="cmd-repl-results">6</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination = Widget.query.paginate(page=1, per_page=5)</span>
