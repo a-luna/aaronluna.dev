@@ -21,6 +21,8 @@
                 <a href="{{ .Params.url_git_rel_browse }}" target="_blank" title="View code for {{ .Params.series_part }}"><i class="fa fa-github" aria-hidden="true"></i>Code</a>
                 {{- if .Param "url_git_rel_diff" }}
                 <a href="{{ .Params.url_git_rel_diff }}" target="_blank" title="Diff report for {{ .Params.series_part }}"><i class="fa fa-github" aria-hidden="true"></i>Diff</a>
+                {{ else }}
+                <div class="disabled" title="N/A"><i class="fa fa-github" aria-hidden="true"></i>Diff</div>
                 {{- end }}
             </div>
             <div class="github-links">

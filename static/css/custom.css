@@ -1543,13 +1543,15 @@ figcaption {
 .tutorial .content .list__item .github-links {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   font-size: 0.9em;
   line-height: 1;
   margin: 5px 0;
+  flex: 1;
 }
 
-.tutorial .content .list__item .github-links a {
+.tutorial .content .list__item .github-links a,
+.tutorial .content .list__item .github-links .disabled {
   color: var(--widget-bg-color);
   background-color: var(--tut-link-color);
   border: 1px solid var(--tut-link-color);
@@ -1559,7 +1561,15 @@ figcaption {
   white-space: nowrap;
   padding: 5px 7px;
   margin: 0 7px;
-  width: 80px;
+  min-width: 80px;
+  flex: 1;
+}
+
+.tutorial .content .list__item .github-links .disabled {
+  cursor: not-allowed;
+  color: var(--widget-bg-color);
+  background-color: var(--accent-color2);
+  border: 1px solid var(--accent-color2);
 }
 
 .tutorial .content .list__item .github-links a:hover,
@@ -3662,7 +3672,7 @@ blockquote td {
     margin: 0 2px;
   }
 
-
+/*
   .tutorial .content .list__item .github-links {
     font-size: 0.8em;
     margin: 5px 0;
@@ -3677,7 +3687,7 @@ blockquote td {
   .tutorial .content .list__item .github-links .fa {
     font-size: 1em;
     margin: 0 3px 0 0;
-  }
+  } */
 }
 
 @media screen and (max-width: 500px) {
