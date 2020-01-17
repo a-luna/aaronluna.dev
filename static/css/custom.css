@@ -988,7 +988,7 @@ blockquote p code {
 }
 
 .steps ul {
-  margin: 0 0 5px 0.5em;
+  margin: 0 0 5px 1.5em;
 }
 
 .steps ul ol {
@@ -1008,17 +1008,10 @@ blockquote p code {
 
 .steps .title,
 .requirements .title {
-  font-size: 1.1em;
+  font-size: 1em;
+  font-weight: 700;
   padding: 0;
   margin: 0 0 5px;
-}
-
-.steps .title {
-  color: var(--header-color);
-}
-
-.requirements .title {
-  font-weight: 700;
 }
 
 div.steps {

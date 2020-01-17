@@ -161,7 +161,7 @@ Flake8 can be configured in a multitude of ways, so getting the most out of it r
 
 The location of your test code in relation to your app code is very important. There are multiple valid ways to layout your project, and the pros and cons of various project layouts are collected as <a href="https://docs.pytest.org/en/latest/goodpractices.html" target="_blank">a helpful set of best practices</a> on the pytest documentation site. The specific recommendations that I have applied to this project are given below:
 
-<div class="steps">
+<div>
   <ul>
     <li>Place a <code>setup.py</code> file in your project's root folder. We will cover the contents of this file shortly, having this file allows you to install your application with <code>pip</code>.</li>
     <li>Place your test code in a separate folder <span class="emphasis">outside</span> of your application code.
