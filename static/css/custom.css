@@ -820,7 +820,7 @@ p .fa,
 div.alert,
 div.note,
 div.requirements {
-  font-size: 0.9em;
+  font-size: 0.95em;
   margin: 10px 0 15px 0;
   border-radius: 4px;
   overflow-wrap: normal;
@@ -1505,64 +1505,71 @@ figcaption {
 
 .tutorial .content .list__header {
   background-color: var(--widget-bg-color);
+  margin: 0 0 7px;
 }
 
 .tutorial .content .list__title {
-  margin: 0 0 10px;;
+  margin: 0;
+}
+
+.tutorial .content .list__title a {
+  font-size: 1em;
 }
 
 .tutorial .content .list__item {
   background-color: var(--widget-bg-color);
   border: none;
   border-radius: 4px;
-  padding: 10px 15px;
+  padding: 15px;
   margin: 0 0 20px;
 }
 
 .tutorial .content .list__item .content {
   font-size: 0.95em;
-  margin: 0 0 10px;
+  margin: 0 0 10px 0;
 }
 
 .tutorial .content .list__item .github-links-wrapper {
   display: flex;
   flex-flow: row wrap;
-  font-style: italic;
-  font-size: 0.9em;
-  margin: 15px 0 0 0;
-  padding: 5px 0 0 0;
-  border-top: 1px dotted var(--accent-color2);
-}
-
-.tutorial .content .list__item .github-links-title {
-  margin: 0;
+  justify-content: flex-start;
 }
 
 .tutorial .content .list__item .github-links {
   display: flex;
   flex-flow: row nowrap;
-  align-self: flex-start;
-  flex: 1;
-  line-height: 1.2;
+  justify-content: flex-start;
+  font-size: 0.95em;
+  line-height: 1;
+  margin: 5px 0;
 }
 
-
-.tutorial .content .list__item .github-links:last-child {
-  flex: 0;
-}
-
-.tutorial .content .list__item .github-links div,
 .tutorial .content .list__item .github-links a {
+  color: var(--widget-bg-color);
+  background-color: var(--tut-link-color);
+  border: 1px solid var(--tut-link-color);
+  border-radius: 20px;
   font-weight: 700;
+  text-align: center;
   white-space: nowrap;
+  padding: 5px 7px;
+  margin: 0 10px;
+  width: 82px;
 }
 
-.tutorial .content .list__item .github-links div {
-  margin: 5px 10px 0 0;
+.tutorial .content .list__item .github-links a:hover,
+.tutorial .content .list__item .github-links a:focus,
+.tutorial .content .list__item .github-links a:active,
+.tutorial .content .list__item .github-links a:active:hover {
+  text-decoration: none;
+  color: var(--tut-link-color);
+  background-color: var(--widget-bg-color);
+
 }
 
-.tutorial .content .list__item .github-links div:last-child {
-  margin: 5px 0 0 0;
+.tutorial .content .list__item .github-links .fa {
+  font-size: 1.3em;
+  margin: 0 5px 0 0;
 }
 
 .toc__menu nav {
@@ -1749,7 +1756,7 @@ a.pagination__item--next {
 .requirements .fa-bullet-list p.fa-bullet-list-item {
   font-size: 0.9em;
   position: relative;
-  margin: 0 0 5px 20px;
+  margin: 0 0 7px 20px;
 }
 
 .fa-bullet-icon {
@@ -3648,6 +3655,23 @@ blockquote td {
 
   #social ul li {
     margin: 0 2px;
+  }
+
+
+  .tutorial .content .list__item .github-links {
+    font-size: 0.8em;
+    margin: 5px 0;
+  }
+
+  .tutorial .content .list__item .github-links a {
+    padding: 5px 7px;
+    margin: 0 5px;
+    width: 66px;
+  }
+
+  .tutorial .content .list__item .github-links .fa {
+    font-size: 1em;
+    margin: 0 3px 0 0;
   }
 }
 
