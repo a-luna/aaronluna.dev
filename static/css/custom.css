@@ -1536,7 +1536,6 @@ figcaption {
 
 .tutorial .content .list__item .github-links-title {
   margin: 0;
-  width: 75px;
 }
 
 .tutorial .content .list__item .github-links {
@@ -1547,11 +1546,23 @@ figcaption {
   line-height: 1.2;
 }
 
+
+.tutorial .content .list__item .github-links:last-child {
+  flex: 0;
+}
+
 .tutorial .content .list__item .github-links div,
 .tutorial .content .list__item .github-links a {
   font-weight: 700;
   white-space: nowrap;
+}
+
+.tutorial .content .list__item .github-links div {
   margin: 5px 10px 0 0;
+}
+
+.tutorial .content .list__item .github-links div:last-child {
+  margin: 5px 0 0 0;
 }
 
 .toc__menu nav {

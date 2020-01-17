@@ -10,7 +10,7 @@ series_part_lead: "Widget API"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: ""
+summary: "Part"
 git_release_name: "v0.5"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.5"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.5.zip"
@@ -19,7 +19,7 @@ url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.4...v
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
-  title: ""
+  title: "How To: Create a Flask API with JWT-Based Authentication (Part 5: Widget API)"
   description: ""
 ---
 ## Project Structure

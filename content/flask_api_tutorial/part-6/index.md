@@ -19,46 +19,50 @@ url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.5...v
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
-  title: ""
+  title: "How To: Create a Flask API with JWT-Based Authentication (Part 6: Widget API Continued)"
   description: ""
 ---
 ## Project Structure
 
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
 
+{{< github_links >}}
+
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
-|- <span class="project-folder">app</span>
-|   |- <span class="project-folder">api</span>
-|   |   |- <span class="project-folder">auth</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |   |- <span class="unmodified-file">business.py</span>
-|   |   |   |- <span class="unmodified-file">decorator.py</span>
-|   |   |   |- <span class="unmodified-file">dto.py</span>
-|   |   |   |- <span class="unmodified-file">endpoints.py</span>
-|   |   |
-|   |   |- <span class="project-folder">widgets</span>
-|   |   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |   |- <span class="work-file">business.py</span>
-|   |   |   |- <span class="work-file">dto.py</span>
-|   |   |   |- <span class="work-file">endpoints.py</span>
-|   |   |
-|   |   |- <span class="unmodified-file">__init__.py</span>
-|   |
-|   |- <span class="project-folder">models</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">token_blacklist.py</span>
-|   |   |- <span class="unmodified-file">user.py</span>,
-|   |   |- <span class="unmodified-file">widget.py</span>
-|   |
-|   |- <span class="project-folder">util</span>
-|   |   |- <span class="project-empty-file">__init__.py</span>
-|   |   |- <span class="unmodified-file">datetime_util.py</span>
-|   |   |- <span class="unmodified-file">result.py</span>
-|   |
-|   |- <span class="unmodified-file">__init__.py</span>
-|   |- <span class="unmodified-file">config.py</span>
+|- <span class="project-folder">src</span>
+|   |- <span class="project-folder">flask_api_tutorial</span>
+|       |- <span class="project-folder">api</span>
+|       |   |- <span class="project-folder">auth</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |   |- <span class="unmodified-file">business.py</span>
+|       |   |   |- <span class="unmodified-file">decorator.py</span>
+|       |   |   |- <span class="unmodified-file">dto.py</span>
+|       |   |   |- <span class="unmodified-file">endpoints.py</span>
+|       |   |
+|       |   |- <span class="project-folder">widgets</span>
+|       |   |   |- <span class="project-empty-file">__init__.py</span>
+|       |   |   |- <span class="work-file">business.py</span>
+|       |   |   |- <span class="work-file">dto.py</span>
+|       |   |   |- <span class="work-file">endpoints.py</span>
+|       |   |
+|       |   |- <span class="unmodified-file">__init__.py</span>
+|       |
+|       |- <span class="project-folder">models</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">token_blacklist.py</span>
+|       |-  |- <span class="unmodified-file">user.py</span>
+|       |-  |- <span class="unmodified-file">widget.py</span>
+|       |
+|       |- <span class="project-folder">util</span>
+|       |   |- <span class="project-empty-file">__init__.py</span>
+|       |-  |- <span class="unmodified-file">datetime_util.py</span>
+|       |-  |- <span class="unmodified-file">result.py</span>
+|       |
+|       |- <span class="unmodified-file">__init__.py</span>
+|       |- <span class="unmodified-file">config.py</span>
 |
-|- <span class="project-folder">test</span>
+|- <span class="project-folder">tests</span>
+|   |- <span class="project-empty-file">__init__.py</span>
 |   |- <span class="work-file">conftest.py</span>
 |   |- <span class="unmodified-file">test_auth_login.py</span>
 |   |- <span class="unmodified-file">test_auth_logout.py</span>
@@ -71,14 +75,17 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |   |- <span class="work-file">test_retrieve_widget_list.py</span>
 |   |- <span class="work-file">test_update_widget.py</span>
 |   |- <span class="unmodified-file">test_user.py</span>
+|   |- <span class="work-file">util.py</span>
 |
 |- <span class="unmodified-file">.env</span>
+|- <span class="unmodified-file">.gitignore</span>
+|- <span class="unmodified-file">.pre-commit-config.yaml</span>
+|- <span class="unmodified-file">pyproject.toml</span>
 |- <span class="unmodified-file">pytest.ini</span>
+|- <span class="unmodified-file">README.md</span>
 |- <span class="unmodified-file">run.py</span>
 |- <span class="unmodified-file">setup.py</span>
-|- <span class="unmodified-file">pyproject.toml</span>
-|- <span class="unmodified-file">requirements.txt</span>
-|- <span class="unmodified-file">requirements_dev.txt</span></div>
+|- <span class="unmodified-file">tox.ini</span></div>
 <div class="project-structure-key-wrapper">
 <div class="project-structure-key">
 <div class="key-item key-label">KEY:</div>
@@ -245,7 +252,7 @@ When a client sends a request to retrieve a list of `widgets`, what data should 
 
 The request to retrieve a list of `widget` objects should include two values: the page number and number of items per page. Luckily, both of these values are integers, and there are several pre-built types in the `flask_restplus.inputs` module that convert request data to integer values.
 
-Open `app/api/widgets/dto.py` and update the import statements to include the `flask_restplus.inputs.positive` class **(Line 6)**:
+Open `src/flask_api_tutorial/api/widgets/dto.py` and update the import statements to include the `flask_restplus.inputs.positive` class **(Line 6)**:
 
 ```python {linenos=table,hl_lines=["6"]}
 """Parsers and serializers for /widgets API endpoints."""
@@ -256,64 +263,46 @@ from dateutil import parser
 from flask_restplus.inputs import positive, URL
 from flask_restplus.reqparse import RequestParser
 
-from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
+from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 ```
 
 Next, add the content below:
 
-```python {linenos=table,linenostart=69}
+```python {linenos=table,linenostart=70}
 pagination_reqparser = RequestParser(bundle_errors=True)
+pagination_reqparser.add_argument("page", type=positive, required=False, default=1)
 pagination_reqparser.add_argument(
-    "page",
-    type=positive,
-    required=False,
-    default=1,
-)
-pagination_reqparser.add_argument(
-    "per_page",
-    type=positive,
-    required=False,
-    choices=[5, 10, 25, 50, 100],
-    default=10,
+    "per_page", type=positive, required=False, choices=[5, 10, 25, 50, 100], default=10
 )
 ```
 
-There are a couple of important things to note about how these arguments are configured:
+By specifying `type=positive`, the value provided in the request data will be coerced to an integer. If the value represents a positive, non-zero integer, the request will succeed and the server will send the paginated list to the client. Otherwise, the server will reject the request with status code 400 `HTTPStatus.BAD_REQUEST`.
 
-<div class="code-details">
-    <ul>
-        <li>
-            <p><strong>Lines 72, 78: </strong>By specifying <code>type=positive</code>, the value provided in the request data will be coerced to an integer. If the value represents a positive, non-zero integer, the request will succeed and the server will send the paginated list to the client. Otherwise, the server will reject the request with status code <code>HTTPStatus.BAD_REQUEST</code> (400).</p>
-            <div class="note note-flex">
-                <div class="note-icon">
-                    <i class="fa fa-pencil"></i>
-                </div>
-                <div class="note-message" style="flex-flow: column wrap">
-                    <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive" target="_blank">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>per_page</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
-                </div>
-            </div>
-        </li>
-        <li>
-            <p><strong>Lines 73, 79: </strong>This is the first time that we have specified a <code>RequestParser</code> argument as <code>required=False</code>. This allows the client to send a request <span class="emphasis">without</span> either parameter and the request will still succeed (e.g., <code>GET /api/v1/widgets</code> will return the same response as <code>GET /api/v1/widgets?page=1&per_page=10</code>).</p>
-            <div class="note note-flex">
-                <div class="note-icon">
-                    <i class="fa fa-pencil"></i>
-                </div>
-                <div class="note-message" style="flex-flow: column wrap">
-                    <p>What would happen if <code>required=True</code> and the client sends a request without either parameter? Rather than using a default value, the server would reject the request with status code <code>HTTPStatus.BAD_REQUEST</code> (400) and include an error message indicating that one or more required values were missing.</p>
-                </div>
-            </div>
-        </li>
-        <li>
-            <p><strong>Lines 74, 81: </strong>The default value for each parameter can be configured with the keyword argument <code>default</code>.</p>
-        </li>
-        <li>
-            <p><strong>Line 80: </strong>The range of valid values for the <code>page</code> parameter is any positive integer. However, the <code>per_page</code> parameter must have an upper bound since the point of employing pagination is to prevent the API from becoming sluggish due to sending/receiving a large amount of data.</p>
-            <p>Flask-RESTPlus includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range" target="_blank"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a range of integers. This would allow the client to request any number of items per page, but I think it makes more sense to restrict the page size to a small, fixed set of choices.</p>
-            <p>The list provided to the <code>choices</code> keyword defines the set of allowable values. This has an additional benefit &mdash; on the Swagger UI page, the input form for <code>per_page</code> will render a select element containing the list of choices.</p>
-        </li>
-    </ul>
+<div class="note note-flex">
+    <div class="note-icon">
+        <i class="fa fa-pencil"></i>
+    </div>
+    <div class="note-message" style="flex-flow: column wrap">
+        <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive" target="_blank">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>per_page</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
+    </div>
 </div>
+
+This is the first time that we have specified a `RequestParser` argument as `required=False`. This allows the client to send a request **without** either parameter and the request will still succeed (e.g., `GET /api/v1/widgets` will return the same response as `GET /api/v1/widgets?page=1&per_page=10`).
+
+<div class="note note-flex">
+    <div class="note-icon">
+        <i class="fa fa-pencil"></i>
+    </div>
+    <div class="note-message" style="flex-flow: column wrap">
+        <p>What would happen if <code>required=True</code> and the client sends a request without either parameter? Rather than using a default value, the server would reject the request with status code <code>HTTPStatus.BAD_REQUEST</code> (400) and include an error message indicating that one or more required values were missing.</p>
+    </div>
+</div>
+
+The range of valid values for the `page` parameter is any positive integer. However, the `per_page` parameter must have an upper bound since the point of employing pagination is to prevent the API from becoming sluggish due to sending/receiving a large amount of data.
+
+Flask-RESTPlus includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range" target="_blank"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a range of integers. This would allow the client to request any number of items per page, but I think it makes more sense to restrict the page size to a small, fixed set of choices.
+
+The list provided to the `choices` keyword defines the set of allowable values. This has an additional benefit &mdash; on the Swagger UI page, the input form for `per_page` will render a select element containing the list of choices.
 
 Implementing the request parser was trivial, but constructing a response containing a list of `widget` objects is significantly more complicated. Keep in mind, <span class="bold-italics">the response must be formatted as a paginated list</span>, including navigational links and values for the current page number, number of items per page, total number of items in the collection, etc.
 
@@ -321,7 +310,7 @@ It is possible to create the paginated list manually from scratch and define API
 
 ### Flask-SQLAlchemy `paginate` Method
 
-The Flask-SQLAlchemy extension has <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">a `paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">`Pagination` objects</a>. The `paginate` method is a member of <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank">the <code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
+The Flask-SQLAlchemy extension provides <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">a `paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">`Pagination` objects</a>. The `paginate` method is a member of <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank">the <code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
 
 <pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
@@ -394,13 +383,13 @@ Let's take a look at `pagination.items[0]`, the first `widget` added to the data
 
 Finally, we retrieve the second (and final) page of `Widget` objects with five items per page by calling `Widget.query.paginate(page=2, per_page=5)`. We then verify that this is, in fact, the second page by calling `pagination.page`. We know `pagination.has_next` should be `False` since this is the final page of `Widgets`, and `pagination.has_prev` should be `True`. `len(pagination.items)` is one since there are six total `Widgets` and items #1-5 were shown on `page=1`. Lastly, we verify that `pagination.items` contains a single `Widget` object.
 
-Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the remaining functionality of the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">for the `User` class</a>.
+Hopefully, this helps you understand the structure of the `Pagination` class and the behavior of the `paginate` method. Understanding both is crucial to implementing the `api.widget_list` endpoint. Next, we need to create an API model for the `Pagination` class which will be considerably more complex than the API model we created <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">for the `User` class</a>.
 
 ### `pagination_model` API Model
 
 In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
 
-First, we need to update the import statements in `app/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
+First, we need to update the import statements in `src/flask_api_tutorial/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
 ```python {linenos=table,hl_lines=["6-7"]}
 """Parsers and serializers for /widgets API endpoints."""
@@ -413,19 +402,13 @@ from flask_restplus.fields import Boolean, DateTime, Integer, List, Nested, Stri
 from flask_restplus.inputs import positive, URL
 from flask_restplus.reqparse import RequestParser
 
-from app.util.datetime_util import make_tzaware, DATE_MONTH_NAME
+from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 ```
 
 Next, add the content below:
 
 ```python {linenos=table,linenostart=86}
-widget_owner_model = Model(
-    "Widget Owner",
-    {
-        "email": String,
-        "public_id": String,
-    },
-)
+widget_owner_model = Model("Widget Owner", {"email": String, "public_id": String})
 
 widget_model = Model(
     "Widget",
@@ -444,13 +427,7 @@ widget_model = Model(
 
 pagination_links_model = Model(
     "Nav Links",
-    {
-        "self": String,
-        "prev": String,
-        "next": String,
-        "first": String,
-        "last": String,
-    },
+    {"self": String, "prev": String, "next": String, "first": String, "last": String},
 )
 
 pagination_model = Model(
@@ -684,7 +661,7 @@ Next, we need to create a function that performs the following actions:
 * Construct <code>dict</code> of navigational links and add links to response header and body.
 * Manually construct HTTP response using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.json.jsonify" target="_blank">the `flask.jsonify` method</a> and send response to client.
 
-Before we begin, open `/app/api/widgets/business.py` and make the following updates to the import statements:
+Before we begin, open `src/flask_api_tutorial/api/widgets/business.py` and make the following updates to the import statements:
 
 ```python {linenos=table,hl_lines=["4-5","8-9"]}
 """Business logic for /widgets API endpoints."""
@@ -693,11 +670,11 @@ from http import HTTPStatus
 from flask import jsonify, url_for
 from flask_restplus import abort, marshal
 
-from app import db
-from app.api.auth.decorator import token_required, admin_token_required
-from app.api.widgets.dto import pagination_model
-from app.models.user import User
-from app.models.widget import Widget
+from flask_api_tutorial import db
+from flask_api_tutorial.api.auth.decorator import token_required, admin_token_required
+from flask_api_tutorial.api.widgets.dto import pagination_model
+from flask_api_tutorial.models.user import User
+from flask_api_tutorial.models.widget import Widget
 ```
 
 <div class="code-details">
@@ -739,9 +716,13 @@ def _pagination_nav_links(pagination):
     nav_links["self"] = url_for("api.widget_list", page=this_page, per_page=per_page)
     nav_links["first"] = url_for("api.widget_list", page=1, per_page=per_page)
     if pagination.has_prev:
-        nav_links["prev"] = url_for("api.widget_list", page=this_page - 1, per_page=per_page)
+        nav_links["prev"] = url_for(
+            "api.widget_list", page=this_page - 1, per_page=per_page
+        )
     if pagination.has_next:
-        nav_links["next"] = url_for("api.widget_list", page=this_page + 1, per_page=per_page)
+        nav_links["next"] = url_for(
+            "api.widget_list", page=this_page + 1, per_page=per_page
+        )
     nav_links["last"] = url_for("api.widget_list", page=last_page, per_page=per_page)
     return nav_links
 
@@ -789,10 +770,10 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 39: </strong>After the response object is fully configured, we return it from the <code>retrieve_widget_list</code> function before sending it to the client.</p>
       </li>
       <li>
-        <p><strong>Lines 42-54: </strong>The <code>_pagination_nav_links</code> function accepts a single parameter which is assumed to be a <code>Pagination</code> instance and returns a <code>dict</code> object named <code>nav_links</code> that matches the fields in <code>pagination_links_model</code>. By default, <code>nav_links</code> contains navigation URLs for <code>self</code>, <code>first</code>, and <code>last</code> pages (even if the total number of pages is one and all navigation URLs are the same). <code>prev</code> and <code>next</code> navigation URLs are not included by default. If <code>pagination.has_prev</code> is <code>True</code>, then the <code>prev</code> page URL is included (accordingly, <code>next</code> is included if <code>pagination.has_next</code> is <code>True</code>).</p>
+        <p><strong>Lines 42-58: </strong>The <code>_pagination_nav_links</code> function accepts a single parameter which is assumed to be a <code>Pagination</code> instance and returns a <code>dict</code> object named <code>nav_links</code> that matches the fields in <code>pagination_links_model</code>. By default, <code>nav_links</code> contains navigation URLs for <code>self</code>, <code>first</code>, and <code>last</code> pages (even if the total number of pages is one and all navigation URLs are the same). <code>prev</code> and <code>next</code> navigation URLs are not included by default. If <code>pagination.has_prev</code> is <code>True</code>, then the <code>prev</code> page URL is included (accordingly, <code>next</code> is included if <code>pagination.has_next</code> is <code>True</code>).</p>
       </li>
       <li>
-        <p><strong>Lines 57-62: </strong>Finally, the <code>_pagination_nav_header_links</code> function also accepts a single parameter which is assumed to be a <code>Pagination</code> instance, but instead of a <code>dict</code> object a string is returned containing all valid page navigation URLs in the correct format for the <code>Link</code> header field.</p>
+        <p><strong>Lines 61-66: </strong>Finally, the <code>_pagination_nav_header_links</code> function also accepts a single parameter which is assumed to be a <code>Pagination</code> instance, but instead of a <code>dict</code> object a string is returned containing all valid page navigation URLs in the correct format for the <code>Link</code> header field.</p>
         <p>This function calls <code>_pagination_nav_links</code> and uses the <code>dict</code> that is returned to generate the <code>Link</code> header field. This works because the keys of the <code>dict</code> object are the same as the <code>Link</code> field's <code>rel</code> parameter and the <code>dict</code> values are the page navigation URLs.</p>
       </li>
     </ul>
@@ -804,7 +785,7 @@ Now that the business logic has been implemented, we can add a method to the `ap
 
 We created the `api.widget_list` endpoint <a href="/series/flask-api-tutorial/part-5/#widgetlist-resource-post-request">in Part 5</a> and implemented the function that handles `POST` requests. According to **Table 1**, this endpoint also supports `GET` requests which allows clients to retrieve lists of `widgets`.
 
-Open `/app/api/widgets/endpoints.py` and make the following updates to the import statements:
+Open `src/flask_api_tutorial/api/widgets/endpoints.py` and make the following updates to the import statements:
 
 ```python {linenos=table,hl_lines=["8-12",14,"17-20"]}
 """API endpoint definitions for /widgets namespace."""
@@ -812,7 +793,7 @@ from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widgets.dto import (
+from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
     pagination_reqparser,
     widget_owner_model,
@@ -820,7 +801,7 @@ from app.api.widgets.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widgets.business import create_widget, retrieve_widget_list
+from flask_api_tutorial.api.widgets.business import create_widget, retrieve_widget_list
 ```
 
 <div class="code-details">
@@ -931,7 +912,7 @@ The business logic for retrieving a single `widget` is very simple. First, the d
 
 Because this is such a common pattern in web applications, <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/queries/#queries-in-views" target="_blank">Flask-SQLAlchemy provides the `first_or_404` method</a> which does exactly what we need. It is modeled after <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#sqlalchemy.orm.query.Query.first" target="_blank">the `first` function</a> from SQLAlchemy, which returns either the first result of a query or `None`. `first_or_404` raises a 404 error instead of returning `None`.
 
-Open `/app/api/widgets/business.py` and add the function below:
+Open `src/flask_api_tutorial/api/widgets/business.py` and add the function below:
 
 ```python {linenos=table,linenostart=42}
 @token_required
@@ -945,7 +926,7 @@ This operation requires a valid access token, so the `@token_required` decorator
 
 ### `api.widget` Endpoint (GET Request)
 
-Next, we need to create the `api.widget` endpoint. Before we do so, open `/app/api/widgets/endpoints.py` and update the import statements to include the `retrieve_widget` function **(Line 17)**:
+Next, we need to create the `api.widget` endpoint. Before we do so, open `src/flask_api_tutorial/api/widgets/endpoints.py` and update the import statements to include the `retrieve_widget` function **(Line 17)**:
 
 ```python {linenos=table,hl_lines=[17]}
 """API endpoint definitions for /widgets namespace."""
@@ -953,7 +934,7 @@ from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widgets.dto import (
+from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
     pagination_reqparser,
     widget_owner_model,
@@ -961,7 +942,7 @@ from app.api.widgets.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widgets.business import (
+from flask_api_tutorial.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget
@@ -1067,9 +1048,9 @@ The request data sent by the client for a `PUT` request is nearly identical to t
 
 It turns out that the need to re-use portions of a request parser is such a common occurrence that <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#parser-inheritance" target="_blank">Flask-RESTPlus provides methods to copy an existing parser, and then add/remove arguments</a>. This is extremely useful since it obviates the need to re-write every argument and duplicate a bunch of code just to slightly tweak the behavior of a request parser.
 
-For example, open `/app/api/widgets/dto.py`, add the lines below, then save the file:
+For example, open `src/flask_api_tutorial/api/widgets/dto.py`, add the lines below, then save the file:
 
-```python {linenos=table,linenostart=67}
+```python {linenos=table,linenostart=72}
 update_widget_reqparser = create_widget_reqparser.copy()
 update_widget_reqparser.remove_argument("name")
 ```
@@ -1080,7 +1061,7 @@ Now we have exactly the request parser that we need for `PUT` requests received 
 
 Next, we need to create the business logic that implements the `PUT` method as specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>.
 
-First, open `/app/api/widgets/business.py` and update the import statements to include the `widget_name` function from the `app.api.widgets.dto` module **(Line 9)**:
+First, open `src/flask_api_tutorial/api/widgets/business.py` and update the import statements to include the `widget_name` function from the `app.api.widgets.dto` module **(Line 9)**:
 
 ```python {linenos=table,hl_lines=[9]}
 """Business logic for /widgets API endpoints."""
@@ -1089,11 +1070,11 @@ from http import HTTPStatus
 from flask import jsonify, url_for
 from flask_restplus import abort, marshal
 
-from app import db
-from app.api.auth.decorator import token_required, admin_token_required
-from app.api.widgets.dto import pagination_model, widget_name
-from app.models.user import User
-from app.models.widget import Widget
+from flask_api_tutorial import db
+from flask_api_tutorial.api.auth.decorator import token_required, admin_token_required
+from flask_api_tutorial.api.widgets.dto import pagination_model, widget_name
+from flask_api_tutorial.models.user import User
+from flask_api_tutorial.models.widget import Widget
 ```
 
 Then copy the `update_widget` function below and add it to `business.py`:
@@ -1106,7 +1087,8 @@ def update_widget(name, widget_dict):
         for k, v in widget_dict.items():
             setattr(widget, k, v)
         db.session.commit()
-        response_dict = dict(status="success", message=f"'{name}' was successfully updated")
+        message = f"'{name}' was successfully updated"
+        response_dict = dict(status="success", message=message)
         return response_dict, HTTPStatus.OK
     try:
         valid_name = widget_name(name.lower())
@@ -1138,25 +1120,25 @@ Let's make sure that the `update_widget` function correctly implements the `PUT`
         <p><strong>Lines 56-57: </strong>Per the specification, if the name provided by the client already exists, and the <code>widget</code> was successfully updated using the values parsed from the request data, we can confirm that the request succeeded by sending either a 200 (<code>HTTPStatus.OK</code>) or 204 (<code>HTTPStatus.NO_CONTENT</code>) response.</p>
       </li>
       <li>
-        <p><strong>Line 59: </strong>If we reach this point, it means that the database does not contain a <code>widget</code> with the name provided by the client. Before using this value to create a new <code>widget</code>, we must validate it with <a href="/series/flask-api-tutorial/part-5/#name-argument">the <code>widget_name</code> function</a> we created in the <code>app.api.widgets.dto</code> module. If it is valid, this function will return the value we passed in. If it is not valid, a <code>ValueError</code> will be thrown.</p>
+        <p><strong>Line 60: </strong>If we reach this point, it means that the database does not contain a <code>widget</code> with the name provided by the client. Before using this value to create a new <code>widget</code>, we must validate it with <a href="/series/flask-api-tutorial/part-5/#name-argument">the <code>widget_name</code> function</a> we created in the <code>app.api.widgets.dto</code> module. If it is valid, this function will return the value we passed in. If it is not valid, a <code>ValueError</code> will be thrown.</p>
       </li>
       <li>
-        <p><strong>Line 61: </strong>If the name provided by the client is invalid we cannot create a new <code>widget</code>. The server rejects the request with a 400 (<code>HTTPStatus.BAD_REQUEST</code>) response containing an error message detailing why the value provided is not a valid <code>widget</code> name.</p>
+        <p><strong>Line 62: </strong>If the name provided by the client is invalid we cannot create a new <code>widget</code>. The server rejects the request with a 400 (<code>HTTPStatus.BAD_REQUEST</code>) response containing an error message detailing why the value provided is not a valid <code>widget</code> name.</p>
       </li>
       <li>
-        <p><strong>Line 62: </strong>If the name provided by the client was successfully validated by the <code>widget_name</code> function, we need to add it to the <code>widget_dict</code> object since the <code>create_widget</code> function expects to receive a <code>dict</code> object containing <code>name</code>, <code>info_url</code>, and <code>deadline</code> keys. <code>widget_dict["name"] = valid_name</code> stores the validated name. At this point, <code>widget_dict</code> is in the format expected by the <code>create_widget</code> function.</p>
+        <p><strong>Line 63: </strong>If the name provided by the client was successfully validated by the <code>widget_name</code> function, we need to add it to the <code>widget_dict</code> object since the <code>create_widget</code> function expects to receive a <code>dict</code> object containing <code>name</code>, <code>info_url</code>, and <code>deadline</code> keys. <code>widget_dict["name"] = valid_name</code> stores the validated name. At this point, <code>widget_dict</code> is in the format expected by the <code>create_widget</code> function.</p>
       </li>
       <li>
-        <p><strong>Line 63: </strong>As specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>, if the name provided by the client does not already exist and this <code>PUT</code> request successfully creates one, we can confirm that the request succeeded by sending a 201 (<code>HTTPStatus.CREATED</code>) response.</p>
+        <p><strong>Line 64: </strong>As specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>, if the name provided by the client does not already exist and this <code>PUT</code> request successfully creates one, we can confirm that the request succeeded by sending a 201 (<code>HTTPStatus.CREATED</code>) response.</p>
       </li>
     </ul>
 </div>
 
-I believe that the `update_widget` function satisfies the specification for the `PUT` method as specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>. <span class="bold-italics">If you disagree, please let me know in the comments, I would greatly appreciate it if my understanding of the spec is faulty in any way.</span>
+I believe that the `update_widget` function satisfies the specification for the `PUT` method as specified in <a href="https://tools.ietf.org/html/rfc7231#section-4.3.4" target="_blank">RFC 7231</a>. <span class="bold-italics teal">If you disagree, please let me know in the comments, I would greatly appreciate it if my understanding of the spec is faulty in any way.</span>
 
 ### `api.widget` Endpoint (PUT Request)
 
-Before we can bring everything together and expose the `put` method handler for the `api.widget` endpoint, open `/app/api/widgets/endpoints.py` and update the import statements to include the `update_widget_reqparser` we created in `app.api.widgets.dto` **(Line 8)** and the `update_widget` function we created in `app.api.widgets.business` **(Line 19)**:
+Before we can bring everything together and expose the `put` method handler for the `api.widget` endpoint, open `src/flask_api_tutorial/api/widgets/endpoints.py` and update the import statements to include the `update_widget_reqparser` we created in `app.api.widgets.dto` **(Line 8)** and the `update_widget` function we created in `app.api.widgets.business` **(Line 19)**:
 
 ```python {linenos=table,hl_lines=[8,19]}
 """API endpoint definitions for /widgets namespace."""
@@ -1164,7 +1146,7 @@ from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widgets.dto import (
+from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
     update_widget_reqparser,
     pagination_reqparser,
@@ -1173,7 +1155,7 @@ from app.api.widgets.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widgets.business import (
+from flask_api_tutorial.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget,
@@ -1236,9 +1218,9 @@ Implementing the process to delete a single `widget` will be simple and very sim
 
 ### `delete_widget` Method
 
-Open `/app/api/widgets/business.py` and add the content below:
+Open `src/flask_api_tutorial/api/widgets/business.py` and add the content below:
 
-```python {linenos=table,linenostart=66}
+```python {linenos=table,linenostart=67}
 @admin_token_required
 def delete_widget(name):
     widget = Widget.query.filter_by(name=name.lower()).first_or_404(
@@ -1253,7 +1235,7 @@ The `delete_widget` function relies on the Flask-SQLAlchemy `first_or_404` metho
 
 ### `api.widget` Endpoint (DELETE Request)
 
-I told you this would be easy! Open `/app/api/widgets/endpoints.py` and update the import statements to include the `delete_widget` function that we just created in `app.api.widgets.business` **(Line 20)**:
+I told you this would be easy! Open `src/flask_api_tutorial/api/widgets/endpoints.py` and update the import statements to include the `delete_widget` function that we just created in `app.api.widgets.business` **(Line 20)**:
 
 ```python {linenos=table,hl_lines=[20]}
 """API endpoint definitions for /widgets namespace."""
@@ -1261,7 +1243,7 @@ from http import HTTPStatus
 
 from flask_restplus import Namespace, Resource
 
-from app.api.widgets.dto import (
+from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
     update_widget_reqparser,
     pagination_reqparser,
@@ -1270,7 +1252,7 @@ from app.api.widgets.dto import (
     pagination_links_model,
     pagination_model,
 )
-from app.api.widgets.business import (
+from flask_api_tutorial.api.widgets.business import (
     create_widget,
     retrieve_widget_list,
     retrieve_widget,
@@ -1337,7 +1319,7 @@ We have finally implemented all of the API routes/CRUD processes specified in **
 
 ## Unit Tests
 
-At this point, I would like you to attempt to create as many unit tests you can think of for the Widget API endpoints/CRUD operations we implemented in this section and the previous section ([Part 5](/series/flask-api-tutorial/part-5/)). For each, dtft6r6yrfjtjd4I will provide a few tests to get you started, and demonstrate how touse the `@pytest.mark.parametrize` makes testing multiple values for a single parameter much simpler.
+At this point, I would like you to attempt to create as many unit tests you can think of for the Widget API endpoints/CRUD operations we implemented in this section and the previous section ([Part 5](/series/flask-api-tutorial/part-5/)). For each, I will provide a few tests to get you started, and demonstrate how the `@pytest.mark.parametrize` decorator makes testing multiple values for a single parameter much simpler.
 
 ### `conftest.py`
 
@@ -1395,7 +1377,7 @@ from http import HTTPStatus
 
 import pytest
 from flask import url_for
-from test.util import (
+from tests.util import (
     EMAIL,
     ADMIN_EMAIL,
     BAD_REQUEST,
@@ -1438,7 +1420,11 @@ def test_create_widget_invalid_name(client, db, admin, widget_name):
 
 @pytest.mark.parametrize(
     "info_url",
-    ["http://www.widget.info", "https://www.securewidgets.gov", "http://aaa.bbb.ccc/ddd/eee.html"],
+    [
+        "http://www.widget.info",
+        "https://www.securewidgets.gov",
+        "http://aaa.bbb.ccc/ddd/eee.html",
+    ],
 )
 def test_create_widget_valid_url(client, db, admin, info_url):
     response = login_user(client, email=ADMIN_EMAIL)
@@ -1513,7 +1499,9 @@ def test_create_widget_bundle_errors(client, db, admin):
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert "message" in response.json and response.json["message"] == BAD_REQUEST
     assert "errors" in response.json and "name" in response.json["errors"]
-    assert "info_url" in response.json["errors"] and "deadline" in response.json["errors"]
+    assert (
+        "info_url" in response.json["errors"] and "deadline" in response.json["errors"]
+    )
 
 
 def test_create_widget_already_exists(client, db, admin):
@@ -1530,7 +1518,9 @@ def test_create_widget_already_exists(client, db, admin):
 
 
 def test_create_widget_no_token(client, db):
-    request_data = f"name={DEFAULT_NAME}&info_url={DEFAULT_URL}&deadline={DEFAULT_DEADLINE}"
+    request_data = (
+        f"name={DEFAULT_NAME}&info_url={DEFAULT_URL}&deadline={DEFAULT_DEADLINE}"
+    )
     response = client.post(
         url_for("api.widget_list"),
         data=request_data,
@@ -1562,31 +1552,31 @@ def test_create_widget_no_admin_token(client, db, user):
 ## Checkpoint
 
 <div class="requirements">
-  <p class="title">User Management/JWT Authentication</p>
+  <p class="title complete">User Management/JWT Authentication</p>
   <div class="fa-bullet-list">
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>New users can register by providing an email address and password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Existing users can obtain a JWT by providing their email address and password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT contains the following claims: time the token was issued, time the token expires, a value that identifies the user, and a flag that indicates if the user has administrator access</p>
+    <p class="fa-bullet-list-item complete""><span class="fa fa-star fa-bullet-icon"></span>JWT is sent in access_token field of HTTP response after successful authentication with email/password</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWTs must expire after 1 hour (in production)</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>JWT is sent by client in Authorization field of request header</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT has been modified</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Requests must be rejected if JWT is expired</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If user logs out, their JWT is immediately invalid/expired</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If JWT is expired, user must re-authenticate with email/password to obtain a new JWT</p>
   </div>
-  <p class="title">API Resource: Widget List</p>
+  <p class="title complete">API Resource: Widget List</p>
   <div class="fa-bullet-list">
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>All users can retrieve a list of all widgets</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>All users can retrieve individual widgets by name</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can edit existing widgets</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
-    <p class="fa-bullet-list-item"><span class="fa fa-star fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>All users can retrieve a list of all widgets</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>All users can retrieve individual widgets by name</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can add new widgets to the database</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can edit existing widgets</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Users with administrator access can delete widgets from the database</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains attributes with URL, datetime, timedelta and bool data types, along with normal text fields.</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>URL and datetime values must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains a "name" attribute which must be a string value containing only lowercase-letters, numbers and the "-" (hyphen character) or "_" (underscore character).</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>The widget model contains a "deadline" attribute which must be a datetime value where the date component is equal to or greater than the current date. The comparison does not consider the value of the time component when this comparison is performed.</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>Widget name must be validated before a new widget is added to the database (and when an existing widget is updated).</p>
+    <p class="fa-bullet-list-item complete"><span class="fa fa-star fa-bullet-icon"></span>If input validation fails either when adding a new widget or editing an existing widget, the API response must include error messages indicating the name(s) of the fields that failed validation.</p>
   </div>
 </div>
