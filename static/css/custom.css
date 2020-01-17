@@ -37,12 +37,16 @@
   margin: 0 0 0 6px;
 }
 
-.content h3 a.hanchor-self {
+.content h3 a.hanchor-self,
+.content h4 a.hanchor-self,
+.content h5 a.hanchor-self {
   font-size: 0.8em;
   margin: 0 0 0 7px;
 }
 
-.content h3 a.hanchor-top {
+.content h3 a.hanchor-top,
+.content h4 a.hanchor-top,
+.content h5 a.hanchor-top {
   font-size: 1em;
   margin: 0 0 0 6px;
 }
@@ -1533,6 +1537,7 @@ figcaption {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  margin: 10px 0 0 0;
 }
 
 .tutorial .content .list__item .github-links {
