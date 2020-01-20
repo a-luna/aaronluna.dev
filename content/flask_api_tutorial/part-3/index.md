@@ -20,6 +20,8 @@ image_ready: true
 resources:
   - name: main
     src: images/main.jpg
+    params:
+      credit: "Photo by ZSun Fu on Unsplash"
   - name: img1
     src: images/p03-01-empty-api.jpg
     title: Figure 1 - Swagger UI without API Routes

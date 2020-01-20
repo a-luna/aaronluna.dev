@@ -20,6 +20,8 @@ image_ready: true
 resources:
   - name: main
     src: images/main.jpg
+    params:
+      credit: "Photo by Matt Howard on Unsplash"
 twitter:
   card: "summary"
   creator: "@aaronlunadev"

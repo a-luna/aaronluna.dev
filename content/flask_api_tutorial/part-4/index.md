@@ -20,6 +20,8 @@ image_ready: true
 resources:
   - name: main
     src: images/main.jpg
+    params:
+      credit: "Photo by Alex Pudov on Unsplash"
   - name: img1
     src: images/p04-01-login-endpoint.jpg
     title: Figure 1 - Swagger UI with /auth/login endpoint

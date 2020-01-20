@@ -342,6 +342,7 @@ h3,
 h4 {
   font-weight: 500;
   margin: 1em 0;
+  line-height: 1.2;
 }
 
 .content h2 {
@@ -357,8 +358,8 @@ h1.post__title {
 }
 
 .tutorial h1.post__title {
-  margin: 0 0 7px;
-  padding: 0 0 7px;
+  margin: 0 0 20px;
+  padding: 0 0 10px;
   border-bottom: 1px dotted #7f7f7f;
 }
 
@@ -370,7 +371,7 @@ h1.post__title {
 }
 
 .post__image {
-  margin: 0 0 20px 0;
+  margin: 0 0 40px 0;
 }
 
 .article-badges {
@@ -1368,6 +1369,11 @@ figcaption {
   margin: 10px 0 0;
 }
 
+header figcaption {
+  color: var(--body-text-color);
+  font-size: 0.95em;
+}
+
 .warning {
   color: var(--off-white2);
   font-size: 1.3em;
@@ -1890,7 +1896,6 @@ a.post-nav__link:focus {
   align-items: center;
   border: none;
   font-size: 1em;
-  padding: 0 5px;
   margin: 0 0 20px;
 }
 
@@ -2061,7 +2066,7 @@ header a.post-nav__link:focus {
 .post-nav__chevron {
   display: inline;
   font-weight: 400;
-  font-size: 0.8em;
+  font-size: 1em;
   line-height: 1;
   margin: auto 0;
 }
@@ -3010,7 +3015,7 @@ header,
 }
 
 .post__meta .post-categories {
-  margin: 10px 0;
+  margin: 15px 0 10px 0;
 }
 
 a.post-category,

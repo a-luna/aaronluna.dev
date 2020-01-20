@@ -7,9 +7,7 @@
                 <div class="post-nav__chevron chevron-prev">
                     <i class="fa fa-lg fa-fw fa-arrow-left" aria-hidden="true"></i>
                 </div>
-                <div class="post-nav__post-title title-prev">
-                    {{.NextInSection.Params.series_part}}
-                </div>
+                <div class="post-nav__post-title title-prev">{{.NextInSection.Params.series_part}}</div>
             </div>
         </div>
     </a>
@@ -26,9 +24,7 @@
     <a class="post-nav__link post-nav__link--next" href="{{.PrevInSection.RelPermalink}}" rel="next">
         <div class="post-nav-flex-item-next">
             <div class="post-nav__item post-nav__item--next inner-nav-flex-container">
-                <div class="post-nav__post-title title-next">
-                    {{.PrevInSection.Params.series_part}}
-                </div>
+                <div class="post-nav__post-title title-next">{{.PrevInSection.Params.series_part}}</div>
                 <div class="post-nav__chevron chevron-next">
                     <i class="fa fa-lg fa-fw fa-arrow-right" aria-hidden="true"></i>
                 </div>

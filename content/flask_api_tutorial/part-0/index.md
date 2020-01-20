@@ -20,6 +20,8 @@ image_ready: true
 resources:
   - name: main
     src: images/main.jpg
+    params:
+      credit: "Photo by Chris Ried on Unsplash"
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
