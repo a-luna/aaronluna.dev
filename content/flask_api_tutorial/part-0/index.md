@@ -16,27 +16,12 @@ aliases:
     - "/flask_api_tutorial/"
     - "/series/flask_api_tutorial/"
     - "/series/flask-api-tutorial/"
-resources:
-  - name: main
-    src: images/main.jpg
-    params:
-      credit: "Photo by Chris Ried on Unsplash"
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
   title: "How To: Create a Flask API with JWT-Based Authentication"
   description: "Step-by-step instructions and in-depth explanations to guide you through the process of creating a robust, production-quality REST API using Flask, Flask-RESTlus, pyjwt, SQLAlchemy and more."
 ---
-My goal for this tutorial is to provide a detailed guide to designing and creating a Flask API that uses JSON Web Tokens (JWT) to authenticate HTTP requests. There are many different Flask extensions and Python packages that can be used to create a web service that satisfies these requirements. The toolchain that this product utilizes includes Flask-RESTPlus, SQLAlchemy, PyJWT, pytest and tox (this is simply my personal preference).
-
-This is <span class="emphasis">NOT</span> a full-stack tutorial, creating a front-end that consumes the API is not covered. However, Flask-RESTPlus will automatically generate a Swagger UI webpage that allows anyone to send requests and inspect responses from the API.
-
-In addition to the user management and authentication functions, the API will contain a RESTful resource that registered users can manipulate with CRUD actions &mdash; a list of "widgets". Why did I decide to create widgets and not to-do items, or something real? Using a generic resource reinforces the idea that this code is boilerplate and could be easily adapted for use in a real-world API.
-
-Performing CRUD actions and restricting access based on a user's assigned role/permissions are extremely common requirements, and the code to do so is the same for a widget, blog post or anything else that you expose to clients via HTTP.
-
-The feature specification for the API is given below. I hope that the various methodologies and "best practices" that I present are well-founded and justified by the arguments I present for them. Any and all comments/criticism are appreciated, please feel free to <a href="https://github.com/a-luna/flask-api-tutorial/issues" target="blank">log issues in the github repository</a> for suggested improvements and/or any bugs that I missed.
-
 <div class="accordian" id="api-requirements">
   <section class="api-requirements-accordian-section accordian-item ac_hidden">
     <h2 class="api-requirements-accordian-button accordian-button"><i class="fa fa-chevron-right pointer"></i><a class="api-requirements-accordian-button" href="#api-requirements">Project Requirements</a></h2>

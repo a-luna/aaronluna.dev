@@ -2,7 +2,7 @@
 <main class="main tutorial" role="main">
     <article class="post">
         <header class="post__header">
-            <h1 class="post__title">{{ .Params.lead }}</h1>
+            <h1 class="post__title">{{- if ne .Params.series_part "Overview" }}{{ .Params.lead }}{{- else }}{{ .Params.series_title }}{{ end }}</h1>
             {{ with partial "post_meta.html" . -}}
             <div class="post__meta meta">{{ . }}</div>
         {{- end }}

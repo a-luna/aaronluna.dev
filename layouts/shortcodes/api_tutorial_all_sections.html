@@ -1,14 +1,8 @@
 {{ range .Site.Taxonomies.series.flask_api_tutorial }}
     {{- if not (eq .Params.series_part "Overview") }}
     <article class="list__item post">
-        {{- if .Params.thumbnail }}
-        <figure class="list__thumbnail">
-            <a href="{{ .Permalink }}">
-                <img src="{{ .Params.thumbnail | relURL }}" alt="{{ .Title }}" />
-            </a>
-        </figure>
-        {{- end }}
         <header class="list__header">
+            <div class="post__image">{{ partial "responsive_image" . }}</div>
             <h3 class="list__title post__title ">
                 <a href="{{ .RelPermalink }}" rel="bookmark">{{ .Params.Lead }}</a>
             </h3>
