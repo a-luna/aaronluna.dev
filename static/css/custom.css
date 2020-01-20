@@ -359,8 +359,7 @@ h1.post__title {
 
 .tutorial h1.post__title {
   margin: 0 0 20px;
-  padding: 0 0 10px;
-  border-bottom: 1px dotted #7f7f7f;
+  padding: 0;
 }
 
 .series__title {
@@ -371,7 +370,11 @@ h1.post__title {
 }
 
 .post__image {
-  margin: 0 0 40px 0;
+  margin: 20px 0 0 0;
+}
+
+.tutorial .post__image {
+  margin: 20px 0 40px 0;
 }
 
 .article-badges {
@@ -1350,6 +1353,7 @@ blockquote.rfc .bold-text {
 figure {
   text-align: center;
   display: block;
+  margin: 0;
 }
 
 figure img {
@@ -1369,7 +1373,7 @@ figcaption {
   margin: 10px 0 0;
 }
 
-header figcaption {
+.post__image figcaption {
   color: var(--body-text-color);
   font-size: 0.95em;
 }
@@ -1508,9 +1512,7 @@ header figcaption {
 .post__header {
   background-color: #323232;
   padding: 0 0 10px;
-  margin: 0 0 15px;
-  border-bottom: 2px dotted var(--accent-color2);
-
+  margin: 0 0 20px;
 }
 
 .about-me .post__header {
@@ -1894,9 +1896,9 @@ a.post-nav__link:focus {
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
-  border: none;
   font-size: 1em;
-  margin: 0 0 20px;
+  margin: 20px 0;
+  padding:0;
 }
 
 #header-nav .post-nav-flex-item-prev,
@@ -2710,7 +2712,7 @@ table.aws-hosting-costs {
 }
 
 #project-repo ul {
-  color: var(--project-repo-link-color);
+  color: var(--tut-link-color);
   margin: 0 0 0 25px;
 }
 

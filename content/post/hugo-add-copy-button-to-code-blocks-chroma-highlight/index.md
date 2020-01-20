@@ -7,6 +7,11 @@ categories:
   - Hugo
   - JavaScript
 summary: "Hugo includes a built-in syntax-highlighter called Chroma. Chroma is extremely fast since it is written in pure Go (like Hugo) and supports every language I can think of. Chroma's speed is especially important since syntax highlighters are notorious for causing slow page loads. However, it lacks one vital feature — an easy way to copy a code block to the clipboard. I decided to document my implementation using only vanilla JS since every blog post I found for this issue relied on jquery to parse the DOM, which is a shame. We can do better, people."
+resources:
+  - name: main
+    src: images/main.jpg
+    params:
+      credit: "Photo by Natalia Y on Unsplash"
 twitter:
   card: "summary"
   creator: "@aaronlunadev"

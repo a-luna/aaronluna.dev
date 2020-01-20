@@ -1,0 +1,10 @@
+{{ if .Param "image_ready" }}
+    {{ $src := .Page.Resources.GetMatch (printf "*main*") }}
+    {{ $thumbnail := $src.Fit "200x100" }}
+
+    <figure class="list__thumbnail">
+        <a href="{{ .RelPermalink }}">
+            <img src="{{ $thumbnail.RelPermalink }}" alt="{{ .Title }}" />
+        </a>
+    </figure>
+{{ end }}

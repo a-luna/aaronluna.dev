@@ -164,12 +164,12 @@
   --accordian-content-link-color: var(--tut-link-color);
 
   /* Github Links Box */
-  --gitrepo-header-bg-color: var(--tutorial-series);
+  --gitrepo-header-bg-color: var(--tut-link-color);
   --gitrepo-header-text-color: var(--black2);
-  --gitrepo-header-toggled-bg-color: var(--tutorial-series);
+  --gitrepo-header-toggled-bg-color: var(--tut-link-color);
   --gitrepo-header-toggled-text-color: var(--black2);
   --gitrepo-content-bg-color: var(--widget-bg-color);
-  --gitrepo-content-link-color: var(--tutorial-series);
+  --gitrepo-content-link-color: var(--tut-link-color);
 
   /* Github Links Box */
   --project-repo-bg-color: var(--black2);

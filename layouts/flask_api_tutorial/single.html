@@ -3,9 +3,12 @@
     <article class="post">
         <header class="post__header">
             <h1 class="post__title">{{ .Params.lead }}</h1>
-            {{ partial "post_nav_part_num.html" . }}
+            {{ with partial "post_meta.html" . -}}
+            <div class="post__meta meta">{{ . }}</div>
+        {{- end }}
             <div class="post__image">{{ partial "responsive_image" . }}</div>
         </header>
+        {{ partial "post_nav_part_num.html" . }}
         {{ partial "api_tutorial_series.html" . }}
         {{ partial "api_tutorial_toc.html" . }}
         <div class="content post__content clearfix">

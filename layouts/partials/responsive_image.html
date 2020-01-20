@@ -1,34 +1,32 @@
-{{ if .Param "image_ready" }}
-    {{ $src := .Page.Resources.GetMatch (printf "*main*") }}
-    {{ $tiny := $src.Resize "500x" }}
-    {{ $small := $src.Resize "800x" }}
-    {{ $medium := $src.Resize "1200x" }}
-    {{ $large := $src.Resize "1500x" }}
+{{ $postImage := .Page.Resources.GetMatch (printf "*main*") }}
+{{ if $postImage }}
+    {{ $tiny := $postImage.Resize "500x" }}
+    {{ $small := $postImage.Resize "800x" }}
+    {{ $medium := $postImage.Resize "1200x" }}
+    {{ $large := $postImage.Resize "1500x" }}
 
-    {{ if ge $src.Width "500" }}
+    {{ if ge $postImage.Width "500" }}
         {{ .Scratch.Add "srcset" $tiny.RelPermalink }}
         {{ .Scratch.Add "srcset" " 500w" }}
     {{ end }}
-    {{ if ge $src.Width "800" }}
+    {{ if ge $postImage.Width "800" }}
         {{ .Scratch.Add "srcset" ", " }}
         {{ .Scratch.Add "srcset" $small.RelPermalink }}
         {{ .Scratch.Add "srcset" " 800w" }}
     {{ end }}
-    {{ if ge $src.Width "1200" }}
+    {{ if ge $postImage.Width "1200" }}
         {{ .Scratch.Add "srcset" ", " }}
         {{ .Scratch.Add "srcset" $medium.RelPermalink }}
         {{ .Scratch.Add "srcset" " 1200w" }}
     {{ end }}
-    {{ if ge $src.Width "1500" }}
+    {{ if ge $postImage.Width "1500" }}
         {{ .Scratch.Add "srcset" ", " }}
         {{ .Scratch.Add "srcset" $large.RelPermalink }}
         {{ .Scratch.Add "srcset" " 1500w" }}
     {{ end }}
 
     <figure>
-        <img sizes="(min-width: 35em) 1200px, 100vw" srcset='{{ .Scratch.Get "srcset" }}' src="{{ $src.RelPermalink }}" alt="{{ .Page.Title }}">
-        <figcaption><p>{{ $src.Params.credit }}</p></figcaption>
+        <img sizes="(min-width: 35em) 1200px, 100vw" srcset='{{ .Scratch.Get "srcset" }}' src="{{ $postImage.RelPermalink }}" alt="{{ .Page.Title }}">
+        <figcaption><p>{{ $postImage.Params.credit }}</p></figcaption>
     </figure>
-
-
 {{ end }}
