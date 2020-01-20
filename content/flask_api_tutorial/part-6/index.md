@@ -10,17 +10,21 @@ series_part_lead: "Widget API Continued"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: ""
+summary: "Part 6 completes the implementation of the Widget API. Since one of the requirements is to allow users to retrieve a paginated list of widgets, advanced techniques for serializing objects to JSON are demonstrated. Both the widget API model and the pagination API model are complex, requiring the use of several new classes from the Flask-RESTPlus fields module. The update and delete processes are implemented next and unit tests for all endpoint/request type combination are created and executed."
 git_release_name: "v0.6"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.6"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.6.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.6.tar.gz"
 url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.5...v0.6"
+image_ready: true
+resources:
+  - name: main
+    src: images/main.jpg
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
   title: "How To: Create a Flask API with JWT-Based Authentication (Part 6: Widget API Continued)"
-  description: ""
+  description: "Part 6 completes the implementation of the Widget API. Since one of the requirements is to allow users to retrieve a paginated list of widgets, advanced techniques for serializing objects to JSON are demonstrated. Both the widget API model and the pagination API model are complex, requiring the use of several new classes from the Flask-RESTPlus fields module. The update and delete processes are implemented next and unit tests for all endpoint/request type combination are created and executed."
 ---
 ## Project Structure
 

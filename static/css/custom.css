@@ -236,7 +236,7 @@ ol li p {
 }
 
 .main__header h1 {
-  color: var(--h1-color);
+  color: var(--header-color);
   font-size: 1.25rem;
   font-weight: 400;
   letter-spacing: 1px;
@@ -351,7 +351,7 @@ h4 {
 h1,
 h1.post__title {
   font-size: 1.5em;
-  color: var(--h1-color);
+  color: var(--header-color);
   font-weight: 500;
   margin: 0 0 0 0;
 }
@@ -367,6 +367,10 @@ h1.post__title {
   font-style: italic;
   color: #7f7f7f;
   margin: 0 0 20px;
+}
+
+.post__image {
+  margin: 0 0 20px 0;
 }
 
 .article-badges {
@@ -454,15 +458,15 @@ h4 {
 }
 
 .content h2 {
-  color: var(--h2-color);
+  color: var(--header-color);
 }
 
 .content h3 {
-  color: var(--h2-color);
+  color: var(--header-color);
 }
 
 .content h4 {
-  color: var(--h2-color);
+  color: var(--header-color);
 }
 
 .content h2,
@@ -660,7 +664,7 @@ a:active:hover {
 }
 
 .bold-text {
-  color: #e2e2e2;
+  color: var(--header-color);
   font-weight: 700;
 }
 
@@ -669,7 +673,7 @@ a:active:hover {
 }
 
 .content p .italics {
-  color: #e2e2e2;
+  color: var(--header-color);
 }
 
 .content p a .italics {
@@ -677,19 +681,19 @@ a:active:hover {
 }
 
 .bold-italics {
-  color: #e2e2e2;
+  color: var(--header-color);
   font-weight: 700;
   font-style: italic;
 }
 
 .emphasis {
-  color: #e2e2e2;
+  color: var(--header-color);
   font-weight: 700;
   text-decoration: underline;
 }
 
 article p strong {
-  color: #e2e2e2;
+  color: var(--header-color);
 }
 
 .alert strong {
@@ -875,9 +879,16 @@ div.note-flex {
   margin: 0 5px;
 }
 
-.tutorial .alert-message a,
-.tutorial .note-message a {
+.tutorial .alert-message a {
   color: var(--tut-link-color);
+}
+
+.tutorial .note-message a,
+.tutorial .note-message a:hover,
+.tutorial .note-message a:active,
+.tutorial .note-message a:focus,
+.tutorial .note-message a:active:hover {
+  color: var(--body-text-color);
 }
 
 .alert-message p,

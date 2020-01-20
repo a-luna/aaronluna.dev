@@ -10,17 +10,21 @@ series_part_lead: "Widget API"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: "Part"
+summary: "Part 5 is dedicated to implementing a RESTful resource (a collection of 'widgets') with API endpoints that allow users to perform CRUD actions. In order to allow users to create a new widget, several advanced techniques for parsing request data are covered. Specifically, two custom 'types' are created since the built-in types provided by Flask-RESTPlus cannot fulfill our requirements. Finally, the custom request parser is integrated with the collection endpoint for the Widget API."
 git_release_name: "v0.5"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.5"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.5.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.5.tar.gz"
 url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.4...v0.5"
+image_ready: true
+resources:
+  - name: main
+    src: images/main.jpg
 twitter:
   card: "summary"
   creator: "@aaronlunadev"
   title: "How To: Create a Flask API with JWT-Based Authentication (Part 5: Widget API)"
-  description: ""
+  description: "Part 5 is dedicated to implementing a RESTful resource (a collection of 'widgets') with API endpoints that allow users to perform CRUD actions. In order to allow users to create a new widget, several advanced techniques for parsing request data are covered. Specifically, two custom 'types' are created since the built-in types provided by Flask-RESTPlus cannot fulfill our requirements. Finally, the custom request parser is integrated with the collection endpoint for the Widget API."
 ---
 ## Project Structure
 
@@ -252,7 +256,7 @@ def add_user(email, admin, password):
   </div>
   <div class="note-message" style="flex-flow: column wrap">
     <p style="margin: 0 0 10px">Explaining how to create a command with click is beyond the scope of this tutorial. Thankfully, the click documentation is exceptional. If you are interested, you can find everything you need to understand the <code>add_user</code> function in the links below:</p>
-    <ul style="color: #86C8F9; list-style: square; margin: 0 0 10px 35px">
+    <ul style="color: var(--body-text-color); list-style: square; margin: 0 0 10px 35px">
       <li><a href="https://click.palletsprojects.com/en/7.x/quickstart/#basic-concepts-creating-a-command" target="_blank">Basic Concepts - Creating a Command</a></li>
       <li><a href="https://click.palletsprojects.com/en/7.x/quickstart/#echoing" target="_blank">Echoing</a></li>
       <li><a href="https://click.palletsprojects.com/en/7.x/quickstart/#adding-parameters" target="_blank">Adding Parameters</a></li>

@@ -4,15 +4,11 @@
         <header class="post__header">
             <h1 class="post__title">{{ .Params.lead }}</h1>
             <div class="series__title"><a href="/series/flask-api-tutorial/overview">{{ .Params.series_title}}</a></div>
-            {{ partial "post_nav_part_num.html" . }}
-            {{ partial "api_tutorial_series.html" . }}
-            {{ partial "api_tutorial_toc.html" . }}
+            <div class="post__image">{{ partial "responsive_image" . }}</div>
         </header>
-        {{- if .Params.thumbnail }}
-        <figure class="post__thumbnail">
-            <img src="{{ .Params.thumbnail | relURL }}" alt="{{ .Title }}">
-        </figure>
-        {{- end }}
+        {{ partial "post_nav_part_num.html" . }}
+        {{ partial "api_tutorial_series.html" . }}
+        {{ partial "api_tutorial_toc.html" . }}
         <div class="content post__content clearfix">
             {{ .Content }}
         </div>

@@ -16,6 +16,10 @@ aliases:
     - "/flask_api_tutorial/"
     - "/series/flask_api_tutorial/"
     - "/series/flask-api-tutorial/"
+image_ready: true
+resources:
+  - name: main
+    src: images/main.jpg
 twitter:
   card: "summary"
   creator: "@aaronlunadev"

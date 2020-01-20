@@ -52,6 +52,7 @@
   --header-bg-color: var(--black1);
   --page-bg-color: var(--dark-gray1);
   --body-text-color: var(--off-white1);
+  --header-color: var(--white2);
   --header-anchor-link: var(--off-white1);
   --header-anchor-link-hover: var(--white2);
   --widget-bg-color: var(--black1);
@@ -75,13 +76,6 @@
   --blog-active-link-color: var(--white2);
   --tutorials-active-link-color: var(--white2);
   --about-active-link-color: var(--white2);
-
-  /* Headers */
-  --header-color: var(--white2);
-  --h1-color: var(--white2);
-  --h2-color: var(--white2);
-  --h3-color: var(--white2);
-  --h4-color: var(--white2);
 
   /* Home Page */
   --home-title-color: var(--h1-color);
@@ -153,7 +147,7 @@
   --cmd-hl-border: var(--gold3);
 
   /* Important Note Box */
-  --note-box: var(--teal2);
+  --note-box: var(--blue1);
 
   /* Alert Box */
   --alert-box: var(--gold1);
