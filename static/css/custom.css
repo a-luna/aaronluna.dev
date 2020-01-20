@@ -2031,6 +2031,7 @@ header a.post-nav__link:focus {
 .post-nav__item {
   flex: none;
   max-width: none;
+  padding: 0;
 }
 
 .post-nav__item--prev {
@@ -3477,11 +3478,11 @@ blockquote td {
     font-size: 1.1em;
   }
 
-  .post-nav__item--next {
+  .post-nav .post-nav__item--next {
     padding: 15px 0 0 0;
   }
 
-  .post-nav__item--prev {
+  .post-nav .post-nav__item--prev {
     padding: 0;
   }
 
@@ -3562,12 +3563,6 @@ blockquote td {
     border-bottom: 1px dotted #7f7f7f;
     margin: 0 0 1em;
     padding: 1em 0;
-  }
-
-  header .post-nav__item--prev,
-  header .post-nav__item--next {
-    margin: 0;
-    padding: 0;
   }
 
   #menu {
@@ -3682,23 +3677,6 @@ blockquote td {
   #social ul li {
     margin: 0 2px;
   }
-
-/*
-  .tutorial .content .list__item .github-links {
-    font-size: 0.8em;
-    margin: 5px 0;
-  }
-
-  .tutorial .content .list__item .github-links a {
-    padding: 5px 7px;
-    margin: 0 5px;
-    width: 66px;
-  }
-
-  .tutorial .content .list__item .github-links .fa {
-    font-size: 1em;
-    margin: 0 3px 0 0;
-  } */
 }
 
 @media screen and (max-width: 500px) {
@@ -3716,8 +3694,8 @@ blockquote td {
   .github-repo:last-child {
     width: 90%;
   }
-  .post-nav-flex-item-prev,
-  .post-nav-flex-item-next {
+  .post-nav .post-nav-flex-item-prev,
+  .post-nav .post-nav-flex-item-next {
     flex: 1 0 100%;
   }
   #search-header {
