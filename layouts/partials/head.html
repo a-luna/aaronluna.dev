@@ -10,6 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="msapplication-starturl" content="/blog?souce=pwa" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {{ $postImage := .Page.Resources.GetMatch (printf "*main*") }}{{ if $postImage }}<meta name="thumbnail" content="{{ $postImage.RelPermalink }}">{{ end }}
     <title>{{ block "title" . }}{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}{{ end }}</title>
     <script>
         (function(d, e) {

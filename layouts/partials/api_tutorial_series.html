@@ -1,7 +1,6 @@
-{{- if ne .Params.series_part "Overview" }}
 <div class="accordian">
     <section id="series-accordian" class="series-accordian-section accordian-item {{ if .Param "toc" }}ac_hidden{{ end }}">
-        <h2 class="series-accordian-button accordian-button"><i class="fa fa-chevron-right pointer"></i><a class="series-accordian-button" href="#series-acordian">Tutorial Sections</a></h2>
+        <h2 class="series-accordian-button accordian-button"><i class="fa fa-chevron-right pointer"></i>Tutorial Sections</h2>
         <div class="accordian-content">
             <div id="api-tutorial">
                 <ul>
@@ -18,4 +17,3 @@
         </div>
     </section id="github-accordian">
 </div>
-{{- end }}

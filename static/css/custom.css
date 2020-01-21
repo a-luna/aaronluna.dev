@@ -375,10 +375,13 @@ h1.post__title {
 
 .tutorial .post__image {
   margin: 20px 0 40px 0;
+  padding: 0;
+  border-top: none;
 }
 
 .list__item .post__image {
   margin: 0 0 15px 0;
+  border: none;
 }
 
 .list__item figcaption {
@@ -1552,7 +1555,11 @@ figcaption {
   border: none;
   border-radius: 4px;
   padding: 15px;
-  margin: 0 0 20px;
+  margin: 0 0 20px 0;
+}
+
+.tutorial .content .list__item:first-child {
+  margin: 20px 0;
 }
 
 .tutorial .content .list__item .content {
@@ -1848,6 +1855,14 @@ a.pagination__item--next {
   flex: 0 0 20px;
 }
 
+.post-nav .chevron-next {
+  margin: 3px 0 auto 7px;
+}
+
+.post-nav .chevron-prev {
+  margin: 3px 7px auto 0;
+}
+
 .inner-nav-flex-container {
   display: flex;
   flex-flow: row nowrap;
@@ -2067,10 +2082,6 @@ header a.post-nav__link:focus {
   display: inline;
   font-weight: 500;
   font-size: 1em;
-}
-
-.post-nav .post-nav__chevron {
-  margin: 2px 0 auto;
 }
 
 .post-nav__chevron {
@@ -2581,7 +2592,9 @@ table.aws-hosting-costs {
   margin-bottom: 1em;
 }
 
-.accordian {
+.accordian-wrapper {
+  border: 1px solid var(--accent-color1);
+  border-radius: 4px;
   margin: 0 0 20px;
 }
 
@@ -2592,7 +2605,6 @@ table.aws-hosting-costs {
 
 .accordian section {
   background-color: var(--accordian-content-bg-color);
-  border-radius: 4px;
 }
 
 #github-accordian section {
@@ -2607,6 +2619,7 @@ table.aws-hosting-costs {
 .tutorial .accordian section h2
 #github-accordian section h2 {
   font-size: 1.1em;
+  font-weight: 700;
   line-height: 1;
   margin: auto 0;
   padding: 7px 5px;
@@ -2616,8 +2629,6 @@ table.aws-hosting-costs {
 .accordian section h2 a,
 .tutorial .accordian section h2 a,
 #github-accordian section h2 a {
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
   margin: 0 0 0 1px;
 }
 
@@ -2674,13 +2685,6 @@ table.aws-hosting-costs {
 
 .accordian section:not(.ac_hidden) .pointer {
   transform: rotate(90deg);
-}
-
-.accordian-content,
-.tutorial .accordian-content,
-#github-accordian .accordian-content  {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
 }
 
 .accordian-content,
@@ -3026,6 +3030,11 @@ header,
 
 .post__meta .post-categories {
   margin: 15px 0 10px 0;
+}
+
+.post__header .post__meta .post-categories {
+  padding: 0 0 20px 0;
+  border-bottom: 1px dotted var(--accent-color2);
 }
 
 a.post-category,

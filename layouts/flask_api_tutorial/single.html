@@ -2,20 +2,23 @@
 <main class="main tutorial" role="main">
     <article class="post">
         <header class="post__header">
-            <h1 class="post__title">{{- if ne .Params.series_part "Overview" }}{{ .Params.lead }}{{- else }}{{ .Params.series_title }}{{ end }}</h1>
-            {{ with partial "post_meta.html" . -}}
-            <div class="post__meta meta">{{ . }}</div>
+            <h1 class="post__title">{{- if ne .Params.series_part "Overview" }}{{ .Params.lead }}{{- else }}{{ .Params.series_title }}{{- end }}</h1>
+            <div class="post__meta meta">{{ partial "post_meta" . }}</div>
+            {{- if ne .Params.series_part "Overview" }}<div class="post__image">{{ partial "responsive_image" . }}</div>{{- end }}
+        {{- if ne .Params.series_part "Overview" }}
+            {{ partial "post_nav_part_num" . }}
+            <div class="accordian-wrapper">
+                {{ partial "api_tutorial_series" . }}
+                {{ partial "api_tutorial_toc" . }}
+                {{ partial "github_links" . }}
+            </div>
         {{- end }}
-            <div class="post__image">{{ partial "responsive_image" . }}</div>
         </header>
-        {{ partial "post_nav_part_num.html" . }}
-        {{ partial "api_tutorial_series.html" . }}
-        {{ partial "api_tutorial_toc.html" . }}
         <div class="content post__content clearfix">
             {{ .Content }}
         </div>
     </article>
 </main>
-{{ partial "post_nav_lead.html" . }}
-{{ partial "comments.html" . }}
+{{ partial "post_nav_lead" . }}
+{{ partial "comments" . }}
 {{ end }}

@@ -52,8 +52,6 @@ twitter:
 
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
 
-{{< github_links >}}
-
 <pre class="project-structure"><div><span class="project-folder">.</span> <span class="project-structure">(project root folder)</span>
 |- <span class="project-folder">src</span>
 |   |- <span class="project-folder">flask_api_tutorial</span>
