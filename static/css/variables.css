@@ -78,8 +78,8 @@
   --about-active-link-color: var(--white2);
 
   /* Home Page */
-  --home-title-color: var(--h1-color);
-  --home-lead-color: var(--header-color);
+  --home-title-color: var(--header-color);
+  --home-lead-color: var(--light-gray2);
   --home-p-color: var(--body-text-color);
   --home-hr-color: var(--accent-color2);
   --home-h4-color: var( --header-color);
@@ -155,21 +155,13 @@
   /* List of Steps */
   --step-list: var(--white2);
 
-  /* Accordian Control */
-  --accordian-header-bg-color: var(--tut-link-color);
-  --accordian-header-text-color: var(--black2);
-  --accordian-header-toggled-bg-color: var(--tut-link-color);
-  --accordian-header-toggled-text-color: var(--black2);
-  --accordian-content-bg-color: var(--widget-bg-color);
-  --accordian-content-link-color: var(--tut-link-color);
-
-  /* Github Links Box */
-  --gitrepo-header-bg-color: var(--tut-link-color);
-  --gitrepo-header-text-color: var(--black2);
-  --gitrepo-header-toggled-bg-color: var(--tut-link-color);
-  --gitrepo-header-toggled-text-color: var(--black2);
-  --gitrepo-content-bg-color: var(--widget-bg-color);
-  --gitrepo-content-link-color: var(--tut-link-color);
+  /* accordion Control */
+  --accordion-header-bg-color: var(--widget-bg-color);
+  --accordion-header-text-color: var(--tut-link-color);
+  --accordion-header-toggled-bg-color: var(--tut-link-color);
+  --accordion-header-toggled-text-color: var(--black2);
+  --accordion-content-bg-color: var(--widget-bg-color);
+  --accordion-content-link-color: var(--tut-link-color);
 
   /* Github Links Box */
   --project-repo-bg-color: var(--black2);

@@ -77,7 +77,7 @@ main {
 }
 
 main.home {
-  margin: 0 auto;
+  margin: 20px auto 0 auto;
   max-width: 750px;
   width: 80%;
 }
@@ -333,7 +333,7 @@ pre .project-structure-key-wrapper {
 
 pre .key-item {
   flex: 0 0 auto;
-  margin: 0 5px;
+  margin: 2px 5px;
 }
 
 h1,
@@ -554,6 +554,16 @@ h4 {
 .cmd-lineno-hl {
   color: var(--cmd-lineno-hl);
   font-weight: 700;
+}
+
+.cmd-hl-teal {
+  background-color: var(--teal2);
+  color: var(--widget-bg-color);
+}
+
+.cmd-hl-purple {
+  background-color: var(--purple3);
+  color: var(--widget-bg-color);
 }
 
 .cmd-hl {
@@ -903,7 +913,7 @@ div.note-flex {
 .tutorial .note-message a:active,
 .tutorial .note-message a:focus,
 .tutorial .note-message a:active:hover {
-  color: var(--body-text-color);
+  color: var(--teal2);
 }
 
 .alert-message p,
@@ -1531,7 +1541,6 @@ figcaption {
 }
 
 .tutorial .post__header {
-  font-size: 0.95em;
   border: none;
   margin: 0;
   padding: 0;
@@ -1676,6 +1685,7 @@ figcaption {
 
 .tutorial .toc {
   margin: 0;
+  background-color: var(--widget-bg-color);
 }
 
 .toc__title {
@@ -2132,14 +2142,13 @@ input {
 
 #api-tutorial ul {
   color: var(--tut-link-color);
-  margin: 0 0 0 20px;
+  margin: 0;
   padding: 0;
-  line-height: 1.3;
+  list-style: none;
 }
 
 #api-tutorial ul li {
-  margin: 5px 0;
-  line-height: 1.3;
+  margin: 0 0 10px 0;
 }
 
 #api-tutorial a,
@@ -2592,126 +2601,76 @@ table.aws-hosting-costs {
   margin-bottom: 1em;
 }
 
-.accordian-wrapper {
-  border: 1px solid var(--accent-color1);
-  border-radius: 4px;
+.accordion-wrapper {
   margin: 0 0 20px;
 }
 
-.accordian section,
-#github-accordian section {
+.accordion:first-child .accordion-item {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.accordion:last-child .accordion-item {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.accordion section {
+  background-color: var(--accordion-content-bg-color);
   overflow: hidden;
 }
 
-.accordian section {
-  background-color: var(--accordian-content-bg-color);
+.accordion section.ac_hidden {
+  height: 40px;
 }
 
-#github-accordian section {
-  background-color: var(--gitrepo-content-bg-color);
-}
-
-.accordian section.ac_hidden {
-  height: 29px;
-}
-
-.accordian section h2,
-.tutorial .accordian section h2
-#github-accordian section h2 {
-  font-size: 1.1em;
-  font-weight: 700;
+.accordion section h2 {
+  color: var(--accordion-header-text-color);
+  background-color: var(--accordion-header-bg-color);
+  font-size: 1.2em;
   line-height: 1;
   margin: auto 0;
-  padding: 7px 5px;
+  padding: 11px 5px;
   cursor: pointer;
 }
 
-.accordian section h2 a,
-.tutorial .accordian section h2 a,
-#github-accordian section h2 a {
-  margin: 0 0 0 1px;
-}
-
-.accordian section h2,
-.tutorial .accordian section h2 {
-  color: var(--accordian-header-text-color);
-  background-color: var(--accordian-header-bg-color);
-}
-
-#github-accordian section h2 {
-  color: var(--gitrepo-header-text-color);
-  background-color: var(--gitrepo-header-bg-color);
-}
-
-.accordian section h2 a,
-.accordian section h2 a:visited,
-.accordian .pointer,
-.tutorial .accordian section h2 a,
-.tutorial .accordian section h2 a:visited,
-.tutorial .accordian .pointer {
-  color: var(--accordian-header-text-color);
+.accordion section:not(.ac_hidden) h2,
+.accordion section:not(.ac_hidden) .pointer {
+  color: var(--accordion-header-toggled-text-color);
+  background-color: var(--accordion-header-toggled-bg-color);
   font-weight: 700;
 }
 
-#github-accordian section h2 a,
-#github-accordian section h2 a:visited,
-#github-accordian .pointer {
-  color: var(--gitrepo-header-text-color);
-}
-
-.accordian section:not(.ac_hidden) h2,
-.accordian section:not(.ac_hidden) h2 a,
-.accordian section:not(.ac_hidden) .pointer,
-.tutorial .accordian section:not(.ac_hidden) h2,
-.tutorial .accordian section:not(.ac_hidden) h2 a,
-.tutorial .accordian section:not(.ac_hidden) .pointer {
-  color: var(--accordian-header-toggled-text-color);
-  background-color: var(--accordian-header-toggled-bg-color);
-}
-
-#github-accordian section:not(.ac_hidden) h2,
-#github-accordian section:not(.ac_hidden) h2 a,
-#github-accordian section:not(.ac_hidden) .pointer {
-  color: var(--gitrepo-header-toggled-text-color);
-  background-color: var(--gitrepo-header-toggled-bg-color);
-}
-
-.accordian .pointer,
-.tutorial .accordian .pointer,
-#github-accordian .pointer {
+.accordion .pointer {
+  color: var(--accordion-header-text-color);
+  font-weight: 700;
   font-size: 0.72727em;
-  margin: auto 5px;
+  margin: auto 10px auto 7px;
 }
 
-.accordian section:not(.ac_hidden) .pointer {
+.accordion section:not(.ac_hidden) .pointer {
   transform: rotate(90deg);
 }
 
-.accordian-content,
-.tutorial .accordian-content {
-  background-color: var(--accordian-content-bg-color);
+.accordion-content {
+  font-size: 1.1em;
+  background-color: var(--accordion-content-bg-color);
+  padding: 10px;
 }
 
-#github-accordian .accordian-content {
-  background-color: var(--gitrepo-content-bg-color);
+.accordion section:not(.ac_hidden) .accordion-content {
+  border-bottom: 1px solid var(--accordion-header-toggled-bg-color);
 }
 
-.accordian-content a,
-.tutorial .accordian-content a,
-#github-accordian .accordian-content a {
-  color: var(--accordian-content-link-color);
+.accordion:last-child section:not(.ac_hidden) .accordion-content {
+  border: none;
 }
 
-#github-accordian .accordian-content a {
-  color: var(--gitrepo-content-link-color);
-}
-
-#github-accordian .accordian-content .message a {
-  font-weight: 700;
+.accordion-content a {
+  color: var(--accordion-content-link-color);
 }
 
 #project-repo {
-  font-size: 0.95em;
   padding: 7px 10px;
 }
 

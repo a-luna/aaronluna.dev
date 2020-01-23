@@ -236,14 +236,9 @@ The object named "items" contains the first ten (of 23 total) widget objects. Ea
 
 If the client sends a `GET` request to `http://localhost:5000/api/v1/widgets` (i.e., neither `page` or `per_page` are sent with the request), what happens? Typically, default values are assumed for these parameters. The default values are configured when we create the `RequestParser` arguments for the pagination parameters.
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p>While Fielding defined HATEOAS and stipulated that it is a requirement for a REST API, he did not specify the format for doing so. Depending on the project, navigational links could be provided in either the response header or body (obviously I have provided both for this demonstration). The format of the <code>Link</code> header field is defined in <a href="https://tools.ietf.org/html/rfc8288" target="_blank">RFC 8288</a>, which is a Proposed Standard that is widely employed throughout the internet (i.e., it's pretty safe to use it in your application, too).</p>
-  </div>
-</div>
+{{< info_box >}}
+While Fielding defined HATEOAS and stipulated that it is a requirement for a REST API, he did not specify the format for doing so. Depending on the project, navigational links could be provided in either the response header or body (obviously I have provided both for this demonstration). The format of the `Link` header field is defined in [RFC 8288](https://tools.ietf.org/html/rfc8288), which is a Proposed Standard that is widely employed throughout the internet (i.e., it's pretty safe to use it in your application, too).
+{{< /info_box >}}
 
 ## Retrieve Widget List
 
@@ -267,6 +262,7 @@ from flask_restplus.inputs import positive, URL
 from flask_restplus.reqparse import RequestParser
 
 from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
+
 ```
 
 Next, add the content below:
@@ -281,25 +277,15 @@ pagination_reqparser.add_argument(
 
 By specifying `type=positive`, the value provided in the request data will be coerced to an integer. If the value represents a positive, non-zero integer, the request will succeed and the server will send the paginated list to the client. Otherwise, the server will reject the request with status code 400 `HTTPStatus.BAD_REQUEST`.
 
-<div class="note note-flex">
-    <div class="note-icon">
-        <i class="fa fa-pencil"></i>
-    </div>
-    <div class="note-message" style="flex-flow: column wrap">
-        <p>Why did I choose <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive" target="_blank">the <code>flask_restplus.inputs.positive</code> class</a>? For both the <code>page</code> and <code>per_page</code> parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.</p>
-    </div>
-</div>
+{{< info_box >}}
+Why did I choose [the `flask_restplus.inputs.positive` class](https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive)? For both the `page` and `per_page` parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.
+{{< /info_box >}}
 
 This is the first time that we have specified a `RequestParser` argument as `required=False`. This allows the client to send a request **without** either parameter and the request will still succeed (e.g., `GET /api/v1/widgets` will return the same response as `GET /api/v1/widgets?page=1&per_page=10`).
 
-<div class="note note-flex">
-    <div class="note-icon">
-        <i class="fa fa-pencil"></i>
-    </div>
-    <div class="note-message" style="flex-flow: column wrap">
-        <p>What would happen if <code>required=True</code> and the client sends a request without either parameter? Rather than using a default value, the server would reject the request with status code <code>HTTPStatus.BAD_REQUEST</code> (400) and include an error message indicating that one or more required values were missing.</p>
-    </div>
-</div>
+{{< info_box >}}
+What would happen if `required=True` and the client sends a request without either parameter? Rather than using a default value, the server would reject the request with status code `HTTPStatus.BAD_REQUEST` (400) and include an error message indicating that one or more required values were missing.
+{{< /info_box >}}
 
 The range of valid values for the `page` parameter is any positive integer. However, the `per_page` parameter must have an upper bound since the point of employing pagination is to prevent the API from becoming sluggish due to sending/receiving a large amount of data.
 
@@ -328,14 +314,9 @@ Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
 
 I created six `Widget` instances in my test environment, which is verified by the first statement `len(Widget.query.all())` returning a result of 6. Next, we create a `Pagination` object for the first page of `Widget` objects with five items per page by calling `Widget.query.paginate(page=1, per_page=5)`. The last statement verifies that we did, in fact, create a `Pagination` object.
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message" style="flex-flow: column wrap">
-    <p>I recommend reading the <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank">SQLAlchemy documentation for the Query object</a>, as well as the Flask-SQLAlchemy documentation for <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">the <code>Pagination</code> object</a> and <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">the <code>paginate</code> method</a>. </p>
-  </div>
-</div>
+{{< info_box >}}
+I recommend reading the [SQLAlchemy documentation for the Query object](https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object), as well as the Flask-SQLAlchemy documentation for [the `Pagination` object](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination) and [the `paginate` method](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate).
+{{< /info_box >}}
 
 <pre><code><span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">pagination.pages</span>
 <span class="cmd-repl-results">2</span>
@@ -406,6 +387,7 @@ from flask_restplus.inputs import positive, URL
 from flask_restplus.reqparse import RequestParser
 
 from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
+
 ```
 
 Next, add the content below:
@@ -520,14 +502,9 @@ widget_model = Model(
     <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"admin@test.com"</span><span class="p">,</span>
     <span class="nt">"public_id"</span><span class="p">:</span> <span class="s2">"475807a4-8497-4c5c-8d70-109b429bb4ef"</span><span class="p">,</span>
 <span class="p">}</span></code></pre>
-        <div class="note note-flex">
-            <div class="note-icon">
-                <i class="fa fa-pencil" aria-hidden="true"></i>
-            </div>
-            <div class="note-message" style="flex-flow: column wrap">
-                <p>For more information and examples of serializing complex structures to JSON, please read the <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#complex-structures" target="_blank">Complex Structures</a> and <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#nested-field" target="_blank">Nested Field</a> sections of the Flask-RESTPlus documentation.</p>
-            </div>
-        </div>
+{{< info_box >}}
+For more information and examples of serializing complex structures to JSON, please read the [Complex Structures](https://flask-restplus.readthedocs.io/en/stable/marshalling.html#complex-structures) and [Nested Field](https://flask-restplus.readthedocs.io/en/stable/marshalling.html#nested-field) sections of the Flask-RESTPlus documentation.
+{{< /info_box >}}
       </li>
       <li>
         <p><strong>Line 105: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTPlus documentation</a>:</p>
@@ -536,14 +513,9 @@ widget_model = Model(
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"link"</span><span class="p">:</span> <span class="s2">"/api/v1/widgets/first_widget"</span><span class="p">,</span></code></pre>
         <p>If the <code>link</code> should be an absolute URI (containing scheme, hostname, and port), include the keyword argument <code>absolute=True</code> (e.g., <code>Url("api.widget", absolute=True)</code>). In my local test environment, this returns the URI below for the same <code>Widget</code> resource:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"link"</span><span class="p">:</span> <span class="s2">"http://localhost:5000/api/v1/widgets/first_widget"</span><span class="p">,</span></code></pre>
-        <div class="alert alert-flex">
-            <div class="alert-icon">
-                <i class="fa fa-exclamation-triangle"></i>
-            </div>
-            <div class="alert-message">
-                <p>The implementation of the <code>Url</code> field in <code>widget_model</code> relies on the <code>api.widget</code> endpoint, which we haven't created at this point. This will result in an unhandled exception until the <code>api.widget</code> endpoint has been fully implemented.</p>
-            </div>
-        </div>
+{{< alert_box >}}
+The implementation of the `Url` field in `widget_model` relies on the `api.widget` endpoint, which we haven't created at this point. This will result in an unhandled exception until the `api.widget` endpoint has been fully implemented.
+{{< /alert_box >}}
       </li>
     </ul>
 </div>
@@ -678,6 +650,7 @@ from flask_api_tutorial.api.auth.decorator import token_required, admin_token_re
 from flask_api_tutorial.api.widgets.dto import pagination_model
 from flask_api_tutorial.models.user import User
 from flask_api_tutorial.models.widget import Widget
+
 ```
 
 <div class="code-details">
@@ -736,6 +709,7 @@ def _pagination_nav_header_links(pagination):
     for rel, url in url_dict.items():
         link_header += f'<{url}>; rel="{rel}", '
     return link_header.strip().strip(",")
+
 ```
 
 This code implements the process of responding to a valid request for a list of widgets, please note the following:
@@ -805,6 +779,7 @@ from flask_api_tutorial.api.widgets.dto import (
     pagination_model,
 )
 from flask_api_tutorial.api.widgets.business import create_widget, retrieve_widget_list
+
 ```
 
 <div class="code-details">
@@ -857,6 +832,7 @@ class WidgetList(Resource):
         """Create a widget."""
         widget_dict = create_widget_reqparser.parse_args()
         return create_widget(widget_dict)
+
 ```
 
 <div class="code-details">
@@ -892,14 +868,9 @@ api.specs            GET        /api/v1/swagger.json
 restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
 static               GET        /static/&lt;path:filename&gt;</span></code></pre>
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-  </div>
-  <div class="alert-message">
-    <p>Please remember, currently an unhandled exception occurs if you attempt to execute either of the methods we have created for the <code>api.widget_list</code> endpoint since the business logic for both operations depends on the <code>api.widget</code> endpoint existing. We will create unit tests for all endpoints/CRUD operations in <span class="bold-text">Table 1</span> when they have been fully implemented.</p>
-  </div>
-</div>
+{{< alert_box >}}
+Please remember, currently an unhandled exception occurs if you attempt to execute either of the methods we have created for the `api.widget_list` endpoint since the business logic for both operations depends on the `api.widget` endpoint existing. We will create unit tests for all endpoints/CRUD operations in **Table 1** when they have been fully implemented.
+{{< /alert_box >}}
 
 ## Retrieve Widget
 
@@ -970,6 +941,7 @@ class Widget(Resource):
     def get(self, name):
         """Retrieve a widget."""
         return retrieve_widget(name)
+
 ```
 
 The only thing that we are seeing for the first time is how to include a parameter in the endpoint path. Thankfully, Flask-RESTPlus uses the same process as Flask for URL route registration (via the `@route` decorator). <a href="https://flask.palletsprojects.com/en/1.1.x/api/#url-route-registrations" target="_blank">From the Flask documentation</a>:
@@ -1056,6 +1028,7 @@ For example, open `src/flask_api_tutorial/api/widgets/dto.py`, add the lines bel
 ```python {linenos=table,linenostart=72}
 update_widget_reqparser = create_widget_reqparser.copy()
 update_widget_reqparser.remove_argument("name")
+
 ```
 
 Now we have exactly the request parser that we need for `PUT` requests received at the `api.widgets` endpoint. The `update_widget_reqparser` is created by simply copying the `create_widget_reqparser` and removing the `name` argument. We will import and use this when we are ready to implement the `put` method handler.
@@ -1078,6 +1051,7 @@ from flask_api_tutorial.api.auth.decorator import token_required, admin_token_re
 from flask_api_tutorial.api.widgets.dto import pagination_model, widget_name
 from flask_api_tutorial.models.user import User
 from flask_api_tutorial.models.widget import Widget
+
 ```
 
 Then copy the `update_widget` function below and add it to `business.py`:
@@ -1099,6 +1073,7 @@ def update_widget(name, widget_dict):
         abort(HTTPStatus.BAD_REQUEST, str(e), status="fail")
     widget_dict["name"] = valid_name
     return create_widget(widget_dict)
+
 ```
 
 Let's make sure that the `update_widget` function correctly implements the `PUT` method:
@@ -1107,14 +1082,9 @@ Let's make sure that the `update_widget` function correctly implements the `PUT`
     <ul>
       <li>
         <p><strong>Line 51: </strong>The first thing we do is check the database for a <code>widget</code> with the name provided by the client. </p>
-        <div class="note note-flex">
-          <div class="note-icon">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
-          </div>
-          <div class="note-message" style="flex-flow: column wrap">
-            <p>Remember, all <code>widget</code> names are converted to lowercase when written to the database. Because of this, we must be careful to convert the value provided by the client to lowercase before searching. You can review <a href="/series/flask-api-tutorial/part-5/#name-argument">the validation logic for the <code>widget</code> name attribute in Part 5</a>.</p>
-          </div>
-        </div>
+{{< info_box >}}
+Remember, all `widget` names are converted to lowercase when written to the database. Because of this, we must be careful to convert the value provided by the client to lowercase before searching. You can review [the validation logic for the `widget` name attribute in Part 5](/series/flask-api-tutorial/part-5/#name-argument).
+{{< /info_box >}}
       </li>
       <li>
         <p><strong>Lines 53-55: </strong>If the name provided by the client is found in the database, we save the retrieved <code>Widget</code> instance as <code>widget</code>. Next, we iterate over the items in <code>widget_dict</code> and overwrite the attributes of <code>widget</code> with the values provided by the client. Then, the updated <code>widget</code> is committed to the database.</p>
@@ -1194,6 +1164,7 @@ class Widget(Resource):
         """Update a widget."""
         widget_dict = update_widget_reqparser.parse_args()
         return update_widget(name, widget_dict)
+
 ```
 
 We have previously encountered and explained everything in the `put` method, so you should be comfortable moving on without explaining the design/implementation. We can verify that the `api.widget` endpoint now supports both `GET` and `PUT` requests by executing the `flask routes` command:
@@ -1232,6 +1203,7 @@ def delete_widget(name):
     db.session.delete(widget)
     db.session.commit()
     return "", HTTPStatus.NO_CONTENT
+
 ```
 
 The `delete_widget` function relies on the Flask-SQLAlchemy `first_or_404` method which we used previously in the `retrieve_widget` function. If the database does not contain a `widget` with the `name` provided by the client, the request is rejected and a 404 (`HTTPStatus.NOT_FOUND`) response is sent. If a `widget` was successfully retrieved, however, it is deleted and the changes are committed to the database. Then, a 204 (`HTTPStatus.NO_CONTENT`) response is sent with an empty request body.
@@ -1299,6 +1271,7 @@ class Widget(Resource):
     def delete(self, name):
         """Delete a widget."""
         return delete_widget(name)
+
 ```
 
 We have previously encountered and explained everything in the `delete` method, so there's nothing we need to elaborate on. We can verify that the `api.widget` endpoint now supports `DELETE`, `GET` and `PUT` requests by executing the `flask routes` command:
@@ -1324,74 +1297,90 @@ We have finally implemented all of the API routes/CRUD processes specified in **
 
 At this point, I would like you to attempt to create as many unit tests you can think of for the Widget API endpoints/CRUD operations we implemented in this section and the previous section ([Part 5](/series/flask-api-tutorial/part-5/)). For each, I will provide a few tests to get you started, and demonstrate how the `@pytest.mark.parametrize` decorator makes testing multiple values for a single parameter much simpler.
 
+### util.py
+
+First, open `tests/util.py` and update the import statements to include the `datetime.date` module **(Line 2)**, and also add the string values highlighted below:
+
+```python {linenos=table,hl_lines=[2,7,"10-11","14-16"]}
+"""Shared functions and constants for unit tests."""
+from datetime import date
+
+from flask import url_for
+
+EMAIL = "new_user@email.com"
+ADMIN_EMAIL = "admin_user@email.com"
+PASSWORD = "test1234"
+BAD_REQUEST = "Input payload validation failed"
+UNAUTHORIZED = "Unauthorized"
+FORBIDDEN = "You are not an administrator"
+WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
+
+DEFAULT_NAME = "some-widget"
+DEFAULT_URL = "https://www.fakesite.com"
+DEFAULT_DEADLINE = date.today().strftime("%m/%d/%Y")
+
+```
+
+Next, add the `create_widget` function to `util.py` and save the file:
+
+```python {linenos=table,linenostart=47}
+def create_widget(
+    test_client,
+    access_token,
+    widget_name=DEFAULT_NAME,
+    info_url=DEFAULT_URL,
+    deadline_str=DEFAULT_DEADLINE,
+):
+    request_data = f"name={widget_name}&info_url={info_url}&deadline={deadline_str}"
+    return test_client.post(
+        url_for("api.widget_list"),
+        headers={"Authorization": f"Bearer {access_token}"},
+        data=request_data,
+        content_type="application/x-www-form-urlencoded",
+    )
+```
+
+This function uses the Flask test client to send a `POST` request to the `api.widget_list` endpoint, which is responsible for creating new widgets. The function requires two parameters: the `test_client` and an `access_token`. The remaining three parameters are optional since they have default values, and it should be obvious what these three values are used for. `widget_name`, `info_url` and `deadline_str` are the values that will be used for the `name`, `info_url` and `deadline` values of the new widget object.
+
 ### `conftest.py`
 
-```python {linenos=table}
+We also need to update `conftest.py` with a new fixture. First, update the import statements to include the `ADMIN_EMAIL` value from `tests.util`:
+
+```python {linenos=table,hl_lines=[7]}
 """Global pytest fixtures."""
 import pytest
 
 from flask_api_tutorial import create_app
 from flask_api_tutorial import db as database
 from flask_api_tutorial.models.user import User
-from test.util import EMAIL, ADMIN_EMAIL, PASSWORD
+from tests.util import EMAIL, ADMIN_EMAIL, PASSWORD
 
+```
 
-@pytest.fixture
-def app():
-    app = create_app("testing")
-    return app
+Next, add the `admin` test fixture and save the file:
 
-
-@pytest.fixture
-def db(app, client, request):
-    database.drop_all()
-    database.create_all()
-    database.session.commit()
-
-    def fin():
-        database.session.remove()
-
-    request.addfinalizer(fin)
-    return database
-
-
-@pytest.fixture
-def user(db):
-    user = User(email=EMAIL, password=PASSWORD)
-    db.session.add(user)
-    db.session.commit()
-    return user
-
-
+```python {linenos=tables,linenostart=37}
 @pytest.fixture
 def admin(db):
     admin = User(email=ADMIN_EMAIL, password=PASSWORD, admin=True)
     db.session.add(admin)
     db.session.commit()
     return admin
+
 ```
+
+This fixture creates a new user with administrator privileges, which will be needed to create new widgets (it will also be needed to modify and delete widgets). We have previously used the `user` fixture in test cases where a `User` object was needed, and the `admin` fixture will be used in the same way.
 
 ### Create Widget
 
+Create a new file named `test_create_widget.py` in `tests`, enter the content below and save the file:
+
 ```python {linenos=table}
 """Unit tests for api.widget_list API endpoint."""
-from datetime import date
 from http import HTTPStatus
 
 import pytest
-from flask import url_for
-from tests.util import (
-    EMAIL,
-    ADMIN_EMAIL,
-    BAD_REQUEST,
-    UNAUTHORIZED,
-    FORBIDDEN,
-    DEFAULT_NAME,
-    DEFAULT_URL,
-    DEFAULT_DEADLINE,
-    login_user,
-    create_widget,
-)
+from tests.util import ADMIN_EMAIL, login_user, create_widget
 
 
 @pytest.mark.parametrize("widget_name", ["abc123", "widget-name", "new_widget1"])
@@ -1407,68 +1396,66 @@ def test_create_widget_valid_name(client, db, admin, widget_name):
     location = f"http://localhost/api/v1/widgets/{widget_name}"
     assert "Location" in response.headers and response.headers["Location"] == location
 
+```
 
-@pytest.mark.parametrize("widget_name", ["abc!23", "widget name", "@widget"])
-def test_create_widget_invalid_name(client, db, admin, widget_name):
-    response = login_user(client, email=ADMIN_EMAIL)
-    assert "access_token" in response.json
-    access_token = response.json["access_token"]
-    response = create_widget(client, access_token, widget_name=widget_name)
-    assert response.status_code == HTTPStatus.BAD_REQUEST
-    assert "message" in response.json and response.json["message"] == BAD_REQUEST
-    assert "errors" in response.json and "name" in response.json["errors"]
-    name_error = f"'{widget_name}' contains one or more invalid characters."
-    assert name_error in response.json["errors"]["name"]
+This is the first time we are using the `@pytest.mark.parameterize` decorator, which is used to parameterize an argument to a test function. In the `test_create_widget_valid_name` function, we are parameterizing the `widget_name` argument, and the test will be executed three times; once for each value defined for `widget_name`. For example, this is the output from pytest if we were to execute just this single test function:
 
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
+<span class="cmd-results">================================================= test session starts ==================================================
+platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
+plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+collected 5 items
 
+tests/test_create_widget.py::BLACK PASSED                                                                        [ 20%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 40%]
+<span class="cmd-hl-border">tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED</span>                                        [ 60%]
+<span class="cmd-hl-border">tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED</span>                                   [ 80%]
+<span class="cmd-hl-border">tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED</span>                                   [100%]
+
+=================================================== warnings summary ===================================================
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask_api_tutorial/venv/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, MutableMapping
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+============================================= 5 passed, 1 warning in 0.57s =============================================</span></code></pre>
+
+You can see the three tests executed by the parameterized test highlighted above. `pytest` helpfully includes the values used to parameterize the test in brackets after the name of the test. This function is designed to verify the response to a successful request to create a new widget, so the three values used for parameterization are all valid widget names, per the specs we followed. An obvious next step would be to create a `test_create_widget_invalid_name` test case, but I will leave that to you.
+
+{{< info_box >}}
+You can find more information on the `@pytest.mark.parameterize` decorator in [the official pytest documents](https://docs.pytest.org/en/latest/parametrize.html).
+{{< /info_box >}}
+
+Creating valid/invalid values for the `info_url` argument should be straightforward, and you should definitely create parameterized test cases for both successful/rejected requests that isolate the `info_url` value. However, testing the `deadline_str` value is more complex. In the same file, `test_create_widget.py`, update the import statements to include the `datetime.date` and `datetime.timedelta` modules **(Line 2)**, as well as the `BAD_REQUEST` and `DEFAULT_NAME` values from `tests.util` **(Line 7)**:
+
+```python {linenos=table,hl_lines=[2,7]}
+"""Unit tests for api.widget_list API endpoint."""
+from datetime import date, timedelta
+from http import HTTPStatus
+
+import pytest
+
+from tests.util import ADMIN_EMAIL, BAD_REQUEST, DEFAULT_NAME, login_user, create_widget
+```
+
+Next, enter the content below and save the file:
+
+```python {linenos=table,linenostart=24,hl_lines=["4-6"]}
 @pytest.mark.parametrize(
-    "info_url",
-    [
-        "http://www.widget.info",
-        "https://www.securewidgets.gov",
-        "http://aaa.bbb.ccc/ddd/eee.html",
-    ],
-)
-def test_create_widget_valid_url(client, db, admin, info_url):
-    response = login_user(client, email=ADMIN_EMAIL)
-    assert "access_token" in response.json
-    access_token = response.json["access_token"]
-    response = create_widget(client, access_token, info_url=info_url)
-    assert response.status_code == HTTPStatus.CREATED
-    assert "status" in response.json and response.json["status"] == "success"
-    success = f"New widget added: {DEFAULT_NAME}."
-    assert "message" in response.json and response.json["message"] == success
-    location = f"http://localhost/api/v1/widgets/{DEFAULT_NAME}"
-    assert "Location" in response.headers and response.headers["Location"] == location
-
-
-@pytest.mark.parametrize(
-    "info_url", ["www.widget.info", "http://localhost:5000", "git://aaa.bbb.ccc"]
-)
-def test_create_widget_invalid_url(client, db, admin, info_url):
-    response = login_user(client, email=ADMIN_EMAIL)
-    assert "access_token" in response.json
-    access_token = response.json["access_token"]
-    response = create_widget(client, access_token, info_url=info_url)
-    assert response.status_code == HTTPStatus.BAD_REQUEST
-    assert "message" in response.json and response.json["message"] == BAD_REQUEST
-    assert "errors" in response.json and "info_url" in response.json["errors"]
-    assert f"{info_url} is not a valid URL." in response.json["errors"]["info_url"]
-
-
-@pytest.mark.parametrize(
-    "deadline",
+    "deadline_str",
     [
         date.today().strftime("%m/%d/%Y"),
         date.today().strftime("%Y-%m-%d"),
-        date.today().strftime("%b %d %Y"),
+        (date.today() + timedelta(days=3)).strftime("%b %d %Y"),
     ],
 )
-def test_create_widget_valid_deadline(client, db, admin, deadline):
+def test_create_widget_valid_deadline(client, db, admin, deadline_str):
     response = login_user(client, email=ADMIN_EMAIL)
     assert "access_token" in response.json
     access_token = response.json["access_token"]
-    response = create_widget(client, access_token, deadline=deadline)
+    response = create_widget(client, access_token, deadline_str=deadline_str)
     assert response.status_code == HTTPStatus.CREATED
     assert "status" in response.json and response.json["status"] == "success"
     success = f"New widget added: {DEFAULT_NAME}."
@@ -1476,37 +1463,57 @@ def test_create_widget_valid_deadline(client, db, admin, deadline):
     location = f"http://localhost/api/v1/widgets/{DEFAULT_NAME}"
     assert "Location" in response.headers and response.headers["Location"] == location
 
+```
 
-@pytest.mark.parametrize("deadline", ["1/1/1970", "2020 - 45 - 21 - 66", "someday"])
-def test_create_widget_invalid_deadline(client, db, admin, deadline):
+```python {linenos=table,linenostart=45,hl_lines=["4-6"]}
+@pytest.mark.parametrize(
+    "deadline_str",
+    [
+        "1/1/1970",
+        (date.today() - timedelta(days=3)).strftime("%Y-%m-%d"),
+        "a long time ago, in a galaxy far, far away",
+    ],
+)
+def test_create_widget_invalid_deadline(client, db, admin, deadline_str):
     response = login_user(client, email=ADMIN_EMAIL)
     assert "access_token" in response.json
     access_token = response.json["access_token"]
-    response = create_widget(client, access_token, deadline=deadline)
+    response = create_widget(client, access_token, deadline_str=deadline_str)
     assert response.status_code == HTTPStatus.BAD_REQUEST
     assert "message" in response.json and response.json["message"] == BAD_REQUEST
     assert "errors" in response.json and "deadline" in response.json["errors"]
 
+```
 
-def test_create_widget_bundle_errors(client, db, admin):
-    response = login_user(client, email=ADMIN_EMAIL)
-    assert "access_token" in response.json
-    access_token = response.json["access_token"]
-    response = create_widget(
-        client,
-        access_token,
-        widget_name="widget name",
-        info_url="www.widget.info",
-        deadline="1/1/1970",
-    )
-    assert response.status_code == HTTPStatus.BAD_REQUEST
-    assert "message" in response.json and response.json["message"] == BAD_REQUEST
-    assert "errors" in response.json and "name" in response.json["errors"]
-    assert (
-        "info_url" in response.json["errors"] and "deadline" in response.json["errors"]
-    )
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
+<span class="cmd-results">================================================= test session starts ==================================================
+platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
+plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+collected 11 items
 
+tests/test_create_widget.py::BLACK PASSED                                                                        [  9%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 18%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 27%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 36%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [ 45%]
+<span class="cmd-hl-teal">tests/test_create_widget.py::test_create_widget_valid_deadline[01/22/2020] PASSED                                [ 83%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-01-22] PASSED                                [ 84%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Jan 25 2020] PASSED                               [ 85%]</span>
+<span class="cmd-hl-purple">tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                                [ 86%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-01-19] PASSED                              [ 87%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 88%]</span>
 
+=================================================== warnings summary ===================================================
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask_api_tutorial/venv/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, MutableMapping
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+============================================ 11 passed, 1 warning in 1.13s =============================================</span></code></pre>
+
+```python {linenos=table,linenostart=67}
 def test_create_widget_already_exists(client, db, admin):
     response = login_user(client, email=ADMIN_EMAIL)
     assert "access_token" in response.json
@@ -1520,20 +1527,6 @@ def test_create_widget_already_exists(client, db, admin):
     assert "message" in response.json and response.json["message"] == name_conflict
 
 
-def test_create_widget_no_token(client, db):
-    request_data = (
-        f"name={DEFAULT_NAME}&info_url={DEFAULT_URL}&deadline={DEFAULT_DEADLINE}"
-    )
-    response = client.post(
-        url_for("api.widget_list"),
-        data=request_data,
-        content_type="application/x-www-form-urlencoded",
-    )
-    assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "status" in response.json and response.json["status"] == "fail"
-    assert "message" in response.json and response.json["message"] == UNAUTHORIZED
-
-
 def test_create_widget_no_admin_token(client, db, user):
     response = login_user(client, email=EMAIL)
     assert "access_token" in response.json
@@ -1542,6 +1535,7 @@ def test_create_widget_no_admin_token(client, db, user):
     assert response.status_code == HTTPStatus.FORBIDDEN
     assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == FORBIDDEN
+
 ```
 
 ### Retrieve Widget List

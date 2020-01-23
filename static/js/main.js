@@ -1,4 +1,4 @@
-const addLinksToHeaderElement = function(h) {
+function addLinksToHeaderElement(h) {
   h.insertAdjacentHTML(
     "beforeend",
     `<a href="#${h.id}" class="hanchor hanchor-self hide-element" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-link"></i></a></a>`
@@ -22,46 +22,29 @@ function hideHeaderLinks(event) {
   this.onmouseleave = null;
 }
 
-const toggleSeriesAccordian = function(event) {
-  event.stopPropagation();
-  document
-    .querySelector(".series-accordian-section")
-    .classList.toggle("ac_hidden");
-};
+function addTargetBlankToExternalLinks(a) {
+  if (!a.getAttribute("href").startsWith("/")) {
+    a.setAttribute("target", "_blank");
+  }
+}
 
-const toggleTocAccordian = function(event) {
-  event.stopPropagation();
-  document
-    .querySelector(".toc-accordian-section")
-    .classList.toggle("ac_hidden");
-};
+function createToggle(accordion) {
+  const accordianSection = accordion.querySelector("section");
+  const button = accordion.querySelector(".accordion-button");
+  button.addEventListener("click", () => toggleAccordion(accordianSection))
+}
 
-const toggleGitLinksAccordian = function(event) {
+function toggleAccordion(accordianSection) {
   event.stopPropagation();
-  document
-    .querySelector(".github-accordian-section")
-    .classList.toggle("ac_hidden");
-};
-
-const toggleApiRequirementsAccordian = function(event) {
-  event.stopPropagation();
-  document
-    .querySelector(".api-requirements-accordian-section")
-    .classList.toggle("ac_hidden");
-};
+  accordianSection.classList.toggle("ac_hidden");
+}
 
 document
   .querySelectorAll("article h2[id], article h3[id], article h4[id], article h5[id]")
   .forEach(h => addLinksToHeaderElement(h));
 document
-  .querySelectorAll(".series-accordian-button")
-  .forEach(button => button.addEventListener("click", toggleSeriesAccordian));
+  .querySelectorAll(".note a, .alert a")
+  .forEach(a => addTargetBlankToExternalLinks(a));
 document
-  .querySelectorAll(".toc-accordian-button")
-  .forEach(button => button.addEventListener("click", toggleTocAccordian));
-document
-  .querySelectorAll(".github-accordian-button")
-  .forEach(button => button.addEventListener("click", toggleGitLinksAccordian));
-document
-  .querySelectorAll(".api-requirements-accordian-button")
-  .forEach(button => button.addEventListener("click", toggleApiRequirementsAccordian));
+  .querySelectorAll(".accordion")
+  .forEach(accordion => createToggle(accordion));

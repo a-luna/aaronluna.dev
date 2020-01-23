@@ -222,7 +222,7 @@ static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 The Swagger UI should also be updated to include the new API endpoint:
 
-{{< image_fig img1 "500x q95" >}}
+{{< image_fig img1 >}}
 
 Finally, let's create unit tests to verify the login process is working correctly.
 
@@ -850,7 +850,7 @@ We just demonstrated how to make a request for a protected resource in code (usi
 
 Did you check out the Swagger UI page after implementing the `/auth/user` endpoint? Fire up the development server with `flask run` and navigate to `http://localhost:5000/api/v1/ui`:
 
-{{< image_fig img2 "500x q95" >}}
+{{< image_fig img2 >}}
 
 You may have already seen this and wondered, why is the `GET` `/auth/user` component the only one with a lock icon (<span class="fa fa-unlock-alt"></span>), or more accurately, a unlocked lock icon? And does it have anything to do with that button labeled **Authorize** that also has a lock icon?
 
@@ -876,39 +876,39 @@ The two are in fact related. The lock icon indicates that the API endpoint requi
 
 Let's see what happens if we attempt to send a request to `/auth/user` as the component is currently configured. First, expand the component by clicking anywhere on the blue bar, click **Try it out**, then click **Execute**:
 
-{{< image_fig img3 "500x q95" >}}
+{{< image_fig img3 >}}
 
 We already knew that this would be the response since we created a test case (`test_auth_user_no_token`) to verify that sending a request to the `api.auth_user` endpoint without an access token would not succeed. So how do we get an access token and how do we send it in the request header with Swagger UI?
 
 Getting an access token is easy, just register a new user <span class="emphasis">OR</span> login with an existing user and the response will include a token in the <code>access_token</code> field. Copy the access token from the **Response body** text box:
 
-{{< image_fig img4 "500x q95" >}}
+{{< image_fig img4 >}}
 
 Next, click the **Authorize** button above the API routes (1). A dialog box will appear titled **Avaialable authorizations**. Paste the access token that was copied from the **Response body** text box into the **Value** text box in the dialog (2). Click **Authorize** (3):
 
-{{< image_fig img5 "500x q95" >}}
+{{< image_fig img5 >}}
 
 After clicking **Authorize**, the button text changes to **Logout**, and the **Value** text box is replaced by a label of asterisk characters (see below). Click **Close** to dismiss the dialog and return to the Swagger UI:
 
-{{< image_fig img6 "500x q95" >}}
+{{< image_fig img6 >}}
 
 Notice that with the access token successfully configured, the lock icons have changed from being unlocked (<span class="fa fa-unlock-alt"></span>) to locked (<span class="fa fa-lock"></span>):
 
-{{< image_fig img7 "500x q95" >}}
+{{< image_fig img7 >}}
 
 Let's send a request to the `api.auth_user` endpoint again, now that the access token will be sent in the request header:
 
-{{< image_fig img8 "500x q95" >}}
+{{< image_fig img8 >}}
 
 As you can see, the access token is sent in the `Authorization` field of the request header, as required by the specification doc for Bearer Token Authentication (RFC6750).
 
 With the `development` environment configuration settings, all access tokens expire fifteen minutes after being issued. If a request is sent with an expired access token, both the response body and header should contain error messages explaining why the request was not succesful:
 
-{{< image_fig img9 "500x q95" >}}
+{{< image_fig img9 >}}
 
 Similarly, try changing any part of an access token (even just a single character) and updating the value in the **Available authorizations** dialog box. The request will be rejected and the response will contain a different error message than the message for an expired token or for not sending an access token at all:
 
-{{< image_fig img10 "500x q95" >}}
+{{< image_fig img10 >}}
 
 That's all you need to do to automatically include the access token when a request is made to a protected resource. Let's figure out how to do the same with httpie.
 

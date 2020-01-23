@@ -5,7 +5,13 @@ module.exports = {
         }),
         require('postcss-uncss')({
             html: ['public/**/*.html'],
-            whitelist: ['#menu a.active']
+            whitelist: [
+                '.hide-element',
+                '.copyable-text-area',
+                '.hanchor',
+                '.hanchor-self',
+                '.hanchor-top'
+            ]
         })
     ]
 }

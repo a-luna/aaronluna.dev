@@ -8,7 +8,7 @@ function createCopyButton(highlight) {
 }
 
 async function copyCodeToClipboard(button, highlight) {
-  const codeElement = highlight.querySelector(":last-child > .chroma > code");
+  const codeElement = highlight.querySelector(".chroma > code");
   const codeToCopy = codeElement.innerText;
   try {
     result = await navigator.permissions.query({ name: "clipboard-write" });
