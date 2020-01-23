@@ -1653,8 +1653,12 @@ figcaption {
 
 .toc__menu ul li {
   padding: 0;
-  margin: 5px 0;
+  margin: 0 0 15px 0;
   line-height: 1.3;
+}
+
+.toc__menu ul li:last-child {
+  margin: 0;
 }
 
 .toc__menu ul ul {
