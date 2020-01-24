@@ -21,11 +21,6 @@ resources:
     src: images/cover.jpg
     params:
       credit: "Photo by wong zihoo on Unsplash"
-twitter:
-  card: "summary"
-  creator: "@aaronlunadev"
-  title: "How To: Create a Flask API with JWT-Based Authentication (Part 6: Widget API Continued)"
-  description: "Part 6 completes the implementation of the Widget API. Since one of the requirements is to allow users to retrieve a paginated list of widgets, advanced techniques for serializing objects to JSON are demonstrated. Both the widget API model and the pagination API model are complex, requiring the use of several new classes from the Flask-RESTPlus fields module. The update and delete processes are implemented next and unit tests for all endpoint/request type combination are created and executed."
 ---
 ## Project Structure
 
@@ -1410,9 +1405,9 @@ collected 5 items
 
 tests/test_create_widget.py::BLACK PASSED                                                                        [ 20%]
 tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 40%]
-<span class="cmd-hl-magenta">tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 60%]</span>
-<span class="cmd-hl-magenta">tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 80%]</span>
-<span class="cmd-hl-magenta">tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [100%]</span>
+<span class="cmd-hl-gold">tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 60%]</span>
+<span class="cmd-hl-gold">tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 80%]</span>
+<span class="cmd-hl-gold">tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [100%]</span>
 
 =================================================== warnings summary ===================================================
 tests/test_create_widget.py::test_create_widget_valid_name[abc123]

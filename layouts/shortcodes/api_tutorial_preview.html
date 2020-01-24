@@ -1,15 +1,24 @@
-<div id="showcase">
-    <div class="showcase-message">New Tutorial Series!</div>
-    <a href="/series/flask-api-tutorial/overview">
-        <h2>How To: Create a Flask API with JWT-Based Authentication</h2>
-    </a>
-    <p>Step-by-step instructions and in-depth explanations guide you through the process of creating a robust, production-quality REST API using <strong>Flask</strong>, <strong>Flask-RESTPlus</strong>, <strong>pyjwt</strong>, <strong>SQLAlchemy</strong>        and other packages.</p>
-    <p>Code quality is a major focus, test coverage is created along with new functionality (using <strong>pytest</strong>). Other dev tools used: <strong>coverage</strong>, <strong>flake8</strong>, <strong>mypy</strong> and <strong>tox</strong>.</p>
-    <div class="list__item meta">
-        <div class="post-categories">
-            <a class="post-category tutorial-series" href="/series">tutorial</a>
-            <a class="post-category python" href="/categories/python" rel="category">python</a>
-            <a class="post-category flask" href="/categories/flask">flask</a>
+{{ $page := .Site.GetPage "/flask_api_tutorial/part-0" }}
+<article class="list__item post default">
+    {{ $postImage := $page.Resources.GetMatch (printf "*cover*") }}
+    {{ if $postImage }}{{ $thumbnail := $postImage.Fill "200x100" }}
+        <figure class="list__thumbnail">
+            <a href="{{ $page.RelPermalink }}">
+                <img src="{{ $thumbnail.RelPermalink }}" alt="{{ $page.Title }}" />
+            </a>
+        </figure>
+    {{ end }}
+    <header class="list__header">
+        <div class="post-meta-date">
+            <div class="meta__text">New Tutorial Series!</div>
         </div>
+        <h3 class="list__title post__title ">
+            <a href="{{ $page.RelPermalink }}" rel="bookmark">{{ $page.Title }}</a>
+        </h3>
+    </header>
+    <div class="content list__excerpt post__content clearfix">
+        <p>Step-by-step instructions and in-depth explanations guide you through the process of creating a robust, production-quality REST API using <strong>Flask</strong>, <strong>Flask-RESTPlus</strong>, <strong>pyjwt</strong>, <strong>SQLAlchemy</strong>        and other packages.</p>
+        <p>Code quality is a major focus, test coverage is created along with new functionality (using <strong>pytest</strong>). Other dev tools used: <strong>coverage</strong>, <strong>flake8</strong>, <strong>mypy</strong> and <strong>tox</strong>.</p>
     </div>
-</div>
+    {{- partial "post_meta/categories.html" $page -}}
+</article>

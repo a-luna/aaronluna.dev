@@ -13,10 +13,6 @@ resources:
     src: images/cover.jpg
     params:
       credit: "Photo by David Clode on Unsplash"
-twitterCard:
-  card: "summary_large_image"
-  title: "Error Handling in Python: Result Class"
-  description: "In a previous post, I explained how concepts from functional programming can be incorporated with object-oriented code to improve the tedious and mandatory task of error handling and input validation through the use of the Result class. That post explained how to implement the Result class in C#. Since I have been writing mostly Python code lately, I created a new implementation and documented its use. Due to Python's duck-typing, this implementation is (IMO) more natural and makes reasoning about the code it supports much easier."
 ---
 
 In a [previous post](/2018/02/04/csharp-tpl-socket-methods/), I presented a C# ``Result`` class that represents the outcome of an operation. This class is intended to be used for error handling as an alternative to throwing and handling exceptions. I was introduced to this concept by <a href="https://enterprisecraftsmanship.com/2015/03/20/functional-c-handling-failures-input-errors/" target="_blank">a post</a> from the <a href="https://enterprisecraftsmanship.com/" target="_blank">Enterprise Craftsmanship blog</a>. I recommend reading the entire post, which is part of a series examining how principles from Functional Programming can be applied to C#.

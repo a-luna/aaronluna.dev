@@ -1,5 +1,13 @@
 <article class="list__item post flask_api_tutorial">
-    <a href="{{ .RelPermalink }}" rel="bookmark">{{ partial "thumbnail" . }}</a>
+    {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
+    {{ if $postImage }}
+        {{ $thumbnail := $postImage.Fill "200x100" }}
+        <figure class="list__thumbnail">
+            <a href="{{ .RelPermalink }}">
+                <img src="{{ $thumbnail.RelPermalink }}" alt="{{ .Title }}" />
+            </a>
+        </figure>
+    {{ end }}
     <header class="list__header">
         <h3 class="list__title post__title ">
             <a href="{{ .RelPermalink }}" rel="bookmark">{{ .Params.lead }}</a>

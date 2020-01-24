@@ -1,11 +1,13 @@
 <article class="list__item post default">
-    {{- if .Params.thumbnail }}
-    <figure class="list__thumbnail">
-        <a href="{{ .Permalink }}">
-            <img src="{{ .Params.thumbnail | relURL }}" alt="{{ .Title }}" />
-        </a>
-    </figure>
-    {{- end }}
+    {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
+    {{ if $postImage }}
+        {{ $thumbnail := $postImage.Fill "200x100" }}
+        <figure class="list__thumbnail">
+            <a href="{{ .RelPermalink }}">
+                <img src="{{ $thumbnail.RelPermalink }}" alt="{{ .Title }}" />
+            </a>
+        </figure>
+    {{ end }}
     <header class="list__header">
         <div class="post-meta-date">
             {{- if not .Date.IsZero }}

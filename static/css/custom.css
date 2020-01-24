@@ -251,13 +251,6 @@ ol li p {
   color: var(--tut-link-color)
 }
 
-.blog-list .main__content {
-  background-color: #323232;
-  border-bottom: 2px dotted #7f7f7f;
-  padding: 0 0 20px;
-  margin: 0 0 10px;
-}
-
 .about-me .post__header {
   text-align: center;
   margin: 0 0 1.5em;
@@ -571,6 +564,11 @@ h4 {
   color: var(--widget-bg-color);
 }
 
+.cmd-hl-gold {
+  background-color: var(--gold1);
+  color: var(--widget-bg-color);
+}
+
 .cmd-hl {
   background: var(--hl-line-bg);
 }
@@ -614,6 +612,15 @@ a:active:hover {
   font-weight: 400;
   color: var(--accent-color1);
   text-decoration: none;
+}
+
+.content .list__header .post-meta-date .meta__text {
+  color: var(--pink2);
+  font-weight: 700;
+}
+
+.content .list__header .post__title {
+  margin: 0;
 }
 
 .tutorial a,
@@ -1938,7 +1945,7 @@ a.post-nav__link:focus {
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
-  font-size: 1em;
+  font-size: 1.05em;
   margin: 20px 0;
   padding:0;
 }
@@ -3467,7 +3474,7 @@ blockquote td {
   }
 
   #header-nav .post-nav__post-title {
-    font-size: 1.1em;
+    font-size: 1.2em;
   }
 
   .post-nav .post-nav__item--next {
