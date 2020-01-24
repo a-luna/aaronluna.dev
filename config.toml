@@ -1,6 +1,5 @@
 baseurl = "https://aaronluna.dev/"
 title = "aaronluna.dev"
-theme = "hugo-notice"
 languageCode = "en-us"
 paginate = "3" # Number of posts per page
 assetDir = "static"
@@ -8,6 +7,9 @@ assetDir = "static"
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsUseClasses = true
+
+[imaging]
+  anchor = "smart"
 
 [markup]
   [markup.goldmark]
