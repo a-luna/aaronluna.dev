@@ -17,8 +17,8 @@ url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.5.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.5.tar.gz"
 url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.4...v0.5"
 resources:
-  - name: main
-    src: images/main.jpg
+  - name: cover
+    src: images/cover.jpg
     params:
       credit: "Photo by Tania Melnyczuk on Unsplash"
 twitter:

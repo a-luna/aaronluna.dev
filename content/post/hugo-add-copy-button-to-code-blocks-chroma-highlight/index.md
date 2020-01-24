@@ -8,8 +8,8 @@ categories:
   - JavaScript
 summary: "Hugo includes a built-in syntax-highlighter called Chroma. Chroma is extremely fast since it is written in pure Go (like Hugo) and supports every language I can think of. Chroma's speed is especially important since syntax highlighters are notorious for causing slow page loads. However, it lacks one vital feature — an easy way to copy a code block to the clipboard. I decided to document my implementation using only vanilla JS since every blog post I found for this issue relied on jquery to parse the DOM, which is a shame. We can do better, people."
 resources:
-  - name: main
-    src: images/main.jpg
+  - name: cover
+    src: images/cover.jpg
     params:
       credit: "Photo by Natalia Y on Unsplash"
 twitter:
@@ -141,7 +141,7 @@ function createCopyButton(highlight) {
 }
 
 async function copyCodeToClipboard(button, highlight) {
-  const codeElement = highlight.querySelector(".chroma > code");
+  const codeElement = highlight.querySelector(":last-child > .chroma > code");
   const codeToCopy = codeElement.innerText;
   try {
     result = await navigator.permissions.query({ name: "clipboard-write" });
@@ -238,4 +238,4 @@ When the user clicks a "Copy" button, the `copyCodeToClipboard` function is call
     </ul>
 </div>
 
-On this site, the JavaScript in the code block above lives in a file named `copyCodeBlock.js` inside the `static` folder. If you'd like, you can verify this and debug the code using your browser's dev tools on any page that contains a code block. I hope this is helpful to you if you use Hugo and have run into the same problem, please leave any feedback/questions in the comments below!
+On this site, the JavaScript in the code block above is bundled with other js files and minified. If you'd like, you can verify the code and debug it using your browser's dev tools on any page that contains a code block (the easiest way would be to inspect the copy button, find the event listeners attached to it and add breakpoints to the method attached to the click handler). I hope this is helpful to you if you use Hugo and have run into the same problem, please leave any feedback/questions in the comments below!

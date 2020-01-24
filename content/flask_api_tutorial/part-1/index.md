@@ -16,8 +16,8 @@ url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.1"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.1.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.1.tar.gz"
 resources:
-  - name: main
-    src: images/main.jpg
+  - name: cover
+    src: images/cover.jpg
     params:
       credit: "Photo by Matt Howard on Unsplash"
 twitter:

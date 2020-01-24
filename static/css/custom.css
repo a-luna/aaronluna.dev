@@ -566,6 +566,11 @@ h4 {
   color: var(--widget-bg-color);
 }
 
+.cmd-hl-magenta {
+  background-color: var(--magenta3);
+  color: var(--widget-bg-color);
+}
+
 .cmd-hl {
   background: var(--hl-line-bg);
 }

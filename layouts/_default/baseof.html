@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 {{ if eq .Section "blog" }}
-	{{ .Scratch.Set "section_class_list" " blog-list" }}
+	{{ .Scratch.Set "section_class" " blog-list" }}
 {{ else if eq .Section "post" }}
-    {{ .Scratch.Set "section_class_list" " blog-post"}}
+    {{ .Scratch.Set "section_class" " blog-post"}}
 {{ else if or (eq .Section "series") (eq .Section "flask_api_tutorial") }}
-	{{ .Scratch.Set "section_class_list" " tutorial" }}
+    {{ .Scratch.Set "section_class" " tutorial" }}
 {{ end }}
 
-<html class="no-js {{ .Scratch.Get "section_class_list" }}" lang="{{ .Site.LanguageCode | default "en-us" }}">
+<html class="no-js" lang='{{ .Site.LanguageCode | default "en-us" }}'>
 {{ partial "head" . }}
-<body class="body{{ .Scratch.Get "section_class_list" }}">
+<body class='body{{ .Scratch.Get "section_class" }}'>
     <div class="container container--outer">
         {{ partial "menu" . }}
         <div class="wrapper flex">
             <div class="primary">
                 {{ block "main" . }}
-                    <div class="content main__content clearfix">
-                        {{ .Content }}
-                    </div>
+                    <div class="content main__content clearfix">{{ .Content }}</div>
                 {{ end }}
             </div>
             {{ partial "search_results"}}

@@ -10,16 +10,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="msapplication-starturl" content="/blog?souce=pwa" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    {{ $postImage := .Page.Resources.GetMatch (printf "*main*") }}{{ if $postImage }}<meta name="thumbnail" content="{{ $postImage.RelPermalink }}">{{ end }}
+    {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}{{ if $postImage }}{{ $thumbnail := $postImage.Resize "90x" }}<meta name="thumbnail" content="{{ $thumbnail.RelPermalink }}">{{ end }}
     <title>{{ block "title" . }}{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}{{ end }}</title>
     <script>
         (function(d, e) {
             d[e] = d[e].replace("no-js", "js");
         })(document.documentElement, "className");
     </script>
-    <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Params.Description }}{{ end }}">
+    <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Params.Summary }}{{ end }}">
     {{ if .Site.Params.opengraph }}
-        {{ template "_internal/opengraph.html" . }}
+        {{ partial "opengraph" . }}
     {{ end }}
     {{ if .Site.Params.twitter_cards }}
         {{ partial "twitter-card" . }}

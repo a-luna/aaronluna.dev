@@ -1,4 +1,4 @@
-{{ $postImage := .Page.Resources.GetMatch (printf "*main*") }}
+{{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
 {{ if $postImage }}
     {{ if ge $postImage.Width "500" }}
         {{ $tiny := $postImage.Resize "500x" }}

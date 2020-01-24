@@ -17,8 +17,8 @@ url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.6.zip"
 url_git_rel_tar: "https://github.com/a-luna/flask-api-tutorial/archive/v0.6.tar.gz"
 url_git_rel_diff: "https://github.com/a-luna/flask-api-tutorial/compare/v0.5...v0.6"
 resources:
-  - name: main
-    src: images/main.jpg
+  - name: cover
+    src: images/cover.jpg
     params:
       credit: "Photo by wong zihoo on Unsplash"
 twitter:
@@ -1410,9 +1410,9 @@ collected 5 items
 
 tests/test_create_widget.py::BLACK PASSED                                                                        [ 20%]
 tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 40%]
-<span class="cmd-hl-border">tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED</span>                                        [ 60%]
-<span class="cmd-hl-border">tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED</span>                                   [ 80%]
-<span class="cmd-hl-border">tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED</span>                                   [100%]
+<span class="cmd-hl-magenta">tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 60%]</span>
+<span class="cmd-hl-magenta">tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 80%]</span>
+<span class="cmd-hl-magenta">tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [100%]</span>
 
 =================================================== warnings summary ===================================================
 tests/test_create_widget.py::test_create_widget_valid_name[abc123]
@@ -1464,6 +1464,8 @@ def test_create_widget_valid_deadline(client, db, admin, deadline_str):
     assert "Location" in response.headers and response.headers["Location"] == location
 
 ```
+
+
 
 ```python {linenos=table,linenostart=45,hl_lines=["4-6"]}
 @pytest.mark.parametrize(

@@ -1,5 +1,5 @@
 baseurl = "https://aaronluna.dev/"
-title = "Aaron Luna"
+title = "aaronluna.dev"
 theme = "hugo-notice"
 languageCode = "en-us"
 paginate = "3" # Number of posts per page
@@ -18,9 +18,14 @@ pygmentsUseClasses = true
     ordered = false
     startLevel = 2
 
+[twitterCard]
+  generate = true
+  site = "https://aaronluna.dev"
+  creator = "aaronlunadev"
+
 [outputs]
-    home = ["HTML", "JSON"]
-    page = ["HTML", "RSS"]
+  home = ["HTML", "JSON"]
+  page = ["HTML", "RSS"]
 
 [permalinks]
   post = "/blog/:slug/"
@@ -36,6 +41,8 @@ pygmentsUseClasses = true
   copyright = "Aaron Luna"
   opengraph = true
   twitter_cards = true
+  site = "https://aaronluna.dev"
+  twitter = "aaronlunadev"
   readmore = false
   authorbox = false
   post_navigation = true

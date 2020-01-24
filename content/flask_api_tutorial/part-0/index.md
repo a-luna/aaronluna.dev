@@ -17,8 +17,8 @@ aliases:
     - "/series/flask_api_tutorial/"
     - "/series/flask-api-tutorial/"
 resources:
-  - name: main
-    src: images/main.jpg
+  - name: cover
+    src: images/cover.jpg
     params:
       credit: "Photo by Matt Howard on Unsplash"
 twitter:
