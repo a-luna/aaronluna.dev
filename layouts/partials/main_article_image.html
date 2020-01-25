@@ -1,24 +1,24 @@
 {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
 {{ if $postImage }}
     {{ if ge $postImage.Width "500" }}
-        {{ $tiny := $postImage.Resize "500x" }}
+        {{ $tiny := $postImage.Fill "500x320" }}
         {{ .Scratch.Add "srcset" $tiny.RelPermalink }}
         {{ .Scratch.Add "srcset" " 500w" }}
     {{ end }}
     {{ if ge $postImage.Width "800" }}
-        {{ $small := $postImage.Resize "800x" }}
+        {{ $small := $postImage.Fill "800x512" }}
         {{ .Scratch.Add "srcset" ", " }}
         {{ .Scratch.Add "srcset" $small.RelPermalink }}
         {{ .Scratch.Add "srcset" " 800w" }}
     {{ end }}
     {{ if ge $postImage.Width "1200" }}
-        {{ $medium := $postImage.Resize "1200x" }}
+        {{ $medium := $postImage.Fill "1200x768" }}
         {{ .Scratch.Add "srcset" ", " }}
         {{ .Scratch.Add "srcset" $medium.RelPermalink }}
         {{ .Scratch.Add "srcset" " 1200w" }}
     {{ end }}
     {{ if ge $postImage.Width "1500" }}
-        {{ $large := $postImage.Resize "1500x" }}
+        {{ $large := $postImage.Fill "1500x960" }}
         {{ .Scratch.Add "srcset" ", " }}
         {{ .Scratch.Add "srcset" $large.RelPermalink }}
         {{ .Scratch.Add "srcset" " 1500w" }}

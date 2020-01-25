@@ -12,7 +12,7 @@
                 </div>
                 <h1 class="post__title">{{ .Title }}</h1>
                     <div class="post__meta meta">{{ partial "post_meta" . }}</div>
-                <div class="post__image">{{ partial "responsive_image" . }}</div>
+                <div class="post__image">{{ partial "main_article_image" . }}</div>
             </header>
             {{- partial "post_toc" . -}}
             <div class="content post__content clearfix">{{ .Content }}</div>

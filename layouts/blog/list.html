@@ -1,8 +1,8 @@
 {{ define "main" }}
 <main class="main list blog-list" role="main">
-    <div class="content main__content clearfix">{{- with .Content }}{{ . }}{{- end }}</div>
+    <div class="content main__content clearfix">{{ .Content }}</div>
     {{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "post")) }}
     {{ range $paginator.Pages }}{{- .Render "summary" }}{{- end }}
 </main>
-{{ partial "pagination.html" . }}
+{{ partial "pagination" . }}
 {{ end }}

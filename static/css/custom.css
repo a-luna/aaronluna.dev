@@ -1643,6 +1643,53 @@ figcaption {
   margin: 10px 0 5px 20px;
 }
 
+#api-tutorial-preview {
+  display: flex;
+  flex-flow: row nowrap;
+  background-color: var(--widget-bg-color);
+  border: 1px solid var(--teal2);
+  border-radius: 4px;
+  padding: 15px;
+  margin: 0 0 40px 0;
+}
+
+#api-tutorial-preview .meta__text {
+  color: var(--teal2);
+  font-size: 1.38em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 10px;
+}
+
+#api-tutorial-preview .list__title {
+  font-size: 1.42em;
+  margin: 0 0 10px 0;
+}
+
+#api-tutorial-preview .post__title-wrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  flex: 1 1 0;
+  min-width: 250px;
+}
+
+#api-tutorial-preview figure {
+  border: 1px solid var(--widget-bg-color);
+  flex: 0 1 40%;
+  margin: auto 15px auto 0;
+  min-width: 165px;
+}
+
+#api-tutorial-preview .post-categories {
+  margin: 5px 0 0 0;
+}
+
+#api-tutorial-preview a.post-category {
+  font-size: 0.95em;
+  padding: 2px 5px;
+}
+
 .toc__menu ul {
   list-style: disc;
   color: var(--blog-link-color);
@@ -2928,13 +2975,6 @@ header,
   border-radius: 4px;
 }
 
-.recent-post .post-meta-date .meta__text {
-  color: var(--home-recent-post-date-color);
-  font-size: 1.65em;
-  line-height: 23px;
-  margin: 0 0 10px;
-}
-
 .list__meta {
   margin: 7px 0;
 }
@@ -3370,6 +3410,45 @@ blockquote td {
   border: 1px solid var(--mid-gray1);
 }
 
+@media screen and (max-width: 968px) {
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 0.9em;
+  }
+}
+
+@media screen and (max-width: 890px) {
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 0.85em;
+  }
+  #api-tutorial-preview figure {
+    min-width: 145px;
+  }
+}
+
+@media screen and (max-width: 865px) {
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 0.8em;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 0.75em;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  #api-tutorial-preview .meta__text {
+    font-size: 1.3em;
+  }
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 1.05em;
+  }
+  #api-tutorial-preview figure {
+    min-width: 165px;
+  }
+}
+
 @media screen and (max-width: 700px) {
   .pagination {
     justify-content: center;
@@ -3612,6 +3691,20 @@ blockquote td {
     padding: 8px 5px;
     margin: 0 3px;
   }
+
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 1em;
+  }
+
+  #api-tutorial-preview figure {
+    min-width: 155px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 0.9em;
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -3688,23 +3781,59 @@ blockquote td {
   #search-header .button {
     margin: 10px auto 10px 0;
   }
+  #api-tutorial-preview {
+    padding: 10px;
+  }
+  #api-tutorial-preview .meta__text {
+    margin: 0 0 5px;
+  }
+  #api-tutorial-preview .list__title {
+    margin: 0 0 5px 0;
+  }
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 0.85em;
+    justify-content: space-around;
+  }
+  #api-tutorial-preview figure {
+    flex: 0 1 40%;
+    min-width: 135px;
+    margin: 0 10px 0 0;
+  }
+  #api-tutorial-preview .post-categories {
+    display: none;
+  }
+}
+@media screen and (max-width: 440px) {
+  #api-tutorial-preview figure {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 350px) {
-  .site-name-link {
-    font-size: 1.1em;
-  }
-
   #site-name {
-    font-size: 1.4em;
+    font-size: 1.25em;
   }
 
   #social ul {
-    font-size: 1.3em;
+    font-size: 1.25em;
   }
 
   .site-menu a {
     font-size: 1em;
     padding: 3px 5px;
+
+  }
+  #api-tutorial-preview .meta__text {
+    margin: 0 0 5px;
+  }
+  #api-tutorial-preview .list__title {
+    margin: 0 0 5px 0;
+  }
+  #api-tutorial-preview .post__title-wrapper {
+    font-size: 0.8em;
+    min-width: 0;
+  }
+  #api-tutorial-preview figure {
+    display: none;
   }
 }

@@ -70,30 +70,30 @@ Creating a project in Azure DevOps gives you more than a private git repository.
 
 <div class="flex-row">
     <div class="flex-item">
-{{< image_fig img1 >}}
+{{< linked_image img1 >}}
     </div>
     <div class="flex-item">
-{{< image_fig img2 >}}
+{{< linked_image img2 >}}
     </div>
 </div>
 
 First, you must select the repository that contains your heroku app. Leave **Azure Repos Git** selected and choose the repo from the dropdown list. Then, click **Continue** (**Figure 3**):
 
-{{< image_fig img3 >}}
+{{< linked_image img3 >}}
 
 Next, you are asked to select a template. You can find templates for many technologies/tools, but since we are creating a simple CD process, scroll to the bottom and select **Empty pipeline** (**Figure 4**):
 
-{{< image_fig img4 >}}
+{{< linked_image img4 >}}
 
 You should see the empty pipeline shown in **Figure 5**. Notice that you are currently viewing the **Tasks** section of the pipeline. Change the name to "Deploy to Heroku" or anything else you like. You can leave the value for **Agent pool** as **Hosted VS2017**:
 
-{{< image_fig img5 >}}
+{{< linked_image img5 >}}
 
 ## Enabling Continous Integration
 
 Currently, this pipeline is not configured to run in response to any trigger. In fact, it will never run unless you setup a schedule or enable continuous integration. To do so, Click **Triggers** and select the checkbox for **Enable continuous integration** as shown in Figure 6.
 
-{{< image_fig img6 >}}
+{{< linked_image img6 >}}
 
 Now this pipeline will run whenever a commit is made to the master branch of your repo. You can make this behavior more fine-grained if you wish, by selecting a different branch or adding a path filter in the **Branch Filters** section.
 
@@ -126,23 +126,23 @@ Ok, back at the Azure Build Pipeline, click **Variables** and create a new Pipel
   </div>
 </div>
 
-{{< image_fig img7 >}}
+{{< linked_image img7 >}}
 
-{{< image_fig img8 >}}
+{{< linked_image img8 >}}
 
 ## Configuring the Build Task
 
 It might seem like we've done a lot of work up to this point, but right now our pipeline doesn't actually do anything. Click on **Tasks** to return to the empty build template. Click on the <i class="fa fa-plus"></i> symbol to add a task to Agent job 1 as shown in **Figure 9**:
 
-{{< image_fig img9 >}}
+{{< linked_image img9 >}}
 
 The list of tasks is pretty huge, so filter it by typing **"power"** or **"powershell"** into the search box as shown in **Figure 10**. Then, click the **Add** button to add a blank Powershell task to Agent job 1:
 
-{{< image_fig img10 >}}
+{{< linked_image img10 >}}
 
 This task requires either a filepath to a Powershell script or an inline Powershell script that executes when the build is triggered. Click the radio button for **Inline** as shown in **Figure 11**:
 
-{{< image_fig img11 >}}
+{{< linked_image img11 >}}
 
 What do we need our Powershell script to do, exactly? In order to push our updated code to Heroku, our script needs to do three things:
 
@@ -171,25 +171,25 @@ git remote add heroku https://heroku:$(pat)@git.heroku.com/test_app.git
 git push heroku $(Build.SourceBranchName)
 ```
 
-{{< image_fig img12 >}}
+{{< linked_image img12 >}}
 
 It's a good idea to doublecheck your work at this point. When you are confident that everyting is configured correctly, **Save & queue** your build as shown in **Figure 13**:
 
-{{< image_fig img13 >}}
+{{< linked_image img13 >}}
 
 ## Verify Deployment
 
 After the build is queued, click the link that appears, This will take you to build logs which update live as the deployment is running. If everything was configured correctly, you should eventually see that every step of the build pupeline succeeded as shown in **Figure 14**:
 
-{{< image_fig img14 >}}
+{{< linked_image img14 >}}
 
 To see detailed logs for the Heroku deployment process, click on **Powershell Script**. Scroll to the bottom of the log in the popup that appears and you should see something similar to **Figure 15**:
 
-{{< image_fig img15 >}}
+{{< linked_image img15 >}}
 
 Note the revision number (``v60``) and commit ID (``3cced9be``) in the Powershell logs. You can confirm these same details in the Activity stream for your Heroku app (**Figure 16**):
 
-{{< image_fig img16 >}}
+{{< linked_image img16 >}}
 
 ## Conclusion
 

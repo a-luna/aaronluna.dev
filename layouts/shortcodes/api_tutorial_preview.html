@@ -1,16 +1,19 @@
 {{ $page := .Site.GetPage "/flask_api_tutorial/part-0" }}
-<article class="list__item post default">
-    <header class="list__header">
-        <div class="post__image">
-            <a href="{{ $page.RelPermalink }}" rel="bookmark">{{ partial "responsive_image" $page }}</a>
-        </div>
-        <div class="post-meta-date">
-            <div class="meta__text">New Tutorial Series!</div>
-        </div>
+{{ $postImage := $page.Page.Resources.GetMatch (printf "*cover*") }}
+<div id="api-tutorial-preview">
+    {{ if $postImage }}
+        {{ $thumbnail := $postImage.Fill "300x192" }}
+        <figure>
+            <a href="{{ $page.RelPermalink }}">
+                <img src="{{ $thumbnail.RelPermalink }}" alt="{{ $page.Title }}" />
+            </a>
+        </figure>
+    {{ end }}
+    <div class="post__title-wrapper">
+        <div class="meta__text">New Tutorial Series!</div>
         <h3 class="list__title post__title ">
-            <a href="{{ $page.RelPermalink }}" rel="bookmark">{{ $page.Params.series_title }}</a>
+            <a href="{{ $page.RelPermalink }}">{{ $page.Params.series_title }}</a>
         </h3>
-    </header>
-    <div class="content list__excerpt post__content clearfix">{{ $page.Summary }}</div>
-    {{- partial "post_meta/categories.html" $page -}}
-</article>
+        {{- partial "post_meta/categories.html" $page -}}
+    </div>
+</div>

@@ -2,11 +2,12 @@
 <article class="list__item post blog-series">
     <header class="list__header">
         <div class="post__image">
-            <a href="{{ $page.RelPermalink }}" rel="bookmark">{{ partial "responsive_image" $page }}</a>
+            <a href="{{ $page.RelPermalink }}" rel="bookmark">{{ partial "main_article_image" $page }}</a>
         </div>
         <h3 class="list__title post__title ">
             <a href="{{ $page.RelPermalink }}" rel="bookmark"> {{ $page.Params.series_title }}</a>
         </h3>
     </header>
     <div class="content list__excerpt post__content clearfix">{{ $page.Summary }}</div>
+    {{- partial "post_meta/categories.html" . -}}
 </article>

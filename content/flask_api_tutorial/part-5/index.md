@@ -1082,15 +1082,11 @@ There's nothing in the code above that we haven't already encountered and explai
 
 The important part is **Lines 26-27** where the `parse_args` method of `create_widget_reqparser` is used to validate the request data, which is then passed to the `create_widget` function which we just defined.
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil" aria-hidden="true"></i>
-  </div>
-  <div class="note-message" style="flex-flow: column wrap">
-    <p>You may have noticed that the <code>@response</code> decorator is sometimes applied to the <code>WidgetList Resource</code> and sometimes applied to the <code>post</code> method. Why would you do this instead of solely documenting one or the other? <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html#cascading" target="_blank">Flask-RESTPlus documentation decorators applied to a class cascade and apply to all methods within the class</a>.</p>
-    <p>In this case, <code>HTTPStatus.BAD_REQUEST</code>, <code>HTTPStatus.UNAUTHORIZED</code>, and <code>HTTPStatus.INTERNAL_SERVER_ERROR</code> are valid responses to any HTTP request made to this endpoint. Placing the <code>@response</code> decorators on the <code>Resource</code> prevents duplicating them on each method.</p>
-  </div>
-</div>
+{{< info_box >}}
+You may have noticed that the `@response` decorator is sometimes applied to the `WidgetList Resource` and sometimes applied to the `post` method. Why would you do this instead of solely documenting one or the other? [Flask-RESTPlus documentation decorators applied to a class cascade and apply to all methods within the class](https://flask-restplus.readthedocs.io/en/stable/swagger.html#cascading).
+<br><br>
+In this case, `HTTPStatus.BAD_REQUEST`, `HTTPStatus.UNAUTHORIZED`, and `HTTPStatus.INTERNAL_SERVER_ERROR` are valid responses to any HTTP request made to this endpoint. Placing the `@response` decorators on the `Resource` prevents duplicating them on each method.
+{{< /info_box >}}
 
 ### Add `widget_ns` Namespace to `api`
 
