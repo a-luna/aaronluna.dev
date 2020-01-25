@@ -14,7 +14,6 @@
         <h3 class="list__title post__title ">
             <a href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a>
         </h3>
-        {{- with .Params.lead }}<p class="list__lead post__lead">{{ . }}</p>{{- end }}
     </header>
     <div class="content list__excerpt post__content clearfix">
         {{ .Summary }}{{- if .Truncated }}... {{- end }}
