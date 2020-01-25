@@ -1,4 +1,5 @@
 /.vscode
 /public
-/resources
+resources/**/*.css*
+resources/**/*.js*
 node_modules
