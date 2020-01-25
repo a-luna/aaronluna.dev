@@ -3476,7 +3476,7 @@ blockquote td {
   }
 
   #widgets {
-    margin: 20px 0 0;
+    margin: 15px 0 0;
   }
 
   .sidebar {
@@ -3488,17 +3488,9 @@ blockquote td {
     margin: 1.5em 0;
   }
 
-  .list__item {
-    margin: 0 0 15px;
-  }
-
-  .list__item:last-child {
-    margin: 0;
-  }
-
   .pagination {
     margin: 0;
-    padding: 20px 0;
+    padding: 0 0 20px 0;
     justify-content: center;
     border-bottom: 2px dotted #7f7f7f;
   }
@@ -3566,6 +3558,12 @@ blockquote td {
   .site-menu a {
     padding: 5px 5px 8px 5px;
     margin: 5px 5px 0;
+  }
+
+  .tutorial .series-list,
+  main.tutorial {
+    padding: 0;
+    border-bottom: 2px dotted var(--accent-color2);
   }
 }
 
@@ -3662,9 +3660,7 @@ blockquote td {
   #social ul li {
     margin: 0 2px;
   }
-}
 
-@media screen and (max-width: 500px) {
   main.home {
     width: 100%;
   }
