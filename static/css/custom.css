@@ -131,7 +131,7 @@ ol li p {
 
 .content {
   font-size: 1em;
-  margin: 0 0 2em;
+  margin: 0 0 20px;
 }
 
 .content p {
@@ -2757,12 +2757,16 @@ header,
 #menu a {
   color: var(--nav-link-color);
   text-decoration: none;
-  border: none;
+  border: 1px solid var(--header-bg-color);
 }
 
 #menu a:hover,
 #menu a:focus {
   color: var(--nav-hover-link-color);
+}
+
+#menu a.active {
+  border-bottom: 1px solid var(--nav-hover-link-color);
 }
 
 #menu #home.active {
@@ -2893,8 +2897,10 @@ header,
 }
 
 #recent-posts-wrapper {
-  padding: 10px 0 0 0;
-  border-top: 2px dotted var(--home-hr-color);}
+  padding: 10px 0 20px 0;
+  border-top: 2px dotted var(--home-hr-color);
+  border-bottom: 2px dotted var(--home-hr-color);
+}
 
 #featured-projects-wrapper {
   margin: 0 auto 15px auto;
@@ -3385,7 +3391,6 @@ blockquote td {
   }
 
   .post-nav {
-    border-top: 1px dotted #7f7f7f;
     margin: 0 0 2em;
     padding: 1em 0;
   }
@@ -3536,8 +3541,6 @@ blockquote td {
   }
 
   .post-nav {
-    border-top: 1px dotted #7f7f7f;
-    border-bottom: 1px dotted #7f7f7f;
     margin: 0 0 1em;
     padding: 1em 0;
   }
@@ -3560,9 +3563,13 @@ blockquote td {
     margin: 5px 5px 0;
   }
 
-  .tutorial .series-list,
-  main.tutorial {
+  .tutorial .series-list {
     padding: 0;
+    border-bottom: 2px dotted var(--accent-color2);
+  }
+
+  #api-tutorial-sections {
+    padding: 0 0 10px 0;
     border-bottom: 2px dotted var(--accent-color2);
   }
 }

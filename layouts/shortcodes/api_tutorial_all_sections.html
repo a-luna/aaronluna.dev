@@ -1,4 +1,5 @@
-{{ range .Site.Taxonomies.series.flask_api_tutorial }}
+<div id="api-tutorial-sections">
+    {{ range .Site.Taxonomies.series.flask_api_tutorial }}
     {{- if not (eq .Params.series_part "Overview") }}
     <article class="list__item post">
         <header class="list__header">
@@ -29,3 +30,4 @@
     </article>
     {{- end }}
 {{- end }}
+</div>
