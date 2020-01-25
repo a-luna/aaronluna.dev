@@ -6,6 +6,15 @@
     <div id="recent-posts">
         {{- range first $recent_num $recent }}
         <div class="recent-post">
+            {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
+            {{ if $postImage }}
+                {{ $thumbnail := $postImage.Fill "300x175" }}
+                <figure>
+                    <a href="{{ .RelPermalink }}">
+                        <img src="{{ $thumbnail.RelPermalink }}" alt="{{ .Title }}" />
+                    </a>
+                </figure>
+            {{ end }}
             <div class="post-meta-date">
                 {{- if not .Date.IsZero }}
                 <div class="meta__item-datetime meta__item">
