@@ -1037,7 +1037,7 @@ blockquote p code {
 .steps ul,
 .steps ol,
 .note ul {
-  margin: 0 0 0 1.5em;
+  margin: 10px 0 10px 2.5em;
   border: none;
 }
 
@@ -1052,12 +1052,6 @@ blockquote p code {
 
 .steps ul li:last-child ol {
   margin: 5px 0 0 2em;
-}
-
-.note ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .steps .title,

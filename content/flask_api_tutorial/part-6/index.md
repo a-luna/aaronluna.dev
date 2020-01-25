@@ -859,7 +859,7 @@ api.auth_user        GET        /api/v1/auth/user
 api.doc              GET        /api/v1/ui
 api.root             GET        /api/v1/
 api.specs            GET        /api/v1/swagger.json
-<span class="cmd-hl-border">api.widget_list      GET, POST  /api/v1/widgets</span>
+<span class="cmd-hl-gold">api.widget_list      GET, POST  /api/v1/widgets</span>
 restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
 static               GET        /static/&lt;path:filename&gt;</span></code></pre>
 
@@ -987,7 +987,7 @@ api.auth_user        GET        /api/v1/auth/user
 api.doc              GET        /api/v1/ui
 api.root             GET        /api/v1/
 api.specs            GET        /api/v1/swagger.json
-<span class="cmd-hl-border">api.widget           GET        /api/v1/widgets/&lt;name&gt;</span>
+<span class="cmd-hl-gold">api.widget           GET        /api/v1/widgets/&lt;name&gt;</span>
 api.widget_list      GET, POST  /api/v1/widgets
 restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
 static               GET        /static/&lt;path:filename&gt;</span></code></pre>
@@ -1174,7 +1174,7 @@ api.auth_user        GET        /api/v1/auth/user
 api.doc              GET        /api/v1/ui
 api.root             GET        /api/v1/
 api.specs            GET        /api/v1/swagger.json
-<span class="cmd-hl-border">api.widget           GET, PUT   /api/v1/widgets/&lt;name&gt;</span>
+<span class="cmd-hl-gold">api.widget           GET, PUT   /api/v1/widgets/&lt;name&gt;</span>
 api.widget_list      GET, POST  /api/v1/widgets
 restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
 static               GET        /static/&lt;path:filename&gt;</span></code></pre>
@@ -1281,7 +1281,7 @@ api.auth_user        GET               /api/v1/auth/user
 api.doc              GET               /api/v1/ui
 api.root             GET               /api/v1/
 api.specs            GET               /api/v1/swagger.json
-<span class="cmd-hl-border">api.widget           DELETE, GET, PUT  /api/v1/widgets/&lt;name&gt;</span>
+<span class="cmd-hl-gold">api.widget           DELETE, GET, PUT  /api/v1/widgets/&lt;name&gt;</span>
 api.widget_list      GET, POST         /api/v1/widgets
 restplus_doc.static  GET               /swaggerui/&lt;path:filename&gt;
 static               GET               /static/&lt;path:filename&gt;</span></code></pre>

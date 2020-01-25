@@ -249,27 +249,22 @@ def add_user(email, admin, password):
     return 0
 ```
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message" style="flex-flow: column wrap">
-    <p style="margin: 0 0 10px">Explaining how to create a command with click is beyond the scope of this tutorial. Thankfully, the click documentation is exceptional. If you are interested, you can find everything you need to understand the <code>add_user</code> function in the links below:</p>
-    <ul style="color: var(--body-text-color); list-style: square; margin: 0 0 10px 35px">
-      <li><a href="https://click.palletsprojects.com/en/7.x/quickstart/#basic-concepts-creating-a-command" target="_blank">Basic Concepts - Creating a Command</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/quickstart/#echoing" target="_blank">Echoing</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/quickstart/#adding-parameters" target="_blank">Adding Parameters</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/arguments/#basic-arguments" target="_blank">Basic Arguments</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/options/#boolean-flags" target="_blank">Boolean Flags</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/options/#password-prompts" target="_blank">Password Prompts</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/documentation/#help-texts" target="_blank">Help Texts</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/documentation/#documenting-arguments" target="_blank">Documenting Arguments</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/documentation/#command-short-help" target="_blank">Command Short Help</a></li>
-      <li><a href="https://click.palletsprojects.com/en/7.x/utils/#ansi-colors" target="_blank">ANSI Colors</a></li>
-    </ul>
-    <p style="margin: 0 0 5px">Finally, the Flask documentation explains <a href="https://flask.palletsprojects.com/en/1.0.x/cli/#custom-commands" target="_blank">how to add custom commands to the Flask CLI</a>. Coincidentally, the example given in the documentation is a command to create a new user.</p>
-  </div>
-</div>
+{{< info_box >}}
+Explaining how to create a command with click is beyond the scope of this tutorial. Thankfully, the click documentation is exceptional. If you are interested, you can find everything you need to understand the `add_user` function in the links below:
+
+* [Basic Concepts - Creating a Command](https://click.palletsprojects.com/en/7.x/quickstart/#basic-concepts-creating-a-command)
+* [Echoing](https://click.palletsprojects.com/en/7.x/quickstart/#echoing)
+* [Adding Parameters](https://click.palletsprojects.com/en/7.x/quickstart/#adding-parameters)
+* [Basic Arguments](https://click.palletsprojects.com/en/7.x/arguments/#basic-arguments)
+* [Boolean Flags](https://click.palletsprojects.com/en/7.x/options/#boolean-flags)
+* [Password Prompts](https://click.palletsprojects.com/en/7.x/options/#password-prompts)
+* [Help Texts](https://click.palletsprojects.com/en/7.x/documentation/#help-texts)
+* [Documenting Arguments](https://click.palletsprojects.com/en/7.x/documentation/#documenting-arguments)
+* [Command Short Help](https://click.palletsprojects.com/en/7.x/documentation/#command-short-help)
+* [ANSI Colors](https://click.palletsprojects.com/en/7.x/utils/#ansi-colors)
+
+Finally, the Flask documentation explains [how to add custom commands to the Flask CLI](https://flask.palletsprojects.com/en/1.0.x/cli/#custom-commands). Coincidentally, the example given in the documentation is a command to create a new user.
+{{< /info_box >}}
 
 You might be wondering how is this different than the idea I dismissed, <span class="bold-italics">"create a function and store it in a file in our project, then run the function through the command-line"</span>? The main difference is discoverability &mdash; Flask automatically includes a CLI with all installations and extending the CLI with custom commands is one of the intended use cases.
 
@@ -306,7 +301,7 @@ Options:
   --help     Show this message and exit.
 
 Commands:
-  <span class="cmd-hl-border">add-user  add a new user</span>
+  <span class="cmd-hl-gold">add-user  add a new user</span>
   db        Perform database migrations.
   routes    Show the routes for the app.
   run       Run a development server.
@@ -1144,7 +1139,7 @@ api.auth_user        GET      /api/v1/auth/user
 api.doc              GET      /api/v1/ui
 api.root             GET      /api/v1/
 api.specs            GET      /api/v1/swagger.json
-<span class="cmd-hl-border">api.widget_list      POST     /api/v1/widgets</span>
+<span class="cmd-hl-gold">api.widget_list      POST     /api/v1/widgets</span>
 restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
 static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
