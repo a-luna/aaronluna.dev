@@ -86,9 +86,9 @@ I use the version with line numbers much more often than the version without, so
   z-index: 2;
   right: 0;
   top: 0;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 12px;
+  line-height: 14px;
   letter-spacing: 0.5px;
   width: 60px;
   color: #232326;
@@ -96,7 +96,7 @@ I use the version with line numbers much more often than the version without, so
   border: 1.25px solid #232326;
   border-radius: 4px;
   white-space: nowrap;
-  padding: 3px 4px 4px 4px;
+  padding: 4px 4px 5px 4px;
   margin: 0 0 0 1px;
   cursor: pointer;
   opacity: 0.6;

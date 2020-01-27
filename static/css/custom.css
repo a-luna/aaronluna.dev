@@ -1189,9 +1189,9 @@ p code.chroma {
   z-index: 2;
   right: 0;
   top: 0;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 12px;
+  line-height: 14px;
   letter-spacing: 0.5px;
   width: 60px;
   color: var(--copy-code-button-text);
@@ -1202,7 +1202,7 @@ p code.chroma {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 4px;
   white-space: nowrap;
-  padding: 3px 4px 4px 4px;
+  padding: 4px 4px 5px 4px;
   margin: 0 0 0 1px;
   cursor: pointer;
   opacity: 0.6;
@@ -1485,6 +1485,7 @@ figcaption {
 }
 
 #social ul li a {
+  color: var(--home-active-link-color);
   display: block;
   text-align: center;
   text-decoration: none;
@@ -1582,7 +1583,7 @@ figcaption {
   border: none;
   border-radius: 4px;
   padding: 15px;
-  margin: 0 0 20px 0;
+  margin: 0 0 40px 0;
 }
 
 .list__item .content {
@@ -2837,7 +2838,7 @@ header,
 }
 
 #menu .site-name-link {
-  color: var(--header-link-color1);
+  color: var(--home-active-link-color);
   border: none;
   text-decoration: none;
   margin: auto 0;
@@ -3461,9 +3462,6 @@ blockquote td {
 }
 
 @media screen and (max-width: 767px) {
-  #api-tutorial-preview {
-    margin: 20px 0 40px 0;
-  }
   #api-tutorial-preview .meta__text {
     font-size: 1.3em;
   }
@@ -3499,9 +3497,18 @@ blockquote td {
     font-size: 2em;
   }
 
+  main.home {
+    margin: 0 auto;
+  }
+
+  .home .post {
+    margin: 0 0 40px 0;
+  }
+
   #recent-posts-wrapper,
   #featured-projects-wrapper {
-    margin: 0 auto 5px auto;
+    margin: 20px auto 0 auto;
+    padding: 20px auto 0 auto;
   }
 
   #recent-posts-wrapper h4,
@@ -3576,11 +3583,10 @@ blockquote td {
   }
 
   #widgets {
-    margin: 15px 0 0;
+    margin: 0 0 40px 0;;
   }
 
   .sidebar {
-    padding: 0.5em 0 0;
     margin: 0;
   }
 
@@ -3589,7 +3595,7 @@ blockquote td {
   }
 
   .pagination {
-    margin: 0;
+    margin: 0 0 40px 0;
     padding: 0 0 20px 0;
     justify-content: center;
     border-bottom: 2px dotted #7f7f7f;
@@ -3667,9 +3673,9 @@ blockquote td {
     margin: 5px 5px 0;
   }
 
-  #menu a.active {
+  /* #menu a.active {
     border-bottom: 1px solid var(--nav-hover-link-color);
-  }
+  } */
 
   .tutorial .series-list {
     padding: 0;
@@ -3773,9 +3779,6 @@ blockquote td {
 
   main.home {
     width: 100%;
-  }
-  .home .post {
-    margin: 0 1em;
   }
   .recent-post,
   .recent-post:first-child,

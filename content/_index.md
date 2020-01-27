@@ -9,4 +9,5 @@ I created this blog because one of the best ways to sharpen your knowledge of a 
 Also, I recently decided to create tutorials for subjects that require more detail than a single blog post. The first tutorial will be available shortly, and will be featured prominently when it is available.
 
 {{< recent_home >}}
+
 {{< featured_projects >}}

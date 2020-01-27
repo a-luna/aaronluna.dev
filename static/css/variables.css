@@ -70,7 +70,7 @@
   --code-details-lineno: var(--white2);
 
   /* Top Nav Menu */
-  --nav-link-color: var(--light-gray2);
+  --nav-link-color: var(--light-gray1);
   --nav-hover-link-color: var(--white2);
   --home-active-link-color: var(--white2);
   --blog-active-link-color: var(--white2);
