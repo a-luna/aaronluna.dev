@@ -2,16 +2,18 @@
     <main class="main" role="main">
         <article class="post">
             <header class="post__header">
-                <div class="post-meta-date">
-                    {{- if not .Date.IsZero }}
-                    <div class="meta__item-datetime meta__item">
-                        <time class="meta__text" datetime='{{ .Date.Format " 2006-01-02T15:04:05 " }}'>{{.Date.Format ( .Site.Params.dateformat | default "January 02, 2006")}}</time> {{- if ne .Date .Lastmod }}
-                        <time class="meta__text" datetime='{{ .Lastmod.Format " 2006-01-02T15:04:05 " }}'> ({{ T "meta_lastmod" }}: {{.Lastmod.Format ( .Site.Params.dateformat | default "January 02, 2006")}})</time> {{- end }}
+                <div class="date-categories-wrapper">
+                    <div class="post-meta-date">
+                        {{- if not .Date.IsZero }}
+                        <div class="meta__item-datetime meta__item">
+                            <time class="meta__text" datetime='{{ .Date.Format " 2006-01-02T15:04:05 " }}'>{{.Date.Format ( .Site.Params.dateformat | default "January 02, 2006")}}</time> {{- if ne .Date .Lastmod }}
+                            <time class="meta__text" datetime='{{ .Lastmod.Format " 2006-01-02T15:04:05 " }}'> ({{ T "meta_lastmod" }}: {{.Lastmod.Format ( .Site.Params.dateformat | default "January 02, 2006")}})</time> {{- end }}
+                        </div>
+                        {{ end -}}
                     </div>
-                    {{ end -}}
+                    {{ partial "post_meta" . }}
                 </div>
                 <h1 class="post__title">{{ .Title }}</h1>
-                    <div class="post__meta meta">{{ partial "post_meta" . }}</div>
                 <div class="post__image">{{ partial "main_article_image" . }}</div>
             </header>
             {{- partial "post_toc" . -}}

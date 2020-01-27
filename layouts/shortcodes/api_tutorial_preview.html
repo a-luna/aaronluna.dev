@@ -2,7 +2,7 @@
 {{ $postImage := $page.Page.Resources.GetMatch (printf "*cover*") }}
 <div id="api-tutorial-preview">
     {{ if $postImage }}
-        {{ $thumbnail := $postImage.Fill "300x192" }}
+        {{ $thumbnail := $postImage.Fill "400x256" }}
         <figure>
             <a href="{{ $page.RelPermalink }}">
                 <img src="{{ $thumbnail.RelPermalink }}" alt="{{ $page.Title }}" />

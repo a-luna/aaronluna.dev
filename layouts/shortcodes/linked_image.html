@@ -23,7 +23,6 @@
         {{ .Scratch.Add "srcset" $large.RelPermalink }}
         {{ .Scratch.Add "srcset" " 1500w" }}
     {{ end }}
-
     <figure>
         <a href="{{ $original.RelPermalink }}">
             <img sizes="(min-width: 35em) 1200px, 100vw" srcset='{{ .Scratch.Get "srcset" }}' src="{{ $original.RelPermalink }}" alt="{{ .Page.Title }}">
