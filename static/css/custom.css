@@ -1902,9 +1902,10 @@ a.pagination__item--next {
 
 .post-nav-flex-item-prev,
 .post-nav-flex-item-next {
-  flex: 1 1 150px;
+  flex: 100%;
   border: none;
   border-radius: 4px;
+  padding: 10px 0;
 }
 
 .post-nav-flex-item-prev {
@@ -1926,11 +1927,11 @@ a.pagination__item--next {
 }
 
 .post-nav .chevron-next {
-  margin: 5px 0 auto 10px;
+  margin: 0 0 0 10px;
 }
 
 .post-nav .chevron-prev {
-  margin: 5px 10px auto 0;
+  margin: 0 10px 0 0;
 }
 
 .inner-nav-flex-container {
@@ -1941,10 +1942,9 @@ a.pagination__item--next {
 
 .post-nav {
   font-size: 1.2em;
-  border-top: 1px dotted #7f7f7f;
-  border-bottom: 1px dotted #7f7f7f;
-  padding: 1em 0;
+  border: none;
   margin: 0 2em 1em 0;
+  padding: 0;
   background-color: var(--page-bg-color);
 }
 
@@ -3298,7 +3298,7 @@ a.post-category:active:hover,
 }
 
 .search-results {
-  flex: 1 0 68%;
+  flex: 1 0 57%;
   margin: 1.5em 0 3em 0;
 }
 
@@ -3489,6 +3489,11 @@ blockquote td {
     padding: 1em 0;
   }
 
+  .post-nav-flex-item-prev,
+  .post-nav-flex-item-next {
+    flex: 100%;
+  }
+
   .home h1 {
     font-size: 2.8em;
   }
@@ -3583,7 +3588,9 @@ blockquote td {
   }
 
   #widgets {
-    margin: 0 0 40px 0;;
+    margin: 0 0 40px 0;
+    padding: 40px 0 0 0;
+    border-top: 2px dotted var(--accent-color2);
   }
 
   .sidebar {
@@ -3596,9 +3603,7 @@ blockquote td {
 
   .pagination {
     margin: 0 0 40px 0;
-    padding: 0 0 20px 0;
     justify-content: center;
-    border-bottom: 2px dotted #7f7f7f;
   }
 
   .about-me .content {
@@ -3679,11 +3684,6 @@ blockquote td {
 
   .tutorial .series-list {
     padding: 0;
-    border-bottom: 2px dotted var(--accent-color2);
-  }
-
-  #api-tutorial-sections {
-    padding: 0 0 10px 0;
     border-bottom: 2px dotted var(--accent-color2);
   }
 }
