@@ -1423,7 +1423,7 @@ You can see the three tests executed by the parameterized test highlighted above
 You can find more information on the `@pytest.mark.parameterize` decorator in [the official pytest documents](https://docs.pytest.org/en/latest/parametrize.html).
 {{< /info_box >}}
 
-Creating valid/invalid values for the `info_url` argument should be straightforward, and you should definitely create parameterized test cases for both successful/rejected requests that isolate the `info_url` value. However, testing the `deadline_str` value is more complex. In the same file, `test_create_widget.py`, update the import statements to include the `datetime.date` and `datetime.timedelta` modules **(Line 2)**, as well as the `BAD_REQUEST` and `DEFAULT_NAME` values from `tests.util` **(Line 7)**:
+Creating valid/invalid values for the `info_url` argument should be straightforward, and you should definitely create parameterized test cases for both successful/rejected requests that isolate the `info_url` value. However, testing the `deadline_str` value is more complex. In the same file, `test_create_widget.py`, update the import statements to include the `datetime.date` and `datetime.timedelta` modules **(Line 2)**, as well as the `DEFAULT_NAME` value from `tests.util` **(Line 7)**:
 
 ```python {linenos=table,hl_lines=[2,7]}
 """Unit tests for api.widget_list API endpoint."""
@@ -1432,10 +1432,12 @@ from http import HTTPStatus
 
 import pytest
 
-from tests.util import ADMIN_EMAIL, BAD_REQUEST, DEFAULT_NAME, login_user, create_widget
+from tests.util import ADMIN_EMAIL, DEFAULT_NAME, login_user, create_widget
 ```
 
-Next, enter the content below and save the file:
+Why is the `deadline` attribute more difficult to test than `widget_name` or `info_url`? Remember, `deadline` is a string value that is parsed to a datetime value which must not be in the past. We could use hard-coded values that won't be in the past 100 years from now, but that is a pretty hacky way to test our code.
+
+What approach can we use that would be better than hard-coded strings? Enter the content below and save the file:
 
 ```python {linenos=table,linenostart=24,hl_lines=["4-6"]}
 @pytest.mark.parametrize(
@@ -1460,7 +1462,55 @@ def test_create_widget_valid_deadline(client, db, admin, deadline_str):
 
 ```
 
+In the first two highlighted lines above **(Lines 27-28)**, we call the `datetime.strftime` method on objects created with  `datetime.date.today`. This generates a string value that always represents the current date, even if this test case is executed 10,000 years from now. `datetime.strftime` accepts a string value that can be configured to generate a string in any format, containing any combination of values such as month, year, hour, time zone, etc.
 
+The third highlighted line **(Line 29)** utilizes a `timedelta` object to generate a date three days in the future (we obviously want to test dates other than the current date). Run `pytest tests/test_create_widget.py` to execute these test cases:
+
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
+<span class="cmd-results">=============================================== test session starts ================================================
+platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
+plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+collected 8 items
+
+tests/test_create_widget.py::BLACK PASSED                                                                    [ 12%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                   [ 25%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                    [ 37%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                               [ 50%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                               [ 62%]
+<span class="cmd-hl-teal">tests/test_create_widget.py::test_create_widget_valid_deadline[01/29/2020] PASSED                            [ 75%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-01-29] PASSED                            [ 87%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 01 2020] PASSED                           [100%]</span>
+
+================================================= warnings summary =================================================
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask_api_tutorial/venv/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, MutableMapping
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+=========================================== 8 passed, 1 warning in 0.87s ===========================================</span></code></pre>
+
+We can easily see what values were used to test the `deadline` value in the results above. For the first two parameterized values, the current date was converted to string values `01/29/2020` and `2020-01-29`, which succeeded in creating a new widget object in the database. Finally, `Feb 01 2020` was used to verify that a date in the future is a valid value for `deadline`.
+
+{{< info_box >}}
+Did you notice that we used three different date formats for the `deadline_str` test parameter, and all three were successful? This is due to the validation performed by the `future_date_from_string` function, specifically by the `dateutil.parser.parse` function.
+{{< /info_box >}}
+
+Before we create test cases for rejected requests, update the import statements to include the `BAD_REQUEST` value from `tests.util` **(Line 7)**:
+
+```python {linenos=table,hl_lines=[7]}
+"""Unit tests for api.widget_list API endpoint."""
+from datetime import date, timedelta
+from http import HTTPStatus
+
+import pytest
+
+from tests.util import ADMIN_EMAIL, BAD_REQUEST, DEFAULT_NAME, login_user, create_widget
+
+```
+
+Then, add the `test_create_widget_invalid_deadline` function and save the file:
 
 ```python {linenos=table,linenostart=45,hl_lines=["4-6"]}
 @pytest.mark.parametrize(
@@ -1482,33 +1532,35 @@ def test_create_widget_invalid_deadline(client, db, admin, deadline_str):
 
 ```
 
+The three parameters in **(Lines 48-50)** must not be considered
+
 <pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
-<span class="cmd-results">================================================= test session starts ==================================================
+<span class="cmd-results">=============================================== test session starts ================================================
 platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
 cachedir: .pytest_cache
 rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
 plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
 collected 11 items
 
-tests/test_create_widget.py::BLACK PASSED                                                                        [  9%]
-tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 18%]
-tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 27%]
-tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 36%]
-tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [ 45%]
-<span class="cmd-hl-teal">tests/test_create_widget.py::test_create_widget_valid_deadline[01/22/2020] PASSED                                [ 83%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[2020-01-22] PASSED                                [ 84%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[Jan 25 2020] PASSED                               [ 85%]</span>
-<span class="cmd-hl-purple">tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                                [ 86%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-01-19] PASSED                              [ 87%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 88%]</span>
+tests/test_create_widget.py::BLACK PASSED                                                                    [  9%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                   [ 18%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                    [ 27%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                               [ 36%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                               [ 45%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[01/29/2020] PASSED                            [ 54%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-01-29] PASSED                            [ 63%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 01 2020] PASSED                           [ 72%]
+<span class="cmd-hl-purple">tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                            [ 81%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-01-26] PASSED                          [ 90%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [100%]</span>
 
-=================================================== warnings summary ===================================================
+================================================= warnings summary =================================================
 tests/test_create_widget.py::test_create_widget_valid_name[abc123]
   /Users/aaronluna/Projects/flask_api_tutorial/venv/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-============================================ 11 passed, 1 warning in 1.13s =============================================</span></code></pre>
+========================================== 11 passed, 1 warning in 0.97s ===========================================</span></code></pre>
 
 ```python {linenos=table,linenostart=67}
 def test_create_widget_already_exists(client, db, admin):

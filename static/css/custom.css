@@ -1575,6 +1575,10 @@ figcaption {
 }
 
 .list__title a {
+  font-size: 1.3em;
+}
+
+#api-tutorial-preview .list__title a {
   font-size: 1em;
 }
 
@@ -1661,7 +1665,11 @@ figcaption {
   border: 1px solid var(--teal2);
   border-radius: 4px;
   padding: 15px;
-  margin: 0 0 40px 0;
+  margin: 40px 0 20px 0;
+}
+
+.home #api-tutorial-preview .post__title-wrapper {
+  font-size: 1.8em;
 }
 
 #api-tutorial-preview .meta__text {
@@ -2259,7 +2267,7 @@ input {
 }
 
 #widgets .search-container {
-  height: 40px;
+  height: 50px;
 }
 
 #widgets .search-inner-wrapper {
@@ -2949,7 +2957,8 @@ header,
 }
 
 #recent-posts-wrapper {
-  padding: 10px 0 20px 0;
+  margin: 40px 0 0 0;
+  padding: 0 0 20px 0;
   border-top: 2px dotted var(--home-hr-color);
   border-bottom: 2px dotted var(--home-hr-color);
 }
@@ -3085,7 +3094,7 @@ a.post-category,
 #widgets .post-category {
   color: var(--black2);
   border: 1px solid var(--cat-color);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   padding: 2px 5px;
   margin: 5px;
@@ -3434,12 +3443,18 @@ blockquote td {
 }
 
 @media screen and (max-width: 968px) {
+  .home #api-tutorial-preview .post__title-wrapper {
+    font-size: 1.8em;
+  }
   #api-tutorial-preview .post__title-wrapper {
     font-size: 0.9em;
   }
 }
 
 @media screen and (max-width: 890px) {
+  .home #api-tutorial-preview .post__title-wrapper {
+    font-size: 1.6em;
+  }
   #api-tutorial-preview .post__title-wrapper {
     font-size: 0.85em;
   }
@@ -3449,6 +3464,9 @@ blockquote td {
 }
 
 @media screen and (max-width: 865px) {
+  .home #api-tutorial-preview .post__title-wrapper {
+    font-size: 1.6em;
+  }
   #api-tutorial-preview .post__title-wrapper {
     font-size: 0.75em;
     min-width: 0;
@@ -3456,12 +3474,18 @@ blockquote td {
 }
 
 @media screen and (max-width: 800px) {
+  .home #api-tutorial-preview .post__title-wrapper {
+    font-size: 1.6em;
+  }
   #api-tutorial-preview .post__title-wrapper {
     font-size: 0.75em;
   }
 }
 
 @media screen and (max-width: 767px) {
+  .home #api-tutorial-preview {
+    font-size: 1em;
+  }
   #api-tutorial-preview .meta__text {
     font-size: 1.3em;
   }
@@ -3593,6 +3617,10 @@ blockquote td {
     border-top: 2px dotted var(--accent-color2);
   }
 
+  #widgets .post-category {
+    font-size: 18px;
+  }
+
   .sidebar {
     margin: 0;
   }
@@ -3677,15 +3705,6 @@ blockquote td {
     padding: 5px 5px 8px 5px;
     margin: 5px 5px 0;
   }
-
-  /* #menu a.active {
-    border-bottom: 1px solid var(--nav-hover-link-color);
-  } */
-
-  .tutorial .series-list {
-    padding: 0;
-    border-bottom: 2px dotted var(--accent-color2);
-  }
 }
 
 @media screen and (max-width: 650px) {
@@ -3713,6 +3732,15 @@ blockquote td {
     padding: 8px 5px;
     margin: 0 3px;
   }
+
+  .home #api-tutorial-preview {
+    font-size: 0.75em;
+    margin: 40px 0;
+  }
+
+  /* .home #api-tutorial-preview figure {
+    display: none;
+  } */
 
   #api-tutorial-preview .post__title-wrapper {
     font-size: 1em;
@@ -3842,6 +3870,9 @@ blockquote td {
     font-size: 1em;
     padding: 3px 5px;
 
+  }
+  .home #api-tutorial-preview {
+    font-size: 1.4em;
   }
   #api-tutorial-preview .meta__text {
     margin: 0 0 5px;
