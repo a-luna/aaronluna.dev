@@ -8,7 +8,7 @@
         <div class="recent-post">
             {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
             {{ if $postImage }}
-                {{ $thumbnail := $postImage.Fill "300x175" }}
+                {{ $thumbnail := $postImage.Fill "400x256" }}
                 <figure>
                     <a href="{{ .RelPermalink }}">
                         <img src="{{ $thumbnail.RelPermalink }}" alt="{{ .Title }}" />
