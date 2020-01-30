@@ -1575,7 +1575,7 @@ figcaption {
 }
 
 .list__title a {
-  font-size: 1.3em;
+  font-size: 1.1em;
 }
 
 #api-tutorial-preview .list__title a {
@@ -1665,7 +1665,7 @@ figcaption {
   border: 1px solid var(--teal2);
   border-radius: 4px;
   padding: 15px;
-  margin: 40px 0 20px 0;
+  margin: 0 0 40px 0;
 }
 
 .home #api-tutorial-preview .post__title-wrapper {
@@ -1951,9 +1951,11 @@ a.pagination__item--next {
 .post-nav {
   font-size: 1.2em;
   border: none;
-  margin: 0 2em 1em 0;
-  padding: 0;
+  margin: 0 2em 20px 0;
+  padding: 10px 0 10px 0;
   background-color: var(--page-bg-color);
+  border-bottom: 2px dotted var(--accent-color2);
+  border-top: 2px dotted var(--accent-color2);
 }
 
 .post-nav__link,
@@ -2082,7 +2084,6 @@ a.post-nav__link:focus {
 #header-nav .post-nav__post-title {
   font-size: 1.2em;
   font-weight: 400;
-  line-height: 1;
   padding: 0;
   margin: 0;
 }
@@ -2163,7 +2164,6 @@ header a.post-nav__link:focus {
   display: inline;
   font-weight: 400;
   font-size: 1em;
-  line-height: 1;
   margin: auto 0;
 }
 
@@ -3017,7 +3017,7 @@ header,
 }
 
 .list__header .post-meta-date .meta__text {
-  font-size: 1.4em;
+  font-size: 1.25em;
   color: var(--list-header-date-color);
   margin: 0;
 }
@@ -3508,11 +3508,6 @@ blockquote td {
     margin: 0;
   }
 
-  .post-nav {
-    margin: 0 0 2em;
-    padding: 1em 0;
-  }
-
   .post-nav-flex-item-prev,
   .post-nav-flex-item-next {
     flex: 100%;
@@ -3626,7 +3621,7 @@ blockquote td {
   }
 
   .comments {
-    margin: 1.5em 0;
+    margin: 20px 0 40px 0;
   }
 
   .pagination {
@@ -3675,8 +3670,7 @@ blockquote td {
   }
 
   .post-nav {
-    margin: 0 0 1em;
-    padding: 1em 0;
+    margin: 0 0 40px 0;
   }
 
   #menu {
@@ -3737,10 +3731,6 @@ blockquote td {
     font-size: 0.75em;
     margin: 40px 0;
   }
-
-  /* .home #api-tutorial-preview figure {
-    display: none;
-  } */
 
   #api-tutorial-preview .post__title-wrapper {
     font-size: 1em;
