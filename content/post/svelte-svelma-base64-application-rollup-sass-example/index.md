@@ -17,7 +17,7 @@ This is a simple application that encodes/decodes ASCII text or hex strings to/f
   - Input/output strings displayed in hex, decimal, binary, and base64 to demonstrate how input bytes are encoded to base64
   - Mouseover/touch any part of the Hex/Base64 output to highlight all related bit groups and the matching base64/ASCII characters in the Lookup Tables
   - Hex strings must contain only numbers and/or upper and lowercase hex digits (a-f, A-F, 0-9)
-  - Hex strings can be prefixed by "0x", but not required
+  - Hex strings can be prefixed by "0x", but this is **not** required (e.g., 0xFE and FE both represent the value 254 and both will produce the same output when encoded to base64)
   - Encoded strings must be valid [base64 (standard)](https://tools.ietf.org/html/rfc4648#section-4) or [base64url (url/filename safe)](https://tools.ietf.org/html/rfc4648#section-5) values
 
 - ### CSS Preprocessing
