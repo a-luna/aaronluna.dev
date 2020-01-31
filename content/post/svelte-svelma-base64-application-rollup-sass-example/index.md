@@ -1,5 +1,5 @@
 ---
-title: "Codesandbox: Base64 Visualizer Created with Svelte + Svelma"
+title: "My First Svelte App! Base64 Visualizer Created with Svelte + Svelma"
 slug: "svelte-svelma-base64-application-rollup-sass-example"
 date: "2020-01-30"
 categories: ["svelte", "Javascript"]
@@ -42,14 +42,12 @@ This is a simple application that encodes/decodes ASCII text or hex strings to/f
 
 I've embedded the application below, you can easily view and fork it on codesandbox:
 
-<div class="cs-embed-wrapper">
-  <div class="cs-embed">
-    <iframe
-        src="https://codesandbox.io/embed/github/a-luna/svelte-base64?codemirror=1&fontsize=12&hidenavigation=1&theme=dark&view=preview"
-        style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-        title="svelte-base64"
-        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-        sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-      ></iframe>
-  </div>
+<div class="cs-embed">
+  <iframe
+      src="https://codesandbox.io/embed/github/a-luna/svelte-base64?codemirror=1&fontsize=12&hidenavigation=1&theme=dark&view=preview"
+      style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+      title="svelte-base64"
+      allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+      sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+    ></iframe>
 </div>

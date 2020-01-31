@@ -3502,13 +3502,7 @@ a.post-category:active:hover,
 }
 
 .cs-embed {
-  margin: 0 0 20px 0;
-}
-
-.cs-embed-wrapper {
-  padding: 0 0 20px 0;
   margin: 0 0 40px 0;
-  border-bottom: 2px dotted var(--accent-color2);
 }
 
 /* RFC Table */
