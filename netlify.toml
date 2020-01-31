@@ -2,22 +2,22 @@
   publish = "public/"
   command = "hugo --gc --minify"
 [context.production.environment]
-  HUGO_VERSION = "0.63.1"
+  HUGO_VERSION = "0.63.2"
   HUGO_ENV = "production"
   HUGO_ENABLEGITINFO = "false"
 [context.split1]
   command = "hugo --gc --minify"
 [context.split1.environment]
-  HUGO_VERSION = "0.63.1"
+  HUGO_VERSION = "0.63.2"
   HUGO_ENV = "production"
 [context.deploy-preview]
   command = "hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL"
 [context.deploy-preview.environment]
-  HUGO_VERSION = "0.63.1"
+  HUGO_VERSION = "0.63.2"
 [context.branch-deploy]
     acommand = "hugo --gc --minify -b $DEPLOY_PRIME_URL"
 [context.branch-deploy.environment]
-  HUGO_VERSION = "0.63.1"
+  HUGO_VERSION = "0.63.2"
 [context.next.environment]
   HUGO_ENABLEGITINFO = "false"
 [[redirects]]
@@ -26,7 +26,7 @@
   status = 200
   force = true
 [[redirects]]
-  from ="/build/global.css"
+  from ="/build/bundle.css"
   to = "https://svelte-base64.netlify.com/build/bundle.css"
   status = 200
   force = true
@@ -36,18 +36,13 @@
   status = 200
   force = true
 [[redirects]]
+  from ="/webfonts/*"
+  to = "https://svelte-base64.netlify.com/webfonts/:splat"
+  status = 200
+  force = true
+[[redirects]]
   from ="/favicon.png"
   to = "https://svelte-base64.netlify.com/favicon.png"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/logo-192.png"
-  to = "https://svelte-base64.netlify.com/logo-192.png"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/logo-512.png"
-  to = "https://svelte-base64.netlify.com/logo-512.png"
   status = 200
   force = true
 [[redirects]]
