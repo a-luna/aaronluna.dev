@@ -42,12 +42,22 @@ This is a simple application that encodes/decodes ASCII text or hex strings to/f
 
 I've embedded the application below, you can easily view and fork it on codesandbox:
 
-<div class="cs-embed">
-  <iframe
-      src="https://codesandbox.io/embed/github/a-luna/svelte-base64?codemirror=1&fontsize=12&hidenavigation=1&theme=dark&view=preview"
-      style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-      title="svelte-base64"
-      allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-      sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-    ></iframe>
+<div class="cs-embed-wrapper">
+  <div class="cs-embed-buttons">
+    <a href="https://codesandbox.io/s/github/a-luna/svelte-base64/tree/master/?fontsize=12&hidenavigation=1&theme=dark" target="_blank">
+      <img alt="Edit svelte-base64" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+    </a>
+    <a href="https://svelte-base64.netlify.com">
+      <img src="https://api.netlify.com/api/v1/badges/6fbc8193-d75d-4dea-a3eb-64d9e97681f1/deploy-status" alt="Netlify Status">
+    </a>
+  </div>
+  <div class="cs-embed">
+    <iframe
+        src="https://svelte-base64.netlify.com"
+        style="width:100%; height:500px; border:2px solid var(--accent-color2);; border-radius: 4px; overflow:hidden;"
+        title="svelte-base64"
+        allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+        sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+      ></iframe>
+  </div>
 </div>

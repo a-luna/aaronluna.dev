@@ -3501,8 +3501,19 @@ a.post-category:active:hover,
   border: 1px solid var(--comments-border);
 }
 
+.cs-embed-buttons {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.cs-embed-buttons a {
+  margin: 0 10px;
+}
+
 .cs-embed {
-  margin: 0 0 40px 0;
+  margin: 20px 0 40px 0;
 }
 
 /* RFC Table */
