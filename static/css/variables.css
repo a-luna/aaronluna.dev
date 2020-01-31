@@ -21,6 +21,7 @@
   --green1: hsl(93, 95%, 45%);
   --green2: hsl(93, 95%, 60%);
   --green3: hsl(93, 95%, 70%);
+  --green4: hsl(93, 95%, 35%);
   --purple1: hsl(261, 100%, 55%);
   --purple2: hsl(261, 100%, 65%);
   --purple3: hsl(261, 100%, 75%);
@@ -110,6 +111,8 @@
   --python-hover: var(--green1);
   --virtualization: var(--orange2);
   --virtualization-hover: var(--orange1);
+  --svelte: var(--green4);
+  --svelte-hover: var(--green1);
 
   /* Section: Blog Posts */
   --blog-link-color: var(--accent-color1);
