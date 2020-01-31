@@ -6,11 +6,10 @@
                 "title": "{{ htmlEscape $page.Title }}",
                 "categories": [{{ range $tindex, $tag := $page.Params.categories }}{{ if $tindex }}, {{ end }}"{{ $tag| htmlEscape }}"{{ end }}],
                 "content": {{$page.Plain | jsonify}}
-            }
-        {{- if gt $index 1 -}},{{- end }}
+            },
         {{- end -}}
     {{- end -}}
-    {{- end -}}
+{{- end -}}
 {{ range $index, $page := .Site.Taxonomies.series.flask_api_tutorial }}
     {{- if gt $index 0 -}},{{- end }}
         {
