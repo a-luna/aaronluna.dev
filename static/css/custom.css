@@ -3501,19 +3501,20 @@ a.post-category:active:hover,
   border: 1px solid var(--comments-border);
 }
 
+.cs-embed-wrapper {
+  margin: 40px 0;
+}
+
 .cs-embed-buttons {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
+  margin: 0 0 20px 0;
 }
 
 .cs-embed-buttons a {
   margin: 0 10px;
-}
-
-.cs-embed {
-  margin: 20px 0 40px 0;
 }
 
 /* RFC Table */
