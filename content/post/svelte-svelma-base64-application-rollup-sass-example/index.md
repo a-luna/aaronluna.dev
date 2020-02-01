@@ -47,13 +47,13 @@ I deployed the svelte application to Netlify (embedded below, you can also click
     <a href="https://codesandbox.io/s/github/a-luna/svelte-base64/tree/master/?fontsize=12&hidenavigation=1&theme=dark" target="_blank">
       <img alt="Edit svelte-base64" src="https://codesandbox.io/static/img/play-codesandbox.svg">
     </a>
-    <a href="https://svelte-base64.netlify.com">
+    <a href="https://aaronluna.dev/base64"target="_blank">
       <img src="https://api.netlify.com/api/v1/badges/6fbc8193-d75d-4dea-a3eb-64d9e97681f1/deploy-status" alt="Netlify Status">
     </a>
   </div>
   <div class="cs-embed">
     <iframe
-        src="https://svelte-base64.netlify.com"
+        src="https://aaronluna.dev/base64"
         style="width:100%; height:500px; border:2px solid var(--accent-color2); border-radius: 4px; overflow:hidden"
         title="svelte-base64"
         allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
