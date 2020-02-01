@@ -18,6 +18,7 @@
   --blue1: hsl(206, 100%, 57%);
   --blue2: hsl(206, 100%, 72%);
   --blue3: hsl(206, 100%, 67%);
+  --blue4: hsl(206, 100%, 47%);
   --green1: hsl(93, 95%, 45%);
   --green2: hsl(93, 95%, 60%);
   --green3: hsl(93, 95%, 70%);
@@ -113,6 +114,8 @@
   --virtualization-hover: var(--orange1);
   --svelte: var(--green4);
   --svelte-hover: var(--green1);
+  --codesandbox: var(--blue4);
+  --codesandbox-hover: var(--blue4);
 
   /* Section: Blog Posts */
   --blog-link-color: var(--accent-color1);

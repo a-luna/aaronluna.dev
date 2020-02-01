@@ -3299,6 +3299,14 @@ a.post-category:active:hover,
   --cat-hover-color: var(--svelte-hover);
 }
 
+.badge.codesandbox,
+.post-category.codesandbox,
+.list__item .post-category.codesandbox,
+.post__header .post-category.codesandbox {
+  --cat-color: var(--codesandbox);
+  --cat-hover-color: var(--codesandbox-hover);
+}
+
 #home-blog-link,
 #view-on-github-link {
   font-size: 2.5em;

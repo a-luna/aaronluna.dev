@@ -2,7 +2,7 @@
 title: "My First Svelte App! Base64 Visualizer Created with Svelte + Svelma"
 slug: "svelte-svelma-base64-application-rollup-sass-example"
 date: "2020-01-30"
-categories: ["svelte", "Javascript"]
+categories: ["svelte", "Javascript", "codesandbox"]
 summary: "This is a simple application I created using svelte 3.0, that encodes/decodes ASCII text or hex strings to/from base64 and provides reactive ui components to help illustrate the encoding process."
 resources:
   - name: cover
@@ -10,7 +10,7 @@ resources:
     params:
       credit: "Photo by Joshua Sortino on Unsplash"
 ---
-This is a simple application that encodes/decodes ASCII text or hex strings to/from base64 and provides reactive UI components to help illustrate the encoding process.
+I am currently teaching myself svelte and I have enjoyed pretty much everything about it. I decided to create a simple application that encodes ASCII text or hex strings to base64, and vice-versa. In order to take advantage of svelte's strengths, the application contains reactive UI components to help illustrate the encoding process.
 
 - ### Base64 Encoder/Decoder
 
@@ -24,7 +24,7 @@ This is a simple application that encodes/decodes ASCII text or hex strings to/f
 
   - [Svelte 3](https://github.com/sveltejs/svelte) + [Svelma](https://github.com/c0bra/svelma) integrated via [`svelte-preprocess`](https://github.com/kaisermann/svelte-preprocess)
     - Svelma is a set of UI components for Svelte based on the Bulma CSS framework.
-  - [Bulma CSS](https://github.com/jgthms/bulma)/FontAwesome 5 integrated via [`node-sass`](https://github.com/sass/node-sass)
+  - [Bulma](https://github.com/jgthms/bulma)/FontAwesome 5 integrated via [`node-sass`](https://github.com/sass/node-sass)
 
 - ### Rollup & Plugins Config
 
@@ -40,7 +40,7 @@ This is a simple application that encodes/decodes ASCII text or hex strings to/f
   - 5 test cases are each executed with 4 different screen types/orientations
   - Input and expected output for both ASCII and Hex strings taken directly from the [Examples and Illustrations](https://tools.ietf.org/html/rfc4648#section-9) and [Test Vectors](https://tools.ietf.org/html/rfc4648#section-10) sections of RFC4648 which is the original specification for Base64 and other print-safe binary encodings
 
-I've embedded the application below, you can easily view and fork it on codesandbox:
+I deployed the svelte application to Netlify (embedded below, you can also click on the Netlify button to open the application in a new tab/window). I also included a button to edit the project in codesandbox, please feel free to <a href="https://github.com/a-luna/svelte-base64/issues" target="_blank">log a github issue</a> if you find any bugs. Thank you!
 
 <div class="cs-embed-wrapper">
   <div class="cs-embed-buttons">
@@ -54,7 +54,7 @@ I've embedded the application below, you can easily view and fork it on codesand
   <div class="cs-embed">
     <iframe
         src="https://svelte-base64.netlify.com"
-        style="width:100%; height:500px; border:2px solid var(--accent-color2); border-radius: 4px;"
+        style="width:100%; height:500px; border:2px solid var(--accent-color2); border-radius: 4px; overflow:hidden"
         title="svelte-base64"
         allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
         sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
