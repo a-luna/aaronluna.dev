@@ -22,7 +22,7 @@
   --green1: hsl(93, 95%, 45%);
   --green2: hsl(93, 95%, 60%);
   --green3: hsl(93, 95%, 70%);
-  --green4: hsl(93, 95%, 35%);
+  --green4: hsl(133, 96%, 42%);
   --purple1: hsl(261, 100%, 55%);
   --purple2: hsl(261, 100%, 65%);
   --purple3: hsl(261, 100%, 75%);
@@ -36,11 +36,13 @@
   --pink1: hsl(338, 95%, 43%);
   --pink2: hsl(338, 95%, 56%);
   --pink3: hsl(342, 100%, 59%);
-  --red1: hsl(357, 93%, 45%);
-  --red2: hsl(357, 93%, 55%);
+  --red1: hsl(2, 93%, 35%);
+  --red2: hsl(357, 93%, 45%);
+  --red3: hsl(9, 97%, 55%);
   --magenta1: hsl(301, 93%, 41%);
   --magenta2: hsl(301, 93%, 51%);
   --magenta3: hsl(301, 93%, 71%);
+  --yellow1: hsla(59, 98%, 55%);
 
   /* Spacing */
   --no-margin: 0;
@@ -93,29 +95,16 @@
 
   /* Categories */
   --aws: var(--purple2);
-  --aws-hover: var(--purple1);
   --devops: var(--magenta2);
-  --devops-hover: var(--magenta1);
-  --dotnet: var(--blue2);
-  --dotnet-hover: var(--blue1);
+  --dotnet: var(--blue4);
   --flask: var(--red2);
-  --flask-hover: var(--red1);
   --hugo: var(--teal2);
-  --hugo-hover: var(--teal1);
   --javascript: var(--gold1);
-  --javascript-hover: var(--gold1);
   --tutorial-series: var(--pink2);
-  --tutorial-series-hover: var(--pink1);
-  --linux: var(--orange2);
-  --linux-hover: var(--orange1);
-  --python: var(--green2);
-  --python-hover: var(--green1);
-  --virtualization: var(--orange2);
-  --virtualization-hover: var(--orange1);
-  --svelte: var(--green4);
-  --svelte-hover: var(--green1);
-  --codesandbox: var(--blue4);
-  --codesandbox-hover: var(--blue4);
+  --linux: var(--yellow1);
+  --python: var(--green1);
+  --virtualization: var(--teal1);
+  --svelte: var(--red3);
 
   /* Section: Blog Posts */
   --blog-link-color: var(--accent-color1);
