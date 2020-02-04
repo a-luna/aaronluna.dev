@@ -13,7 +13,7 @@ resources:
 ---
 I am currently teaching myself svelte and I have enjoyed pretty much everything about it. I decided to create a simple application that encodes ASCII text or hex strings to base64, and vice-versa. In order to take advantage of svelte's strengths, the application contains reactive UI components to help illustrate the encoding process.
 
-### Base64 Encoder/Decoder
+## Base64 Encoder/Decoder
 
 - Input/output strings displayed in hex, decimal, binary, and base64 to demonstrate how input bytes are encoded to base64.
 - Mouseover/touch any part of the Hex/Base64 output to highlight all related bit groups and the matching base64/ASCII characters in the Lookup Tables.
@@ -24,7 +24,7 @@ I am currently teaching myself svelte and I have enjoyed pretty much everything 
 - If a decoded string is composed entirely of ASCII-printable characters, it will be rendered as text.
 - If a decoded string contains a single byte that is outside of the range of ASCII-printable characters (`0x20` - `0x7E`), the entire string will be rendered as hex digits.
 
-### CSS Preprocessing & Rollup Config
+## CSS Preprocessing & Rollup Config
 
 - [Svelte 3](https://github.com/sveltejs/svelte) + [Svelma](https://github.com/c0bra/svelma) integrated via [`svelte-preprocess`](https://github.com/kaisermann/svelte-preprocess).
   - Svelma is a set of UI components for Svelte based on the Bulma CSS framework.
@@ -34,7 +34,7 @@ I am currently teaching myself svelte and I have enjoyed pretty much everything 
 - When building for production, bundled CSS and JS files are minified.
 - [resolve](https://www.npmjs.com/package/@rollup/plugin-node-resolve), [commonjs](https://www.npmjs.com/package/@rollup/plugin-commonjs), and [terser](https://github.com/TrySound/rollup-plugin-terserhttps://github.com/TrySound/rollup-plugin-terser) rollup plugins configured.
 
-### Tests
+## Tests
 
 - Cypress E2E tests created for basic encode/decode scenarios.
 - 1 test case is failing (out of 5 total) due to a bug that can not be reproduced outside of Cypress.

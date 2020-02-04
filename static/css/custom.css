@@ -3117,13 +3117,14 @@ a.svelte {
 
 .search-results {
   flex: 1 0 67%;
-  margin: 1.5em 0 3em 0;
+  margin: 0 0 40px 0;
 }
 
 .search-query {
   color: #b3b3b3;
   font-size: 1.8em;
-  line-height: 25px;
+  line-height: 1.2;
+  margin: 0 0 10px 0;
 }
 
 .search-results ul {
@@ -3137,26 +3138,30 @@ a.svelte {
 
 #search-header {
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  margin: 0 2em 2em 0;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  margin: 0 2em 40px 0;
 }
 
 #query {
   color: #f2f2f2;
+  margin: 0 0 0 5px;
 }
 
 #search-header .button {
   cursor: pointer;
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 700;;
   color: #323232;
   background-color: var(--pink2);
   border: 1px solid var(--pink2);
   border-radius: 4px;
-  line-height: 13px;
+  line-height: 16px;
   margin: 0;
-  padding: 6px;
+  padding: 10px;
   box-sizing: border-box;
+  max-width: 200px;
+  text-align: center;
 }
 
 #search-header .button:hover,
@@ -3166,6 +3171,7 @@ a.svelte {
   color: var(--pink2);
   background-color: #323232;
   border: 1px solid var(--pink2);
+  text-decoration: none;
 }
 
 .fade {
@@ -3312,9 +3318,7 @@ blockquote td {
     justify-content: center;
   }
   .search-results {
-    margin: 1.5em 0 1em 0;
-    padding: 0 0 15px 0;
-    border-bottom: 2px dotted #7f7f7f;
+    margin: 0 0 40px 0;
   }
 
   main {
@@ -3635,13 +3639,11 @@ blockquote td {
   .post-nav .post-nav-flex-item-next {
     flex: 1 0 100%;
   }
-  #search-header {
-    flex-flow: column nowrap;
-    justify-content: center;
-    margin: 0 0 1em;
-  }
   #search-header .button {
-    margin: 10px auto 10px 0;
+    font-size: 15px;
+    line-height: 15px;
+    padding: 8px;
+    max-width: 165px;
   }
   .article-preview {
     max-width: 440px;

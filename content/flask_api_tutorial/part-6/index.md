@@ -1531,6 +1531,7 @@ def test_create_widget_invalid_deadline(client, db, admin, deadline_str):
     assert "errors" in response.json and "deadline" in response.json["errors"]
 
 ```
+Unlike the parameters in the "happy" path test case, we can use hardcoded strings to verify that invalid `deadline` values are rejected by the API. The first parameterized value is `1/1/1970` ***(Line 48)**, which will be parsed as a valid `datetime` value by `dateutil.parser`, but must be rejected since it has already passed.
 
 The three parameters in **(Lines 48-50)** must not be considered
 
