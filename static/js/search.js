@@ -18,34 +18,32 @@ async function initSearchIndex() {
   }
 }
 
-function interceptSearchInput(event) {
+function interceptSearchInput(event, dom) {
   if (event.keyCode == 13) {
-    handleSearchButtonClicked();
+    handleSearchButtonClicked(dom);
   }
 }
 
-function handleSearchButtonClicked() {
+function handleSearchButtonClicked(dom) {
   event.preventDefault();
-  const query = document.getElementById("search").value.trim().toLowerCase();
+  const query = dom.getSearchQuery();
   if (query === "") {
-    displayErrorMessage("Please enter a search term");
+    displayErrorMessage(dom, "Please enter a search term");
     return;
   }
-  document.getElementById("query").innerHTML = query;
+  dom.searchQueryLabel().innerHTML = query;
   const searchResults = searchSite(query);
   if (!searchResults.length) {
-    displayErrorMessage("Your search returned no results");
+    displayErrorMessage(dom, "Your search returned no results");
     return;
   }
-  renderResults(searchResults);
+  renderResults(dom, searchResults);
 }
 
-function displayErrorMessage(message) {
-  const errorMessage = document.querySelector("#search-form .search-error-message");
-  errorMessage.innerHTML = message;
-  const errorDiv = document.querySelector("#search-form .search-error");
-  errorDiv.classList.remove("hide-element");
-  errorDiv.classList.add("fade");
+function displayErrorMessage(dom, message) {
+  dom.errorLabel().innerHTML = message;
+  dom.errorDiv().classList.remove("hide-element");
+  dom.errorDiv().classList.add("fade");
 }
 
 function searchSite(queryString) {
@@ -68,8 +66,8 @@ function searchSite(queryString) {
   return searchResults;
 }
 
-function renderResults(searchResults) {
-  clearSearchResults();
+function renderResults(dom, searchResults) {
+  clearSearchResults(dom);
   searchResults.slice(0, 10).forEach(function(hit) {
     let resultTitle = document.createElement("a");
     resultTitle.setAttribute("href", hit.href);
@@ -79,18 +77,15 @@ function renderResults(searchResults) {
     let result = document.createElement("li");
     result.appendChild(resultTitle);
     result.appendChild(resultContent);
-    const results = document.querySelector(".search-results ul");
-    results.appendChild(result);
+    dom.searchResultsList().appendChild(result);
   });
-  const primary = document.querySelector(".primary");
-  primary.classList.add("hide-element");
-  const search = document.querySelector(".search-results");
-  search.classList.remove("hide-element");
+  dom.primaryDiv().classList.add("hide-element");
+  dom.searchResultsDiv().classList.remove("hide-element");
   scrollToTop();
 }
 
-function clearSearchResults() {
-  const results = document.querySelector(".search-results ul");
+function clearSearchResults(dom) {
+  const results = dom.searchResultsList();
   while (results.firstChild) results.removeChild(results.firstChild);
 }
 
@@ -112,29 +107,41 @@ function removeAnimation() {
   this.classList.add("hide-element");
 }
 
-function handleClearSearchResultsButtonClicked(event) {
-  const search = document.querySelector(".search-results");
-  search.classList.add("hide-element");
-  clearSearchResults();
-  const primary = document.querySelector(".primary");
-  primary.classList.remove("hide-element");
-  document.getElementById("search").value = "";
+function handleClearSearchResultsButtonClicked(dom) {
+  dom.searchResultsDiv().classList.add("hide-element");
+  dom.primaryDiv().classList.remove("hide-element");
+  dom.searchInput().value = "";
+  clearSearchResults(dom);
 }
 
 initSearchIndex();
 document.addEventListener("DOMContentLoaded", function() {
-  const searchButton = document.getElementById("search-button");
-  if (searchButton != null) {
-    searchButton.addEventListener("click", handleSearchButtonClicked);
+  const DomElements = {
+    searchButton() { return document.getElementById("search-button"); },
+    searchInput() { return document.getElementById("search"); },
+    getSearchQuery() { return this.searchInput().value.trim().toLowerCase(); },
+    searchResultsDiv() { return document.querySelector(".search-results"); },
+    searchQueryLabel() { return document.getElementById("query"); },
+    searchResultsList() { return document.querySelector(".search-results ul"); },
+    clearSearchResultsButton() { return document.getElementById("clear-search-results"); },
+    primaryDiv() { return document.querySelector(".primary"); },
+    errorLabel() { return document.querySelector("#search-form .search-error-message"); },
+    errorDiv() { return document.querySelector("#search-form .search-error"); },
   }
-  const searchInput = document.getElementById("search");
+
+  const searchInput = DomElements.searchInput();
+  const searchButton = DomElements.searchButton();
+
   if (searchInput != null) {
-    searchInput.addEventListener("keydown", interceptSearchInput);
+    searchInput.addEventListener("keydown", event => interceptSearchInput(event, DomElements));
   }
-  document
-    .getElementById("clear-search-results")
-    .addEventListener("click", handleClearSearchResultsButtonClicked);
-  document
-    .querySelectorAll(".search-error")
-    .forEach(div => div.addEventListener("animationend", removeAnimation));
+  if (searchButton != null) {
+    searchButton.addEventListener(
+      "click", () => handleSearchButtonClicked(DomElements)
+    );
+  }
+  DomElements.clearSearchResultsButton().addEventListener(
+    "click", () => handleClearSearchResultsButtonClicked(DomElements)
+  );
+  DomElements.errorDiv().addEventListener("animationend", removeAnimation)
 });
