@@ -3233,13 +3233,16 @@ a.svelte {
 
 .cs-embed {
   height: 500px;
-  padding: 10px;
   overflow: hidden;
 }
 
 .cs-embed-wrapper {
-  margin: 40px 0;
+  margin: 20px 0;
+  padding: 3px;
   overflow: hidden;
+  background-color: var(--black2);
+  border: 2px solid var(--accent-color2);
+  border-radius: 4px;
 }
 
 .cs-embed-buttons {
@@ -3247,7 +3250,7 @@ a.svelte {
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  margin: 0 0 20px 0;
+  margin: 20px 0;
 }
 
 .cs-embed-buttons a {
