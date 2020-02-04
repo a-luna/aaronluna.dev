@@ -1,5 +1,5 @@
 ---
-title: "Svelte App: Base64 Encoding Tool"
+title: "My First Svelte Application: Base64 Encoder/Decoder"
 slug: "svelte-svelma-base64-rollup-global-sass"
 date: "2020-01-30"
 menu_section: "blog"

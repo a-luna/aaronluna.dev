@@ -26,34 +26,26 @@ function interceptSearchInput(event) {
 
 function handleSearchButtonClicked() {
   event.preventDefault();
-  const query = document.getElementById("search").value.toLowerCase();
+  const query = document.getElementById("search").value.trim().toLowerCase();
   if (query === "") {
-    const errorDiv = document
-      .getElementById("search-form")
-      .querySelector(".search-error");
-    const errorMessage = document
-      .getElementById("search-form")
-      .querySelector(".search-error-message");
-    errorMessage.innerHTML = "Please enter a search term";
-    errorDiv.classList.remove("hide-element");
-    errorDiv.classList.add("fade");
+    displayErrorMessage("Please enter a search term");
     return;
   }
   document.getElementById("query").innerHTML = query;
   const searchResults = searchSite(query);
   if (!searchResults.length) {
-    const errorDiv = document
-      .getElementById("search-form")
-      .querySelector(".search-error");
-    const errorMessage = document
-      .getElementById("search-form")
-      .querySelector(".search-error-message");
-    errorMessage.innerHTML = "Your search returned no results";
-    errorDiv.classList.remove("hide-element");
-    errorDiv.classList.add("fade");
+    displayErrorMessage("Your search returned no results");
     return;
   }
   renderResults(searchResults);
+}
+
+function displayErrorMessage(message) {
+  const errorMessage = document.querySelector("#search-form .search-error-message");
+  errorMessage.innerHTML = message;
+  const errorDiv = document.querySelector("#search-form .search-error");
+  errorDiv.classList.remove("hide-element");
+  errorDiv.classList.add("fade");
 }
 
 function searchSite(queryString) {
@@ -106,11 +98,9 @@ function scrollToTop() {
   var toTopInterval = setInterval(function() {
     var supportedScrollTop =
       document.body.scrollTop > 0 ? document.body : document.documentElement;
-
     if (supportedScrollTop.scrollTop > 0) {
       supportedScrollTop.scrollTop = supportedScrollTop.scrollTop - 50;
     }
-
     if (supportedScrollTop.scrollTop < 1) {
       clearInterval(toTopInterval);
     }
