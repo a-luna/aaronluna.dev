@@ -1533,7 +1533,9 @@ def test_create_widget_invalid_deadline(client, db, admin, deadline_str):
 ```
 Unlike the parameters in the "happy" path test case, we can use hardcoded strings to verify that invalid `deadline` values are rejected by the API. The first parameterized value is `1/1/1970` ***(Line 48)**, which will be parsed as a valid `datetime` value by `dateutil.parser`, but must be rejected since it has already passed.
 
-The three parameters in **(Lines 48-50)** must not be considered
+Next, we construct a string value for a date three days in the past using a `timedelta` object **(Line 49)**. This is the same technique we used in the "happy" path to construct dates in the future. The third parameter is a string that is not a formatted `datetime` value, and should obviously be rejected by `datetuil.parser` **(Line 50)**.
+
+Run `pytest tests/test_create_widget.py` to execute these test cases:
 
 <pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
 <span class="cmd-results">=============================================== test session starts ================================================
@@ -1563,7 +1565,17 @@ tests/test_create_widget.py::test_create_widget_valid_name[abc123]
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
 ========================================== 11 passed, 1 warning in 0.97s ===========================================</span></code></pre>
 
-```python {linenos=table,linenostart=67}
+{{< info_box >}}
+Don't be confused by the `PASSED` result for these three test cases. This does not mean that the request succeeded and a new widget was created, since the `assert` statements verify that the status code of the response is 400 `HTTPStatus.BAD_REQUEST` **(Line 58)**, and that the response includes an error message indicating that the value of the `deadline` attribute was invalid **(Line 60)**.
+{{< /info_box >}}
+
+Hopefully, these three parameterized test cases are illustrative and enable you to create the remaining necessary test cases for the `widget_name` and `info_url` attributes.
+
+There are plenty of other requirements and expected behaviors that need test coverage other than the input validation performed on the client's request data. I'll show you two more test cases for the create widget operation, but **you must attempt to create other test cases on your own for any remaining functionality**.
+
+First, we should verify that it isn't possible to create a widget if a widget with the same name has already been created. We can easily write a test case to check this scenario. Add the test case below (`test_create_widget_already_exists`) to `test_create_widget.py` and save the file:
+
+```python {linenos=table,linenostart=63}
 def test_create_widget_already_exists(client, db, admin):
     response = login_user(client, email=ADMIN_EMAIL)
     assert "access_token" in response.json
@@ -1575,8 +1587,33 @@ def test_create_widget_already_exists(client, db, admin):
     assert "status" in response.json and response.json["status"] == "fail"
     name_conflict = f"Widget name: {DEFAULT_NAME} already exists, must be unique."
     assert "message" in response.json and response.json["message"] == name_conflict
+```
 
+The main thing that we need to verify is that the HTTP response code from the server is 409 (`HTTPStatus.CONFLICT`) **(Line 70)**, indicating that the new widget was not created due to a conflict with an existing widget. This is also verified in the error message sent in the server's response **(Lines 72-73)**.
 
+So far, in every test case for the create widget process we used the admin user account. However, we absolutely must verify that users without administrator access cannot create new widgets. Before we begin, we need to update the import statements to include the `EMAIL` **(Line 8)** and `FORBIDDEN` **(Line 11)** string values from `tests.util`:
+
+```python {linenos=table,hl_lines=[8,11]}
+"""Unit tests for api.widget_list API endpoint."""
+from datetime import date, timedelta
+from http import HTTPStatus
+
+import pytest
+
+from tests.util import (
+    EMAIL,
+    ADMIN_EMAIL,
+    BAD_REQUEST,
+    FORBIDDEN,
+    DEFAULT_NAME,
+    login_user,
+    create_widget,
+)
+```
+
+Next, add the test case below (`test_create_widget_no_admin_token`) to `test_create_widget.py` and save the file:
+
+```python {linenos=table,linenostart=84}
 def test_create_widget_no_admin_token(client, db, user):
     response = login_user(client, email=EMAIL)
     assert "access_token" in response.json
@@ -1588,7 +1625,135 @@ def test_create_widget_no_admin_token(client, db, user):
 
 ```
 
+As in the previous test case, the main thing we need to verify is that the HTTP status code of the response is 403 (`HTTPStatus.FORBIDDEN`) **(Line 89)**, and that the error message indicates that request was rejected since the user does not have administrator privileges **(Line 91)**.
+
+Let's verify that all of our test cases are still passing by running `tox`:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
+py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.4.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.1.0,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.3,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==1.0.0
+py37 run-test-pre: PYTHONHASHSEED='396877841'
+py37 run-test: commands[0] | pytest
+================================================= test session starts =================================================
+platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+cachedir: .tox/py37/.pytest_cache
+rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
+plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+collected 90 items
+
+run.py::BLACK SKIPPED                                                                                           [  1%]
+run.py::FLAKE8 SKIPPED                                                                                          [  2%]
+setup.py::BLACK SKIPPED                                                                                         [  3%]
+setup.py::FLAKE8 SKIPPED                                                                                        [  4%]
+src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                               [  5%]
+src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                                              [  6%]
+src/flask_api_tutorial/config.py::BLACK SKIPPED                                                                 [  7%]
+src/flask_api_tutorial/config.py::FLAKE8 SKIPPED                                                                [  8%]
+src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                                           [ 10%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                                          [ 11%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                                      [ 12%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                                     [ 13%]
+src/flask_api_tutorial/api/auth/business.py::BLACK SKIPPED                                                      [ 14%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 SKIPPED                                                     [ 15%]
+src/flask_api_tutorial/api/auth/decorator.py::BLACK SKIPPED                                                     [ 16%]
+src/flask_api_tutorial/api/auth/decorator.py::FLAKE8 SKIPPED                                                    [ 17%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                           [ 18%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                          [ 20%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK SKIPPED                                                     [ 21%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 SKIPPED                                                    [ 22%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                                   [ 23%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                                  [ 24%]
+src/flask_api_tutorial/api/widgets/business.py::BLACK SKIPPED                                                   [ 25%]
+src/flask_api_tutorial/api/widgets/business.py::FLAKE8 SKIPPED                                                  [ 26%]
+src/flask_api_tutorial/api/widgets/dto.py::BLACK SKIPPED                                                        [ 27%]
+src/flask_api_tutorial/api/widgets/dto.py::FLAKE8 SKIPPED                                                       [ 28%]
+src/flask_api_tutorial/api/widgets/endpoints.py::BLACK SKIPPED                                                  [ 30%]
+src/flask_api_tutorial/api/widgets/endpoints.py::FLAKE8 SKIPPED                                                 [ 31%]
+src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                                        [ 32%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                                       [ 33%]
+src/flask_api_tutorial/models/token_blacklist.py::BLACK SKIPPED                                                 [ 34%]
+src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 SKIPPED                                                [ 35%]
+src/flask_api_tutorial/models/user.py::BLACK SKIPPED                                                            [ 36%]
+src/flask_api_tutorial/models/user.py::FLAKE8 SKIPPED                                                           [ 37%]
+src/flask_api_tutorial/models/widget.py::BLACK SKIPPED                                                          [ 38%]
+src/flask_api_tutorial/models/widget.py::FLAKE8 SKIPPED                                                         [ 40%]
+src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                                          [ 41%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                                         [ 42%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK SKIPPED                                                     [ 43%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 SKIPPED                                                    [ 44%]
+src/flask_api_tutorial/util/result.py::BLACK SKIPPED                                                            [ 45%]
+src/flask_api_tutorial/util/result.py::FLAKE8 SKIPPED                                                           [ 46%]
+tests/__init__.py::BLACK SKIPPED                                                                                [ 47%]
+tests/__init__.py::FLAKE8 SKIPPED                                                                               [ 48%]
+tests/conftest.py::BLACK SKIPPED                                                                                [ 50%]
+tests/conftest.py::FLAKE8 SKIPPED                                                                               [ 51%]
+tests/test_auth_login.py::BLACK SKIPPED                                                                         [ 52%]
+tests/test_auth_login.py::FLAKE8 SKIPPED                                                                        [ 53%]
+tests/test_auth_login.py::test_login PASSED                                                                     [ 54%]
+tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                                [ 55%]
+tests/test_auth_logout.py::BLACK SKIPPED                                                                        [ 56%]
+tests/test_auth_logout.py::FLAKE8 SKIPPED                                                                       [ 57%]
+tests/test_auth_logout.py::test_logout PASSED                                                                   [ 58%]
+tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                                 [ 60%]
+tests/test_auth_register.py::BLACK SKIPPED                                                                      [ 61%]
+tests/test_auth_register.py::FLAKE8 SKIPPED                                                                     [ 62%]
+tests/test_auth_register.py::test_auth_register PASSED                                                          [ 63%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                 [ 64%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                            [ 65%]
+tests/test_auth_user.py::BLACK SKIPPED                                                                          [ 66%]
+tests/test_auth_user.py::FLAKE8 SKIPPED                                                                         [ 67%]
+tests/test_auth_user.py::test_auth_user PASSED                                                                  [ 68%]
+tests/test_auth_user.py::test_auth_user_no_token PASSED                                                         [ 70%]
+tests/test_auth_user.py::test_auth_user_expired_token PASSED                                                    [ 71%]
+tests/test_config.py::BLACK SKIPPED                                                                             [ 72%]
+tests/test_config.py::FLAKE8 SKIPPED                                                                            [ 73%]
+tests/test_config.py::test_config_development PASSED                                                            [ 74%]
+tests/test_config.py::test_config_testing PASSED                                                                [ 75%]
+tests/test_config.py::test_config_production PASSED                                                             [ 76%]
+tests/test_create_widget.py::BLACK PASSED                                                                       [ 77%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                      [ 78%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                       [ 80%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                  [ 81%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                  [ 82%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[02/10/2020] PASSED                               [ 83%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-10] PASSED                               [ 84%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 13 2020] PASSED                              [ 85%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                               [ 86%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-07] PASSED                             [ 87%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 88%]
+<span class="cmd-hl-yellow">tests/test_create_widget.py::test_create_widget_already_exists PASSED                                           [ 90%]
+tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                           [ 91%]</span>
+tests/test_user.py::BLACK SKIPPED                                                                               [ 92%]
+tests/test_user.py::FLAKE8 SKIPPED                                                                              [ 93%]
+tests/test_user.py::test_encode_access_token PASSED                                                             [ 94%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                     [ 95%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                     [ 96%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                     [ 97%]
+tests/util.py::BLACK SKIPPED                                                                                    [ 98%]
+tests/util.py::FLAKE8 SKIPPED                                                                                   [100%]
+
+================================================== warnings summary ===================================================
+src/flask_api_tutorial/api/auth/business.py::BLACK
+  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, MutableMapping
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+=============================================== short test summary info ===============================================
+SKIPPED [30] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
+SKIPPED [30] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
+===================================== 30 passed, 60 skipped, 1 warning in 15.11s ======================================
+_______________________________________________________ summary _______________________________________________________
+  py37: commands succeeded
+  congratulations :)</span></code></pre>
+
+I highlighted the results from the two test cases we just created in the test results reported above.
+
+<span class="bold-italics teal">Please do not assume that these test cases are sufficient for the create widget operation, there are many requirements that have not been verified by the test cases I provided. You absolutely must attempt to identify these gaps and create all necessary test cases.</span>
+
 ### Retrieve Widget List
+
+
 
 ### Retrieve Widget
 

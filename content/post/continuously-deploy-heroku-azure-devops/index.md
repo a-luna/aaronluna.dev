@@ -117,14 +117,9 @@ Generate a new API token and have the value ready before moving on to the next s
 
 Ok, back at the Azure Build Pipeline, click **Variables** and create a new Pipeline variable as shown in **Figure 7**. I recommend using a simple, short name for any build variables, so I named mine ``pat`` (personal access token).
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>Since exposing the API token would be no different than exposing the password to your Heroku account, <span class="bold-text">make sure to click the lock icon to make the variable secret as shown in Figures 7 and 8</span>. This will prevent the API token from appearing in build logs.</p>
-  </div>
-</div>
+{{< alert_box >}}
+Since exposing the API token would be no different than exposing the password to your Heroku account, **make sure to click the lock icon to make the variable secret as shown in Figures 7 and 8**. This will prevent the API token from appearing in build logs.
+{{< /alert_box >}}
 
 {{< linked_image img7 >}}
 

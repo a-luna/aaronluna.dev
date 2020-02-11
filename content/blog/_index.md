@@ -5,4 +5,3 @@ url: "/blog/"
 aliases:
     - "/post/"
 ---
-{{< api_tutorial_preview >}}

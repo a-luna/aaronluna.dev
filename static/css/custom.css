@@ -552,6 +552,11 @@ h4 {
   color: var(--widget-bg-color);
 }
 
+.cmd-hl-yellow {
+  background-color: var(--yellow1);
+  color: var(--widget-bg-color);
+}
+
 .cmd-hl {
   background: var(--hl-line-bg);
 }

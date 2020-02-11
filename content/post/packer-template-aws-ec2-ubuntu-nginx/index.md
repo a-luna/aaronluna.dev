@@ -12,6 +12,24 @@ resources:
     src: images/cover.jpg
     params:
       credit: "Photo by Scott Blake on Unsplash"
+  - name: img1
+    src: images/aws_credentials.jpeg
+    title: Figure 1 - AWS Credentials File
+  - name: img2
+    src: images/ami_filters.jpeg
+    title: Figure 2 - AMI Filter Settings
+  - name: img3
+    src: images/aws_console_ami.jpeg
+    title: Figure 3 - AMI Built from Packer Template
+  - name: img4
+    src: images/deregister_ami.jpeg
+    title: Figure 4 - Deregister the AMI to Avoid Incurring Costs
+  - name: img5
+    src: images/aws_console_snapshot.jpeg
+    title: Figure 5 - Snapshot Associated with Packer AMI
+  - name: img6
+    src: images/delete_snapshot.jpeg
+    title: Figure 6 - Delete the AMI Snapshot to Avoid Incurring Costs
 ---
 
 Build automation is a foundational concept within the culture of Continuous Delivey and DevOps. Implementing a successful build automation strategy can dramatically improve product quality and produce time savings in several areas. Packer is a powerful build automation tool that is relatively simple to integrate with your team's workflow. The [official website](https://www.packer.io/intro/index.html) describes packer as follows:
@@ -20,14 +38,9 @@ Build automation is a foundational concept within the culture of Continuous Deli
 
 Installing packer is simple, visit [this page for instructions](https://www.packer.io/intro/getting-started/install.html) as well as download links for all platforms. The packer template shown in this post builds an Amazon EC2 image, so [create an account](https://aws.amazon.com/free/) if you do not already have one. The image will use a **t2.micro** instance, which qualifies for the free-tier.
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>If your account is not elibigle for the free-tier or you have used the maximun number of EC2 hours for the current month, you can incur actual costs as a result of using these examples (The accumulated costs should be relatively minor, less than a dollar or a few dollars if you launch an instance and leave it running for a month).</p>
-  </div>
-</div>
+{{< alert_box >}}
+If your account is not elibigle for the free-tier or you have used the maximun number of EC2 hours for the current month, you can incur actual costs as a result of using these examples (The accumulated costs should be relatively minor, less than a dollar or a few dollars if you launch an instance and leave it running for a month).
+{{< /alert_box >}}
 
 I am warning you with peace and love, I am not responsible for any charges that are generated. If you are not comfortable with setting up an AWS account (credit card is required, even for the free-tier), I will be doing a follow-up post that uses Vagrant and Ansible to build VirtualBox images.
 
@@ -203,14 +216,9 @@ In order to build the machine image, you must provide your AWS authentication cr
 <span class="cmd-prompt">$</span> <span class="cmd-input">export AWS_SECRET_ACCESS_KEY="YOUR SECRET KEY"</span>
 <span class="cmd-prompt">$</span> <span class="cmd-input">export AWS_DEFAULT_REGION="us-west-2"</span>
 <span class="cmd-prompt">$</span> <span class="cmd-input">packer build nginx_ubuntu_from_source.json</span></code></pre>
-    <div class="alert alert-flex">
-      <div class="alert-icon">
-        <i class="fa fa-exclamation-triangle"></i>
-      </div>
-      <div class="alert-message">
-        <p>If credentials are provided through the command line, anyone who can see your environment variables (including programs you run) can see the credentials, and anyone that can view your processes can see the command line used to run them, including the parameters.</p>
-      </div>
-    </div>
+{{< alert_box >}}
+If credentials are provided through the command line, anyone who can see your environment variables (including programs you run) can see the credentials, and anyone that can view your processes can see the command line used to run them, including the parameters.
+{{< /alert_box >}}
   </li>
   <li>
     <strong>Shared credentials file</strong>
@@ -224,7 +232,7 @@ In order to build the machine image, you must provide your AWS authentication cr
 
 I use a credentials file to avoid the potential insecurity of methods #1 and #2. You can [create the credentials file manually or generate it using the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-config-files.html), here is the expected format:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/aws_credentials.jpeg" width="700" link="https://s3-us-west-1.amazonaws.com/alunapublic/devops/aws_credentials.jpeg" alt="AWS Credentials File" caption="Figure 1 - AWS Credentials File">}}
+{{< linked_image img1 >}}
 
 ## The Amazon-EBS Builder
 
@@ -255,7 +263,7 @@ The builder for our template is shown below:
 
 The ```amazon-ebs``` builder builds an AMI by launching an EC2 instance from a source AMI, provisioning that running machine, and then creating an AMI from that machine. The simplest way to choose the source AMI is through the ```source_ami``` configuration setting. For example, if you want to base your AMI off of the most recent, official Ubuntu 16.04 HVM EBS AMI, you could find the AMI ID inside the AWS console as shown below:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/ami_filters.jpeg" width="700" link="https://s3-us-west-1.amazonaws.com/alunapublic/devops/ami_filters.jpeg" alt="AMI Filter Settings" caption="Figure 2 - AMI Filter Settings">}}
+{{< linked_image img2 >}}
 
 To use this as your source AMI, you would add ```"source-ami": "ami-925144f2"``` to the JSON above and remove the entire ```source_ami_filter``` object.
 
@@ -503,30 +511,26 @@ Build 'amazon-ebs' finished.</span>
 <span class="cmd-results">==> Builds finished. The artifacts of successful builds are:
 --> amazon-ebs: AMIs were created:
 us-west-1: ami-xxxxxxxx</span></code></pre>
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>Unless you want to be charged for storing the AMI that has been created, you should deregister it and delete the snapshot associated with the AMI immediately.</p>
-  </div>
-</div>
+
+{{< alert_box >}}
+Unless you want to be charged for storing the AMI that has been created, you should deregister it and delete the snapshot associated with the AMI immediately.
+{{< /alert_box >}}
 
 First, login to the AWS Console and navigate to **EC2 -> AMIs**.  The AMI created by the packer template will have the name specified in line 31 of the JSON file:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/aws_console_ami.jpeg" width="500" link="https://s3-us-west-1.amazonaws.com/alunapublic/devops/aws_console_ami.jpeg" alt="AMI Built from Packer Template" caption="Figure 3 - AMI Built from Packer Template">}}
+{{< linked_image img3 >}}
 
 Select the AMI and click **Deregister** from the **Actions** menu:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/deregister_ami.jpeg" width="400" link="https://s3-us-west-1.amazonaws.com/alunapublic/devops/deregister_ami.jpeg" alt="Deregister the AMI to Avoid Incurring Costs" caption="Figure 4 - Deregister the AMI to Avoid Incurring Costs">}}
+{{< linked_image img4 >}}
 
 Next, navigate to **EC2 -> Snapshots**:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/aws_console_snapshot.jpeg" width="500" link="https://s3-us-west-1.amazonaws.com/alunapublic/devops/aws_console_snapshot.jpeg" alt="Snapshot Associated with Packer AMI" caption="Figure 5 - Snapshot Associated with Packer AMI">}}
+{{< linked_image img5 >}}
 
 Select the snapshot and click **Delete** from the **Actions** menu
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/devops/delete_snapshot.jpeg" width="500" link="https://s3-us-west-1.amazonaws.com/alunapublic/devops/delete_snapshot.jpeg" alt="Delete AMI Snapshot" caption="Figure 6 - Delete the AMI Snapshot to Avoid Incurring Costs">}}
+{{< linked_image img6 >}}
 
 ## Installing NGINX from .deb File
 
