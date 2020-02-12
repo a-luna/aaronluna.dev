@@ -11,7 +11,7 @@ resources:
   - name: cover
     src: images/cover.jpg
     params:
-      credit: "Photo by Denny Bú on Unsplash"
+      credit: "Photo by Thomas Jensen on Unsplash"
 ---
 
 While creating the [TPL Socket extension methods](/2018/02/04/csharp-tpl-socket-methods/), I ended up with a library of networking functions and IP address parsing/retrieving methods. If you would like to download individual .cs files or a zip file containing the entire library, you can do so at the github link below:

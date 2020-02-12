@@ -65,7 +65,9 @@ If you would like to download the source code for the packer examples shown in t
 In this post I will go through each section of the packer template file [nginx_ubuntu_from_source.json](https://github.com/a-luna/packer-examples/blob/master/nginx_ubuntu_from_source.json), showing the expected console output from each component individually. I will not cover the shell scripts which build NGINX from source code and configure the installation, since this has already been [documented in this post](/2018/01/22/install-nginx-source-code-shell-script/).
 
 Here is the complete template file, the line numbers will stay consistent throughout this post:
-{{< highlight json "linenos=inline" >}}{
+
+```json {linenos=table}
+{
   "variables": {
     "nginx_ver": "1.15.6",
     "pcre_ver": "8.42",
@@ -146,14 +148,17 @@ Here is the complete template file, the line numbers will stay consistent throug
     "destination": "./download",
     "direction": "download"
   }]
-}{{< /highlight >}}
+}
+```
 
 The github repository also contains a second template file, [nginx_ubuntu_from_deb.json](https://github.com/a-luna/packer-examples/blob/master/nginx_ubuntu_from_deb.json). I will briefly cover the differences between the two templates at the end of this post.
 
 ## User Variables
 
 The first section of the template contains user variables which are passed to shell scripts in the ```provisioners``` section.
-{{< highlight json "linenos=inline,linenostart=2" >}}"variables": {
+
+```json {linenos=table,linenostart=2}
+"variables": {
   "nginx_ver": "1.15.6",
   "pcre_ver": "8.42",
   "zlib_ver": "1.2.11",
@@ -165,7 +170,8 @@ The first section of the template contains user variables which are passed to sh
   "deb_pkg_folder": "deb_pkg",
   "log_folder": "log",
   "log_file": "install_source.log"
-},{{< /highlight >}}
+},
+```
 
 Please keep the version numbers for NGINX, PCRE, zlip, OpenSSL and GeoIp libraries up-to-date. You can find the latest release for each product at the links below:
 
@@ -239,7 +245,9 @@ I use a credentials file to avoid the potential insecurity of methods #1 and #2.
 The ```builders``` section contains an array of objects that define the platform, operating system, etc. of each machine image that will be built from the template. Builders are responsible for creating virtual machines and generating images from them for various platforms. For example, there are separate builders for EC2, VMware, VirtualBox, etc. Packer comes with many builders by default, and can also be extended to add new builders.
 
 The builder for our template is shown below:
-{{< highlight json "linenos=inline,linenostart=15" >}}"builders": [{
+
+```json {linenos=table,linenostart=15}
+"builders": [{
   "type": "amazon-ebs",
   "access_key": "{{user `aws_access_key`}}",
   "secret_key": "{{user `aws_secret_key`}}",
@@ -259,7 +267,8 @@ The builder for our template is shown below:
   "vpc_id": "vpc-xxxxxxxx",
   "subnet_id": "subnet-xxxxxxxx",
   "associate_public_ip_address": "true"
-}],{{< /highlight >}}
+}],
+```
 
 The ```amazon-ebs``` builder builds an AMI by launching an EC2 instance from a source AMI, provisioning that running machine, and then creating an AMI from that machine. The simplest way to choose the source AMI is through the ```source_ami``` configuration setting. For example, if you want to base your AMI off of the most recent, official Ubuntu 16.04 HVM EBS AMI, you could find the AMI ID inside the AWS console as shown below:
 
@@ -312,15 +321,19 @@ In order to install the latest version of NGINX and perform customizations such 
 ### Shell Provisioner (Inline Script)
 
 The first provisioner in our template is a [shell provisioner](https://www.packer.io/docs/provisioners/shell.html). This provisioner requires that one of the following configuration options be present: ```inline```, ```script``` or ```scripts```. In this instance, we are using the ```inline``` option to define a sequence of shell commands to execute on the EC2 instance. The commands are run with the user defined by the ```ssh_username``` setting.
-{{< highlight json "linenos=inline,linenostart=36" >}}"provisioners": [{
+
+```json {linenos=table,linenostart=36}
+"provisioners": [{
   "type": "shell",
   "inline": ["sudo mkdir -p {{user `working_dir`}}/{{user `src_folder`}}",
   "sudo chown ubuntu:ubuntu {{user `working_dir`}}/{{user `src_folder`}}",
   "sudo mkdir -p {{user `working_dir`}}/{{user `deb_pkg_folder`}}/",
   "sudo chown ubuntu:ubuntu {{user `working_dir`}}/{{user `deb_pkg_folder`}}"]
-},{{{< /highlight >}}
+},
+```
 
 These commands create two directories and change their owner to the SSH user, this is needed to use the file provisioner which is the next action performed on our EC2 instance. The output from the ```packer build``` command which is generated solely from this shell provisioner is shown below:
+
 <pre><code><span class="cmd-results">==> amazon-ebs: Connected to SSH!
 ==> amazon-ebs: Provisioning with shell script:
 /var/folders/7t/g16tw4qd2x532lsb_1lm0vyh0000gn/T/packer-shell348591307</span></code></pre>
@@ -330,12 +343,16 @@ As you can see, packer creates a temporary script file from our shell commands a
 ### File Provisioner (Upload to EC2)
 
 The [file provisioner](https://www.packer.io/docs/provisioners/file.html) transfers files and folders between the local machine and the EC2 instance. The default transfer direction is upload (from the local machine to the EC2 instance). This is the default behavior, so you do not need to provide the direction setting in the file provisioner if this is the desired behavior. We will encounter the download transfer direction in a later step:
-{{< highlight json "linenos=inline,linenostart=43" >}}"type": "file",
+
+```json {linenos=table,linenostart=43}
+"type": "file",
 "source": "./upload/",
 "destination": "{{user `working_dir`}}/{{user `deb_pkg_folder`}}"
-},{{{< /highlight >}}
+},
+```
 
 This provisioner transfers the contents of the ```upload``` directory to the location on the EC2 instance defined by the values of the user variables ```working_dir``` and ```deb_pkg_folder``` (I chose to use ```/opt/deb_pkg```). The uploaded files are used to configure the firewall settings and provide the systemd unit file for the NGINX service. The output from the ```packer build``` command which is generated solely from this file provisioner is shown below:
+
 <pre><code><span class="cmd-results">==> amazon-ebs: Uploading ./upload/ => /opt/deb_pkg</span></code></pre>
 
 ### Shell Provisioner (Local File)
@@ -343,7 +360,9 @@ This provisioner transfers the contents of the ```upload``` directory to the loc
 The next provisioner is where the bulk of the configuration process is performed. This is another shell provisioner but this time we are using the ```scripts``` configuration option to execute multiple bash script files. All of the user variables are used by this provisioner in the ```environment_vars``` object which injects the user variables into the shell scripts.
 
 Also, please note the use of the configuration setting ```"expect_disconnect": true```. This is necessary since the last shell script reboots the server to verify the NGINX service was configured successfully. If this option was not set, the build process would produce an error when the server disconnects and terminate the EC2 instance:
-{{< highlight json "linenos=inline,linenostart=47" >}}"type": "shell",
+
+```json {linenos=table,linenostart=47}
+"type": "shell",
 "scripts": ["./bash-scripts/00--nginx-prep_install.sh",
   "./bash-scripts/01a-nginx-install_from_source.sh",
   "./bash-scripts/02--nginx-configure_post_install.sh"],
@@ -359,7 +378,8 @@ Also, please note the use of the configuration setting ```"expect_disconnect": t
   "DEB_PKG_FOLDER={{user `deb_pkg_folder`}}",
   "LOG_FOLDER={{user `log_folder`}}",
   "LOG_FILE={{user `log_file`}}"]
-},{{{< /highlight >}}
+},
+```
 
 These scripts perform the following sequence of actions:
 
@@ -375,6 +395,7 @@ These scripts perform the following sequence of actions:
 10. Reboot EC2 instance and verify NGINX service starts automatically
 
 The output from the ```packer build``` command which is generated solely from this shell provisioner is shown below:
+
 <pre><code><span class="cmd-results">==> amazon-ebs: Provisioning with shell script: ./bash-scripts/00--nginx-prep_install.sh
     amazon-ebs: 29-Apr-2018-07-50-22 | Updating system...
     amazon-ebs: 29-Apr-2018-07-51-07 | Downloading prerequisites...
@@ -430,16 +451,20 @@ The output from the ```packer build``` command which is generated solely from th
     amazon-ebs: 29-Apr-2018-07-54-43 | Rebooting server to verify NGINX starts automatically...</span></code></pre>
 
 The next provisioner executes a single shell script after the EC2 instance has rebooted. Following a reboot, it is [recommended](https://www.packer.io/docs/provisioners/shell.html#handling-reboots) to use the ```pause_before``` option when executing a shell script because Packer is able to detect and SSH into the instance as soon as SSH is available. However, Ubuntu actually doesn't get proper amounts of time to initialize. The pause makes sure that the OS properly initializes:
-{{< highlight json "linenos=inline,linenostart=64" >}}"type": "shell",
+
+```json {linenos=table,linenostart=64}
+"type": "shell",
 "script": "./bash-scripts/03--nginx-verify_install.sh",
 "pause_before": "10s",
 "environment_vars": [
   "WORKING_DIR={{user `working_dir`}}",
   "LOG_FOLDER={{user `log_folder`}}",
   "LOG_FILE={{user `log_file`}}"]
-},{{{< /highlight >}}
+},
+```
 
 The output from the ```packer build``` command which is generated solely from this shell provisioner is shown below:
+
 <pre><code><span class="cmd-results">==> amazon-ebs: Pausing 10s before the next provisioner...
 ==> amazon-ebs: Provisioning with shell script: ./bash-scripts/03--nginx-verify_install.sh
     amazon-ebs:
@@ -473,7 +498,8 @@ The output from the ```packer build``` command which is generated solely from th
 
 The final two provisioners in our template are file provisioners that download files from the EC2 instance to our local machine. In order to do so, we must use the configuration setting ```"direction": "download"``` as shown below:
 
-{{< highlight json "linenos=inline,linenostart=72" >}}"type": "file",
+```json {linenos=table,linenostart=72}
+"type": "file",
 "source": "{{user `working_dir`}}/{{user `deb_pkg_folder`}}/",
 "destination": "./download",
 "direction": "download"
@@ -482,11 +508,13 @@ The final two provisioners in our template are file provisioners that download f
 "source": "{{user `working_dir`}}/{{user `log_folder`}}/",
 "destination": "./download",
 "direction": "download"
-}]{{< /highlight >}}
+}]
+```
 
 These provisioners download the contents of the directories defined by the values of the user variables ```working_dir/deb_pkg_folder``` and ```working_dir/log_folder``` to the download folder which must exist within the directory where the packer template is located. The first provisioner downloads the .deb package which can install/uninstall the custom NGINX build and the .tar.gz file containing the source files needed to perform the installation. The second provisioner downloads the log of the NGINX installation process.
 
 The output from the ```packer build``` command which is generated solely from these file provisioners is shown below:
+
 <pre><code><span class="cmd-results">==> amazon-ebs: Downloading /opt/deb_pkg/ => ./download
 ==> amazon-ebs: Downloading /opt/log/ => ./download</span></code></pre>
 
@@ -495,6 +523,7 @@ The output from the ```packer build``` command which is generated solely from th
 After the provisioners have completed, packer stops the EC2 instance and creates an AMI that is associated with your account. You can use this AMI to launch any number of t2.micro instances that are running the latest version of NGINX, configured with your desired set of builtin and third-party modules.
 
 The output from the ```packer build``` command which is generated after the provisioners have completed is shown below:
+
 <pre><code><span class="cmd-results">==> amazon-ebs: Stopping the source instance...
     amazon-ebs: Stopping instance, attempt 1
 ==> amazon-ebs: Waiting for the instance to stop...
@@ -535,6 +564,7 @@ Select the snapshot and click **Delete** from the **Actions** menu
 ## Installing NGINX from .deb File
 
 The final provisioner downloaded two files from the ```deb_pkg``` folder on the EC2 instance to the local machine:
+
 <pre><code><span class="cmd-prompt">$</span> <span class="cmd-input">ls -l</span>
 <span class="cmd-results">total 194512
 -rwxr-xr-x  1 aaronluna  staff  97927787 Apr 29 03:09 nginx-1.15.6-src_files.tar.gz
@@ -543,7 +573,9 @@ The final provisioner downloaded two files from the ```deb_pkg``` folder on the 
 The .deb package can be used to uninstall NGINX from an EC2 instance launched from an AMI produced by the [nginx_ubuntu_from_source.json](https://github.com/a-luna/packer-examples/blob/master/nginx_ubuntu_from_source.json) template file, and it can also be used (along with the .tar.gz file containing the necessary source files) to install NGINX on an EC2 instance. To do so, you only need to call ```packer build``` with the other template file in the [github repository](https://github.com/a-luna/packer-examples): [nginx_ubuntu_from_deb.json](https://github.com/a-luna/packer-examples/blob/master/nginx_ubuntu_from_deb.json).
 
 The two templates are very similar. In fact, the shell scripts have been modularized so they can be used in both versions. Here is the full JSON for [nginx_ubuntu_from_deb.json]("https://github.com/a-luna/packer-examples/blob/master/nginx_ubuntu_from_deb.json):
-{{< highlight json "linenos=inline" >}}{
+
+```json {linenos=table}
+{
   "variables": {
     "nginx_ver": "1.15.6",
     "pcre_ver": "8.42",
@@ -623,22 +655,30 @@ The two templates are very similar. In fact, the shell scripts have been modular
     "destination": "./download",
     "direction": "download"
   }]
-}{{< /highlight >}}
+}
+```
 
 The two files are identical through lines 1-46. The template which installs NGINX from the .deb package contains an additional file provisioner (lines 47-50) which uploads the two files in the deb_pkg folder to the EC2 instance:
-{{< highlight json "linenos=inline,linenostart=47" >}}"type": "file",
+
+```json {linenos=table,linenostart=47}
+"type": "file",
 "source": "./download/{{user `deb_pkg_folder`}}/",
 "destination": "{{user `working_dir`}}/{{user `src_folder`}}"
-},{{{< /highlight >}}
+},
+```
 
 The next provisioner which executes the array of shell scripts to install NGINX is also nearly identical  in both files. The only difference is in line 53 which executes a different installation script that installs NGINX from the .deb package rather than downloading and building NGINX from source:
-{{< highlight json "linenos=inline,linenostart=51" >}}"type": "shell",
+
+```json {linenos=table,linenostart=51}
+"type": "shell",
 "scripts": ["./bash-scripts/00--nginx-prep_install.sh",
   "./bash-scripts/01b-nginx-install_from_deb.sh",
   "./bash-scripts/02--nginx-configure_post_install.sh"],
-"expect_disconnect": true,{{< /highlight >}}
+"expect_disconnect": true,
+```
 
 The entire output from the ```packer build``` command for this template file is shown below:
+
 <pre><code><span class="cmd-prompt">$</span> <span class="cmd-input">packer build nginx_ubuntu_from_deb.json</span>
 <span class="cmd-results">==> amazon-ebs: Prevalidating AMI Name: custom_nginx_ubuntu_1525002641
     amazon-ebs: Found Image ID: ami-925144f2
@@ -756,6 +796,7 @@ us-west-1: ami-xxxxxxxx</span></code></pre>
 ## Installation Log Files
 
 Each packer template downloads a log file of the installation process containing the console output from the EC2 instance to the local machine:
+
 <pre><code><span class="cmd-prompt">$</span> <span class="cmd-input">ls -l</span>
 <span class="cmd-results"></span>total 2520
 -rw-r--r--  1 aaronluna  staff    92355 Apr 29 07:03 install_deb.log

@@ -47,6 +47,7 @@ pygmentsUseClasses = true
   twitter = "aaronlunadev"
   readmore = false
   authorbox = false
+  toc = false
   post_navigation = true
   postSections = ["post"]
   menu_label = "Menu"

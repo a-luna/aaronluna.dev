@@ -6,7 +6,11 @@
                 {{ partial "post_meta" . }}
                 <div class="post__image">{{ partial "main_article_image" . }}</div>
             </header>
-            {{- partial "post_toc" . -}}
+            {{- if .Param "toc" }}
+            <div class="accordion-wrapper">
+                {{ partial "toc_accordion" . }}
+            </div>
+            {{- end }}
             <div class="content post__content clearfix">{{ .Content }}</div>
             {{ partial "post_tags" . }}
         </article>

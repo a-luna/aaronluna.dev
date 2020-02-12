@@ -1694,6 +1694,7 @@ figcaption {
   width: auto;
   background-color: var(--widget-bg-color);
   padding: 7px 10px;
+  margin: 0;
 }
 
 .toc__title {

@@ -7,6 +7,48 @@ aliases:
 date: "2018-01-26"
 menu_section: "blog"
 categories: ["Virtualization"]
+summary: "Packer is an open source tool for creating identical machine images for multiple platforms from a single source configuration. Packer is lightweight, runs on every major operating system, and is highly performant, creating machine images for multiple platforms in parallel. In this post, I will demonstrate how to create a packer template for AWS that automatically installs and configures NGINX on the most recent Ubuntu OS."
+resources:
+  - name: cover
+    src: images/cover.jpg
+    params:
+      credit: "Photo by Daniel Olah on Unsplash"
+  - name: img1
+    src: images/vmware_proc_memory.jpg
+    title: Figure 1 - Processors & Memory Settings
+  - name: img2
+    src: images/vmware_hard_drive_scsi.jpg
+    title: Figure 2 - Hard Disk Settings
+  - name: img3
+    src: images/textedit_preferences.jpg
+    title: Figure 3 - TextEdit Preferences menu showing location of Smart quotes setting
+  - name: img4
+    src: images/vnware_window_menu.jpg
+    title: Figure 4 - The virtual machine library can be accessed from the Window menu
+  - name: img5
+    src: images/vmware_edit_vmx_file.jpg
+    title: Figure 5 - Menu options available with the ALT key pressed
+  - name: img6
+    src: images/windows_network_connection_details.jpg
+    title: Figure 6 - Network adapter properties for E1000E and VMXNET3 within Windows
+  - name: img7
+    src: images/textedit_updated_config.jpg
+    title: Figure 7 - .VMX file with additional settings added
+  - name: img8
+    src: images/disk_clean_up_default.jpg
+    title: Figure 8 - Disk Cleanup Tool
+  - name: img9
+    src: images/disk_clean_up_windows_update.jpg
+    title: Figure 9 - Disk Cleanup Tool with Windows Update Cleanup option selected
+  - name: img10
+    src: images/disk_clean_up_in_progress.jpg
+    title: Figure 10 - Disk Cleanup in progress
+  - name: img11
+    src: images/windows_search_settings.jpg
+    title: Figure 11 - Windows Settings Search Results
+  - name: img12
+    src: images/windows_virtual_memory_settings.jpg
+    title: Figure 12 - Changes to paging file size within Performance Options
 ---
 
 The majority of my work consists of C#/.NET development, and Visual Studio+ReSharper is my preferred IDE. Since I'm a Mac user, I run VS on a Windows 10 instance with VMWare Fusion. For the first month or so everything ran smoothly. However, the performance of the VM degraded significantly over time, especially with multiple Visual Studio projects open in the VM and resource-hungry programs running on the Mac simultaneously.
@@ -17,38 +59,33 @@ Thankfully, after changing a few settings and clearing unnecessary files I was a
 
  I found that a combination of 2 processor cores with 4096 MB of memory works best for my needs (Note: My MacBook Pro has a 2.8GHz Intel quad core i7 with 8 GB RAM and Intel Iris GPU with 1536 MB). Also, select "Enable hypervisor applications in this virtual machine" as shown in **Figure 1**.
 
- {{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vmware_proc_memory.jpeg" width="500" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vmware_proc_memory.jpeg" alt="VMWare Fusion Processor and Memory Settings" caption="Figure 1 - Processors &#38; Memory Settings">}}
+{{< linked_image img1 >}}
 
 I also saw a performance boost by changing the driver for the hard drive bus type to SCSI. On the Hard Disk Settings page, expand the "Advanced options" menu and change the Bus type to SCSI. Also, select "Pre-allocate disk space" as shown in **Figure 2**:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vnware_hard_drive_scsi.jpeg" width="550" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vnware_hard_drive_scsi.jpeg" alt="VMWare Fusion Hard Disk Settings" caption="Figure 2 - Hard Disk Settings">}}
+{{< linked_image img2 >}}
 
 ## Settings in the .VMX File
 
 VMWare only exposes a small number of settings through the UI. There are hundreds of additional configuration options which can only be modified by editing the .vmx file.
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>You should always make a backup of the .vmx file before modifying it. You can easily make changes that render the VM unusable or unable to boot!</p>
-  </div>
-</div>
+{{< alert_box >}}
+You should always make a backup of the .vmx file before modifying it. You can easily make changes that render the VM unusable or unable to boot!
+{{< /alert_box >}}
 
 Before changing the .vmx file itself, launch TextEdit and open the Preferences menu. **Make sure Smart quotes is unchecked** (See **Figure 3** below). If this option is checked and you save the .vmx file, you will not be able to boot your VM.
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/textedit_preferences.jpeg" width="400" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/textedit_preferences.jpeg" alt="TextEdit Preferences menu showing location of Smart quotes setting" caption="Figure 3 - TextEdit Preferences menu showing location of Smart quotes setting">}}
+{{< linked_image img3 >}}
 
 The easiest way to access the .vmx file is from the list of virtual machines in the main VMWare Fusion window. If the list of virtual machines is not visible, go to **Window -&#62; Virtual Machine Library**.
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vnware_window_menu.jpeg" width="400" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vnware_window_menu.jpeg" alt="VMWare virtual machine library can be accessed from the Window menu" caption="Figure 4 - The virtual machine library can be accessed from the Window menu">}}
+{{< linked_image img4 >}}
 
 Next, shutdown the VM. Ensure that it is completely shutdown and not in a suspended state.
 
 Right click on the VM as shown in **Figure 5**. If you press and hold the &#8997; (ALT) key, **Show in Finder** will change to **Open Config File in Editor**.
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vmware_edit_vmx_file.jpeg" width="300" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/vmware_edit_vmx_file.jpeg" alt="VMWare Menu options available with the ALT key pressed" caption="Figure 5 - Menu options available with the ALT key pressed">}}
+{{< linked_image img5 >}}
 
 There are other hidden options within this menu, try holding the ^ (CTRL) key or &#8984; (CMD) key  and the menu item will change to **Show Config File in Finder** and **Open Latest Log File**, respectively.
 
@@ -57,7 +94,7 @@ Right-click on your VM while holding the &#8997; (ALT) key and select **Open Con
   <li>
     <p>Find <strong>ethernet0.virtualDev = “e1000e”</strong> and change it to <strong>ethernet0.virtualDev = “vmxnet3”</strong>.</p>
     <p><strong>E1000E</strong> is the default value and is recognized by Windows as an Intel 82574L Gigabit NIC. <strong>VMXNET3</strong> is a virtual NIC which is optimized for use in a VM and is not based on a physical part (<strong>Figure 6</strong> shows how the two NICs are displayed in Windows) Changing this value should drastically improve network performance. If you would like to read a detailed comparison of these two NICs and others which can be used with VMWare, <a href="https://kb.vmware.com/s/article/1001805">check out this page</a>.</p>
-    {{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/windows_network_connection_details.jpeg" width="700" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/windows_network_connection_details.jpeg" alt="Network adapter properties for E1000E and VMXNET3" caption="Figure 6 - Network adapter properties for E1000E and VMXNET3 within Windows">}}
+{{< linked_image img6 >}}
   </li>
   <li>
     <p>Add the following lines to the .vmx file:</p>
@@ -102,7 +139,7 @@ Right-click on your VM while holding the &#8997; (ALT) key and select **Open Con
         </table>
       </div>
     </div>
-    {{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/textedit_updated_config.jpeg" width="500" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/textedit_updated_config.jpeg" alt="VMX file with additional settings added" caption="Figure 7 - .VMX file with additional settings added">}}
+{{< linked_image img7 >}}
   </li>
 </ul>
 
@@ -110,25 +147,25 @@ Right-click on your VM while holding the &#8997; (ALT) key and select **Open Con
 
 One of the main causes of slower performance in my Windows VM turned out to be caused by Windows Update. I noticed that I was constantly running out of hard drive space, and would allocate more space from the host OS to improve performance. It turns out that Windows keeps copies of all updates, and performing a normal Disk Cleanup does not remove these files even when they are completely redundant.
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/disk+clean+up+-+default.JPG" width="350" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/disk+clean+up+-+default.JPG" alt="Disk Cleanup Tool" caption="Figure 8 - Disk Cleanup Tool">}}
+{{< linked_image img8 >}}
 
 The Disk Cleanup tool is located at <strong>Control Panel -&#62; System and Security -&#62; Administrative Tools</strong>. Note that in <strong>Figure 8</strong>, performing the cleanup will free up less than 10 MB. You need to click the <strong>"Clean up system files"</strong>  button and select the checkbox for <strong>"Windows Update Cleanup"</strong> as shown in <strong>Figure 9</strong>:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/disk+clean+up+-+windows+update.JPG" width="350" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/disk+clean+up+-+windows+update.JPG" alt="Disk Cleanup Tool with Windows Update Cleanup option selected" caption="Figure 9 - Disk Cleanup Tool with Windows Update Cleanup option selected">}}
+{{< linked_image img9 >}}
 
 Now, the Disk Cleanup tool shows that 3 GB of space will be reclaimed. Running this tool once a month should improve the performance of your Windows 10 VM dramatically. The cleanup process took approximately 45 minutes to complete when I ran it for the first time.
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/disk+clean+up+-+in+progress.JPG" width="300" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/disk+clean+up+-+in+progress.JPG" alt="Disk Cleanup in progress" caption="Figure 10 - Disk Cleanup in progress">}}
+{{< linked_image img10 >}}
 
 ## Virtual Memory Settings in Windows 10
 
 Another way to realize performance gains is by adjusting the size of the paging file.  Right-click the Start button and select "Settings". Enter "performance" in the search box and select "Adjust the appearance and performance of Windows" as shown in <strong>Figure 11</strong>:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/windows_search_settings.jpeg" width="300" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/windows_search_settings.jpeg" alt="Search results for performance in Windows Settings" caption="Figure 11 - Windows Settings Search Results">}}
+{{< linked_image img11 >}}
 
 This will open Performance Options. Navigate to the Advanced tab and click the Change… button. Uncheck the "Automatically manage paging file size for all drives" checkbox and select the radio button for "Custom Size". For both Initial and Maximum Size enter twice the amount of RAM that the VM has allocated. For my setup, this equals 2 * 4096 MB = 8192 MB. See <strong>Figure 12</strong>:
 
-{{<figure src="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/windows_virtual_memory_settings.jpeg" width="700" link="https://s3-us-west-1.amazonaws.com/alunapublic/optimize_vmware_fusion/windows_virtual_memory_settings.jpeg" alt="Changes to paging file size within Performance Options" caption="Figure 12 - Changes to paging file size within Performance Options">}}
+{{< linked_image img12 >}}
 
 Click the Set button and reboot the VM in order to apply the changes.
 
