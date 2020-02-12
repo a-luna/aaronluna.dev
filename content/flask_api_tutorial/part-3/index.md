@@ -42,11 +42,6 @@ resources:
   - name: img7
     src: images/p03-07-register-response-cli.jpg
     title: Figure 7 - New user successfully registered (CLI)
-twitter:
-  card: "summary"
-  creator: "@aaronlunadev"
-  title: "How To: Create a Flask API with JWT-Based Authentication (Part 3: API Configuration and User Registration)"
-  description: "Part 3 explains how to initialize the Flask-RESTPlus extension and how API routes/endpoints are defined. In order to create an endpoint for new user registration, the modules and classes available in Flask-RESTPlus for parsing and validating request data are explored and demonstrated. Additionally, the process for serializing Python objects in order to send them in an HTTP response is covered. After implementing the user registration API endpoint, test cases are created and executed to verify the registration process is working correctly."
 ---
 ## Project Structure
 

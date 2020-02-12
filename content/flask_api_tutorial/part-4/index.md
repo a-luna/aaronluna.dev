@@ -51,11 +51,6 @@ resources:
   - name: img10
     src: images/p04-10-auth-user-invalid-token-swagger.jpg
     title: Figure 10 - Request failed (Invalid token)
-twitter:
-  card: "summary"
-  creator: "@aaronlunadev"
-  title: "How To: Create a Flask API with JWT-Based Authentication (Part 4: JWT Authentication, Decorators and Blacklisting Tokens)"
-  description: "Part 4 completes the user authorization API by implementing login, logout and user verification API endpoints. The process to create a custom decorator that only allows access to users with a valid JWT is covered in-depth. How to send an HTTP request for a protected resource that includes a JWT is demonstrated with both Swagger UI and command-line tools. A new class/database model is introduced to create a token blacklist, to ensure that JWTs cannot be used after the user has logged out. Test cases are created and executed for all API endpoints covering successful and failed attempts to login/logout/retrieve user info."
 ---
 ## Project Structure
 

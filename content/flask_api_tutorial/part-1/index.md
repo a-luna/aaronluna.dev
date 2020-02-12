@@ -20,11 +20,6 @@ resources:
     src: images/cover.jpg
     params:
       credit: "Photo by Matt Howard on Unsplash"
-twitter:
-  card: "summary"
-  creator: "@aaronlunadev"
-  title: "How To: Create a Flask API with JWT-Based Authentication (Part 1: Project Setup and Environment Configuration)"
-  description: "In Part 1, the core concepts of REST and JWTs are introduced, project dependencies are described and installed, and the project is fully configured for prod/dev environments. The flask server and CLI are demonstrated to ensure the setup was performed correctly before moving on to Part 2."
 ---
 ## Introduction
 

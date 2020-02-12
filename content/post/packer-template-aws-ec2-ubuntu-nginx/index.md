@@ -11,7 +11,7 @@ resources:
   - name: cover
     src: images/cover.jpg
     params:
-      credit: "Photo by Scott Blake on Unsplash"
+      credit: "Photo by Franck V. on Unsplash"
   - name: img1
     src: images/aws_credentials.jpeg
     title: Figure 1 - AWS Credentials File

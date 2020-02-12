@@ -12,9 +12,4 @@ categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
 draft: true
 summary: ""
-twitter:
-  card: "summary"
-  creator: "@aaronlunadev"
-  title: ""
-  description: ""
 ---

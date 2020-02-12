@@ -1,12 +1,12 @@
 ---
 title: "How To: Create a Flask API with JWT-Based Authentication (Part 6)"
-lead: "Part 6: Widget API Continued"
+lead: "Part 6: Pagination, HATEOAS and Parameterized Testing"
 slug: "part-6"
 series: ["flask_api_tutorial"]
 series_weight: 6
 series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 6"
-series_part_lead: "Widget API Continued"
+series_part_lead: "Pagination, HATEOAS and Parameterized Testing"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
@@ -1371,7 +1371,7 @@ This fixture creates a new user with administrator privileges, which will be nee
 Create a new file named `test_create_widget.py` in `tests`, enter the content below and save the file:
 
 ```python {linenos=table}
-"""Unit tests for api.widget_list API endpoint."""
+"""Unit tests for POST requests sent to api.widget_list API endpoint."""
 from http import HTTPStatus
 
 import pytest
@@ -1751,7 +1751,25 @@ I highlighted the results from the two test cases we just created in the test re
 
 <span class="bold-italics teal">Please do not assume that these test cases are sufficient for the create widget operation, there are many requirements that have not been verified by the test cases I provided. You absolutely must attempt to identify these gaps and create all necessary test cases.</span>
 
+{{< info_box >}}
+For the remaining CRUD operations I will be providing far fewer test cases since many of the test requirements must be repeated for each. Yes, testing is always (and I mean ALWAYS) repetitive. You might as well just accept it, keep your head down and write test cases until your body refuses to cooperate.
+{{< /info_box >}}
+
 ### Retrieve Widget List
+
+In order to test the retrieve widget list operation, we need to create a function that uses the Flask test client to send a `GET` request to the `api.widget_list` endpoint. Remember, this endpoint expects the client's request to include pagination query parameters, refer back to [this section](#retrieve_widget_list-method) if you need to review how this was implemented.
+
+Open `tests/util.py`, add the content below and save the file:
+
+```python {linenos=tabe,linenostart=63}
+def retrieve_widget_list(test_client, access_token, page=None, per_page=None):
+    return test_client.get(
+        url_for("api.widget_list", page=page, per_page=per_page),
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+```
+
+Hopefully the `retrieve_widget_list` function above makes sense to you since it is very similar (and much simpler than) the `create_widget` function we used to test the create widget operation.
 
 
 

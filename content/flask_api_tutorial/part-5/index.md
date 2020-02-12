@@ -1,12 +1,12 @@
 ---
 title: "How To: Create a Flask API with JWT-Based Authentication (Part 5)"
-lead: "Part 5: Widget API"
+lead: "Part 5: RESTful Resources and Advanced Request Parsing"
 slug: "part-5"
 series: ["flask_api_tutorial"]
 series_weight: 5
 series_title: "How To: Create a Flask API with JWT-Based Authentication"
 series_part: "Part 5"
-series_part_lead: "Widget API"
+series_part_lead: "RESTful Resources and Advanced Request Parsing"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
@@ -21,11 +21,6 @@ resources:
     src: images/cover.jpg
     params:
       credit: "Photo by Tania Melnyczuk on Unsplash"
-twitter:
-  card: "summary"
-  creator: "@aaronlunadev"
-  title: "How To: Create a Flask API with JWT-Based Authentication (Part 5: Widget API)"
-  description: "Part 5 is dedicated to implementing a RESTful resource (a collection of 'widgets') with API endpoints that allow users to perform CRUD actions. In order to allow users to create a new widget, several advanced techniques for parsing request data are covered. Specifically, two custom 'types' are created since the built-in types provided by Flask-RESTPlus cannot fulfill our requirements. Finally, the custom request parser is integrated with the collection endpoint for the Widget API."
 ---
 ## Project Structure
 
