@@ -117,6 +117,8 @@ ol li p {
   font-size: 1em;
   flex: 1 0 67%;
   margin: 0;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .post__header {
@@ -337,7 +339,7 @@ h4 {
 
 h1,
 h1.post__title {
-  font-size: 1.5em;
+  font-size: 2em;
   color: var(--header-color);
   font-weight: 500;
   margin: 0 0 0 0;
@@ -1597,7 +1599,7 @@ figcaption {
 }
 
 .article-preview .list__title {
-  font-size: 1.6em;
+  font-size: 1.5em;
   margin: 0;
 }
 
@@ -1725,7 +1727,7 @@ figcaption {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
-  margin: 1.5em 2em 0 0;
+  margin: auto 2em 0 0;
 }
 
 .pagination__item {

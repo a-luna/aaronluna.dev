@@ -1918,6 +1918,26 @@ def test_retrieve_paginated_widget_list(client, db, admin):
 
 ```
 
+Wow, that test case is a doozy! Hopefully the comments help explain what is being tested and why. Since there are
+
+<div class="code-details">
+    <ul>
+      <li>
+        <p><strong>Lines : </strong></p>
+      </li>
+      <li>
+        <p><strong>Lines : </strong></p>
+      </li>
+      <li>
+        <p><strong>Lines : </strong></p>
+      </li>
+    </ul>
+</div>
+
+ Basically, the three lists in **Lines 8-36** are used to create seven new widget instances, . Why seven? [When we created the `pagination_reqparser`](#pagination_reqparser-request-parser), we defined that the only valid values for the `per_page` parameter are `[5, 10, 25, 50, 100]`. Creating seven widget instances and requesting a paginated list with `per_page=5` allows us to verify that our pagination logic is working correctly since we should be able to retrieve two pages: the first with a total of five widgets, and the second with a total of two widgets.
+
+
+
 ### Retrieve Widget
 
 ### Update Widget
