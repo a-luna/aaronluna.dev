@@ -6,16 +6,14 @@ const setQueryLabel = query => { document.getElementById("query").innerHTML = qu
 
 async function initSearchIndex() {
   try {
-    let response = await fetch("/index.json");
+    const response = await fetch("/index.json");
     pagesIndex = await response.json();
     searchIndex = lunr(function() {
       this.field("title");
       this.field("categories");
       this.field("content");
       this.ref("href");
-      for (var i = 0; i < pagesIndex.length; ++i) {
-        this.add(pagesIndex[i]);
-      }
+      pagesIndex.forEach(page => this.add(page))
     });
   } catch (e) {
     console.log(e);
@@ -31,16 +29,16 @@ function interceptSearchInput(event) {
 function handleSearchButtonClicked() {
   event.preventDefault();
   const query = getSearchQuery();
-  if (query === "") {
+  if (!query) {
     displayErrorMessage("Please enter a search term");
     return;
   }
-  setQueryLabel(query);
   const searchResults = searchSite(query);
   if (!searchResults.length) {
     displayErrorMessage("Your search returned no results");
     return;
   }
+  setQueryLabel(query);
   renderResults(searchResults);
 }
 
@@ -90,12 +88,12 @@ function updateSearchResults(searchResults) {
 }
 
 function createSearchResult(hit) {
-  let resultTitle = document.createElement("a");
+  const resultTitle = document.createElement("a");
   resultTitle.setAttribute("href", hit.href);
   resultTitle.innerHTML = hit.title;
-  let resultContent = document.createElement("p");
+  const resultContent = document.createElement("p");
   resultContent.innerHTML = hit.content.slice(0, 250) + "...";
-  let result = document.createElement("li");
+  const result = document.createElement("li");
   result.appendChild(resultTitle);
   result.appendChild(resultContent);
   return result
@@ -107,8 +105,8 @@ function showSearchResults() {
 }
 
 function scrollToTop() {
-  var toTopInterval = setInterval(function() {
-    var supportedScrollTop =
+  const toTopInterval = setInterval(function() {
+    const supportedScrollTop =
       document.body.scrollTop > 0 ? document.body : document.documentElement;
     if (supportedScrollTop.scrollTop > 0) {
       supportedScrollTop.scrollTop = supportedScrollTop.scrollTop - 50;
