@@ -1,5 +1,9 @@
 let searchIndex, pagesIndex;
 
+const getSearchQuery = () => document.getElementById("search").value.trim().toLowerCase();
+const clearSearchInput = () => { document.getElementById("search").value = ""; }
+const setQueryLabel = query => { document.getElementById("query").innerHTML = query; }
+
 async function initSearchIndex() {
   try {
     let response = await fetch("/index.json");
@@ -18,32 +22,32 @@ async function initSearchIndex() {
   }
 }
 
-function interceptSearchInput(event, dom) {
+function interceptSearchInput(event) {
   if (event.keyCode == 13) {
-    handleSearchButtonClicked(dom);
+    handleSearchButtonClicked();
   }
 }
 
-function handleSearchButtonClicked(dom) {
+function handleSearchButtonClicked() {
   event.preventDefault();
-  const query = dom.getSearchQuery();
+  const query = getSearchQuery();
   if (query === "") {
-    displayErrorMessage(dom, "Please enter a search term");
+    displayErrorMessage("Please enter a search term");
     return;
   }
-  dom.searchQueryLabel().innerHTML = query;
+  setQueryLabel(query);
   const searchResults = searchSite(query);
   if (!searchResults.length) {
-    displayErrorMessage(dom, "Your search returned no results");
+    displayErrorMessage("Your search returned no results");
     return;
   }
-  renderResults(dom, searchResults);
+  renderResults(searchResults);
 }
 
-function displayErrorMessage(dom, message) {
-  dom.errorLabel().innerHTML = message;
-  dom.errorDiv().classList.remove("hide-element");
-  dom.errorDiv().classList.add("fade");
+function displayErrorMessage(message) {
+  document.querySelector("#search-form .search-error-message").innerHTML = message;
+  document.querySelector("#search-form .search-error").classList.remove("hide-element");
+  document.querySelector("#search-form .search-error").classList.add("fade");
 }
 
 function searchSite(queryString) {
@@ -66,27 +70,40 @@ function searchSite(queryString) {
   return searchResults;
 }
 
-function renderResults(dom, searchResults) {
-  clearSearchResults(dom);
-  searchResults.slice(0, 10).forEach(function(hit) {
-    let resultTitle = document.createElement("a");
-    resultTitle.setAttribute("href", hit.href);
-    resultTitle.innerHTML = hit.title;
-    let resultContent = document.createElement("p");
-    resultContent.innerHTML = hit.content.slice(0, 250) + "...";
-    let result = document.createElement("li");
-    result.appendChild(resultTitle);
-    result.appendChild(resultContent);
-    dom.searchResultsList().appendChild(result);
-  });
-  dom.primaryDiv().classList.add("hide-element");
-  dom.searchResultsDiv().classList.remove("hide-element");
+function renderResults(searchResults) {
+  clearSearchResults();
+  updateSearchResults(searchResults);
+  showSearchResults();
   scrollToTop();
 }
 
-function clearSearchResults(dom) {
-  const results = dom.searchResultsList();
+function clearSearchResults() {
+  const results = document.querySelector(".search-results ul");
   while (results.firstChild) results.removeChild(results.firstChild);
+}
+
+function updateSearchResults(searchResults) {
+  searchResults.slice(0, 10).forEach(function(hit) {
+    result = createSearchResult(hit)
+    document.querySelector(".search-results ul").appendChild(result);
+  });
+}
+
+function createSearchResult(hit) {
+  let resultTitle = document.createElement("a");
+  resultTitle.setAttribute("href", hit.href);
+  resultTitle.innerHTML = hit.title;
+  let resultContent = document.createElement("p");
+  resultContent.innerHTML = hit.content.slice(0, 250) + "...";
+  let result = document.createElement("li");
+  result.appendChild(resultTitle);
+  result.appendChild(resultContent);
+  return result
+}
+
+function showSearchResults() {
+  document.querySelector(".primary").classList.add("hide-element");
+  document.querySelector(".search-results").classList.remove("hide-element");
 }
 
 function scrollToTop() {
@@ -107,41 +124,31 @@ function removeAnimation() {
   this.classList.add("hide-element");
 }
 
-function handleClearSearchResultsButtonClicked(dom) {
-  dom.searchResultsDiv().classList.add("hide-element");
-  dom.primaryDiv().classList.remove("hide-element");
-  dom.searchInput().value = "";
-  clearSearchResults(dom);
+function handleClearSearchButtonClicked() {
+  hideSearchResults();
+  clearSearchResults();
+  clearSearchInput();
+}
+
+function hideSearchResults() {
+  document.querySelector(".search-results").classList.add("hide-element");
+  document.querySelector(".primary").classList.remove("hide-element");
 }
 
 initSearchIndex();
 document.addEventListener("DOMContentLoaded", function() {
-  const DomElements = {
-    searchButton() { return document.getElementById("search-button"); },
-    searchInput() { return document.getElementById("search"); },
-    getSearchQuery() { return this.searchInput().value.trim().toLowerCase(); },
-    searchResultsDiv() { return document.querySelector(".search-results"); },
-    searchQueryLabel() { return document.getElementById("query"); },
-    searchResultsList() { return document.querySelector(".search-results ul"); },
-    clearSearchResultsButton() { return document.getElementById("clear-search-results"); },
-    primaryDiv() { return document.querySelector(".primary"); },
-    errorLabel() { return document.querySelector("#search-form .search-error-message"); },
-    errorDiv() { return document.querySelector("#search-form .search-error"); },
-  }
-
-  const searchInput = DomElements.searchInput();
-  const searchButton = DomElements.searchButton();
-
-  if (searchInput != null) {
-    searchInput.addEventListener("keydown", event => interceptSearchInput(event, DomElements));
-  }
-  if (searchButton != null) {
-    searchButton.addEventListener(
-      "click", () => handleSearchButtonClicked(DomElements)
+  if (document.querySelector("#search-form") != null) {
+    document.getElementById("search").addEventListener(
+      "keydown", event => interceptSearchInput(event)
+    );
+    document.getElementById("search-button").addEventListener(
+      "click", () => handleSearchButtonClicked()
+    );
+    document.getElementById("clear-search-results").addEventListener(
+      "click", () => handleClearSearchButtonClicked()
+    );
+    document.querySelector("#search-form .search-error").addEventListener(
+      "animationend", removeAnimation
     );
   }
-  DomElements.clearSearchResultsButton().addEventListener(
-    "click", () => handleClearSearchResultsButtonClicked(DomElements)
-  );
-  DomElements.errorDiv().addEventListener("animationend", removeAnimation)
 });

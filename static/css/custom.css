@@ -1,4 +1,6 @@
-.hide-element {
+.hide-element,
+.primary.hide-element,
+#search-form .search-error.hide-element {
   display: none;
 }
 
@@ -2157,13 +2159,14 @@ input {
   border-radius: 4px;
 }
 
-.search-error {
+#search-form .search-error {
   position: absolute;
   z-index: 2;
   width: inherit;
   height: 40px;
   display: flex;
   transition: all 0.5s ease-out;
+  margin: 5px 0;
 }
 
 .search-error.hide-element {
@@ -2190,7 +2193,6 @@ input {
 }
 
 #search-form #search {
-  margin: 0 0 0 5px;
   border: 1px #909090;
   border-radius: 4px;
   margin: 0 5px 0 10px;
