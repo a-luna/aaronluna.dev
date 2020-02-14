@@ -26,10 +26,10 @@ Over the years, I have built up my own set of best practices and decided to get 
 * **Upcasting vs Downcasting**
   * Upcasting = Derived Class &#61;&#62; Base Class
     * Upcasting is implicit (cast operator is not required)
-      <p>`Animal animal = dog;`</p>
+      <p><code>Animal animal = dog;</code></p>
   * Downcasting = Base Class &#61;&#62; Derived Class
     * Downcasting requires a cast operator (explicit)
-      <p>`Dog dog = (Dog)animal;`</p>
+      <p><code>Dog dog = (Dog)animal;</code></p>
 
 * **is vs as Operators**
   * The `is` operator checks the compatibility of an object with a given type and returns the result as a Boolean (True Or False)

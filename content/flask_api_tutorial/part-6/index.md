@@ -573,6 +573,8 @@ There are only a few things in `pagination_model` that we are seeing for the fir
     </ul>
 </div>
 
+### `pagination_model` JSON Example
+
 We finally covered everything necessary to create the `pagination_model` API model. Here's an example of the JSON that our API model will produce given a pagination object with <code>page=2</code>, <code>per_page=5</code>, and <code>total=7</code>:
 
 ```json
@@ -1803,10 +1805,10 @@ URLS = [
 
 DEADLINES = [
     date.today().strftime("%m/%d/%y"),
-    date.today().strftime("%m/%d/%y"),
     (date.today() + timedelta(days=3)).strftime("%m/%d/%y"),
+    (date.today() + timedelta(days=5)).strftime("%m/%d/%y"),
     (date.today() + timedelta(days=10)).strftime("%m/%d/%y"),
-    date.today().strftime("%m/%d/%y"),
+    (date.today() + timedelta(days=17)).strftime("%m/%d/%y"),
     (date.today() + timedelta(days=23)).strftime("%m/%d/%y"),
     (date.today() + timedelta(days=78)).strftime("%m/%d/%y"),
 ]
@@ -1918,25 +1920,61 @@ def test_retrieve_paginated_widget_list(client, db, admin):
 
 ```
 
-Wow, that test case is a doozy! Hopefully the comments help explain what is being tested and why. Since there are
+Wow, that test case is a doozy! Let's take a look at what exactly is being tested since there's a lot going on here:
 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Lines : </strong></p>
+        <p><strong>Lines 8-36: </strong>These three lists contain the data required to create seven widget instances. Each item in each list is unique, in order to create test data that is as realistic as possible. This also makes the verifications that we perform more effective since we prevent any "false positive" results from occurring.</p>
       </li>
       <li>
-        <p><strong>Lines : </strong></p>
+        <p><strong>Lines 45-53: </strong>The seven widget instances are added to the database. Why seven? <a href="#pagination_reqparser-request-parser">When we created the <code>pagination_reqparser</code></a>, we defined that the only valid values for the <code>per_page</code> parameter are <code>[5, 10, 25, 50, 100]</code>. Creating seven widget instances and requesting a paginated list with <code>per_page=5</code> allows us to verify that our pagination logic is working correctly since the expected result is that the seven widget instances will generate two pages: the first with a total of five widgets, and the second with a total of two widgets.</p>
       </li>
       <li>
-        <p><strong>Lines : </strong></p>
+        <p><strong>Lines 56-57: </strong>We use the <code>retrieve_widget_list</code> function that we created in <code>tests.util</code> to send a request for the first page of widgets with <span class="bold-text">5 items per page</span> (<code>page=1, per_page=5</code>), and verify that the HTTP status code of the response is 200 <code>HTTPStatus.OK</code>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 60-65: </strong>Since the request was sucessful, we know that <code>response.json</code> contains the pagination object. If you need to remind yourself how this object is structured, <a href="#pagination_model-json-example">click here</a>.</p>
+        <p>We verify that the pagination object correctly represents the <span class="bold-text">first page of two total pages</span> of widgets containing five widgets per page. For example, <code>has_prev</code> should be <code>False</code>, <code>has_next</code> should be <code>True</code>, <code>page</code> should be equal to <code>1</code>, etc.</p>
+      </li>
+      <li>
+        <p><strong>Line 66: </strong>Next, we verify that <code>items</code> (which is the list of widgets on page 1) contains five elements.</p>
+      </li>
+      <li>
+        <p><strong>Lines 69-75: </strong>After verifying the pagination attributes, we verify that the widgets retrieved from the database contain the exact values for <code>widget_name</code>, <code>info_url</code> and <code>deadline_str</code> that were taken from the <code>NAMES</code>, <code>URLS</code> and <code>DEADLINES</code> lists when we created the first five widget instances and added them to the database. This is done in a simple, compact way with a <code>for</code> loop.</p>
+      </li>
+      <li>
+        <p><strong>Lines 78-79: </strong>After verifying all data on page 1, we send a request for the second page of widgets with <span class="bold-text">5 items per page</span> (<code>page=2, per_page=5</code>), which should return a response with status code 200 (<code>HTTPStatus.OK</code>).</p>
+      </li>
+      <li>
+        <p><strong>Lines 82-87: </strong>Next, we verify that the pagination object correctly represents the <span class="bold-text">second page of two total pages</span> of widgets containing five widgets per page. For example, <code>has_prev</code> should be <code>True</code>, <code>has_next</code> should be <code>False</code>, <code>page</code> should be equal to <code>2</code>, etc.</p>
+      </li>
+      <li>
+        <p><strong>Line 88: </strong>Since there are seven total widgets in the database and page 1 contained #1-5, we expect that <code>items</code> on page 2 will contain two elements (i.e., widgets #6-7)</p>
+      </li>
+      <li>
+        <p><strong>Lines 91-97: </strong>In the same way that we did for page 1, we verify that the widgets retrieved from the database contain the exact values for <code>widget_name</code>, <code>info_url</code> and <code>deadline_str</code> that were taken from the <code>NAMES</code>, <code>URLS</code> and <code>DEADLINES</code> lists when we created the final two widget instances and added them to the database.</p>
+        <p>At this point, we have verified that our pagination scheme is working correctly when a client requests a list of widgets with five items per page. Let's see if everything is working as expected with a larger <code>per_page</code> value.</p>
+      </li>
+      <li>
+        <p><strong>Lines 100-101: </strong>We send a request for the first page of widgets with <span class="bold-text">10 items per page</span> (<code>page=1, per_page=10</code>), and verify that the HTTP status code of the response is 200 <code>HTTPStatus.OK</code>.</p>
+      </li>
+      <li>
+        <p><strong>Lines 104-109: </strong>We verify that the pagination object correctly represents the <span class="bold-text">first page of one total page</span> of widgets containing ten widgets per page. For example, <code>has_prev</code> should be <code>False</code>, <code>has_next</code> should be <code>False</code>, <code>page</code> should be equal to <code>1</code>, etc.</p>
+      </li>
+      <li>
+        <p><strong>Lines 110: </strong>Next, we verify that <code>items</code> (which is the list of widgets on page 1) contains seven elements.</p>
+      </li>
+      <li>
+        <p><strong>Lines 113-119: </strong>This should look familiar to you by now. We verify that the widgets retrieved from the database contain the exact values for <code>widget_name</code>, <code>info_url</code> and <code>deadline_str</code> that were taken from the <code>NAMES</code>, <code>URLS</code> and <code>DEADLINES</code> lists when we created all seven widget instances and added them to the database.</p>
+      </li>
+      <li>
+        <p><strong>Lines 122-141: </strong>I'm going to summarize the rest of the test case since it is nearly identical to the <code>page=1, per_page=10</code> results that we just explained. When requesting the list of widgets in <span class="bold-text">Line 122</span>, no values are specified for <code>page</code> and <code>per_page</code>. Since we specified that default values of <code>page=1</code> and <code>per_page=10</code> will be used when the request does not contain either value, we perform the same verifications which we just explained for <span class="bold-text">Lines 103-119</span>.</p>
       </li>
     </ul>
 </div>
 
- Basically, the three lists in **Lines 8-36** are used to create seven new widget instances, . Why seven? [When we created the `pagination_reqparser`](#pagination_reqparser-request-parser), we defined that the only valid values for the `per_page` parameter are `[5, 10, 25, 50, 100]`. Creating seven widget instances and requesting a paginated list with `per_page=5` allows us to verify that our pagination logic is working correctly since we should be able to retrieve two pages: the first with a total of five widgets, and the second with a total of two widgets.
-
-
+Are you still with me? I know that this section has been quite tedious but bear with me! The end is in sight, and when we get there you will have a fully-featured REST API with a satisfactory level of test-coverage.
 
 ### Retrieve Widget
 
