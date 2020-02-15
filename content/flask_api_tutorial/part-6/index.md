@@ -1314,7 +1314,7 @@ WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
 
 DEFAULT_NAME = "some-widget"
 DEFAULT_URL = "https://www.fakesite.com"
-DEFAULT_DEADLINE = date.today().strftime("%m/%d/%Y")
+DEFAULT_DEADLINE = date.today().strftime("%m/%d/%y")
 
 ```
 
@@ -1759,7 +1759,7 @@ For the remaining CRUD operations I will be providing far fewer test cases since
 
 ### Retrieve Widget List
 
-In order to test the retrieve widget list operation, we need to create a function that uses the Flask test client to send a `GET` request to the `api.widget_list` endpoint. Remember, this endpoint expects the client's request to include pagination query parameters, refer back to [this section](#retrieve_widget_list-method) if you need to review how this was implemented.
+In order to test the retrieve widget list operation, we need to create a function that uses the Flask test client to send a `GET` request to the `api.widget_list` endpoint. Remember, this endpoint expects the client's request to include pagination query parameters (i.e., `page` and `per_page`), refer back to [this section](#retrieve_widget_list-method) if you need to review how this was implemented.
 
 Open `tests/util.py`, add the content below and save the file:
 
@@ -1974,9 +1974,71 @@ Wow, that test case is a doozy! Let's take a look at what exactly is being teste
     </ul>
 </div>
 
-Are you still with me? I know that this section has been quite tedious but bear with me! The end is in sight, and when we get there you will have a fully-featured REST API with a satisfactory level of test-coverage.
+Are you still with me? I know that this section has been quite tedious but bear with me! The end is in sight, and when we get there you will have a fully-featured REST API with a satisfactory level of test-coverage. Just imagine how excited you will be.
 
 ### Retrieve Widget
+
+Hopefully you can figure out what we need to do at this point, since we did the same thing for the previous two sets of test cases: create a function that sends a request to the API endpoint responsible for handling the current operation, with the correct HTTP method type. Since we now are testing the retrieve widget operation, we need to use the Flask test client to send a `GET` request to the `api.widget` endpoint, specifying the name of the widget we wish to retrieve in the URL path.
+
+Open `tests/util.py` and add the content below:
+
+```python {linenos=table,linenostart=70}
+def retrieve_widget(test_client, access_token, widget_name):
+    return test_client.get(
+        url_for("api.widget", name=widget_name),
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+```
+
+This is very similar to the `retrieve_widget_list` function that we created in the same file so it should be easy to understand. Create a new file named `test_retrieve_widget.py` and add everything you see below:
+
+```python {linenos=table}
+"""Test cases for GET requests sent to the api.widget API endpoint."""
+from http import HTTPStatus
+
+from tests.util import (
+    ADMIN_EMAIL,
+    EMAIL,
+    DEFAULT_NAME,
+    DEFAULT_URL,
+    DEFAULT_DEADLINE,
+    login_user,
+    create_widget,
+    retrieve_widget,
+)
+
+
+def test_retrieve_widget_non_admin_user(client, db, admin, user):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token)
+    assert response.status_code == HTTPStatus.CREATED
+
+    response = login_user(client, email=EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = retrieve_widget(client, access_token, widget_name=DEFAULT_NAME)
+    assert response.status_code == HTTPStatus.OK
+
+    assert "name" in response.json and response.json["name"] == DEFAULT_NAME
+    assert "info_url" in response.json and response.json["info_url"] == DEFAULT_URL
+    assert "deadline" in response.json and DEFAULT_DEADLINE in response.json["deadline"]
+    assert "owner" in response.json and "email" in response.json["owner"]
+    assert response.json["owner"]["email"] == ADMIN_EMAIL
+
+
+def test_retrieve_widget_does_not_exist(client, db, user):
+    response = login_user(client, email=EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = retrieve_widget(client, access_token, widget_name=DEFAULT_NAME)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert (
+        "message" in response.json
+        and f"{DEFAULT_NAME} not found in database" in response.json["message"]
+    )
+```
 
 ### Update Widget
 
