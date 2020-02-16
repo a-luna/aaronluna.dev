@@ -21,6 +21,9 @@ resources:
     src: images/cover.jpg
     params:
       credit: "Photo by wong zihoo on Unsplash"
+  - name: img1
+    src: images/swagger.png
+    title: Figure 1 - Swagger UI with all API routes
 ---
 ## Project Structure
 
@@ -237,7 +240,7 @@ While Fielding defined HATEOAS and stipulated that it is a requirement for a RES
 
 ## Retrieve Widget List
 
-With the background info regarding pagination and HATEOAS in mind, we are ready to begin implementing the API endpoint that responds to `GET` requests sent to `/api/v1/widgets`. Per **Table 1**, this endpoint and request type allows clients to retrieve a list of `widget` objects. As before, we start by creating request parsers/API models to validate request data and serialize response data.
+With the background info regarding pagination and HATEOAS in mind, we are ready to begin implementing the API endpoint that responds to `GET` requests sent to `/api/v1/widgets`. Per **[Table 1](#table-1)**, this endpoint and request type allows clients to retrieve a list of `widget` objects. As before, we start by creating request parsers/API models to validate request data and serialize response data.
 
 ### `pagination_reqparser` Request Parser
 
@@ -714,7 +717,7 @@ This code implements the process of responding to a valid request for a list of 
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 31: </strong>Per <span class="bold-text">Table 1</span>, the process of retrieving a list of <code>widgets</code> can only be performed by registered users (both regular and admin users). This is enforced by decorating the <code>retrieve_widget_list</code> function with <code>@token_required</code>.</p>
+        <p><strong>Line 31: </strong>Per <span class="bold-text"><a href="#table-1">Table 1</a></span>, the process of retrieving a list of <code>widgets</code> can only be performed by registered users (both regular and admin users). This is enforced by decorating the <code>retrieve_widget_list</code> function with <code>@token_required</code>.</p>
       </li>
       <li>
         <p><strong>Line 32: </strong>The <code>page</code> and <code>per_page</code> parameters are passed to <code>retrieve_widget_list</code> after the <code>pagination_model</code> has parsed the values provided by the client from the request data.</p>
@@ -757,7 +760,7 @@ Now that the business logic has been implemented, we can add a method to the `ap
 
 ### `api.widget_list` Endpoint (GET Request)
 
-We created the `api.widget_list` endpoint <a href="/series/flask-api-tutorial/part-5/#widgetlist-resource-post-request">in Part 5</a> and implemented the function that handles `POST` requests. According to **Table 1**, this endpoint also supports `GET` requests which allows clients to retrieve lists of `widgets`.
+We created the `api.widget_list` endpoint <a href="/series/flask-api-tutorial/part-5/#widgetlist-resource-post-request">in Part 5</a> and implemented the function that handles `POST` requests. According to **[Table 1](#table-1)**, this endpoint also supports `GET` requests which allows clients to retrieve lists of `widgets`.
 
 Open `src/flask_api_tutorial/api/widgets/endpoints.py` and make the following updates to the import statements:
 
@@ -866,12 +869,12 @@ restplus_doc.static  GET        /swaggerui/&lt;path:filename&gt;
 static               GET        /static/&lt;path:filename&gt;</span></code></pre>
 
 {{< alert_box >}}
-Please remember, currently an unhandled exception occurs if you attempt to execute either of the methods we have created for the `api.widget_list` endpoint since the business logic for both operations depends on the `api.widget` endpoint existing. We will create unit tests for all endpoints/CRUD operations in **Table 1** when they have been fully implemented.
+Please remember, currently an unhandled exception occurs if you attempt to execute either of the methods we have created for the `api.widget_list` endpoint since the business logic for both operations depends on the `api.widget` endpoint existing. We will create unit tests for all endpoints/CRUD operations in **[Table 1](#table-1)** when they have been fully implemented.
 {{< /alert_box >}}
 
 ## Retrieve Widget
 
-At this point, we have completed two of the five CRUD processes specified in **Table 1**. Thankfully, the remaining three should be much simpler and faster to implement since many of the elements can be reused (e.g. request parsers, API models).
+At this point, we have completed two of the five CRUD processes specified in **[Table 1](#table-1)**. Thankfully, the remaining three should be much simpler and faster to implement since many of the elements can be reused (e.g. request parsers, API models).
 
 The two processes we completed (create a `widget`, retrieve a list of `widgets`) are accessed via the `/api/v1/widgets` endpoint, which is also called the **resource collection** endpoint. However, the remaining three processes are accessed via the **resource item** endpoint, <code>api/v1/widgets/&lt;name&gt;</code>. The `name` parameter is provided by the client and is used to perform the requested action (retrieve, update, delete) on a specific `widget` instance.
 
@@ -996,7 +999,7 @@ static               GET        /static/&lt;path:filename&gt;</span></code></pre
 
 ## Update Widget
 
-Working our way through **Table 1**, the next process to implement is updating a single `widget`. Clients with administrator access can perform this operation by sending a `PUT` request to the `api.widget` endpoint.
+Working our way through **[Table 1](#table-1)**, the next process to implement is updating a single `widget`. Clients with administrator access can perform this operation by sending a `PUT` request to the `api.widget` endpoint.
 
 I'd like you to try and imagine the business logic that the server should perform in this situation. Did you imagine something similar to: <span class="bold-italics">retrieve the</span> <code>widget</code> <span class="bold-italics">whose name matches the URI requested by the client, parse the request data containing the updated data/values, and modify the attributes of the</span> <code>widget</code> <span class="bold-italics">using the parsed values</span>?
 
@@ -1288,7 +1291,7 @@ api.widget_list      GET, POST         /api/v1/widgets
 restplus_doc.static  GET               /swaggerui/&lt;path:filename&gt;
 static               GET               /static/&lt;path:filename&gt;</span></code></pre>
 
-We have finally implemented all of the API routes/CRUD processes specified in **Table 1**, but we actually have no idea if they are working correctly. At the absolute minimum, we need to create unit tests that verify the "happy path" behavior for each CRUD process. We also need unit tests that verify our request parsers are configured correctly, and requests containing invalid data are rejected.
+We have finally implemented all of the API routes/CRUD processes specified in **[Table 1](#table-1)**, but we actually have no idea if they are working correctly. At the absolute minimum, we need to create unit tests that verify the "happy path" behavior for each CRUD process. We also need unit tests that verify our request parsers are configured correctly, and requests containing invalid data are rejected.
 
 ## Unit Tests
 
@@ -1328,11 +1331,10 @@ def create_widget(
     info_url=DEFAULT_URL,
     deadline_str=DEFAULT_DEADLINE,
 ):
-    request_data = f"name={widget_name}&info_url={info_url}&deadline={deadline_str}"
     return test_client.post(
         url_for("api.widget_list"),
         headers={"Authorization": f"Bearer {access_token}"},
-        data=request_data,
+        data=f"name={widget_name}&info_url={info_url}&deadline={deadline_str}",
         content_type="application/x-www-form-urlencoded",
     )
 ```
@@ -1763,7 +1765,7 @@ In order to test the retrieve widget list operation, we need to create a functio
 
 Open `tests/util.py`, add the content below and save the file:
 
-```python {linenos=tabe,linenostart=63}
+```python {linenos=tabe,linenostart=62}
 def retrieve_widget_list(test_client, access_token, page=None, per_page=None):
     return test_client.get(
         url_for("api.widget_list", page=page, per_page=per_page),
@@ -1982,7 +1984,7 @@ Hopefully you can figure out what we need to do at this point, since we did the 
 
 Open `tests/util.py` and add the content below:
 
-```python {linenos=table,linenostart=70}
+```python {linenos=table,linenostart=69}
 def retrieve_widget(test_client, access_token, widget_name):
     return test_client.get(
         url_for("api.widget", name=widget_name),
@@ -1990,7 +1992,7 @@ def retrieve_widget(test_client, access_token, widget_name):
     )
 ```
 
-This is very similar to the `retrieve_widget_list` function that we created in the same file so it should be easy to understand. Create a new file named `test_retrieve_widget.py` and add everything you see below:
+This is very similar to the `retrieve_widget_list` function that we created in the same file so it should be easy to understand. Create a new file named `test_retrieve_widget.py` in the `tests` folder and add everything you see below:
 
 ```python {linenos=table}
 """Test cases for GET requests sent to the api.widget API endpoint."""
@@ -2040,11 +2042,285 @@ def test_retrieve_widget_does_not_exist(client, db, user):
     )
 ```
 
+The first test case, `test_retrieve_widget_non_admin_user`, is a basic happy-path scenario with one small wrinkle. This operation requires a valid access token, but does not require administrator privileges. So, while the request to create a new widget is sent by the `admin` user **(Line 20)**, the request to retrieve the same widget is sent by the regular non-admin `user` **(Line 26)**. After that request succeeds, we verify the attributes of the retrieved widget match the values used to create it.
+
+The second test case, `test_retrieve_widget_does_not_exist`, is a very simple unhappy-path scenario. The first four lines **(Lines 37-40)** are exactly the same as **Lines 23-26** in the previous test case. Why is this noteworthy? Because in this case, we are attempting to retrieve a widget with `name="some-widget"` before it has been created and added to the database. We expect to receive a response with status code 404 (`HTTPStatus.NOT_FOUND`), and an error message explaining that there is no widget with that name in the database **(Lines 41-45)**.
+
 ### Update Widget
+
+You know the routine by now, open `tests/utils.py`, add the `update_widget` function and save the file:
+
+```python {linenos=table,linenostart=76}
+def update_widget(test_client, access_token, widget_name, info_url, deadline_str):
+    return test_client.put(
+        url_for("api.widget", name=widget_name),
+        headers={"Authorization": f"Bearer {access_token}"},
+        data=f"info_url={info_url}&deadline={deadline_str}",
+        content_type="application/x-www-form-urlencoded",
+    )
+```
+
+`update_widget` is (obviously) the function that we will use to send a `PUT` request to the `api.widget` endpoint. Next, create a new file named `test_update_widget.py` in `tests`, enter the content below and save the file:
+
+```python {linenos=table}
+"""Test cases for GET requests sent to the api.widget API endpoint."""
+from datetime import date, timedelta
+from http import HTTPStatus
+
+from tests.util import (
+    ADMIN_EMAIL,
+    DEFAULT_NAME,
+    login_user,
+    create_widget,
+    retrieve_widget,
+    update_widget,
+)
+
+UPDATED_URL = "https://www.newurl.com"
+UPDATED_DEADLINE = (date.today() + timedelta(days=5)).strftime("%m/%d/%y")
+
+
+def test_update_widget(client, db, admin):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token)
+    assert response.status_code == HTTPStatus.CREATED
+
+    response = update_widget(
+        client,
+        access_token,
+        widget_name=DEFAULT_NAME,
+        info_url=UPDATED_URL,
+        deadline_str=UPDATED_DEADLINE,
+    )
+    assert response.status_code == HTTPStatus.OK
+    response = retrieve_widget(client, access_token, widget_name=DEFAULT_NAME)
+    assert response.status_code == HTTPStatus.OK
+
+    assert "name" in response.json and response.json["name"] == DEFAULT_NAME
+    assert "info_url" in response.json and response.json["info_url"] == UPDATED_URL
+    assert "deadline" in response.json and UPDATED_DEADLINE in response.json["deadline"]
+    assert "owner" in response.json and "email" in response.json["owner"]
+    assert response.json["owner"]["email"] == ADMIN_EMAIL
+
+```
+
+This is the normal, happy-path scenario for updating an existing widget. After logging in with an admin user and creating a widget **(Lines 19-23)**, we update the values for `info_url` and `deadline_str` **(Lines 25-30)**. Next, we send a request to retrieve the same widget from the database **(Line 33)** so that we can verify that the `info_url` and `deadline_str` values were successfully updated **(Lines 37-38)**.
+
+{{< alert_box >}}
+Please keep in mind the level of detail and attention that was paid to [the formal definition of a `PUT` request earlier in this section](#update_widget). The test coverage for the update widget operation should be designed to verify that our implementation adheres to the requirements from [Section 4.3.4 of RFC 7321](https://tools.ietf.org/html/rfc7231#section-4.3.4).
+{{< /alert_box >}}
 
 ### Delete Widget
 
+There is only a single, remaining CRUD operation in **[Table 1](#table-1)** that we need to create test coverage for: delete widget. Without further ado, open `tests/utils.py`, add the `delete_widget` function and save the file:
+
+```python {linenos=table,linenostart=85}
+def delete_widget(test_client, access_token, widget_name):
+    return test_client.delete(
+        url_for("api.widget", name=widget_name),
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+```
+
+`delete_widget` is the function that we will use to send a `DELETE` request to the `api.widget` endpoint. Next, create a new file named `test_delete_widget.py` in `tests`, enter the content below and save the file:
+
+```python {linenos=table}
+"""Test cases for GET requests sent to the api.widget API endpoint."""
+from http import HTTPStatus
+
+from tests.util import (
+    ADMIN_EMAIL,
+    EMAIL,
+    DEFAULT_NAME,
+    FORBIDDEN,
+    login_user,
+    create_widget,
+    retrieve_widget,
+    delete_widget,
+)
+
+
+def test_delete_widget(client, db, admin):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token)
+    assert response.status_code == HTTPStatus.CREATED
+    response = delete_widget(client, access_token, widget_name=DEFAULT_NAME)
+    assert response.status_code == HTTPStatus.NO_CONTENT
+    response = retrieve_widget(client, access_token, widget_name=DEFAULT_NAME)
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+def test_delete_widget_no_admin_token(client, db, admin, user):
+    response = login_user(client, email=ADMIN_EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = create_widget(client, access_token)
+    assert response.status_code == HTTPStatus.CREATED
+
+    response = login_user(client, email=EMAIL)
+    assert "access_token" in response.json
+    access_token = response.json["access_token"]
+    response = delete_widget(client, access_token, widget_name=DEFAULT_NAME)
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    assert "status" in response.json and response.json["status"] == "fail"
+    assert "message" in response.json and response.json["message"] == FORBIDDEN
+
+```
+
+The first test case, `test_delete_widget`, is a basic happy-path scenario. The admin user creates a widget, then sends the request to delete the same widget **(Lines 17-22)**. If the delete request was successful, we expect the response to have a status code of 204 (`HTTPStatus.NO_CONTENT`) **(Line 23)**. To verify that the widget was deleted in another way, the admin user sends a request to retrieve a widget with name equal to the name of the widget which was deleted **(Line 24)**. In this case, we expect the response to have a status code of 404 (`HTTPStatus.NOT_FOUND`) **(Line 25)**.
+
+The second test case, `test_delete_widget_no_admin_token`, is a very simple unhappy-path scenario. The first five lines **(Lines 29-33)** are exactly the same as **Lines 17-21** in the previous test case. However, this test case differs because now we login as the non-admin user and send a request to delete the widget which was created previously **(Lines 35-38)**. However, since this operation can only be performed by admin users, we expect the response to have a status code of 403 (`HTTPStatus.FORBIDDEN`), and for the response to contain a field named **message** explaining that the requested operation can only be performed by users with administrator privileges **(Lines 39-4`)**.
+
+Let's verify that all of our test cases are still passing by running `tox`:
+
+<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
+py37 recreate: /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37
+py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
+py37 inst: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.11.0,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==2.2.0
+py37 run-test-pre: PYTHONHASHSEED='2239596822'
+py37 run-test: commands[0] | pytest
+=============================================== test session starts ================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+cachedir: .tox/py37/.pytest_cache
+rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
+collected 106 items
+
+run.py::FLAKE8 PASSED                                                                                        [  0%]
+run.py::BLACK PASSED                                                                                         [  1%]
+setup.py::FLAKE8 PASSED                                                                                      [  2%]
+setup.py::BLACK PASSED                                                                                       [  3%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                            [  4%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                             [  5%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                              [  6%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                               [  7%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                        [  8%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                         [  9%]
+src/flask_api_tutorial/api/exceptions.py::FLAKE8 PASSED                                                      [ 10%]
+src/flask_api_tutorial/api/exceptions.py::BLACK PASSED                                                       [ 11%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                   [ 12%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                    [ 13%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                   [ 14%]
+src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                    [ 15%]
+src/flask_api_tutorial/api/auth/decorator.py::FLAKE8 PASSED                                                  [ 16%]
+src/flask_api_tutorial/api/auth/decorator.py::BLACK PASSED                                                   [ 16%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 PASSED                                                        [ 17%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK PASSED                                                         [ 18%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                                  [ 19%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                   [ 20%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                [ 21%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                 [ 22%]
+src/flask_api_tutorial/api/widgets/business.py::FLAKE8 PASSED                                                [ 23%]
+src/flask_api_tutorial/api/widgets/business.py::BLACK PASSED                                                 [ 24%]
+src/flask_api_tutorial/api/widgets/dto.py::FLAKE8 PASSED                                                     [ 25%]
+src/flask_api_tutorial/api/widgets/dto.py::BLACK PASSED                                                      [ 26%]
+src/flask_api_tutorial/api/widgets/endpoints.py::FLAKE8 PASSED                                               [ 27%]
+src/flask_api_tutorial/api/widgets/endpoints.py::BLACK PASSED                                                [ 28%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                     [ 29%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                      [ 30%]
+src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 PASSED                                              [ 31%]
+src/flask_api_tutorial/models/token_blacklist.py::BLACK PASSED                                               [ 32%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                         [ 33%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                          [ 33%]
+src/flask_api_tutorial/models/widget.py::FLAKE8 PASSED                                                       [ 34%]
+src/flask_api_tutorial/models/widget.py::BLACK PASSED                                                        [ 35%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                       [ 36%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                        [ 37%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                  [ 38%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                   [ 39%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                         [ 40%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                          [ 41%]
+tests/__init__.py::FLAKE8 PASSED                                                                             [ 42%]
+tests/__init__.py::BLACK PASSED                                                                              [ 43%]
+tests/conftest.py::FLAKE8 PASSED                                                                             [ 44%]
+tests/conftest.py::BLACK PASSED                                                                              [ 45%]
+tests/test_auth_login.py::FLAKE8 PASSED                                                                      [ 46%]
+tests/test_auth_login.py::BLACK PASSED                                                                       [ 47%]
+tests/test_auth_login.py::test_login PASSED                                                                  [ 48%]
+tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                             [ 49%]
+tests/test_auth_logout.py::FLAKE8 PASSED                                                                     [ 50%]
+tests/test_auth_logout.py::BLACK PASSED                                                                      [ 50%]
+tests/test_auth_logout.py::test_logout PASSED                                                                [ 51%]
+tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                              [ 52%]
+tests/test_auth_register.py::FLAKE8 PASSED                                                                   [ 53%]
+tests/test_auth_register.py::BLACK PASSED                                                                    [ 54%]
+tests/test_auth_register.py::test_auth_register PASSED                                                       [ 55%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                              [ 56%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                         [ 57%]
+tests/test_auth_user.py::FLAKE8 PASSED                                                                       [ 58%]
+tests/test_auth_user.py::BLACK PASSED                                                                        [ 59%]
+tests/test_auth_user.py::test_auth_user PASSED                                                               [ 60%]
+tests/test_auth_user.py::test_auth_user_no_token PASSED                                                      [ 61%]
+tests/test_auth_user.py::test_auth_user_expired_token PASSED                                                 [ 62%]
+tests/test_config.py::FLAKE8 PASSED                                                                          [ 63%]
+tests/test_config.py::BLACK PASSED                                                                           [ 64%]
+tests/test_config.py::test_config_development PASSED                                                         [ 65%]
+tests/test_config.py::test_config_testing PASSED                                                             [ 66%]
+tests/test_config.py::test_config_production PASSED                                                          [ 66%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                   [ 67%]
+tests/test_create_widget.py::BLACK PASSED                                                                    [ 68%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                    [ 69%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                               [ 70%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                               [ 71%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[02/16/2020] PASSED                            [ 72%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-16] PASSED                            [ 73%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 19 2020] PASSED                           [ 74%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                            [ 75%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-13] PASSED                          [ 76%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 77%]
+tests/test_create_widget.py::test_create_widget_already_exists PASSED                                        [ 78%]
+tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                        [ 79%]
+tests/test_delete_widget.py::FLAKE8 PASSED                                                                   [ 80%]
+tests/test_delete_widget.py::BLACK PASSED                                                                    [ 81%]
+tests/test_delete_widget.py::test_delete_widget PASSED                                                       [ 82%]
+tests/test_delete_widget.py::test_delete_widget_no_admin_token PASSED                                        [ 83%]
+tests/test_retrieve_widget.py::FLAKE8 PASSED                                                                 [ 83%]
+tests/test_retrieve_widget.py::BLACK PASSED                                                                  [ 84%]
+tests/test_retrieve_widget.py::test_retrieve_widget_non_admin_user PASSED                                    [ 85%]
+tests/test_retrieve_widget.py::test_retrieve_widget_does_not_exist PASSED                                    [ 86%]
+tests/test_retrieve_widget_list.py::FLAKE8 PASSED                                                            [ 87%]
+tests/test_retrieve_widget_list.py::BLACK PASSED                                                             [ 88%]
+tests/test_retrieve_widget_list.py::test_retrieve_paginated_widget_list PASSED                               [ 89%]
+tests/test_update_widget.py::FLAKE8 PASSED                                                                   [ 90%]
+tests/test_update_widget.py::BLACK PASSED                                                                    [ 91%]
+tests/test_update_widget.py::test_update_widget PASSED                                                       [ 92%]
+tests/test_user.py::FLAKE8 PASSED                                                                            [ 93%]
+tests/test_user.py::BLACK PASSED                                                                             [ 94%]
+tests/test_user.py::test_encode_access_token PASSED                                                          [ 95%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                  [ 96%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                  [ 97%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                  [ 98%]
+tests/util.py::FLAKE8 PASSED                                                                                 [ 99%]
+tests/util.py::BLACK PASSED                                                                                  [100%]
+
+================================================= warnings summary =================================================
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, MutableMapping
+
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+    from werkzeug import cached_property
+
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, Hashable
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+========================================= 106 passed, 3 warnings in 30.00s =========================================
+_____________________________________________________ summary ______________________________________________________
+  py37: commands succeeded
+  congratulations :)</span></code></pre>
+
 ## Checkpoint
+
+{{< linked_image img1 >}}
 
 <div class="requirements">
   <p class="title complete">User Management/JWT Authentication</p>

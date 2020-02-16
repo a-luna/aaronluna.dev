@@ -182,7 +182,7 @@ class LoginUser(Resource):
     @auth_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @auth_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     def post(self):
-        """Authenticate user and return a session token."""
+        """Authenticate an existing user and return an access token."""
         request_data = auth_reqparser.parse_args()
         email = request_data.get("email")
         password = request_data.get("password")
@@ -1017,9 +1017,9 @@ Now that we have an access token, the only thing we need to do is send it in the
 
 The "logout" process for the API is really simple since we don't actually implement any session handling. The `api.auth_logout` endpoint will use the `@token_required` decorator, just like the `api.auth_user` endpoint. Therefore, if a request is received without an access token or with an invalid/expired token, it will be aborted without executing any of the business logic we define for the logout process.
 
-One of the requirements states: <span class="italics requirements">If user logs out, their JWT is immediately invalid/expired</span>. In order to satisfy this requirement, when a user logs out and their access token is <span class="emphasis">NOT</span> invalid/expired, we must add the token to a blacklist and ensure that any subsequent request for a protected resource that includes the token is unsuccessful.
+One of the requirements states: <span class="bold-italics">If user logs out, their JWT is immediately invalid/expired</span>. In order to satisfy this requirement, when a user logs out and their access token is <span class="emphasis">NOT</span> invalid/expired, we must add the token to a blacklist and ensure that any subsequent request for a protected resource that includes the token is unsuccessful.
 
-Even though access tokens are typically configured to expire less than a day after being issued, the blacklist should be persistent (i.e., stored in the database, <span class="emphasis">NOT</span> in RAM). We can create a database table to store blacklisted tokens, which is what we will do next.
+Even though access tokens are typically configured to expire less than a day after being issued, the blacklist should be persistent (i.e., stored in a database, <span class="emphasis">NOT</span> in RAM). We can create a database table to store blacklisted tokens, which is what we will do next.
 
 ### `BlacklistedToken` DB Model
 

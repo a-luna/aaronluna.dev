@@ -631,7 +631,7 @@ class RegisterUser(Resource):
     @auth_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
     @auth_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
     def post(self):
-        """Register a new user."""
+        """Register a new user and return an access token."""
         request_data = auth_reqparser.parse_args()
         email = request_data.get("email")
         password = request_data.get("password")

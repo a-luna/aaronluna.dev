@@ -15,7 +15,7 @@ resources:
 ---
 
 ```python {linenos=table}
-"""Decorator that prints a report including the total execution time of the wrapped function."""
+"""Report function name, argument names and values, and execution time of decorated function."""
 import inspect
 from datetime import datetime
 from functools import wraps
@@ -23,7 +23,7 @@ from functools import wraps
 DT_NAIVE = "%Y-%m-%d %I:%M:%S %p"
 
 def measure_time(func):
-    """Measure the execution time of the wrapped method."""
+    """Measure the execution time of the decorated method."""
 
     @wraps(func)
     def wrapper_measure_time(*args, **kwargs):
@@ -38,11 +38,13 @@ def measure_time(func):
     return wrapper_measure_time
 
 def get_function_call_args(func, *args, **kwargs):
+    """Return a string containing function name and list of all argument names/values."""
     func_args = inspect.signature(func).bind(*args, **kwargs).arguments
     func_args_str =  ", ".join(f"{arg}={val}" for arg, val in func_args.items())
     return f"{func.__name__}({func_args_str})"
 
 def format_timedelta_str(td):
+    """Convert timedelta to an easy-to-read string value."""
     (milliseconds, microseconds) = divmod(td.microseconds, 1000)
     (minutes, seconds) = divmod(td.seconds, 60)
     (hours, minutes) = divmod(minutes, 60)
@@ -61,23 +63,24 @@ def format_timedelta_str(td):
 ```
 
 ```python {linenos=table}
-"""Decorator that will attempt to retry a function after an exception is raised.""""
+"""Implement retry logic on a decorated function.""""
 from functools import wraps
 from time import sleep
 
 class RetryLimitExceededError(Exception):
-    """Custom exception raised by retry decorator when max_attempts limit is reached."""
+    """Exception raised when max_attempts limit is reached."""
 
     def __init__(self, func, max_attempts):
         message = f"Retry limit exceeded! (function: {func.__name__}, max attempts: {max_attempts})"
         super().__init__(message)
 
-def handle_failed_attempt(func, remaining, e, delay):
+def handle_failed_attempt(func, remaining, ex, delay):
     """Example function that could be supplied to on_failure attribute of retry decorator."""
     message = (
         f"Function name: {func.__name__}\n"
-        f"Error: {repr(e)}\n"
-        f"{remaining} attempts remaining, retrying in {delay} seconds...")
+        f"Error: {repr(ex)}\n"
+        f"{remaining} attempts remaining, retrying in {delay} seconds..."
+    )
     print(message)
 
 def retry(*, max_attempts=2, delay=1, exceptions=(Exception,), on_failure=None):
@@ -90,13 +93,13 @@ def retry(*, max_attempts=2, delay=1, exceptions=(Exception,), on_failure=None):
             for remaining in attempts:
                 try:
                     return func(*args, **kwargs)
-                except exceptions as e:
+                except exceptions as ex:
                     if remaining > 0:
                         if on_failure:
-                            on_failure(func, remaining, e, delay)
+                            on_failure(func, remaining, ex, delay)
                         sleep(delay)
                     else:
-                        raise RetryLimitExceededError(func, max_attempts) from e
+                        raise RetryLimitExceededError(func, max_attempts) from ex
                 else:
                     break
         return wrapper_retry

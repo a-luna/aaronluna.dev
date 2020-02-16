@@ -49,23 +49,11 @@ function displayErrorMessage(message) {
 }
 
 function searchSite(queryString) {
-  const searchResults = searchIndex
-    .query(function(q) {
-      // look for an exact match and give that a massive positive boost
-      q.term(queryString, { usePipeline: true, boost: 100 });
-      // prefix matches should not use stemming, and lower positive boost
-      q.term(queryString, {
-        usePipeline: false,
-        boost: 10,
-        wildcard: lunr.Query.wildcard.TRAILING
-      });
-    })
-    .map(function(result) {
-      return pagesIndex.filter(function(page) {
-        return page.href === result.ref;
-      })[0];
-    });
-  return searchResults;
+  return searchIndex.search(queryString).map(function(result) {
+    return pagesIndex.filter(function(page) {
+      return page.href === result.ref;
+    })[0];
+  });
 }
 
 function renderResults(searchResults) {
@@ -135,7 +123,7 @@ function hideSearchResults() {
 
 initSearchIndex();
 document.addEventListener("DOMContentLoaded", function() {
-  if (document.querySelector("#search-form") != null) {
+  if (document.getElementById("search-form") != null) {
     document.getElementById("search").addEventListener(
       "keydown", event => interceptSearchInput(event)
     );
@@ -145,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("clear-search-results").addEventListener(
       "click", () => handleClearSearchButtonClicked()
     );
-    document.querySelector("#search-form .search-error").addEventListener(
+    document.querySelector(".search-error").addEventListener(
       "animationend", removeAnimation
     );
   }
