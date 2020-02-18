@@ -40,12 +40,12 @@ The chart below shows the folder structure that was created in [Part 1](/series/
 |       |
 |       |- <span class="project-folder">models</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="work-file">user.py</span>
+|       |   |- <span class="work-file">user.py</span>
 |       |
 |       |- <span class="project-folder">util</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="unmodified-file">datetime_util.py</span>
-|       |-  |- <span class="unmodified-file">result.py</span>
+|       |   |- <span class="unmodified-file">datetime_util.py</span>
+|       |   |- <span class="unmodified-file">result.py</span>
 |       |
 |       |- <span class="unmodified-file">__init__.py</span>
 |       |- <span class="unmodified-file">config.py</span>
@@ -163,14 +163,9 @@ The `User` class demonstrates several important concepts for creating database m
         </li>
         <li>
             <p><strong>Line 20: </strong>Flask-SQLAlchemy will automatically set the name of the database table by converting the class name (<code>User</code>) to lowercase. However, <code>user</code> is a reserved word in multiple SQL implementations (e.g., PostgreSQL, MySQL, MSSQL), and using any reserved word as a table name is a bad idea. You can override this default value by setting the <code>__tablename__</code> class attribute.</strong></p>
-            <div class="note note-flex">
-                <div class="note-icon">
-                    <i class="fa fa-pencil"></i>
-                </div>
-                <div class="note-message">
-                    <p>Python class names in CamelCase will also create tablenames by converting to lowercase, with underscores inserted between each word (e.g., Python class <code>CamelCase</code> => Database table <code>camel_case</code>).</p>
-                </div>
-            </div>
+{{< info_box >}}
+Python class names in CamelCase will also create tablenames by converting to lowercase, with underscores inserted between each word (e.g., Python class `CamelCase` => Database table `camel_case`).
+{{< /info_box >}}
         </li>
         <li>
             <p><strong>Lines 22-27: </strong>Use <code>db.Column</code> to define a column. Dy default, the column name will be the same as the name of the attribute you assign it to. The first argument to <code>db.Column</code> is the data type (i.e., <code>db.Integer</code>, <code>db.String(size)</code>, <code>db.Boolean</code>). There are many different <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#generic-types" target="_blank">generic data types</a> as well as <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#sql-standard-and-multiple-vendor-types" target="_blank">vendor-specific data types</a> available. Our <code>site_user</code> table will have the following columns:</p>
@@ -186,55 +181,35 @@ The `User` class demonstrates several important concepts for creating database m
                 </li>
                 <li>
                     <p><strong>registered_on: </strong>This column will contain the date and time when the user account was created. <a href="https://docs.sqlalchemy.org/en/13/core/type_basics.html#sqlalchemy.types.DateTime" target="_blank">SQLAlchemy provides many ways to store datetime values</a>, but the simplist method is to use <code>db.DateTime</code>.  Notice that we have specified a default value for this column, <code>default=utc_now</code>. This is a function in the <code>app.util.datetime_util</code> module that returns the current UTC date and time as an "aware" datetime object. When a new User is added to the database, the current UTC time will be evaluated and stored as the value for <code>registered_on</code>.</p>
-                    <div class="alert alert-flex">
-                        <div class="alert-icon">
-                            <i class="fa fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="alert-message">
-                            <p>In this project, all datetime values are assumed to be in UTC when written to the database.</p>
-                        </div>
-                    </div>
+{{< alert_box >}}
+In this project, all datetime values are assumed to be in UTC when written to the database.
+{{< /alert_box >}}
                 </li>
                 <li>
                     <p><strong>admin: </strong>This is a flag that indicates whether a user has administrator access. Use the <code>db.Boolean</code> data type to create a column containing only TRUE/FALSE values. By default, users should not have administrator access. We specify <code>default=False</code> to ensure this behavior.</p>
                 </li>
                 <li>
                     <p><strong>public_id: </strong>This column will contain <a href="https://docs.python.org/3/library/uuid.html" target="_blank">UUID</a> (Universally Unique IDentifier) values. This column is defined in the same way as the email column since we are storing a string value that must be unique for all users. However, since this is a random value (i.e., not user-provided), we populate the column similarly to <code>registered_on</code>, with the result of a lambda function that is called when a new User is added to the database.</p>
-                    <div class="note note-flex">
-                        <div class="note-icon">
-                            <i class="fa fa-pencil"></i>
-                        </div>
-                        <div class="note-message">
-                            <p>You may be wondering why we are using <code>default=lambda:str(uuid4())</code>, rather than <code>default=uuid4</code>. Calling <code>uuid.uuid4()</code> returns a UUID object, which must be converted to a string before it can be written to the database.</p>
-                        </div>
-                    </div>
+{{< info_box >}}
+You may be wondering why we are using `default=lambda:str(uuid4())`, rather than `default=uuid4`. Calling `uuid.uuid4()` returns a UUID object, which must be converted to a string before it can be written to the database.
+{{< /info_box >}}
                 </li>
             </ul>
         </li>
         <li>
             <p><strong>Lines 34-39: </strong>The <code>@hybrid_property</code> decorator is <a href="https://docs.sqlalchemy.org/en/13/orm/extensions/hybrid.html?highlight=hybrid%20properties" target="_blank">another SQLAlchemy feature</a> that is capable of much more than what I am demonstrating here. Most often, this decorator is used to create "computed" or "virtual" columns whose value is computed from the values of one or more columns. In this instance, the <code>registered_on_str</code> column converts the datetime value stored in <code>registered_on</code> to a formatted string.</p>
-            <div class="note note-flex">
-                <div class="note-icon">
-                    <i class="fa fa-pencil"></i>
-                </div>
-                <div class="note-message" style="flex-flow: column wrap">
-                    <p>I am using several of the functions from the <code>app.util.datetime_util</code> module here. The <code>registered_on</code> value (and all <code>datetime</code> values) is always converted to the UTC timezone when the value is written to the database. The <code>registered_on_str</code> value converts this value to the timezone of the machine executing this code and formats it as a string value.</p>
-                </div>
-             </div>
+{{< info_box >}}
+I am using several of the functions from the `app.util.datetime_util` module here. The `registered_on` value (and all `datetime` values) is always converted to the UTC timezone when the value is written to the database. The `registered_on_str` value converts this value to the timezone of the machine executing this code and formats it as a string value.
+{{< /info_box >}}
         </li>
         <li>
             <p><strong>Lines 41-43: </strong>This is part of the password-hashing implementation. The <code>@property</code> decorator exposes a <code>password</code> attribute on our User class. However, this is designed as a write-only value so when a client attempts to call <code>user.password</code> and retrieve the value, an <code>AttributeError</code> is raised.</p>
         </li>
         <li>
             <p><strong>Lines 45-49: </strong>This is the setter function for the <code>password</code> <code>@property</code> which calculates the value stored in the <code>password_hash</code> column. This design only stores the hashed value and discards the actual password. Also, hashing the same password multiple times always produces a different value, so it is impossible to compare <code>password_hash</code> values to determine if multiple users have the same password.</p>
-            <div class="note note-flex">
-                <div class="note-icon">
-                    <i class="fa fa-pencil"></i>
-                </div>
-                <div class="note-message">
-                    <p>We are using a value from the <code>Config</code> class, <code>BCRYPT_LOG_ROUNDS</code>. Since we have created our <code>app</code> object using the factory pattern, we must access the Flask application instance through the proxy object <code>current_app</code> (<a href="http://flask.pocoo.org/docs/1.0/appcontext/#purpose-of-the-context" target="_blank">Read this for more info</a>).</p>
-                </div>
-            </div>
+{{< info_box >}}
+We are using a value from the `Config` class, `BCRYPT_LOG_ROUNDS`. Since we have created our `app` object using the factory pattern, we must access the Flask application instance through the proxy object `current_app` ([Read this for more info](http://flask.pocoo.org/docs/1.0/appcontext/#purpose-of-the-context)).
+{{< /info_box >}}
         </li>
         <li>
             <p><strong>Lines 51-52: </strong>This <code>check_password</code> function is used when the user is attempting to login. The <code>password</code> argument passed into the function is the value provided by the user, and this is provided to the <code>bcrypt.check_password_hash</code> function along with the <code>password_hash</code> value that was created when the user registered their account. The function returns <code>True</code> if the password provided by the user matches the hash, or <code>False</code> otherwise.</p>
@@ -300,14 +275,9 @@ def shell():
     </ul>
 </div>
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>The changes we just made to <code>run.py</code> will be repeated whenever a new model is added. In general, whenever you add a new database model class to your project, you need to update your application entry point (in our case the <code>run.py</code> file to import the new model class before running the <code>flask db migrate</code> command.</p>
-  </div>
-</div>
+{{< alert_box >}}
+The changes we just made to `run.py` will be repeated whenever a new model is added. In general, whenever you add a new database model class to your project, you need to update your application entry point (in our case the `run.py` file to import the new model class before running the `flask db migrate` command.
+{{< /alert_box >}}
 
 Ok, after making the changes to `run.py` we are ready to create our first migration. To do so, we use the `flask db migrate` command. Also, I recommend adding a message describing the schema changes that will be made, as shown below:
 
@@ -325,19 +295,14 @@ The `flask db migrate` command creates the migration script but does not apply t
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade  -> 5789387e80dd, add User model</span></code></pre>
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p>Each time the database schema changes, repeat the <code>flask db migrate</code> and <code>flask db upgrade</code> steps demonstrated above. <span class="emphasis">Remember to add a message</span> describing the schema changes when a new migration is created with <code>flask db migrate</code>.</p>
-  </div>
-</div>
+{{< info_box >}}
+Each time the database schema changes, repeat the `flask db migrate` and `flask db upgrade` steps demonstrated above. <span class="emphasis">Remember to add a message</span> describing the schema changes when a new migration is created with `flask db migrate`.
+{{< /info_box >}}
 
 We can verify that the `site_user` table has been created using `flask shell` and the `sqlite3` module:
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
-<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+<span class="cmd-results">Python 3.7.6 (default, Jan 19 2020, 06:08:58)
 [Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 App: app [development]
 Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
@@ -530,14 +495,9 @@ Here a few more things to note about the fixtures we defined in `conftest.py`:
         </li>
         <li>
             <p><strong>Line 17: </strong>The <code>db</code> fixture is using the <code>client</code> fixture from <code>pytest-flask</code>. The <code>request</code> parameter is another special <code>pytest</code> feature that can be used as a parameter in any fixture function. The <code>request</code> object gives access to the test context where the fixture was requested.</p>
-            <div class="alert alert-flex">
-                <div class="alert-icon">
-                    <i class="fa fa-exclamation-triangle"></i>
-                </div>
-                <div class="alert-message">
-                    <p>Do not confuse the pytest <code>request</code> object and the global Flask <code>request</code> object. The former is used by a fixture to perform any teardown/destruct process on the test object created by the fixture. The latter represents an HTTP request received by the Flask application and contains the HTML body, headers, etc. sent by the client.</p>
-                </div>
-            </div>
+{{< alert_box >}}
+Do not confuse the pytest `request` object and the global Flask `request` object. The former is used by a fixture to perform any teardown/destruct process on the test object created by the fixture. The latter represents an HTTP request received by the Flask application and contains the HTML body, headers, etc. sent by the client.
+{{< /alert_box >}}
         </li>
         <li>
             <p><strong>Line 18-20: </strong>This is my preferred way to teardown/create the database used for testing. You may notice that I do not remove the database after each test run as is common practice, rather I drop all tables before beginning a new test case. This allows me to inspect the database after a failing test run since the data is still present.</p>
@@ -567,7 +527,7 @@ def test_encode_access_token(user):
 
 Run the `tox` command and verify that all tests pass:
 
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">pytest</span>
+<pre><code class="tox"><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">tox</span>
 <span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
 py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
 py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
@@ -691,7 +651,7 @@ There are several important things to note about this method:
             <p><strong>Lines 69-70: </strong>Depending on how the <code>access_token</code> was passed to the <code>decode_access_token</code> function, it could either be a byte-array or a string. Before proceeding, we convert <code>access_token</code> to a string if necessary.</p>
         </li>
         <li>
-            <p><strong>Lines 71-73: </strong>We could add this validation step later, since it will be needed when we define our API routes and incorporate Flask-RESTPlus. I'm adding it now and telling you: Sometimes, the Authorization field of a request header will be prefixed with "Bearer" and sometimes it won't. We need to handle both situations when decoding access tokens.</p>
+            <p><strong>Lines 71-73: </strong>We could add this validation step later, since it will be needed when we define our API routes and incorporate Flask-RESTx. I'm adding it now and telling you: Sometimes, the Authorization field of a request header will be prefixed with "Bearer" and sometimes it won't. We need to handle both situations when decoding access tokens.</p>
         </li>
         <li>
             <strong>Line 75: </strong>Since the token signature was calculated with the <code>SECRET_KEY</code>, we must use the same value to decode the token.
@@ -799,7 +759,7 @@ Add the `test_decode_access_token_invalid` method to `test_user.py`:
 Rather than explain this test case line-by-line as done previously, I think it's easier to execute the test in the `flask shell` interpreter and print out the value of several important variables:
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
-<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+<span class="cmd-results">Python 3.7.6 (default, Jan 19 2020, 06:08:58)
 [Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 App: flask-api-tutorial [development]
 Instance: /Users/aaronluna/Projects/flask_api_tutorial</span>

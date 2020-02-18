@@ -10,7 +10,7 @@ series_part_lead: "API Configuration and User Registration"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: "Part 3 explains how to initialize the Flask-RESTPlus extension and how API routes/endpoints are defined. In order to create an endpoint for new user registration, the modules and classes available in Flask-RESTPlus for parsing and validating request data are explored and demonstrated. Additionally, the process for serializing Python objects in order to send them in an HTTP response is covered. After implementing the user registration API endpoint, test cases are created and executed to verify the registration process is working correctly."
+summary: "Part 3 explains how to initialize the Flask-RESTx extension and how API routes/endpoints are defined. In order to create an endpoint for new user registration, the modules and classes available in Flask-RESTx for parsing and validating request data are explored and demonstrated. Additionally, the process for serializing Python objects in order to send them in an HTTP response is covered. After implementing the user registration API endpoint, test cases are created and executed to verify the registration process is working correctly."
 git_release_name: "v0.3"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.3"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.3.zip"
@@ -64,12 +64,12 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |
 |       |- <span class="project-folder">models</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="unmodified-file">user.py</span>
+|       |   |- <span class="unmodified-file">user.py</span>
 |       |
 |       |- <span class="project-folder">util</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="unmodified-file">datetime_util.py</span>
-|       |-  |- <span class="unmodified-file">result.py</span>
+|       |   |- <span class="unmodified-file">datetime_util.py</span>
+|       |   |- <span class="unmodified-file">result.py</span>
 |       |
 |       |- <span class="work-file">__init__.py</span>
 |       |- <span class="unmodified-file">config.py</span>
@@ -103,7 +103,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 
 ## Introduction
 
-It's finally time to start configuring the API! Keep in mind that the URL routes and the business logic that takes place when a user sends a `GET`, `POST`, `PUT` or `DELETE` request could all be accomplished using the functions, classes and decorators provided in Flask (that is, without using the Flask-RESTPlus extension). However, doing so would require considerably more code and would not give us the Swagger UI page to document and test the API.
+It's finally time to start configuring the API! Keep in mind that the URL routes and the business logic that takes place when a user sends a `GET`, `POST`, `PUT` or `DELETE` request could all be accomplished using the functions, classes and decorators provided in Flask (that is, without using the Flask-RESTx extension). However, doing so would require considerably more code and would not give us the Swagger UI page to document and test the API.
 
 Before we begin, let's discuss what makes a REST API <span class="bold-italics">RESTful</span> and make a decision to abide (or not to abide) by <a href="https://en.wikipedia.org/wiki/Representational_state_transfer#Architectural_constraints" target="_blank">the requirements and constraints of REST</a>.
 
@@ -185,9 +185,9 @@ There are several approaches to API versioning, but the one I prefer is the most
     </ul>
 </div>
 
-## API Configuration with Flask-RESTPlus
+## API Configuration with Flask-RESTx
 
-Just like every other extension, Flask-RESTPlus can be initialized with a Flask application object (i.e., `api.init_app(app)` -- doing so would place the API at the website root). However, in most applications we would rather have the API routes configured with a prefix such as <code>/api/v1</code> to enforce our versioning system.
+Just like every other extension, Flask-RESTx can be initialized with a Flask application object (i.e., `api.init_app(app)` -- doing so would place the API at the website root). However, in most applications we would rather have the API routes configured with a prefix such as <code>/api/v1</code> to enforce our versioning system.
 
 The best way to accomplish this is with <a href="http://flask.pocoo.org/docs/1.0/blueprints/#why-blueprints" target="_blank">Flask blueprints</a>. Typically, blueprints are used to factor a large, monolithic Flask application into logical groupings based on the functional areas of your website. Using a blueprint to isolate the API will allow us to define a `url_prefix` for the API endpoints.
 
@@ -207,7 +207,7 @@ api = Api(
     api_bp,
     version="1.0",
     title="Flask API with JWT-Based Authentication",
-    description="Welcome to the Swagger UI documentation for the Widget API",
+    description="Welcome to the Swagger UI documentation site!",
     doc="/ui",
     authorizations=authorizations,
 )
@@ -221,18 +221,13 @@ There are a few important things to note about how we are configuring the `api` 
           <p><strong>Line 5: </strong>This is where we create the Flask blueprint object for our API. The first parameter, <code>"api"</code>, is the name of the blueprint. All API endpoint names will be prefixed with this value (e.g., <code>api.func_name</code>). The <code>url_prefix</code> value makes all API routes begin with <code>/api/v1</code> (e.g., <code>api/v1/auth/login</code>).</p>
       </li>
       <li>
-          <p><strong>Lines 6, 14: </strong>The API will implement <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer token authentication</a>. This dictionary value is passed to the Flask-RESTPlus <code>Api</code> constructor which adds the authorization to the Swagger UI page. This creates a "Authorize" button in the Swagger UI that prompts you to enter a Bearer token value (i.e., JWT value). After providing a token, all API methods that require authorization will automatically send the token in the Authorization field of the request header.</p>
-          <div class="note note-flex">
-            <div class="note-icon">
-              <i class="fa fa-pencil"></i>
-            </div>
-            <div class="note-message">
-              <p>Currently, Flask-RESTPlus only supports OpenAPI 2.0, which lacks sufficient configuration settings to accurately describe Bearer token authentication as a security scheme object. This is not the case in OpenAPI 3.0. Defining an <code>apiKey</code> named <code>Bearer</code> which is located in the <code>Authorization</code> field of the request header achieves nearly the same behavior as Bearer Token Authentication, and provides a dialog window on the Swagger UI page to send requests with the access token in the header.</p>
-            </div>
-          </div>
+          <p><strong>Lines 6, 14: </strong>The API will implement <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer token authentication</a>. This dictionary value is passed to the Flask-RESTx <code>Api</code> constructor which adds the authorization to the Swagger UI page. This creates a "Authorize" button in the Swagger UI that prompts you to enter a Bearer token value (i.e., JWT value). After providing a token, all API methods that require authorization will automatically send the token in the Authorization field of the request header.</p>
+{{< info_box >}}
+Currently, Flask-RESTx only supports OpenAPI 2.0, which lacks sufficient configuration settings to accurately describe Bearer token authentication as a security scheme object. This is not the case in OpenAPI 3.0. Defining an `apiKey` named `Bearer` which is located in the `Authorization` field of the request header achieves nearly the same behavior as Bearer Token Authentication, and provides a dialog window on the Swagger UI page to send requests with the access token in the header.
+{{< /info_box >}}
       </li>
       <li>
-        <p><strong>Line 9: </strong>Passing the <code>api_bp</code> blueprint object to the Flask-RESTPlus <code>Api</code> constructor links the two objects and is how all API routes become prefixed with the <code>url_prefix</code> value from <code>api_bp</code>. Later, we will import the <code>api_bp</code> object in the <code>run</code> module and register the blueprint with the Flask application object to complete the process of configuring the API.</p>
+        <p><strong>Line 9: </strong>Passing the <code>api_bp</code> blueprint object to the Flask-RESTx <code>Api</code> constructor links the two objects and is how all API routes become prefixed with the <code>url_prefix</code> value from <code>api_bp</code>. Later, we will import the <code>api_bp</code> object in the <code>run</code> module and register the blueprint with the Flask application object to complete the process of configuring the API.</p>
       </li>
       <li>
         <p><strong>Lines 10-12: </strong>All of these string values are displayed in the Swagger UI.</p>
@@ -293,11 +288,13 @@ The first four routes in the list were added by registering the `api_bp` bluepri
 
 You should see something similar to the screenshot below. Note that the URL path, API version, title and description are taken directly from values we provided to the `Api` constructor in the `src/flask_api_tutorial/api/__init__.py` file.
 
+<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
+
 {{< linked_image img1 >}}
 
 ### API Namespaces
 
-In the same way that we can organize our Flask project with **blueprints**, we can organize our Flask-RESTPlus API with **namespace** objects. Our API will contain two namespaces: `auth_ns` and `widget_ns`, which correspond to the `flask_api_tutorial.api.auth` and `flask_api_tutorial.api.widgets` packages, respectively. For now, we will focus on `auth_ns`, since this is the namespace that handles authentication requests.
+In the same way that we can organize our Flask project with **blueprints**, we can organize our Flask-RESTx API with **namespace** objects. Our API will contain two namespaces: `auth_ns` and `widget_ns`, which correspond to the `flask_api_tutorial.api.auth` and `flask_api_tutorial.api.widgets` packages, respectively. For now, we will focus on `auth_ns`, since this is the namespace that handles authentication requests.
 
 Currently, the `src/flask_api_tutorial/api/auth` folder only contains the `__init__.py` file. We need to create 3 new files in the `auth` folder: `business.py`, `dto.py` and `endpoints.py`. Run the command below from the project root folder to create the files (or create them yourself however you wish):
 
@@ -311,7 +308,7 @@ drwxr-xr-x  5 aaronluna  staff  160 Dec 27 02:47 ..
 -rw-r--r--  1 aaronluna  staff    0 Dec 30 01:20 dto.py
 -rw-r--r--  1 aaronluna  staff    0 Dec 30 01:20 endpoints.py</span></code></pre>
 
-All of these files are standard for any Flask-RESTPlus API namespace package that I create. These files perform specific roles that are common to request handling and response formatting:
+All of these files are standard for any Flask-RESTx API namespace package that I create. These files perform specific roles that are common to request handling and response formatting:
 
 <div class="code-details">
   <ul>
@@ -322,7 +319,7 @@ All of these files are standard for any Flask-RESTPlus API namespace package tha
       <p><strong>dto.py: </strong>DTO stands for <span class="bold-italics">data transfer object</span>. This file will contain custom objects that parse and validate request data, and API model classes that will serialize our database model classes to JSON objects before sending them in an HTTP response.</p>
     </li>
     <li>
-      <p><strong>endpoints.py: </strong>This file will contain Flask-RESTPlus <code>Resource</code> classes. Resources are the most important individual parts of a REST API. Each resource is an API endpoint, and the methods we add to each <code>Resource</code> class control the HTTP methods the endpoint responds to . The following method names are automatically mapped to the corresponding HTTP methods: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> and <code>head</code>.</p>
+      <p><strong>endpoints.py: </strong>This file will contain Flask-RESTx <code>Resource</code> classes. Resources are the most important individual parts of a REST API. Each resource is an API endpoint, and the methods we add to each <code>Resource</code> class control the HTTP methods the endpoint responds to . The following method names are automatically mapped to the corresponding HTTP methods: <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> and <code>head</code>.</p>
     </li>
   </ul>
 </div>
@@ -331,7 +328,7 @@ Before we begin implementing the API routes and business logic for the authentic
 
 ## Request Parsing and Response Marshalling
 
-Flask-RESTPlus provides two different approaches for parsing and validating request data. Deciding which method to use will depend on the complexity of the data and the interface you provide to the client.
+Flask-RESTx provides two different approaches for parsing and validating request data. Deciding which method to use will depend on the complexity of the data and the interface you provide to the client.
 
 In many cases the source of an HTTP POST request is a form submission from a page. Another common scenario is an HTTP GET request that occurs when a client accesses a URL with a query string containing pertinent request data. In these cases, you should use the `RequestParser` class provided in the `reqparse` module.
 
@@ -341,13 +338,13 @@ Documenting the expected format of request and response data has an additional b
 
 ### Request Parser Configuration
 
-Flask-RESTPlus provides the `RequestParser` class as a way to parse data from the Flask `request` object. For each value to be parsed, we add an instance of the `Argument` class to the `RequestParser`. The `Argument` class is very flexible and is configured by the parameters listed below:
+Flask-RESTx provides the `RequestParser` class as a way to parse data from the Flask `request` object. For each value to be parsed, we add an instance of the `Argument` class to the `RequestParser`. The `Argument` class is very flexible and is configured by the parameters listed below:
 
 <div style="font-size: 0.95em; padding: 5px">
   <ul>
     <li><strong>name: </strong>The name of the argument to parse from the request.</li>
     <li><strong>default: </strong>The value to use if the argument is not found in the request, default value is <code>None</code>.</li>
-    <li><strong>type: </strong>The type to convert the parsed argument to. This can be any primitive (e.g., int, str, etc.), but Flask-RESTPlus also provides more advanced types in the <code>inputs</code> module (e.g., email address, URL, etc.). You can also define your own custom data types.</li>
+    <li><strong>type: </strong>The type to convert the parsed argument to. This can be any primitive (e.g., int, str, etc.), but Flask-RESTx also provides more advanced types in the <code>inputs</code> module (e.g., email address, URL, etc.). You can also define your own custom data types.</li>
     <li><strong>required: </strong>By default, arguments that are added to a <code>RequestParser</code> that are not found in the request are set to the default value. If <code>required=True</code>, any request where the argument is not found will be aborted with HTTP exception 400 <code>HTTPStatus.BAD_REQUEST</code>.</li>
     <li>
       <p><strong>location: </strong>Where to look on the <code>Flask.request</code> object for the argument (can be <code>args</code>, <code>form</code>, <code>headers</code>, <code>json</code>, <code>values</code> or <code>files</code>). The default behavior is to parse values from <code>values</code> and <code>json</code>. <code>values</code> is actually a dictionary that conbines <code>args</code> and <code>form</code>. Also, you can specify multiple locations with a list (e.g., <code>["form", "args"]</code>), the last location in the list takes precedence in the result set.</p>
@@ -364,7 +361,7 @@ I recommend reading and fully understanding the documentation explaining <a href
 
 For `POST` and `PUT` requests that create a new resource or update an existing resource in a collection, you should instruct the client to send the resource as a JSON object in the request body. You can define the expected API model by creating a `dict` object where the keys are the names of the attributes on the JSON object and the values are a class that will validate and convert the attribute to the required data type.
 
-In the same way that the `inputs` module provides primitive data types and a set of predefined data formats to specify the `type` of each `RequestParser` `Argument`, the `fields` module fulfills the same role for `model` objects. You can find <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#models" target="_blank">a list of pre-defined</a> `fields` in the API documentation. You can also easily create your own custom `field` by subclassing `fileds.Raw`, <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#custom-fields-multiple-values" target="_blank">as shown in the Flask-RESTPlus docs</a>.
+In the same way that the `inputs` module provides primitive data types and a set of predefined data formats to specify the `type` of each `RequestParser` `Argument`, the `fields` module fulfills the same role for `model` objects. You can find <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#models" target="_blank">a list of pre-defined</a> `fields` in the API documentation. You can also easily create your own custom `field` by subclassing `fileds.Raw`, <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#custom-fields-multiple-values" target="_blank">as shown in the Flask-RESTx docs</a>.
 
 To avoid duplicating code, if you need to define two models which represent the same ORM object but expose slightly different sets of attributes, you can <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#duplicating-with-clone" target="_blank">inherit a model</a> rather than defining the same set of `fields` twice.
 
@@ -427,16 +424,11 @@ We will implement each endpoint in the same way, following the steps listed belo
     <li>Define the business logic necessary to process the request if validation succeeds.</li>
     <li>Create a class that inherits from <code>Resource</code> and bind it to the API endpoint/URL route.</li>
     <li>Define the set of HTTP methods that the API endpoint will support and expose methods on the concrete <code>Resource</code> class for each. Methods named <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code>, <code>patch</code>, <code>options</code> or <code>head</code> will be called when the API endpoint receives a request of the same HTTP method type.
-    <div class="alert alert-flex">
-      <div class="alert-icon">
-        <i class="fa fa-exclamation-triangle"></i>
-      </div>
-      <div class="alert-message">
-        <p>If the API endpoint does not support the HTTP method, do not expose a method with the name of the HTTP method and the client will receive a response with status code 405 <code>HTTPStatus.METHOD_NOT_ALLOWED</code></p>
-      </div>
-    </div>
+{{< alert_box >}}
+If the API endpoint does not support the HTTP method, do not expose a method with the name of the HTTP method and the client will receive a response with status code 405 `HTTPStatus.METHOD_NOT_ALLOWED`.
+{{< /alert_box >}}
     </li>
-    <li>Document the <code>Resource</code> class and all methods <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">as explained in the Flask-RESTPlus docs</a>. Most of the content on the Swagger UI page is generated by decorating your concrete <code>Resource</code> classes and their methods.</li>
+    <li>Document the <code>Resource</code> class and all methods <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">as explained in the Flask-RESTx docs</a>. Most of the content on the Swagger UI page is generated by decorating your concrete <code>Resource</code> classes and their methods.</li>
     <li>Utilize the business logic created in <strong>Step 2</strong> within the approprate HTTP methods to process the request.</li>
     <li>Create unit tests to verify that the input validation provided by the request parsers/API models is working correctly, and verify the endpoint behaves as expected.</li>
   </ol>
@@ -469,7 +461,7 @@ auth_reqparser.add_argument(
 
 The first thing to note here is the parameter `bundle_errors=True` when we instantiate `auth_reqparser`. This value is false by default, which means that only a single error is reported whenever the request data fails validation. I prefer to have all error messages reported for all arguments in our request parser.
 
-Next, notice that we have specified `type=email()` for the `email` argument. This is a pre-defined type provided by Flask-RESTPlus that verifies that the value sent in the request is a valid email address. If a request includes a value of "213323 kjljk" for `email`, we expect that the user will not be registered and the response will include a status code indicating that a validation error occurred and a message explaining that the value for `email` is not valid.
+Next, notice that we have specified `type=email()` for the `email` argument. This is a pre-defined type provided by Flask-RESTx that verifies that the value sent in the request is a valid email address. If a request includes a value of "213323 kjljk" for `email`, we expect that the user will not be registered and the response will include a status code indicating that a validation error occurred and a message explaining that the value for `email` is not valid.
 
 The remaining parameters are the same for both arguments: `location="form", required=True, nullable=False`. [The purpose of each parameter was explained previously](#request-parser-configuration), and should answer any questions you have about these settings.
 
@@ -556,14 +548,9 @@ def _get_token_expire_time():
   <ul>
     <li>
       <p><strong>Lines 12-13: </strong>The first thing we do is verify that the email address provided by the user has not been registered. If a <code>User</code> already exists with the same email address, the request is aborted.</p>
-      <div class="note note-flex">
-        <div class="note-icon">
-          <i class="fa fa-pencil"></i>
-        </div>
-        <div class="note-message">
-          <p>The <code>abort</code> function is provided by Flask-RESTPlus and is the correct way to abort a request received by an API endpoint. The first argument is the HTTP status code to include in the response. In this case, the appropriate response code is <code>HTTPStatus.CONFLICT</code> (409). The remaining arguments are included in the response body.</p>
-        </div>
-      </div>
+{{< info_box >}}
+The `abort` function is provided by Flask-RESTx and is the correct way to abort a request received by an API endpoint. The first argument is the HTTP status code to include in the response. In this case, the appropriate response code is 409 `HTTPStatus.CONFLICT`. The remaining arguments are included in the response body.
+{{< /info_box >}}
     </li>
     <li>
       <p><strong>Line 14-16: </strong>If the email address has not been registered, we proceed to create a <code>User</code> object with the provided email and password values, and then commit the new user to the database.</p>
@@ -586,7 +573,7 @@ def _get_token_expire_time():
       <p>We calculate the lifespan of the <code>access_token</code> from the <code>app.config</code> values <code>TOKEN_EXPIRE_HOURS</code> and <code>TOKEN_EXPIRE_MINUTES</code>. If the <code>app.config["TESTING"]</code> flag is set, then five seconds is used as the lifespan of the token. Otherwise, the lifespan in seconds is calculated with <code>TOKEN_EXPIRE_HOURS * 3600 + TOKEN_EXPIRE_MINUTES * 60</code>.</p>
     </li>
     <li>
-      <p><strong>Line 25: </strong>The most appropriate HTTP status code for a response indicating we have created a new resource is <code>HTTPStatus.CREATED</code> (201).</p>
+      <p><strong>Line 25: </strong>The most appropriate HTTP status code for a response indicating we have created a new resource is 201 <code>HTTPStatus.CREATED</code>.</p>
     </li>
     <li>
       <p><strong>Line 26-27: </strong>The final requirement in the specification cited above is that the response must include the HTTP <code>Cache-Control</code> response header field with a value of <code>no-store</code>, and the <code>Pragma</code> response header field with a value of <code>no-cache</code></p>
@@ -626,10 +613,10 @@ class RegisterUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/register."""
 
     @auth_ns.expect(auth_reqparser)
-    @auth_ns.response(HTTPStatus.CREATED, "New user was successfully created.")
-    @auth_ns.response(HTTPStatus.CONFLICT, "Email address is already registered.")
-    @auth_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @auth_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+    @auth_ns.response(int(HTTPStatus.CREATED), "New user was successfully created.")
+    @auth_ns.response(int(HTTPStatus.CONFLICT), "Email address is already registered.")
+    @auth_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+    @auth_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
     def post(self):
         """Register a new user and return an access token."""
         request_data = auth_reqparser.parse_args()
@@ -641,10 +628,10 @@ class RegisterUser(Resource):
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 9: </strong>Flask-RESTPlus <code>Namespace</code> objects are used to group a related set of API endpoints in the same way that Flask <code>Blueprint</code> objects can be used to group related URL routes.</p>
+        <p><strong>Line 9: </strong>Flask-RESTx <code>Namespace</code> objects are used to group a related set of API endpoints in the same way that Flask <code>Blueprint</code> objects can be used to group related URL routes.</p>
         <p>In this file, we will use the <code>auth_ns</code> object reapeatedly as a decorator. Most of these have an effect on the behavior of the class or method they decorate, some do not. All of these decorators have one thing in common  &mdash; they all produce some sort of documentation on the Swagger UI page.</p>
         <p>These decorators can inform clients about the expected format of request and response data or the set of possible HTTP status codes that the client can expect to receive from the server in a response. Also, docstrings for HTTP methods are rendered on the Swagger UI page and should be used to provide a short description of the method's purpose.</p>
-        <p>Check out the Flask-RESTPlus docs for <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">examples of using decorators to document the Swagger UI page</a> (if you need even more info it's probably in the <a href="https://flask-restplus.readthedocs.io/en/stable/api.html" target="_blank">API documentation</a>).</p>
+        <p>Check out the Flask-RESTx docs for <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">examples of using decorators to document the Swagger UI page</a> (if you need even more info it's probably in the <a href="https://flask-restplus.readthedocs.io/en/stable/api.html" target="_blank">API documentation</a>).</p>
       </li>
       <li>
         <p><strong>Line 12: </strong>The <code>route</code> decorator is used to decorate a class that inherits from <code>Resource</code>. Here, the <code>@auth_ns.route</code> decorator registers the <code>RegisterUser</code> resource with the <code>auth_ns</code> namespace.</p>
@@ -727,43 +714,45 @@ The presence of the `api.auth_register` endpoint in the list of routes confirms 
 
 Start the development server by running `flask run` and point your browser to `http://localhost:5000/api/v1/ui` to check out the Swagger UI:
 
+<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
+
 {{< linked_image img2 >}}
 
-You can click anywhere on the green bar to expand the component. It might not seem like a huge deal, but everything you see was automatically generated by Flask-RESTPlus (from the `api` object, `auth_ns` object, `auth_reqparser`, `RegisterUser`, etc):
+You can click anywhere on the green bar to expand the component. It might not seem like a huge deal, but everything you see was automatically generated by Flask-RESTx (from the `api` object, `auth_ns` object, `auth_reqparser`, `RegisterUser`, etc):
+
+<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
 
 {{< linked_image img3 >}}
 
 If you'd like to send a request, click the **Try It Out** button. Then, enter any valid email address and any value for password and click **Execute**:
 
+<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
+
 {{< linked_image img4 >}}
 
 You should receive a response with status code 201 `HTTPStatus.CREATED` if the email address is formatted correctly (this is the only validation process being performed by `auth_reqparser`):
 
+<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
+
 {{< linked_image img5 >}}
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p>The Swagger UI helpfully provides a <strong>Curl</strong> textbox that contains the exact request that was submitted to the server based on the values you provided. <code>cURL</code> is a ubiquitous tool and you can copy and paste the contents of the textbox into any terminal if you would like to test your API from the command-line.</p>
-  </div>
-</div>
+{{< info_box >}}
+The Swagger UI helpfully provides a **Curl** textbox that contains the exact request that was submitted to the server based on the values you provided. **cURL** is a ubiquitous tool and you can copy and paste the contents of the textbox into any terminal if you would like to test your API from the command-line.
+{{< /info_box >}}
 
 If you attempt to register with an email address that already exists in the database, you should receive a response with status code 409 `HTTPStatus.CONFLICT`. You can also test the API with a command-line tool (e.g., httpie, curl, wget, etc):
 
+<span class="pink bold-italics" style="font-size: 1.5em">REDO WITH TEXT</span>
+
 {{< linked_image img6 >}}
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p>The CLI examples I provide in this tutorial will <span class="emphasis">NOT</span> use <code>cURL</code>. I prefer <a href="https://httpie.org/" target="_blank">httpie</a> because the syntax is much cleaner and more intuitive. The options for styling and formatting the output are a huge plus as well.</p>
-  </div>
-</div>
+{{< info_box >}}
+The CLI examples I provide in this tutorial will <span class="emphasis">NOT</span> use `cURL` I prefer [httpie](https://httpie.org/) because the syntax is much cleaner and more intuitive. The options for styling and formatting the output are a huge plus as well.
+{{< /info_box >}}
 
 Here's an example of a successful request using httpie. Note that on the command-line or Swagger UI the response from the server is always formatted as JSON:
+
+<span class="pink bold-italics" style="font-size: 1.5em">REDO WITH TEXT</span>
 
 {{< linked_image img7 >}}
 
@@ -855,7 +844,7 @@ Let's go through the `test_auth_register` function and explain what is being tes
     <li>
       <p><strong>Line 10: </strong><code>test_auth_register</code> is a test case, and <code>client</code> and <code>db</code> are test fixtures defined in <code>conftest.py</code>. The reason for invoking the <code>client</code> fixture is obvious &mdash; we need it to test the API. However, the reason for invoking <code>db</code> is not so obvious since it isn't actually being called in the test function. This fixture initializes the database by creating tables for each database model class (the only model class at this point is <code>User</code>).</p>
       <p>In this test case, we are sending a request to register a new user and expecting the request to succeed. This will only work if the database has been initialized and the <code>site_user</code> table exists in the database since the SQLAlchemy extension will attempt to execute a <code>INSERT INTO site_user...</code> SQL statement.</p>
-      <p><span class="emphasis">BOTTOM LINE</span> &mdash; Invoking the <code>db</code> fixture is necessary for any test cases that add or modify database objects.</p>
+      <p><span class="emphasis">BOTTOM LINE</span>&nbsp;&nbsp;Invoking the <code>db</code> fixture is necessary for any test cases that add or modify database objects.</p>
     </li>
     <li>
       <p><strong>Line 11: </strong>We start off the test case by submitting the registration request with the default values. This is really the only action performed in this test case, the rest of the code just verifies the server response to the registration request.</p>
@@ -960,16 +949,11 @@ The last test case we will cover at this point is where the client submits an em
   <span class="purple">"message"</span>: <span class="light-blue">"Input payload validation failed"</span>
 }</span></span></code></pre>
 
-You might notice that none of the code we wrote for the `api.auth_register` endpoint generated the response above. That is because this response was automatically generated by Flask-RESTPlus based on the `auth_reqparser` we configured in `src/flask_api_tutorial/api/auth/dto.py`.
+You might notice that none of the code we wrote for the `api.auth_register` endpoint generated the response above. That is because this response was automatically generated by Flask-RESTx based on the `auth_reqparser` we configured in `src/flask_api_tutorial/api/auth/dto.py`.
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>The response above <span class="emphasis">DOES NOT</span> have an attribute named <span class="bold-text">status</span>, because Flask-RESTPlus generated the response rather than any of the code that was written for this tutorial.</p>
-  </div>
-</div>
+{{< alert_box >}}
+The response above <span class="emphasis">DOES NOT</span> have an attribute named **status**, because Flask-RESTx generated the response rather than any of the code that was written for this tutorial.
+{{< /alert_box >}}
 
 Whenever a request is rejected because of one or more `RequestParser` arguments failed validation, the format of the response will always contain a **message** attribute equal to <code>"Input payload validation failed"</code> and a an **errors** attribute with the value being another embedded list. The embedded list contains an entry for each argument in the parser that failed validation, with the name of the argument as the attribute name and the value equal to a message describing the failure that occurred.
 
@@ -1108,7 +1092,7 @@ ________________________________________________________ summary _______________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 
-The warning that is generated from Flask-RESTPlus is a very minor issue with the manner in which one of their modules is importing a type from the standard library. This has no effect on the operation of the API and will be fixed very soon in an upcoming release. I will update this test result when it has been fixed.
+The warning that is generated from Flask-RESTx is a very minor issue with the manner in which one of their modules is importing a type from the standard library. This has no effect on the operation of the API and will be fixed very soon in an upcoming release. I will update this test result when it has been fixed.
 
 ## Checkpoint
 

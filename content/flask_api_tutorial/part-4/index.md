@@ -74,13 +74,13 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |
 |       |- <span class="project-folder">models</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="work-file">token_blacklist.py</span>
-|       |-  |- <span class="work-file">user.py</span>
+|       |   |- <span class="work-file">token_blacklist.py</span>
+|       |   |- <span class="work-file">user.py</span>
 |       |
 |       |- <span class="project-folder">util</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="unmodified-file">datetime_util.py</span>
-|       |-  |- <span class="unmodified-file">result.py</span>
+|       |   |- <span class="unmodified-file">datetime_util.py</span>
+|       |   |- <span class="unmodified-file">result.py</span>
 |       |
 |       |- <span class="unmodified-file">__init__.py</span>
 |       |- <span class="unmodified-file">config.py</span>
@@ -177,10 +177,10 @@ class LoginUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/login."""
 
     @auth_ns.expect(auth_reqparser)
-    @auth_ns.response(HTTPStatus.OK, "Login succeeded.")
-    @auth_ns.response(HTTPStatus.UNAUTHORIZED, "email or password does not match")
-    @auth_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @auth_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+    @auth_ns.response(int(HTTPStatus.OK), "Login succeeded.")
+    @auth_ns.response(int(HTTPStatus.UNAUTHORIZED), "email or password does not match")
+    @auth_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+    @auth_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
     def post(self):
         """Authenticate an existing user and return an access token."""
         request_data = auth_reqparser.parse_args()
@@ -468,7 +468,7 @@ user_model = Model(
 )
 ```
 
-`"User"` is the name of the API Model, and this value will be used to identify the JSON object in the Swagger UI page. Please read <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html" target="_blank">the Flask-RESTPlus documentation</a> for detailed examples of creating API models. Basically, an API model is a dictionary where the keys are the names of attributes on the object that we need to serialize, and the values are a class from the `fields` module that formats the value of the attibute on the object to ensure that it can be safely included in the HTTP response.
+`"User"` is the name of the API Model, and this value will be used to identify the JSON object in the Swagger UI page. Please read <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html" target="_blank">the Flask-RESTx documentation</a> for detailed examples of creating API models. Basically, an API model is a dictionary where the keys are the names of attributes on the object that we need to serialize, and the values are a class from the `fields` module that formats the value of the attibute on the object to ensure that it can be safely included in the HTTP response.
 
 Any other attributes of the object are considered private and will not be included in the JSON. If the name of the attribute on the object is different than the name that you wish to use in the JSON, specify the name of the attribute on the object using the `attribute` parameter, which is what we are doing for `registered_on` in the code above (**Line 22**).
 
@@ -478,7 +478,7 @@ The last attribute in the `User` API model is named `token_expires_in`, but the 
 
 Objects in Python are quite permissive due to the language's dynamic nature. For example, you are free to create new attributes of your choosing on any object, and we will modify the `User` object to include an attribute named `token_expires_in` before we marshal the object to JSON and send it to the client. The value for this attribute will be a formatted string representing the `timedelta` until the token expires, which is available from the payload of the user's access token after validating that the token is valid.
 
-The Flask-RESTPlus docs contain a <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.fields" target="_blank">full list of the classes available in the `fields' module</a> as well as <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#custom-fields-multiple-values" target="_blank">instructions for creating a custom formatter</a>.
+The Flask-RESTx docs contain a <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.fields" target="_blank">full list of the classes available in the `fields' module</a> as well as <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#custom-fields-multiple-values" target="_blank">instructions for creating a custom formatter</a>.
 
 ### `get_logged_in_user` Function
 
@@ -656,7 +656,7 @@ There are a few new concepts to note:
       <p><strong>Line 56: </strong>The <code>@auth_ns.response</code> decorator can be configured with an API model as an optional third argument. This has no effect on the resource's behavior, but the API model is displayed on the Swagger UI page as an example response body for requests that produce a status code 200 <code>HTTPStatus.OK</code>.</p>
     </li>
     <li>
-      <p><strong>Line 59: </strong>The <code>@auth_ns.marshal_with</code> decorator is how we tell Flask-RESTPlus to filter the data returned from this method against the provided API model (<code>user_model</code>), and validate the data against the set of fields configured in the API model.</p>
+      <p><strong>Line 59: </strong>The <code>@auth_ns.marshal_with</code> decorator is how we tell Flask-RESTx to filter the data returned from this method against the provided API model (<code>user_model</code>), and validate the data against the set of fields configured in the API model.</p>
     </li>
     <li>
       <p><strong>Line 62: </strong>Remember, <code>get_logged_in_user</code> returns a <code>User</code> object. Without the <code>@marshal_with</code> decorator, this would produce a server error since we are not returning an HTTP response object as expected. The <code>@marshal_with</code> decorator creates the JSON using the <code>user_model</code> and assigns status code 200 <code>HTTPStatus.OK</code> before returning the response.</p>

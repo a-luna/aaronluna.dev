@@ -10,7 +10,7 @@ series_part_lead: "Pagination, HATEOAS and Parameterized Testing"
 menu_section: "tutorials"
 categories: ["Flask", "Python", "Tutorial-Series"]
 toc: true
-summary: "Part 6 completes the implementation of the Widget API. Since one of the requirements is to allow users to retrieve a paginated list of widgets, advanced techniques for serializing objects to JSON are demonstrated. Both the widget API model and the pagination API model are complex, requiring the use of several new classes from the Flask-RESTPlus fields module. The update and delete processes are implemented next and unit tests for all endpoint/request type combination are created and executed."
+summary: "Part 6 completes the implementation of the Widget API. Since one of the requirements is to allow users to retrieve a paginated list of widgets, advanced techniques for serializing objects to JSON are demonstrated. Both the widget API model and the pagination API model are complex, requiring the use of several new classes from the Flask-RESTx fields module. The update and delete processes are implemented next and unit tests for all endpoint/request type combination are created and executed."
 git_release_name: "v0.6"
 url_git_rel_browse: "https://github.com/a-luna/flask-api-tutorial/tree/v0.6"
 url_git_rel_zip: "https://github.com/a-luna/flask-api-tutorial/archive/v0.6.zip"
@@ -51,14 +51,14 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |
 |       |- <span class="project-folder">models</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="unmodified-file">token_blacklist.py</span>
-|       |-  |- <span class="unmodified-file">user.py</span>
-|       |-  |- <span class="unmodified-file">widget.py</span>
+|       |   |- <span class="unmodified-file">token_blacklist.py</span>
+|       |   |- <span class="unmodified-file">user.py</span>
+|       |   |- <span class="unmodified-file">widget.py</span>
 |       |
 |       |- <span class="project-folder">util</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="unmodified-file">datetime_util.py</span>
-|       |-  |- <span class="unmodified-file">result.py</span>
+|       |   |- <span class="unmodified-file">datetime_util.py</span>
+|       |   |- <span class="unmodified-file">result.py</span>
 |       |
 |       |- <span class="unmodified-file">__init__.py</span>
 |       |- <span class="unmodified-file">config.py</span>
@@ -288,7 +288,7 @@ What would happen if `required=True` and the client sends a request without eith
 
 The range of valid values for the `page` parameter is any positive integer. However, the `per_page` parameter must have an upper bound since the point of employing pagination is to prevent the API from becoming sluggish due to sending/receiving a large amount of data.
 
-Flask-RESTPlus includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range" target="_blank"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a range of integers. This would allow the client to request any number of items per page, but I think it makes more sense to restrict the page size to a small, fixed set of choices.
+Flask-RESTx includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range" target="_blank"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a range of integers. This would allow the client to request any number of items per page, but I think it makes more sense to restrict the page size to a small, fixed set of choices.
 
 The list provided to the `choices` keyword defines the set of allowable values. This has an additional benefit &mdash; on the Swagger UI page, the input form for `per_page` will render a select element containing the list of choices.
 
@@ -370,9 +370,9 @@ Hopefully, this helps you understand the structure of the `Pagination` class and
 
 ### `pagination_model` API Model
 
-In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
+In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTx uses them to serialize database objects in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
 
-First, we need to update the import statements in `src/flask_api_tutorial/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
+First, we need to update the import statements in `src/flask_api_tutorial/api/widgets/dto.py` to include the Flask-RESTx `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
 ```python {linenos=table,hl_lines=["6-7"]}
 """Parsers and serializers for /widgets API endpoints."""
@@ -490,7 +490,7 @@ widget_model = Model(
         <p><strong>Line 102: </strong>We used the <code>Boolean</code> class already (in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a>), so refer back to that section if you need to review how it works.</p>
       </li>
       <li>
-        <p><strong>Line 103: </strong><code>time_remaining_str</code> is a formatted string version of  <code>time_remaining</code>, which is a <code>timedelta</code> value. Since Flask-RESTPlus does not include built-in types for serializing <code>timedelta</code> values, formatting <code>time_remaining</code> as a string is the only way to include it in the serialized JSON.</p>
+        <p><strong>Line 103: </strong><code>time_remaining_str</code> is a formatted string version of  <code>time_remaining</code>, which is a <code>timedelta</code> value. Since Flask-RESTx does not include built-in types for serializing <code>timedelta</code> values, formatting <code>time_remaining</code> as a string is the only way to include it in the serialized JSON.</p>
         <p>Here's an example of the format used by <code>time_remaining_str</code>:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"time_remaining"</span><span class="p">:</span> <span class="s2">"16 hours 41 minutes 42 seconds"</span><span class="p">,</span></code></pre>
       </li>
@@ -502,12 +502,12 @@ widget_model = Model(
     <span class="nt">"public_id"</span><span class="p">:</span> <span class="s2">"475807a4-8497-4c5c-8d70-109b429bb4ef"</span><span class="p">,</span>
 <span class="p">}</span></code></pre>
 {{< info_box >}}
-For more information and examples of serializing complex structures to JSON, please read the [Complex Structures](https://flask-restplus.readthedocs.io/en/stable/marshalling.html#complex-structures) and [Nested Field](https://flask-restplus.readthedocs.io/en/stable/marshalling.html#nested-field) sections of the Flask-RESTPlus documentation.
+For more information and examples of serializing complex structures to JSON, please read the [Complex Structures](https://flask-restplus.readthedocs.io/en/stable/marshalling.html#complex-structures) and [Nested Field](https://flask-restplus.readthedocs.io/en/stable/marshalling.html#nested-field) sections of the Flask-RESTx documentation.
 {{< /info_box >}}
       </li>
       <li>
-        <p><strong>Line 105: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTPlus documentation</a>:</p>
-        <blockquote>Flask-RESTPlus includes a special field, <code>fields.Url</code>, that synthesizes a uri for the resource that’s being requested. This is also a good example of how to add data to your response that’s not actually present on your data object.</blockquote>
+        <p><strong>Line 105: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTx documentation</a>:</p>
+        <blockquote>Flask-RESTx includes a special field, <code>fields.Url</code>, that synthesizes a uri for the resource that’s being requested. This is also a good example of how to add data to your response that’s not actually present on your data object.</blockquote>
         <p>By including a <code>link</code> to the URI with each <code>Widget</code>, the client can perform CRUD actions without manually constructing or storing the URI (which is an example of <a href="#hateoas">HATEOAS</a>). By default, the value returned for <code>link</code> will be a relative URI as shown below:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"link"</span><span class="p">:</span> <span class="s2">"/api/v1/widgets/first_widget"</span><span class="p">,</span></code></pre>
         <p>If the <code>link</code> should be an absolute URI (containing scheme, hostname, and port), include the keyword argument <code>absolute=True</code> (e.g., <code>Url("api.widget", absolute=True)</code>). In my local test environment, this returns the URI below for the same <code>Widget</code> resource:</p>
@@ -523,7 +523,7 @@ I hope that all of the material we encountered for the first time in the `widget
 
 #### `pagination_links_model` and `pagination_model`
 
-If you go back and look at the <a href="#pagination">pagination example in the Introduction</a> , there's something important that is included in the example that <span class="emphasis">is not</span> part of the Flask-RESTPlus `Pagination` object. Here's a hint: it has to do with <a href="#hateoas">HATEOAS</a>. The answer is: **navigational links**:
+If you go back and look at the <a href="#pagination">pagination example in the Introduction</a> , there's something important that is included in the example that <span class="emphasis">is not</span> part of the Flask-RESTx `Pagination` object. Here's a hint: it has to do with <a href="#hateoas">HATEOAS</a>. The answer is: **navigational links**:
 
 ```python {linenos=table,linenostart=108}
 pagination_links_model = Model(
@@ -564,7 +564,7 @@ There are only a few things in `pagination_model` that we are seeing for the fir
     <ul>
       <li>
         <p><strong>Line 122: </strong>In order to match the object structure shown in the <a href="#pagination">Introduction</a>, <code>pagination_model</code> must have a field named <code>links</code> containing navigational links that allow the client to access all <code>Widget</code> instances available in the database.</p>
-        <p>Notice that we are using the <code>Nested</code> field type the same way we did in <code>widget_model</code>, the only difference is that now we are including the keyword argument <code>skip_none=True</code>. As explained in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#skip-none-in-nested-fields" target="_blank">the Flask-RESTPlus documentation</a>, by default, if any of the fields in <code>pagination_links_model</code> have value <code>None</code>, the JSON output will contain these fields with value <code>null</code>.</p>
+        <p>Notice that we are using the <code>Nested</code> field type the same way we did in <code>widget_model</code>, the only difference is that now we are including the keyword argument <code>skip_none=True</code>. As explained in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#skip-none-in-nested-fields" target="_blank">the Flask-RESTx documentation</a>, by default, if any of the fields in <code>pagination_links_model</code> have value <code>None</code>, the JSON output will contain these fields with value <code>null</code>.</p>
         <p>There are many situations where one or more of the navigational links will be <code>None</code> (e.g., for the first page of results <code>prev</code> will always be <code>None</code>). <span class="bold-italics">By specifying</span> <code>skip_none=True</code>, <span class="bold-italics">these values will not be rendered in the JSON output</span>, making it much cleaner and reducing the size of the response.</p>
       </li>
       <li>
@@ -572,7 +572,7 @@ There are only a few things in `pagination_model` that we are seeing for the fir
       </li>
       <li>
         <p><strong>Line 129: </strong>We have already seen examples using the <code>Nested</code> type, which allows us to create complex API models which are composed of built-in types, custom types, and other API models. However, in order to serialize the most important part of the pagination object, we need a way to marshal a list of <code>widget</code> objects to JSON.</p>
-        <p>This is easily accomplished using the <code>List</code> type in conjunction with the <code>Nested</code> type. For more information on the <code>List</code> type, refer to <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#list-field" target="_blank">the Flask-RESTPlus documentation for Response Marshalling</a>.</p>
+        <p>This is easily accomplished using the <code>List</code> type in conjunction with the <code>Nested</code> type. For more information on the <code>List</code> type, refer to <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#list-field" target="_blank">the Flask-RESTx documentation for Response Marshalling</a>.</p>
       </li>
     </ul>
 </div>
@@ -945,7 +945,7 @@ class Widget(Resource):
 
 ```
 
-The only thing that we are seeing for the first time is how to include a parameter in the endpoint path. Thankfully, Flask-RESTPlus uses the same process as Flask for URL route registration (via the `@route` decorator). <a href="https://flask.palletsprojects.com/en/1.1.x/api/#url-route-registrations" target="_blank">From the Flask documentation</a>:
+The only thing that we are seeing for the first time is how to include a parameter in the endpoint path. Thankfully, Flask-RESTx uses the same process as Flask for URL route registration (via the `@route` decorator). <a href="https://flask.palletsprojects.com/en/1.1.x/api/#url-route-registrations" target="_blank">From the Flask documentation</a>:
 
 <blockquote>
   <p>Variable parts in the route can be specified with angular brackets (<code>/user/&lt;username&gt;</code>). By default a variable part in the URL accepts any string without a slash however a different converter can be specified as well by using <code>/&lt;converter:name&gt;</code>.</p>
@@ -1022,7 +1022,7 @@ I know, the language is highly technical and much more complex than the answer t
 
 The request data sent by the client for a `PUT` request is nearly identical to the data sent for a `POST` request, with one important difference. With a `PUT` request, the `name` parameter is provided in the URI instead of the body of the request. Because of this, we can't just re-use the `create_widget_reqparser` as-is to parse a `PUT` request.
 
-It turns out that the need to re-use portions of a request parser is such a common occurrence that <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#parser-inheritance" target="_blank">Flask-RESTPlus provides methods to copy an existing parser, and then add/remove arguments</a>. This is extremely useful since it obviates the need to re-write every argument and duplicate a bunch of code just to slightly tweak the behavior of a request parser.
+It turns out that the need to re-use portions of a request parser is such a common occurrence that <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#parser-inheritance" target="_blank">Flask-RESTx provides methods to copy an existing parser, and then add/remove arguments</a>. This is extremely useful since it obviates the need to re-write every argument and duplicate a bunch of code just to slightly tweak the behavior of a request parser.
 
 For example, open `src/flask_api_tutorial/api/widgets/dto.py`, add the lines below, then save the file:
 
@@ -2323,9 +2323,11 @@ It's been a while since we looked at the Swagger UI page, and it has changed con
 
 {{< linked_image img1 >}}
 
-You should spend some time testing all of the endpoints. If you need a refresher
+You should spend some time testing all of the endpoints. If you need a refresher on requesting and retrieiving an access token, and how to use the access token to send a request for a protected resource, refer to [this step-by-step explanation in Part 4](/series/flask-api-tutorial/part-4/#swagger-ui)
 
 ## Checkpoint
+
+At long last, we have implemented all of the required features for this project. However, that does not mean that
 
 <div class="requirements">
   <p class="title complete">User Management/JWT Authentication</p>

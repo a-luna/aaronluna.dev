@@ -23,9 +23,9 @@ resources:
 ---
 ## Introduction
 
-My goal for this tutorial is to provide a detailed guide to designing and creating a Flask API that uses JSON Web Tokens (JWT) to authenticate HTTP requests. There are many different Flask extensions and Python packages that can be used to create a web service that satisfies these requirements. The toolchain that this product utilizes includes Flask-RESTPlus, SQLAlchemy, PyJWT, pytest and tox (this is simply my personal preference).
+My goal for this tutorial is to provide a detailed guide to designing and creating a Flask API that uses JSON Web Tokens (JWT) to authenticate HTTP requests. There are many different Flask extensions and Python packages that can be used to create a web service that satisfies these requirements. The toolchain that this product utilizes includes Flask-RESTx, SQLAlchemy, PyJWT, pytest and tox (this is simply my personal preference).
 
-This is <span class="emphasis">NOT</span> a full-stack tutorial, creating a front-end that consumes the API is not covered. However, Flask-RESTPlus will automatically generate a Swagger UI webpage that allows anyone to send requests and inspect responses from the API.
+This is <span class="emphasis">NOT</span> a full-stack tutorial, creating a front-end that consumes the API is not covered. However, Flask-RESTx will automatically generate a Swagger UI webpage that allows anyone to send requests and inspect responses from the API.
 
 In addition to the user management and authentication functions, the API will contain a RESTful resource that registered users can manipulate with CRUD actions &mdash; a list of "widgets". Why did I decide to create widgets and not to-do items, or something real? Using a generic resource reinforces the idea that this code is boilerplate and could be easily adapted for use in a real-world API.
 
@@ -110,14 +110,9 @@ Combining these into a JWT would result in the following token:
 
 The PyJWT package trims all padding characters ("=") from the JWT components. The payload and signature each originally had one such character that is not present in the final version shown above.
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>Base64-encoded strings may look like gibberish, but <strong><u>DO NOT</u></strong> make the mistake of assuming that the payload data has been encrypted. <strong><u>NEVER</u></strong> include any sensitive data (e.g., user password, payment info) in the JWT payload since it can be easily decoded by anyone.</p>
-  </div>
-</div>
+{{< alert_box >}}
+Base64-encoded strings may look like gibberish, but <strong><u>DO NOT</u></strong> make the mistake of assuming that the payload data has been encrypted. <strong><u>NEVER</u></strong> include any sensitive data (e.g., user password, payment info) in the JWT payload since it can be easily decoded by anyone.
+{{< /alert_box >}}
 
 ## Project Dependencies
 
@@ -127,9 +122,9 @@ My favorite thing about Python is that for any type of application or library yo
 
 <a href="https://pyjwt.readthedocs.io/en/latest/" target="_blank">PyJWT</a> is the package we will use to generate and decode JSON Web Tokens (JWTs).
 
-### Flask-RESTPlus
+### Flask-RESTx
 
-<a href="https://flask-restplus.readthedocs.io/en/stable/" target="_blank">Flask-RESTPlus</a> is a Flask extension that makes creating APIs simple (in fact, most of the configuration can be done with decorators). This extension provides helpful tools for marshalling data from custom Python objects to an appropriate format for sending as a HTTP response. As you would expect, there are also tools for parsing data from HTTP requests into basic and custom Python datatypes. However, my favorite feature is the visual, interactive documentation that is automatically generated for you using <a href="https://swagger.io/tools/swagger-ui/" target="_blank">Swagger UI</a>.
+<a href="https://github.com/python-restx/flask-restx" target="_blank">Flask-RESTx</a> is a Flask extension that makes creating APIs simple (in fact, most of the configuration can be done with decorators). This extension provides helpful tools for marshalling data from custom Python objects to an appropriate format for sending as a HTTP response. As you would expect, there are also tools for parsing data from HTTP requests into basic and custom Python datatypes. However, my favorite feature is the visual, interactive documentation that is automatically generated for you using <a href="https://swagger.io/tools/swagger-ui/" target="_blank">Swagger UI</a>.
 
 ### OpenAPI/Swagger UI
 
@@ -263,8 +258,8 @@ In this section, we will work on everything marked as <code class="work-file">NE
 |       |
 |       |- <span class="project-folder">util</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
-|       |-  |- <span class="work-file">datetime_util.py</span>
-|       |-  |- <span class="work-file">result.py</span>
+|       |   |- <span class="work-file">datetime_util.py</span>
+|       |   |- <span class="work-file">result.py</span>
 |       |
 |       |- <span class="work-file">__init__.py</span>
 |       |- <span class="work-file">config.py</span>
@@ -330,6 +325,11 @@ After activating the new virtual environment, upgrade `pip`, `setuptools` and `w
 <span class="cmd-comment"># removed package upgrade messages...</span>
 <span class="cmd-results">Successfully installed pip-19.3.1 setuptools-43.0.0 wheel-0.33.6</span></code></pre>
 
+Finally, initialize a new git repository for our project:
+
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">git init</span>
+<span class="cmd-results">Initialized empty Git repository in /Users/aaronluna/Projects/flask_api_tutorial</span></code></pre>
+
 ## Configuration Files
 
 If you are familiar with the Python ecosystem, you have probably noticed that the root folder for any project that is more complex than a to-do list is filled with various configuration files, a `README.md`, a license file, `requirements.txt`, etc. Unfortunately, this project will be no different. Let's get these out of the way right now.
@@ -357,7 +357,7 @@ SECRET_KEY="please change me"
 The `SECRET_KEY` will be used to sign our JSON authorization tokens. The value you choose for this key should be a long, random string of bytes. <span class="emphasis">It is absolutely vital that this value remains secret</span> since anyone who knows the value can generate authorization keys for your API. <a href="http://flask.pocoo.org/docs/1.0/config/?highlight=secret_key#SECRET_KEY" target="_blank">The recommended way</a> to generate a `SECRET_KEY` is to use the Python interpreter:
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">python</span>
-<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+<span class="cmd-results">Python 3.7.6 (default, Jan 19 2020, 06:08:58)
 [Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">import os</span>
@@ -376,7 +376,7 @@ SECRET_KEY="\x1ah\xe9\x00\x04\x1d>\x00\x14($\x17\x90\x1f?~?\xdc\xe9\x91U\xd2\xb5
 
 Before we write any app code, let's customize the rules used by black. Create a file named `pyproject.toml` in the project root folder and add the following content:
 
-```toml
+```ini
 [tool.black]
 line-length = 89
 target-version = ['py37']
@@ -498,19 +498,19 @@ That's all of the configuration files we need! We still need to create another f
 
 Next, create a new file named `setup.py` in the project root folder and add the content below. Then, save and close the file:
 
-```python
+```python {linenos=table,hl_lines=[30]}
 """Installation script for flask-api-tutorial application."""
 from pathlib import Path
 from setuptools import setup, find_packages
 
 DESCRIPTION = (
-    "Boilerplate Flask API with Flask-RESTPlus, SQLAlchemy, pytest, flake8, "
+    "Boilerplate Flask API with Flask-RESTx, SQLAlchemy, pytest, flake8, "
     "tox configured"
 )
 APP_ROOT = Path(__file__).parent
 README = (APP_ROOT / "README.md").read_text()
 AUTHOR = "Aaron Luna"
-AUTHOR_EMAIL = "admin@aaronluna.dev"
+AUTHOR_EMAIL = "contact@aaronluna.dev"
 PROJECT_URLS = {
     "Documentation": "https://aaronluna.dev/series/flask-api-tutorial/",
     "Bug Tracker": "https://github.com/a-luna/flask-api-tutorial/issues",
@@ -521,13 +521,14 @@ INSTALL_REQUIRES = [
     "Flask-Bcrypt",
     "Flask-Cors",
     "Flask-Migrate",
-    "flask-restplus",
+    "flask-restx",
     "Flask-SQLAlchemy",
     "PyJWT",
     "python-dateutil",
     "python-dotenv",
     "requests",
     "urllib3",
+    "werkzeug==0.16.1",
 ]
 EXTRAS_REQUIRE = {
     "dev": [
@@ -566,6 +567,10 @@ setup(
 )
 ```
 
+{{< alert_box >}}
+Installing the latest version of werkzeug (v1.0.0) breaks Flask-RESTx. However, this is due to an import error and should be fixed soon. Currently, werkzeug is pinned to the last version which does not break Flask-RESTx, and I will update this once this issue has been resolved.
+{{< /alert_box >}}
+
 If you are unfamiliar with the structure or operation of the `setup.py` file, <a href="https://github.com/pypa/sampleproject/blob/master/setup.py" target="_blank">I recommend bookmarking this example from the PyPA</a> which is fully documented with comments explaining every keyword-argument that the `setup` function supports, which kwargs are required or optional, etc.
 
 ## Install `flask-api-tutorial`
@@ -578,14 +583,9 @@ Finally, install the `flask-api-tutorial` application in editable mode:
   Running setup.py develop for flask-api-tutorial
 Successfully installed Flask-1.1.1 Flask-Bcrypt-0.7.1 Flask-Cors-3.0.8 Flask-Migrate-2.5.2 Flask-SQLAlchemy-2.4.1 Jinja2-2.10.3 Mako-1.1.0 MarkupSafe-1.1.1 PyJWT-1.7.1 SQLAlchemy-1.3.12 Six-1.13.0 Werkzeug-0.16.0 alembic-1.3.2 aniso8601-8.0.0 appdirs-1.4.3 aspy.yaml-1.3.0 attrs-19.3.0 bcrypt-3.1.7 black-19.10b0 certifi-2019.11.28 cffi-1.13.2 cfgv-2.0.1 chardet-3.0.4 click-7.0 entrypoints-0.3 filelock-3.0.12 flake8-3.7.9 flask-api-tutorial flask-restplus-0.13.0 identify-1.4.9 idna-2.8 importlib-metadata-1.3.0 itsdangerous-1.1.0 jsonschema-3.2.0 mccabe-0.6.1 more-itertools-8.0.2 nodeenv-1.3.3 packaging-19.2 pathspec-0.7.0 pluggy-0.13.1 pre-commit-1.20.0 py-1.8.1 pycodestyle-2.5.0 pycparser-2.19 pydocstyle-5.0.1 pyflakes-2.1.1 pyparsing-2.4.6 pyrsistent-0.15.6 pytest-5.3.2 pytest-black-0.3.7 pytest-clarity-0.2.0a1 pytest-dotenv-0.4.0 pytest-flake8-1.0.4 pytest-flask-0.15.0 python-dateutil-2.8.1 python-dotenv-0.10.3 python-editor-1.0.4 pytz-2019.3 pyyaml-5.2 regex-2019.12.20 requests-2.22.0 snowballstemmer-2.0.0 termcolor-1.1.0 toml-0.10.0 tox-3.14.3 typed-ast-1.4.0 urllib3-1.25.7 virtualenv-16.7.9 wcwidth-0.1.7 zipp-0.6.0</span></code></pre>
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p><code>pip install -e .</code> installs the <code>flask-api-tutorial</code> application in the virtual environment in <span class="bold-italics">editable mode</span>. This allows our tests to be executed with the folder layout discussed previously, and also allows any changes made to app code or test code to be tested without needing to re-install the <code>flask-api-tutorial</code> application.</p>
-  </div>
-</div>
+{{< info_box >}}
+`pip install -e .` installs the `flask-api-tutorial` application in the virtual environment in __**editable mode**__. This allows our tests to be executed with the folder layout discussed previously, and also allows any changes made to app code or test code to be tested without needing to re-install the `flask-api-tutorial` application.
+{{< /info_box >}}
 
 Next, run the `pre-commit install` command to actually add the hooks to the local `.git` folder:
 
@@ -835,7 +835,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PRESERVE_CONTEXT_ON_EXCEPTION = False
     SWAGGER_UI_DOC_EXPANSION = "list"
-    RESTPLUS_MASK_SWAGGER = False
+    RESTX_MASK_SWAGGER = False
     JSON_SORT_KEYS = False
 
 
@@ -903,14 +903,9 @@ In order for our `Config` classes to work correctly, the environment variables d
 
 As long as `python-dotenv` is installed, when the `flask` command is run any environment variables defined in `.env` will be set. This allows the `os.getenv` method to retrieve the values defined in `.env` and use them in our Flask application.
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>Never commit your <code>.env</code> file to your project's git repository. Doing so publicly exposes the <code>SECRET_KEY</code>, allowing anyone to issue authorization tokens for the API.</p>
-  </div>
-</div>
+{{< alert_box >}}
+Never commit your `.env` file to your project's git repository. Doing so publicly exposes the `SECRET_KEY`, allowing anyone to issue authorization tokens for the API.
+{{< /alert_box >}}
 
 ## The Application Factory Pattern
 
@@ -949,14 +944,9 @@ After creating the Flask app and applying the config settings, we initialize the
 
 You should recognize all of the Flask extensions from the first section of this post, except for Flask-Bcrypt. This extension provides bcrypt hashing utitlities which will be used to securely store and verify user passwords.
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p>By initializing the Flask-CORS extension as shown, CORS support for all domains and for all origins for all routes has been enabled.</p>
-  </div>
-</div>
+{{< info_box >}}
+By initializing the Flask-CORS extension as shown, CORS support for all domains and for all origins for all routes has been enabled.
+{{< /info_box >}}
 
 ## Unit Tests: `test_config.py`
 
@@ -999,89 +989,30 @@ def test_config_production():
     assert app.config["TOKEN_EXPIRE_MINUTES"] == 0
 ```
 
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p>In order for the pytest runner to discover the tests, each test class and test case method must begin with "test" (or "Test").</p>
-  </div>
-</div>
+{{< info_box >}}
+In order for the pytest runner to discover the tests, each test class and test case method must begin with "test" (or "Test").
+{{< /info_box >}}
 
 In the first line of each test case, the `create_app` function is called to create a flask application object with the desired configuration settings. We pass the name of the environment to the `create_app` function, which will retrieve the desired config settings from the `get_config` function.
 
 For each configuration, we verify that the value of `SECRET_KEY` is not equal to the default value, which verifies that the value from the `.env` file was successfully retieved. We also check that each database URL is set correctly and that the `TOKEN_EXPIRE_HOURS` and `TOKEN_EXPIRE_MINUTES` settings are correct for each environment.
-<div class="note note-flex">
-  <div class="note-icon">
-    <i class="fa fa-pencil"></i>
-  </div>
-  <div class="note-message">
-    <p>If you are using a different database for any environment and you retrieved the URL from the <code>.env</code> file, make sure you update the test case to verify that this value is retrieved correctly.</p>
-  </div>
-</div>
+
+{{< info_box >}}
+If you are using a different database for any environment and you retrieved the URL from the `.env` file, make sure you update the test case to verify that this value is retrieved correctly.
+{{< /info_box >}}
 
 We can run these tests (and our static-analysis tools) with the `tox` command. This has the added benefit of verifying that the `setup.py` file correctly installs our application:
 
 <pre><code class="tox"><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">tox</span>
-<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
-py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
-py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
-py37 run-test-pre: PYTHONHASHSEED='3969784365'
-py37 run-test: commands[0] | pytest
-================================================== test session starts ===================================================
-platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
-cachedir: .tox/py37/.pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
-collected 29 items
-
-run.py::BLACK PASSED                                                                                               [  3%]
-run.py::FLAKE8 PASSED                                                                                              [  6%]
-setup.py::BLACK PASSED                                                                                             [ 10%]
-setup.py::FLAKE8 PASSED                                                                                            [ 13%]
-src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                   [ 17%]
-src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                  [ 20%]
-src/flask_api_tutorial/config.py::BLACK PASSED                                                                     [ 24%]
-src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                    [ 27%]
-src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                               [ 31%]
-src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                              [ 34%]
-src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                          [ 37%]
-src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                         [ 41%]
-src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                       [ 44%]
-src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                      [ 48%]
-src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                            [ 51%]
-src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                           [ 55%]
-src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                              [ 58%]
-src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                             [ 62%]
-src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                         [ 65%]
-src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                        [ 68%]
-src/flask_api_tutorial/util/result.py::BLACK PASSED                                                                [ 72%]
-src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                               [ 75%]
-tests/__init__.py::BLACK PASSED                                                                                    [ 79%]
-tests/__init__.py::FLAKE8 PASSED                                                                                   [ 82%]
-tests/test_config.py::BLACK PASSED                                                                                 [ 86%]
-tests/test_config.py::FLAKE8 PASSED                                                                                [ 89%]
-tests/test_config.py::test_config_development PASSED                                                               [ 93%]
-tests/test_config.py::test_config_testing PASSED                                                                   [ 96%]
-tests/test_config.py::test_config_production PASSED                                                                [100%]
-
-=================================================== 29 passed in 4.17s ===================================================
-________________________________________________________ summary _________________________________________________________
-  py37: commands succeeded
-  congratulations :)</span></code></pre>
+<span class="cmd-results">UPDATE WITH NEW FILES/FOLDERS</span></code></pre>
 
 ## Flask CLI/Application Entry Point
 
 One of the many neat features of Flask is that it comes with a built-in Command-Line Interface (CLI) that is powered by <a href="https://click.palletsprojects.com/en/7.x/" target="_blank">click</a>. In order to use the CLI, Flask needs to be able to find an application instance, which is accomplished with the `FLASK_APP` environment variable. `FLASK_APP` must be set to a file path or an import path of a module containing a Flask application (<a href="http://flask.pocoo.org/docs/1.0/cli/#application-discovery" target="_blank">Read this for more info</a>).
 
-<div class="alert alert-flex">
-  <div class="alert-icon">
-    <i class="fa fa-exclamation-triangle"></i>
-  </div>
-  <div class="alert-message">
-    <p>Make sure you have activated your virtual environment, you will not be able to use the Flask CLI otherwise.</p>
-  </div>
-</div>
+{{< alert_box >}}
+Make sure you have activated your virtual environment, you will not be able to use the Flask CLI otherwise.
+{{< /alert_box >}}
 
 You may remember that `FLASK_APP` was one of the values we defined in our `.env` file (`FLASK_APP=run.py`). This tells Flask to look within `run.py` for an object named `app` (or a factory method named `create_app`). Currently, the `run.py` file is empty. If you attempt to run the Flask CLI with the `flask` command, an exception is thrown:
 
@@ -1157,7 +1088,7 @@ Please note the following about `run.py` (a.k.a the application entry point):
 The `shell` method in the `run.py` file is decorated with `@app.shell_context_processor`. This is the method that executes when we run `flask shell`. According to the `flask --help` documentation this command "Runs a shell in the app context." If you are not sure what this means, consider the examples below:
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">python</span>
-<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+<span class="cmd-results">Python 3.7.6 (default, Jan 19 2020, 06:08:58)
 [Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">app</span>
@@ -1177,7 +1108,7 @@ NameError: name 'db' is not defined</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">exit()</span></code></pre>
 
 <pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
-<span class="cmd-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
+<span class="cmd-results">Python 3.7.6 (default, Jan 19 2020, 06:08:58)
 [Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 App: app [development]
 Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
@@ -1225,7 +1156,7 @@ Commands:
 
 ## Checkpoint
 
-Most of the work done in this section wasn't related to any specific project requirements, but I think we can claim at least partial credit on one (the `ProductionConfig` settings define the token age as one hour and will be used when creating JWTs). The <span class="italics requirements">JWTs must expire after 1 hour (in production)</span> item has been marked as partially complete (<span class="fa fa-star-half-o goldenrod"></span>):
+Most of the work done in this section wasn't related to any specific project requirements, but I think we can claim at least partial credit on one (the `ProductionConfig` settings define the token age as one hour and will be used when creating JWTs). The <span class="italics requirements">JWTs must expire after 1 hour (in production)</span> item has been marked as partially complete (<span class="fa fa-star-half-o blue"></span>):
 
 <div class="requirements">
   <p class="title in-progress">User Management/JWT Authentication</p>
