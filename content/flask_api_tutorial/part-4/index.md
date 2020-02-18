@@ -160,7 +160,7 @@ The API resource that processes login requests will be very similar to the `Regi
 """API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.auth.dto import auth_reqparser
 from flask_api_tutorial.api.auth.business import (
@@ -266,7 +266,6 @@ def test_login(client, db):
 def test_login_email_does_not_exist(client, db):
     response = login_user(client)
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == UNAUTHORIZED
     assert "access_token" not in response.json
 ```
@@ -293,7 +292,7 @@ from functools import wraps
 from http import HTTPStatus
 
 from flask import jsonify, request
-from flask_restplus import abort
+from flask_restx import abort
 
 from flask_api_tutorial.models.user import User
 
@@ -448,10 +447,10 @@ The first thing we need to do is create an API model for the `User` class. In `s
 
 ```python {linenos=table,hl_lines=["2-3"]}
 """Parsers and serializers for /auth API endpoints."""
-from flask_restplus import Model
-from flask_restplus.fields import String, Boolean
-from flask_restplus.inputs import email
-from flask_restplus.reqparse import RequestParser
+from flask_restx import Model
+from flask_restx.fields import String, Boolean
+from flask_restx.inputs import email
+from flask_restx.reqparse import RequestParser
 ```
 
 Next, add the content below and save the file:
@@ -492,7 +491,7 @@ Open `src/flask_api_tutorial/api/auth/business.py` and update the import stateme
 from http import HTTPStatus
 
 from flask import current_app, jsonify
-from flask_restplus import abort
+from flask_restx import abort
 
 from flask_api_tutorial import db
 from flask_api_tutorial.api.auth.decorator import token_required
@@ -616,7 +615,7 @@ Next, open `src/flask_api_tutorial/api/auth/endpoints.py` and update the import 
 """API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.auth.dto import auth_reqparser, user_model
 from flask_api_tutorial.api.auth.business import (
@@ -752,7 +751,6 @@ Copy the test case below and add it to `test_auth_user.py`:
 def test_auth_user_no_token(client, db):
     response = client.get(url_for("api.auth_user"))
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == "Unauthorized"
     assert "WWW-Authenticate" in response.headers
     assert response.headers["WWW-Authenticate"] == WWW_AUTH_NO_TOKEN
@@ -809,7 +807,6 @@ def test_auth_user_expired_token(client, db):
     time.sleep(6)
     response = get_user(client, access_token)
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == TOKEN_EXPIRED
     assert "WWW-Authenticate" in response.headers
     assert response.headers["WWW-Authenticate"] == WWW_AUTH_EXPIRED_TOKEN
@@ -1124,7 +1121,7 @@ Finally, we need to create a new migration script and upgrade the database to cr
 
 First, run <code>flask db migrate</code> and add a message explaining the changes that will be made by running this migration:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add BlacklistedToken model"</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask db migrate --message "add BlacklistedToken model"</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'token_blacklist'
@@ -1133,7 +1130,7 @@ INFO  [alembic.autogenerate.compare] Detected added table 'token_blacklist'
 
 Next, run <code>flask db upgrade</code> to run the migration script and add the new table to the database:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade 5789387e80dd -> 97f449048b52, add BlacklistedToken model</span></code></pre>
@@ -1151,7 +1148,7 @@ The function that performs this process will be defined in`src/flask_api_tutoria
 from http import HTTPStatus
 
 from flask import current_app, jsonify
-from flask_restplus import abort
+from flask_restx import abort
 
 from flask_api_tutorial import db
 from flask_api_tutorial.api.auth.decorator import token_required
@@ -1247,7 +1244,7 @@ Open `src/flask_api_tutorial/api/auth/endpoints.py` and update the import statem
 """API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.auth.dto import auth_reqparser, user_model
 from flask_api_tutorial.api.auth.business import (
@@ -1358,7 +1355,6 @@ def test_logout_token_blacklisted(client, db):
     assert response.status_code == HTTPStatus.OK
     response = logout_user(client, access_token)
     assert response.status_code == HTTPStatus.UNAUTHORIZED
-    assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == TOKEN_BLACKLISTED
     assert "WWW-Authenticate" in response.headers
     assert response.headers["WWW-Authenticate"] == WWW_AUTH_BLACKLISTED_TOKEN
@@ -1379,7 +1375,7 @@ There are plenty of necessary test cases that are missing from the current set. 
 
 You should run <code>tox</code> to make sure the new test case passes and that nothing else broke because of the changes:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<pre><code class="tox"><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">tox</span>
 <span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
 py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
 py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0

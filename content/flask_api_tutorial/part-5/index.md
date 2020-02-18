@@ -265,7 +265,7 @@ You might be wondering how is this different than the idea I dismissed, <span cl
 
 Also, help documentation is automatically generated for CLI commands (via click). You can view the documentation for the `add-user` command by running `flask add-user --help`:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user --help</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user --help</span>
 <span class="cmd-results">Usage: flask add-user [OPTIONS] EMAIL
 
   Add a new user to the database with email address = EMAIL.
@@ -277,7 +277,7 @@ Options:
 
 Users can view all Flask CLI commands, including custom commands by running `flask`:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask</span>
 <span class="cmd-results">Usage: flask [OPTIONS] COMMAND [ARGS]...
 
   A general utility script for Flask applications.
@@ -309,7 +309,7 @@ Finally, let's demonstrate how to use the `flask add-user` command:
 <ul style="list-style: none; margin: 0 0 20px 0">
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Create regular user</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="light-blue bold-text">Successfully added new user:
@@ -317,7 +317,7 @@ Repeat for confirmation:
   </li>
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Create admin user</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user admin@test.com --admin</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user admin@test.com --admin</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="light-blue bold-text">Successfully added new admin user:
@@ -325,7 +325,7 @@ Repeat for confirmation:
   </li>
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Error: Email already exists</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="pink bold-text">Error: user@test.com is already registered</span></span></code></pre>
@@ -474,7 +474,7 @@ def shell():
 
 Next, run <code>flask db migrate</code> and add a message explaining the changes that will be made by executing this migration script:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget model"</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget model"</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'widget'
@@ -491,7 +491,7 @@ INFO  [alembic.autogenerate.compare] Detected added table 'widget'
 
 Next, run <code>flask db upgrade</code> to run the migration script on the database in your development environment:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade 8fa4b4909211 -> fdd8ca8d8666, add widget table</span></code></pre>
@@ -571,8 +571,8 @@ import re
 from datetime import date, datetime, time, timezone
 
 from dateutil import parser
-from flask_restplus.inputs import URL
-from flask_restplus.reqparse import RequestParser
+from flask_restx.inputs import URL
+from flask_restx.reqparse import RequestParser
 
 from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
@@ -696,7 +696,7 @@ def widget_name(name):
 
 We can see how this function works by testing it in the `flask shell`:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-repl-results">Python 3.7.5 (default, Nov 19 2019, 17:27:19)
 [Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 App: flask-api-tutorial [development]
@@ -961,7 +961,7 @@ Create a new file named `business.py` in `src/flask_api_tutorial/api/widgets` an
 from http import HTTPStatus
 
 from flask import jsonify, url_for
-from flask_restplus import abort
+from flask_restx import abort
 
 from flask_api_tutorial import db
 from flask_api_tutorial.api.auth.decorator import admin_token_required
@@ -1047,7 +1047,7 @@ According to **Table 1**, the operation to create a <code>widget</code> is acces
 """API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.widgets.dto import create_widget_reqparser
 from flask_api_tutorial.api.widgets.business import create_widget
@@ -1090,7 +1090,7 @@ In order to register the `widget_ns` namespace with the `api` object, open `src/
 ```python {linenos=table,hl_lines=[6,28]}
 """API blueprint configuration."""
 from flask import Blueprint
-from flask_restplus import Api
+from flask_restx import Api
 
 from flask_api_tutorial.api.auth.endpoints import auth_ns
 from flask_api_tutorial.api.widgets.endpoints import widget_ns

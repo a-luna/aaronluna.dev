@@ -570,6 +570,19 @@ h4 {
   padding: 0;
 }
 
+.tox-passed {
+  color: var(--green1);
+}
+
+.tox-skipped {
+  color: var(--gold2);
+}
+
+.tox-failed,
+.tox-error {
+  color: var(--pink2);
+}
+
 a {
   font-weight: 400;
   color: var(--link-color);

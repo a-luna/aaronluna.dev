@@ -198,7 +198,7 @@ In the `src/flask_api_tutorial/api/__init__.py` file, add the following content:
 ```python {linenos=table}
 """API blueprint configuration."""
 from flask import Blueprint
-from flask_restplus import Api
+from flask_restx import Api
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 authorizations = {"Bearer": {"type": "apiKey", "in": "header", "name": "Authorization"}}
@@ -280,7 +280,7 @@ The placement of the import statement is deliberate. To avoid a circular import,
 
 It's a good idea to make sure that everything still works and we have not broken anything, so run the unit tests with `tox`. They should all pass. Then, run `flask routes` to see the new URL routes that have been registered in our application:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask routes</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask routes</span>
 <span class="cmd-results">Endpoint             Methods  Rule
 -------------------  -------  --------------------------
 api.doc              GET      /api/v1/ui
@@ -301,8 +301,8 @@ In the same way that we can organize our Flask project with **blueprints**, we c
 
 Currently, the `src/flask_api_tutorial/api/auth` folder only contains the `__init__.py` file. We need to create 3 new files in the `auth` folder: `business.py`, `dto.py` and `endpoints.py`. Run the command below from the project root folder to create the files (or create them yourself however you wish):
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">cd src/flask_api_tutorial/api/auth && touch business.py dto.py endpoints.py</span>
-<span class="cmd-venv">(venv) flask-api-tutorial/src/flask_api_tutorial/api/auth $</span> <span class="cmd-input">ls -al</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">cd src/flask_api_tutorial/api/auth && touch business.py dto.py endpoints.py</span>
+<span class="cmd-venv">(venv) flask_api_tutorial/src/flask_api_tutorial/api/auth $</span> <span class="cmd-input">ls -al</span>
 <span class="cmd-results">total 8
 drwxr-xr-x  7 aaronluna  staff  224 Dec 30 01:20 .
 drwxr-xr-x  5 aaronluna  staff  160 Dec 27 02:47 ..
@@ -454,8 +454,8 @@ When a new user attempts to register, what data is required? The way our `User` 
 
 ```python
 """Parsers and serializers for /auth API endpoints."""
-from flask_restplus.inputs import email
-from flask_restplus.reqparse import RequestParser
+from flask_restx.inputs import email
+from flask_restx.reqparse import RequestParser
 
 
 auth_reqparser = RequestParser(bundle_errors=True)
@@ -519,7 +519,7 @@ Open `src/flask_api_tutorial/api/auth/business.py`, add the content below and sa
 from http import HTTPStatus
 
 from flask import current_app, jsonify
-from flask_restplus import abort
+from flask_restx import abort
 
 from flask_api_tutorial import db
 from flask_api_tutorial.models.user import User
@@ -613,7 +613,7 @@ In an application that adheres to the [principles of REST](#understanding-rest),
 """API endpoint definitions for /auth namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.auth.dto import auth_reqparser
 from flask_api_tutorial.api.auth.business import process_registration_request
@@ -683,7 +683,7 @@ In order to register the `auth_ns` namespace with the `api` object, open `src/fl
 ```python {linenos=table,hl_lines=[5,19]}
 """API blueprint configuration."""
 from flask import Blueprint
-from flask_restplus import Api
+from flask_restx import Api
 
 from flask_api_tutorial.api.auth.endpoints import auth_ns
 
@@ -906,7 +906,6 @@ def test_auth_register_email_already_registered(client, db):
     db.session.commit()
     response = register_user(client)
     assert response.status_code == HTTPStatus.CONFLICT
-    assert "status" in response.json and response.json["status"] == "fail"
     assert (
         "message" in response.json and response.json["message"] == EMAIL_ALREADY_EXISTS
     )
@@ -1029,7 +1028,7 @@ There are quite a few more test cases that we need to create for the <code>api.a
 
 You should run <code>tox</code> to make sure the new test cases all pass and that nothing else broke because of the changes:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<pre><code class="tox"><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">tox</span>
 <span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
 py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
 py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0

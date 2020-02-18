@@ -6,7 +6,7 @@
         "css-doodle": "^0.7.7",
         "lunr": "^2.3.8",
         "netlify-lambda": "^1.6.3",
-        "serialize-javascript": ">=2.1.1"
+        "serialize-javascript": "^3.0.0"
     },
     "repository": {
         "type": "git",

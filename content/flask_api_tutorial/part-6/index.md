@@ -25,6 +25,7 @@ resources:
     src: images/swagger.png
     title: Figure 1 - Swagger UI with all API routes
 ---
+
 ## Project Structure
 
 The chart below shows the folder structure for this section of the tutorial. In this post, we will work on all files marked as <code class="work-file">NEW CODE</code>. Files that contain code from previous sections but will not be modified in this post are marked as <code class="unmodified-file">NO CHANGES</code>.
@@ -256,8 +257,8 @@ import re
 from datetime import date, datetime, time, timezone
 
 from dateutil import parser
-from flask_restplus.inputs import positive, URL
-from flask_restplus.reqparse import RequestParser
+from flask_restx.inputs import positive, URL
+from flask_restx.reqparse import RequestParser
 
 from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
@@ -299,7 +300,7 @@ It is possible to create the paginated list manually from scratch and define API
 
 The Flask-SQLAlchemy extension provides <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">a `paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">`Pagination` objects</a>. The `paginate` method is a member of <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank">the <code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
+<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
 [Clang 10.0.1 (clang-1001.0.46.4)] on darwin
 App: flask-api-tutorial [development]
@@ -369,7 +370,7 @@ Hopefully, this helps you understand the structure of the `Pagination` class and
 
 ### `pagination_model` API Model
 
-In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in  <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
+In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTPlus uses them to serialize database objects in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
 
 First, we need to update the import statements in `src/flask_api_tutorial/api/widgets/dto.py` to include the Flask-RESTPlus `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
@@ -379,10 +380,10 @@ import re
 from datetime import date, datetime, time, timezone
 
 from dateutil import parser
-from flask_restplus import Model
-from flask_restplus.fields import Boolean, DateTime, Integer, List, Nested, String, Url
-from flask_restplus.inputs import positive, URL
-from flask_restplus.reqparse import RequestParser
+from flask_restx import Model
+from flask_restx.fields import Boolean, DateTime, Integer, List, Nested, String, Url
+from flask_restx.inputs import positive, URL
+from flask_restx.reqparse import RequestParser
 
 from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
@@ -631,10 +632,10 @@ We finally covered everything necessary to create the `pagination_model` API mod
 
 Next, we need to create a function that performs the following actions:
 
-* Create a `pagination` object given the `page` and `per_page` values parsed from the request data.
-* Serialize the `pagination` object to JSON using `pagination_model` and <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the `flask_restplus.marshal` method</a>.
-* Construct <code>dict</code> of navigational links and add links to response header and body.
-* Manually construct HTTP response using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.json.jsonify" target="_blank">the `flask.jsonify` method</a> and send response to client.
+- Create a `pagination` object given the `page` and `per_page` values parsed from the request data.
+- Serialize the `pagination` object to JSON using `pagination_model` and <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the `flask_restplus.marshal` method</a>.
+- Construct <code>dict</code> of navigational links and add links to response header and body.
+- Manually construct HTTP response using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.json.jsonify" target="_blank">the `flask.jsonify` method</a> and send response to client.
 
 Before we begin, open `src/flask_api_tutorial/api/widgets/business.py` and make the following updates to the import statements:
 
@@ -643,7 +644,7 @@ Before we begin, open `src/flask_api_tutorial/api/widgets/business.py` and make 
 from http import HTTPStatus
 
 from flask import jsonify, url_for
-from flask_restplus import abort, marshal
+from flask_restx import abort, marshal
 
 from flask_api_tutorial import db
 from flask_api_tutorial.api.auth.decorator import token_required, admin_token_required
@@ -768,7 +769,7 @@ Open `src/flask_api_tutorial/api/widgets/endpoints.py` and make the following up
 """API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
@@ -906,7 +907,7 @@ Next, we need to create the `api.widget` endpoint. Before we do so, open `src/fl
 """API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
@@ -1044,7 +1045,7 @@ First, open `src/flask_api_tutorial/api/widgets/business.py` and update the impo
 from http import HTTPStatus
 
 from flask import jsonify, url_for
-from flask_restplus import abort, marshal
+from flask_restx import abort, marshal
 
 from flask_api_tutorial import db
 from flask_api_tutorial.api.auth.decorator import token_required, admin_token_required
@@ -1117,7 +1118,7 @@ Before we can bring everything together and expose the `put` method handler for 
 """API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
@@ -1216,7 +1217,7 @@ I told you this would be easy! Open `src/flask_api_tutorial/api/widgets/endpoint
 """API endpoint definitions for /widgets namespace."""
 from http import HTTPStatus
 
-from flask_restplus import Namespace, Resource
+from flask_restx import Namespace, Resource
 
 from flask_api_tutorial.api.widgets.dto import (
     create_widget_reqparser,
@@ -1466,7 +1467,7 @@ def test_create_widget_valid_deadline(client, db, admin, deadline_str):
 
 ```
 
-In the first two highlighted lines above **(Lines 27-28)**, we call the `datetime.strftime` method on objects created with  `datetime.date.today`. This generates a string value that always represents the current date, even if this test case is executed 10,000 years from now. `datetime.strftime` accepts a string value that can be configured to generate a string in any format, containing any combination of values such as month, year, hour, time zone, etc.
+In the first two highlighted lines above **(Lines 27-28)**, we call the `datetime.strftime` method on objects created with `datetime.date.today`. This generates a string value that always represents the current date, even if this test case is executed 10,000 years from now. `datetime.strftime` accepts a string value that can be configured to generate a string in any format, containing any combination of values such as month, year, hour, time zone, etc.
 
 The third highlighted line **(Line 29)** utilizes a `timedelta` object to generate a date three days in the future (we obviously want to test dates other than the current date). Run `pytest tests/test_create_widget.py` to execute these test cases:
 
@@ -1535,7 +1536,8 @@ def test_create_widget_invalid_deadline(client, db, admin, deadline_str):
     assert "errors" in response.json and "deadline" in response.json["errors"]
 
 ```
-Unlike the parameters in the "happy" path test case, we can use hardcoded strings to verify that invalid `deadline` values are rejected by the API. The first parameterized value is `1/1/1970` ***(Line 48)**, which will be parsed as a valid `datetime` value by `dateutil.parser`, but must be rejected since it has already passed.
+
+Unlike the parameters in the "happy" path test case, we can use hardcoded strings to verify that invalid `deadline` values are rejected by the API. The first parameterized value is `1/1/1970` **\*(Line 48)**, which will be parsed as a valid `datetime` value by `dateutil.parser`, but must be rejected since it has already passed.
 
 Next, we construct a string value for a date three days in the past using a `timedelta` object **(Line 49)**. This is the same technique we used in the "happy" path to construct dates in the future. The third parameter is a string that is not a formatted `datetime` value, and should obviously be rejected by `datetuil.parser` **(Line 50)**.
 
@@ -1588,7 +1590,6 @@ def test_create_widget_already_exists(client, db, admin):
     assert response.status_code == HTTPStatus.CREATED
     response = create_widget(client, access_token)
     assert response.status_code == HTTPStatus.CONFLICT
-    assert "status" in response.json and response.json["status"] == "fail"
     name_conflict = f"Widget name: {DEFAULT_NAME} already exists, must be unique."
     assert "message" in response.json and response.json["message"] == name_conflict
 ```
@@ -1624,7 +1625,6 @@ def test_create_widget_no_admin_token(client, db, user):
     access_token = response.json["access_token"]
     response = create_widget(client, access_token)
     assert response.status_code == HTTPStatus.FORBIDDEN
-    assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == FORBIDDEN
 
 ```
@@ -1633,7 +1633,7 @@ As in the previous test case, the main thing we need to verify is that the HTTP 
 
 Let's verify that all of our test cases are still passing by running `tox`:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<pre><code class="tox"><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">tox</span>
 <span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
 py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
 py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.4.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.1.0,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.3,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==1.0.0
@@ -1726,8 +1726,8 @@ tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 13 2020] PASS
 tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                               [ 86%]
 tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-07] PASSED                             [ 87%]
 tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 88%]
-<span class="cmd-hl-yellow">tests/test_create_widget.py::test_create_widget_already_exists PASSED                                           [ 90%]
-tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                           [ 91%]</span>
+tests/test_create_widget.py::test_create_widget_already_exists PASSED                                           [ 90%]
+tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                           [ 91%]
 tests/test_user.py::BLACK SKIPPED                                                                               [ 92%]
 tests/test_user.py::FLAKE8 SKIPPED                                                                              [ 93%]
 tests/test_user.py::test_encode_access_token PASSED                                                             [ 94%]
@@ -1750,8 +1750,6 @@ SKIPPED [30] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.
 _______________________________________________________ summary _______________________________________________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
-
-I highlighted the results from the two test cases we just created in the test results reported above.
 
 <span class="bold-italics teal">Please do not assume that these test cases are sufficient for the create widget operation, there are many requirements that have not been verified by the test cases I provided. You absolutely must attempt to identify these gaps and create all necessary test cases.</span>
 
@@ -2166,7 +2164,6 @@ def test_delete_widget_no_admin_token(client, db, admin, user):
     access_token = response.json["access_token"]
     response = delete_widget(client, access_token, widget_name=DEFAULT_NAME)
     assert response.status_code == HTTPStatus.FORBIDDEN
-    assert "status" in response.json and response.json["status"] == "fail"
     assert "message" in response.json and response.json["message"] == FORBIDDEN
 
 ```
@@ -2177,7 +2174,7 @@ The second test case, `test_delete_widget_no_admin_token`, is a very simple unha
 
 Let's verify that all of our test cases are still passing by running `tox`:
 
-<pre><code><span class="cmd-venv">(venv) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
+<pre><code class="tox"><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">tox</span>
 <span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
 py37 recreate: /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37
 py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
@@ -2305,7 +2302,7 @@ src/flask_api_tutorial/api/exceptions.py::FLAKE8
     from collections import OrderedDict, MutableMapping
 
 src/flask_api_tutorial/api/exceptions.py::FLAKE8
-  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be rebmoved in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
     from werkzeug import cached_property
 
 src/flask_api_tutorial/api/exceptions.py::FLAKE8
@@ -2318,9 +2315,17 @@ _____________________________________________________ summary __________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 
-## Checkpoint
+As you can see, thanks to `pytest` and various plugins, we have a faily robust test suite as well as automated enforcement of our code formatter (`black`) and linter (`flake8`) for all files inside the `src` and `tests` folders.
+
+## Swagger UI
+
+It's been a while since we looked at the Swagger UI page, and it has changed considerably due to the API endpoints and models we created in this section. Fire up the development server with the `flask run` command and navigate to http://localhost:5000/api/v1/ui. You should see the page shown below:
 
 {{< linked_image img1 >}}
+
+You should spend some time testing all of the endpoints. If you need a refresher
+
+## Checkpoint
 
 <div class="requirements">
   <p class="title complete">User Management/JWT Authentication</p>

@@ -28,7 +28,7 @@
     {{ with .OutputFormats.Get "rss" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{ end -}}
-    {{ partial "styles" . }}
+    {{ partial "css_bundle" . }}
     <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
     {{- if not .Site.IsServer }}
         {{ template "_internal/google_analytics_async.html" . }}
