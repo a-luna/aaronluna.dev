@@ -6,5 +6,5 @@
     {{- end }}
 {{ else }}
     {{ $bundlejs := $alljs | resources.Concat "bundle.js" | minify | fingerprint }}
-    <script type="text/javascript" src="{{ $bundlejs.Permalink }}" integrity="{{ $bundlejs.Data.Integrity }}"></script>
+    <script type="text/javascript" src="{{ $bundlejs.RelPermalink }}" integrity="{{ $bundlejs.Data.Integrity }}"></script>
 {{ end }}

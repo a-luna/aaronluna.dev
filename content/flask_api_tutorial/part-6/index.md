@@ -37,7 +37,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |   |- <span class="project-folder">auth</span>
 |       |   |   |- <span class="project-empty-file">__init__.py</span>
 |       |   |   |- <span class="unmodified-file">business.py</span>
-|       |   |   |- <span class="unmodified-file">decorator.py</span>
+|       |   |   |- <span class="unmodified-file">decorators.py</span>
 |       |   |   |- <span class="unmodified-file">dto.py</span>
 |       |   |   |- <span class="unmodified-file">endpoints.py</span>
 |       |   |
@@ -647,7 +647,7 @@ from flask import jsonify, url_for
 from flask_restx import abort, marshal
 
 from flask_api_tutorial import db
-from flask_api_tutorial.api.auth.decorator import token_required, admin_token_required
+from flask_api_tutorial.api.auth.decorators import token_required, admin_token_required
 from flask_api_tutorial.api.widgets.dto import pagination_model
 from flask_api_tutorial.models.user import User
 from flask_api_tutorial.models.widget import Widget
@@ -1048,7 +1048,7 @@ from flask import jsonify, url_for
 from flask_restx import abort, marshal
 
 from flask_api_tutorial import db
-from flask_api_tutorial.api.auth.decorator import token_required, admin_token_required
+from flask_api_tutorial.api.auth.decorators import token_required, admin_token_required
 from flask_api_tutorial.api.widgets.dto import pagination_model, widget_name
 from flask_api_tutorial.models.user import User
 from flask_api_tutorial.models.widget import Widget
@@ -1660,8 +1660,8 @@ src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                      
 src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                                     [ 13%]
 src/flask_api_tutorial/api/auth/business.py::BLACK SKIPPED                                                      [ 14%]
 src/flask_api_tutorial/api/auth/business.py::FLAKE8 SKIPPED                                                     [ 15%]
-src/flask_api_tutorial/api/auth/decorator.py::BLACK SKIPPED                                                     [ 16%]
-src/flask_api_tutorial/api/auth/decorator.py::FLAKE8 SKIPPED                                                    [ 17%]
+src/flask_api_tutorial/api/auth/decorators.py::BLACK SKIPPED                                                     [ 16%]
+src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 SKIPPED                                                    [ 17%]
 src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                           [ 18%]
 src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                          [ 20%]
 src/flask_api_tutorial/api/auth/endpoints.py::BLACK SKIPPED                                                     [ 21%]
@@ -2205,8 +2205,8 @@ src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                      
 src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                    [ 13%]
 src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                   [ 14%]
 src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                    [ 15%]
-src/flask_api_tutorial/api/auth/decorator.py::FLAKE8 PASSED                                                  [ 16%]
-src/flask_api_tutorial/api/auth/decorator.py::BLACK PASSED                                                   [ 16%]
+src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 PASSED                                                  [ 16%]
+src/flask_api_tutorial/api/auth/decorators.py::BLACK PASSED                                                   [ 16%]
 src/flask_api_tutorial/api/auth/dto.py::FLAKE8 PASSED                                                        [ 17%]
 src/flask_api_tutorial/api/auth/dto.py::BLACK PASSED                                                         [ 18%]
 src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                                  [ 19%]

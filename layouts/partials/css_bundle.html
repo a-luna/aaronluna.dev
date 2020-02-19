@@ -10,5 +10,5 @@
     {{ end }}
 {{ else }}
     {{ $bundlecss := $allcss | resources.Concat "bundle.css" | minify | fingerprint }}
-    <link rel="stylesheet" href="{{ $bundlecss.Permalink }}" integrity="{{ $bundlecss.Data.Integrity }}" media="screen">
+    <link rel="stylesheet" href="{{ $bundlecss.RelPermalink }}" integrity="{{ $bundlecss.Data.Integrity }}" media="screen">
 {{ end }}

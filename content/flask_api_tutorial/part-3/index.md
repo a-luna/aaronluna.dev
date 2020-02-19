@@ -629,7 +629,7 @@ class RegisterUser(Resource):
     <ul>
       <li>
         <p><strong>Line 9: </strong>Flask-RESTx <code>Namespace</code> objects are used to group a related set of API endpoints in the same way that Flask <code>Blueprint</code> objects can be used to group related URL routes.</p>
-        <p>In this file, we will use the <code>auth_ns</code> object reapeatedly as a decorator. Most of these have an effect on the behavior of the class or method they decorate, some do not. All of these decorators have one thing in common  &mdash; they all produce some sort of documentation on the Swagger UI page.</p>
+        <p>In this file, we will use the <code>auth_ns</code> object repeatedly as a decorator. Most of these have an effect on the behavior of the class or method they decorate, some do not. All of these decorators have one thing in common  &mdash; they all produce some sort of documentation on the Swagger UI page.</p>
         <p>These decorators can inform clients about the expected format of request and response data or the set of possible HTTP status codes that the client can expect to receive from the server in a response. Also, docstrings for HTTP methods are rendered on the Swagger UI page and should be used to provide a short description of the method's purpose.</p>
         <p>Check out the Flask-RESTx docs for <a href="https://flask-restplus.readthedocs.io/en/stable/swagger.html" target="_blank">examples of using decorators to document the Swagger UI page</a> (if you need even more info it's probably in the <a href="https://flask-restplus.readthedocs.io/en/stable/api.html" target="_blank">API documentation</a>).</p>
       </li>

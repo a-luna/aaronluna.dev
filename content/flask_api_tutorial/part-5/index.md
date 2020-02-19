@@ -33,7 +33,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |   |- <span class="project-folder">auth</span>
 |       |   |   |- <span class="project-empty-file">__init__.py</span>
 |       |   |   |- <span class="unmodified-file">business.py</span>
-|       |   |   |- <span class="unmodified-file">decorator.py</span>
+|       |   |   |- <span class="unmodified-file">decorators.py</span>
 |       |   |   |- <span class="unmodified-file">dto.py</span>
 |       |   |   |- <span class="unmodified-file">endpoints.py</span>
 |       |   |
@@ -964,7 +964,7 @@ from flask import jsonify, url_for
 from flask_restx import abort
 
 from flask_api_tutorial import db
-from flask_api_tutorial.api.auth.decorator import admin_token_required
+from flask_api_tutorial.api.auth.decorators import admin_token_required
 from flask_api_tutorial.models.user import User
 from flask_api_tutorial.models.widget import Widget
 

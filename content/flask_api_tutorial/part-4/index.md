@@ -63,7 +63,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |   |- <span class="project-folder">auth</span>
 |       |   |   |- <span class="project-empty-file">__init__.py</span>
 |       |   |   |- <span class="work-file">business.py</span>
-|       |   |   |- <span class="work-file">decorator.py</span>
+|       |   |   |- <span class="work-file">decorators.py</span>
 |       |   |   |- <span class="work-file">dto.py</span>
 |       |   |   |- <span class="work-file">endpoints.py</span>
 |       |   |
@@ -217,6 +217,8 @@ static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 The Swagger UI should also be updated to include the new API endpoint:
 
+<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
+
 {{< linked_image img1 >}}
 
 Finally, let's create unit tests to verify the login process is working correctly.
@@ -284,7 +286,7 @@ Let's take a break from implementing the API endpoints in the `auth_ns` namespac
 
 It might seem weird to recommend a Stack Overflow post as a general-purpose guide, but I think you will be pleasantly surprised if you visit the page.
 
-Create a new file named `decorator.py` in `src/flask_api_tutorial/api/auth` and add the content below:
+Create a new file named `decorators.py` in `src/flask_api_tutorial/api/auth` and add the content below:
 
 ```python {linenos=table}
 """Decorators that decode and verify authorization tokens."""
@@ -494,7 +496,7 @@ from flask import current_app, jsonify
 from flask_restx import abort
 
 from flask_api_tutorial import db
-from flask_api_tutorial.api.auth.decorator import token_required
+from flask_api_tutorial.api.auth.decorators import token_required
 from flask_api_tutorial.models.user import User
 from flask_api_tutorial.util.datetime_util import (
     remaining_fromtimestamp,
@@ -1151,7 +1153,7 @@ from flask import current_app, jsonify
 from flask_restx import abort
 
 from flask_api_tutorial import db
-from flask_api_tutorial.api.auth.decorator import token_required
+from flask_api_tutorial.api.auth.decorators import token_required
 from flask_api_tutorial.models.token_blacklist import BlacklistedToken
 from flask_api_tutorial.models.user import User
 from flask_api_tutorial.util.datetime_util import (
@@ -1402,8 +1404,8 @@ src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                      
 src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                               [ 17%]
 src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                 [ 18%]
 src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                [ 20%]
-src/flask_api_tutorial/api/auth/decorator.py::BLACK SKIPPED                                               [ 21%]
-src/flask_api_tutorial/api/auth/decorator.py::FLAKE8 SKIPPED                                              [ 23%]
+src/flask_api_tutorial/api/auth/decorators.py::BLACK SKIPPED                                               [ 21%]
+src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 SKIPPED                                              [ 23%]
 src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                     [ 24%]
 src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                    [ 26%]
 src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                [ 27%]
