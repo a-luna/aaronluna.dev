@@ -1,5 +1,6 @@
 ---
-title: "The internet"
+title: "Error: Offline"
+subhead: "The internet"
 lead: "You are not connected to it"
 slug: "offline"
 type: "offline"
