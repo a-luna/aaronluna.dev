@@ -953,12 +953,6 @@ div.requirements {
   text-transform: none;
 }
 
-.code-details code {
-  font-size: 0.8em;
-  border-radius: 4px;
-  padding: 1px 2px;
-}
-
 .code-details pre code {
   font-size: 0.85em;
 }
@@ -1064,7 +1058,7 @@ li code {
   font-size: 0.85em;
   background-color: inherit;
   border: none;
-  padding: 2px 4px;
+  padding: 2px;
   border-radius: 4px;
   font-style: normal;
 }
@@ -1076,9 +1070,10 @@ li code {
 }
 
 .post__content p code {
-  background: inherit;
-  padding: 0 2px;
-  font-size: 0.85em;
+  font-size: 0.8em;
+  background: var(--widget-bg-color);
+  padding: 2px 4px;
+  margin: 0 1px;
 }
 
 pre.chroma {
