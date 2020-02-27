@@ -274,36 +274,49 @@ def test_login_email_does_not_exist(client, db):
 
 Everything in this file should be simple to understand since it is so similar to the test set we just created. Run  `tox` and make sure no failures occur.
 
-## Decorators
+## Accessing Protected Resources
 
-Let's take a break from implementing the API endpoints in the `auth_ns` namespace to create two custom decorators. Understanding how decorators work and how to create them can be a daunting topic. I recommend reading at least one of the following articles:
+The two remaining API routes in the `auth_ns`  namespace and all endpoints in the `widget_ns` namespace are **protected resources**, so called because any request sent by a client must include an `access_token` in JWT format in the request header’s `Authorization` field. 
+
+[In Part 3](/series/flask-api-tutorial/part-3/#process-registration-request), we discussed the required format for the server’s response to an authorization request (according to <a href="https://tools.ietf.org/html/rfc6749" target="_blank">RFC6749</a> and <a href="https://tools.ietf.org/html/rfc6750" target="_blank">RFC6750</a>). The specification documents also define the required format for the server’s response to a request for a protected resource.
+
+The server must validate the `access_token`, and if the token is valid/not expired and the user has the necessary access rights for the protected resource (e.g., administrator privileges), the request is considered successful. The format and content of the server’s response will depend on the resource and the type of operation requested by the client.
+
+However, if the token is invalid/expired or there is some other issue preventing the request from succeeding, the server’s response will be the same for any protected resource. The format of the response must abide by the specifications given in <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">RFC6750</a>:
+
+* If the token is invalid/expired, the server must reject the request and provide an `error` and/or `error_description` explaining why the token is invalid in the response header’s `WWW-Authenticate` field. The status code of the response must be 401 (`HTTPStatus.UNAUTHORIZED`)
+* If a client sends a request for a protected resource  _**without**_ an `access_token`, the server must reject the request and _**must not**_ provide any explanation for why the request was rejected in the response header’s `WWW-Authenticate` field (i.e., `error` and `error_description` are not included in the value of the `WWW-Authenticate` field). The status code of the response must be 401 (`HTTPStatus.UNAUTHORIZED`)
+* If a client sends a request for a protected resource and the token is valid/not expired, _**but it has been blacklisted**_, the server must reject the request and provide a message prompting the client to log in again. The status code of the response must be 401 (`HTTPStatus.UNAUTHORIZED`)
+* If a client sends a request to a protected resource that requires administrator privileges, and the token is valid/not expired _**but the user does not have the admin role**_, the server must reject the request and provide an `error` and/or `error_description` in the response header’s `WWW-Authenticate` field explaining that the user’s token does not have sufficient scope to access the protected resource. The status code of the response must be 403 (`HTTPStatus.FORBIDDEN`)
+
+### `@token_required`  and `@admin_token_required`  Decorators
+
+We can implement the responses required when a request for a protected resource must be rejected with a pair of function decorators. It is important to understand how these decorators are designed and how this design is driven by the need to obey the specifications from <a href="https://tools.ietf.org/html/rfc6750" target="_blank">RFC6750</a>.
+
+{{< info_box >}}
+Understanding how decorators work and how to create them can be a daunting topic. I recommend reading at least one of the following articles:
 
 <ul class="list-of-links">
   <li><a href="https://realpython.com/primer-on-python-decorators/" target="_blank">Primer on Python Decorators (Real Python)</a></li>
   <li><a href="https://blog.apcelent.com/python-decorator-tutorial-with-example.html" target="_blank">Python Decorator Tutorial with Example (Apcelent Tech Blog)</a></li>
   <li><a href="https://stackoverflow.com/questions/739654/how-to-make-a-chain-of-function-decorators" target="_blank">How to make a chain of function decorators? (Stack Overflow)</a></li>
 </ul>
-
-It might seem weird to recommend a Stack Overflow post as a general-purpose guide, but I think you will be pleasantly surprised if you visit the page.
+{{< /info_box >}}
 
 Create a new file named `decorators.py` in `src/flask_api_tutorial/api/auth` and add the content below:
 
 ```python {linenos=table}
 """Decorators that decode and verify authorization tokens."""
 from functools import wraps
-from http import HTTPStatus
 
-from flask import jsonify, request
-from flask_restx import abort
+from flask import request
 
+from flask_api_tutorial.api.exceptions import ApiUnauthorized, ApiForbidden
 from flask_api_tutorial.models.user import User
-
-_REALM_REGULAR_USERS = "registered_users@mydomain.com"
-_REALM_ADMIN_USERS = "admin_users@mydomain.com"
 
 
 def token_required(f):
-    """Allow access to the wrapped function if the request header contains a valid access token."""
+    """Allow access to the wrapped function if the request contains a valid access token."""
 
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -316,13 +329,13 @@ def token_required(f):
 
 
 def admin_token_required(f):
-    """Allow access to the wrapped function if the user has admin privileges."""
+    """Allow access to the wrapped function if the request contains a valid access token AND the user has admin privileges."""
 
     @wraps(f)
     def decorated(*args, **kwargs):
         token_payload = _check_access_token(admin_only=True)
         if not token_payload["admin"]:
-            _admin_token_required()
+            raise ApiForbidden()
         for name, val in token_payload.items():
             setattr(decorated, name, val)
         return f(*args, **kwargs)
@@ -333,101 +346,149 @@ def admin_token_required(f):
 def _check_access_token(admin_only):
     token = request.headers.get("Authorization")
     if not token:
-        _no_access_token(admin_only)
-    payload = User.decode_access_token(token).on_failure(_invalid_token, admin_only)
-    return payload
-
-
-def _no_access_token(admin_only):
-    response = jsonify(status="fail", message="Unauthorized")
-    response.status_code = HTTPStatus.UNAUTHORIZED
-    realm = _REALM_ADMIN_USERS if admin_only else _REALM_REGULAR_USERS
-    response.headers["WWW-Authenticate"] = f'Bearer realm="{realm}"'
-    abort(response)
-
-
-def _invalid_token(message, admin_only):
-    response = jsonify(status="fail", message=f"{message}")
-    response.status_code = HTTPStatus.UNAUTHORIZED
-    realm = _REALM_ADMIN_USERS if admin_only else _REALM_REGULAR_USERS
-    response.headers["WWW-Authenticate"] = (
-        f'Bearer realm="{realm}", '
-        f'error="invalid_token", '
-        f'error_description="{message}"'
-    )
-    abort(response)
-
-
-def _admin_token_required():
-    response = jsonify(status="fail", message="You are not an administrator")
-    response.status_code = HTTPStatus.FORBIDDEN
-    response.headers["WWW-Authenticate"] = (
-        f'Bearer realm="{_REALM_ADMIN_USERS}", '
-        f'error="insufficient_scope", '
-        f'error_description="You are not an administrator"'
-    )
-    abort(response)
+        raise ApiUnauthorized(description="Unauthorized", admin_only=admin_only)
+    result = User.decode_access_token(token)
+    if result.failure:
+        raise ApiUnauthorized(
+            description=result.error,
+            admin_only=admin_only,
+            error="invalid_token",
+            error_description=result.error,
+        )
+    return result.value
 ```
 
-The decorators defined in this module are responsible for implementing key parts of the Bearer token authentication model. It is important to understand how they are designed and how this design is driven by the need to obey the specifications from <a href="https://tools.ietf.org/html/rfc6750" target="_blank">RFC6750</a>:
+<div class="code-details">
+    <ul>
+	     <li>
+	         <p><strong>Line 6: </strong>The <code>ApiUnauthorized</code> and <code>ApiForbidden</code> classes which are imported here have not been created yet, we will cover these next.</p>
+	     </li>
+		  <li>
+		      <p><strong>Lines 10, 23: </strong>This module exposes two decorators, <code>@token_required</code> and <code>@admin_token_required</code>. If access to a method/function needs to be restricted to users who have a valid <code>access_token</code>, simply decorate it with <code>@token_required</code>. If access needs to be restricted solely to users who have a valid <code>access_token</code> <span class="emphasis">AND</span> administrator privileges, decorate the method with <code>@admin_token_required</code> instead.</p>
+		  </li>
+		  <li>
+		      <p><strong>Lines 15, 28: </strong>The first thing both decorators do is call the <code>_check_access_token</code> function. This function returns a <code>token_payload</code> object if an <code>access_token</code> was sent in the request header <span class="emphasis">AND</span> the token was successfully decoded. If no <code>access_token</code> was sent or the token is invalid/expired, the current request is aborted.</p>
+		  </li>
+		  <li>
+		      <p><strong>Line 39: </strong>Within the <code>_check_access_token</code> function, <code>request</code> is the global <code>flask.request</code> object, which allows us to access the headers from the current request, among other things. For more info, check out <a href="https://flask.palletsprojects.com/en/1.1.x/reqcontext/" target="_blank">the Flask docs</a>.</p>
+		  </li>
+		  <li>
+		      <p><strong>Lines 40-41: </strong> If no token is found in the header’s <code>Authorization</code> field, the current request is aborted to prevent access to the requested resource.</p>
+		  </li>
+		  <li>
+		      <p><strong>Line 42: </strong>If the request header does contain an <code>access_token</code>, we attempt to verify and decode it. Remember, if the token is invalid/expired, then the value of <code>result.failure</code> will be <code>True</code> and <code>result.error</code> will contain a string value that explains why the validation failed.</p>
+		  </li>
+		  <li>
+		      <p><strong>Lines 43-49: </strong>If the token is invalid/expired, we abort the current request. We will explain how the <code>ApiUnauthorized</code> class is used shortly, but you probably noticed that we are providing values for more attributes in this instance than we did when we aborted the request in <span class="bold-text">Line 41</span>. What is the difference?</p>
+		      <p>In <span class="bold-text">Line 41</span>, we aborted the current request because the header’s <code>Authorization</code> field <span class="bold-text">did not contain an <code>access_token</code></span>. Per the specification, the server’s response <span class="bold-text">should not</span> contain an error code or other error information when this is the case.</p>
+		      <p>However, in <span class="bold-text">Line 44</span>, the client did send a token in the request header, but it was invalid/expired. In this case, the server’s response should include information explaining the reason why the request was denied. This information is contained in <code>result.error</code>, and will be included in the server’s response since we are providing it to the <code>ApiUnauthorized</code> <code>__init__</code> function.</p>
+		  </li>
+		  <li>
+		      <p><strong>Line 50: </strong>If the <code>access_token</code> was successfully validated and decoded, then the JWT payload (which is stored in <code>result.value</code>) is returned to the decorator function.</p>
+{{< info_box >}}
+The token payload is a JSON object containing data identifying the user that the token was issued for, and other information. <a href="/series/flask-api-tutorial/part-2/#encode_access_token-function">Click here to review the data that is included in the JWT payload</a> as well as the process used to encode the token.
+{{< /info_box >}}
+		  </li>
+		  <li>
+		      <p><strong>Lines 29-30: </strong>Back in the <code>admin_token_required</code> decorator, after successfully decoding the token payload, the first thing we do is check the value of <code> token_payload["admin"]</code>, which tells us if the user has administrator privileges. If this value is <code>False </code>, then the request is rejected by calling <code>ApiForbidden</code>.</p>
+		  </li>
+		  <li>
+		      <p><strong>Lines 16-17, 31-32: </strong>Both decorators pass the contents of <code>token_payload</code> to the decorated function in the same way &mdash; by iterating over the dictionary items and (for each item) creating a new attribute on the decorated function (attribute name = dict item key, attribute value = dict item value). This allows the decorated function to access the user’s <code>public_id</code>, the <code>access_token</code> string value, etc.</p>
+		      <p>If that explanation was confusing, it should make more sense after we apply the decorator to a function and step through the code, which will happen very shortly.</p>
+		  </li>
+		  <li>
+		      <p><strong>Lines 20, 35: </strong>After the token has been decoded and passed to the wrapped function, the wrapped function is executed and returned to the code that originally called it.</p>
+		  </li>
+    </ul>
+</div>
+
+### `ApiUnauthorized` and `ApiForbidden` Exceptions
+
+Next, let’s take a look at the custom HTTP exceptions that are used in our decorator functions. Create a new file named `exceptions.py` in `src/flask_api_tutorial/api` and add the content below:
+
+```python {linenos=table}
+"""Custom HTTPException classes that extend werkzeug.exceptions."""
+from werkzeug.exceptions import Unauthorized, Forbidden
+
+_REALM_REGULAR_USERS = "registered_users@mydomain.com"
+_REALM_ADMIN_USERS = "admin_users@mydomain.com"
+
+
+class ApiUnauthorized(Unauthorized):
+    """Raise status code 401 with WWW-Authenticate header"""
+
+    def __init__(
+        self,
+        description="Unauthorized",
+        admin_only=False,
+        error=None,
+        error_description=None,
+    ):
+        self.description = description
+        self.www_auth_value = self.__get_www_auth_value(
+            admin_only, error, error_description
+        )
+        Unauthorized.__init__(
+            self, description=description, response=None, www_authenticate=None
+        )
+
+    def get_headers(self, environ):
+        return [("Content-Type", "text/html"), ("WWW-Authenticate", self.www_auth_value)]
+
+    def __get_www_auth_value(self, admin_only, error, error_description):
+        realm = _REALM_ADMIN_USERS if admin_only else _REALM_REGULAR_USERS
+        www_auth_value = f'Bearer realm="{realm}"'
+        if error:
+            www_auth_value += f', error="{error}"'
+        if error_description:
+            www_auth_value += f', error_description="{error_description}"'
+        return www_auth_value
+
+
+class ApiForbidden(Forbidden):
+    description = "You are not an administrator"
+
+    def get_headers(self, environ):
+        return [
+            ("Content-Type", "text/html"),
+            (
+                "WWW-Authenticate",
+                'Bearer realm="admin_users@mydomain.com", '
+                'error="insufficient_scope", '
+                'error_description="You are not an administrator"',
+            ),
+        ]
+```
+
+There are a few things to point out regarding the code above:
 
 <div class="code-details">
-  <ul>
-    <li>
-      <p><strong>Lines 14, 27: </strong>This module exposes two decorators, <code>@token_required</code> and <code>@admin_token_required</code>. If access to a method/function needs to be restricted to users who have a valid <code>access_token</code>, simply decorate it with <code>@token_required</code>. If access needs to be restricted solely to users who have a valid <code>access_token</code> <span class="emphasis">AND</span> administrator privileges, decorate the method with <code>@admin_token_required</code> instead.</p>
-    </li>
-    <li>
-      <p><strong>Lines 19, 32: </strong>The first thing both decorators do is call the <code>_check_access_token</code> function. This function returns a <code>token_payload</code> object if an <code>access_token</code> was sent in the request header <span class="emphasis">AND</span> the token was successfully decoded. If no <code>access_token</code> was sent or the token is invalid/expired, the current request is aborted.</p>
-    </li>
-    <li>
-      <p><strong>Lines 20-21, 35-36: </strong>Both decorators pass the contents of <code>token_payload</code> to the decorated function in the same way &mdash; by iterating over the dictionary items and (for each item) creating a new attribute on the decorated function (attribute name = dict item key, attribute value = dict item value). This allows the decorated function to access the user's <code>public_id</code>, the <code>access_token</code> string value, etc.</p>
-      <p>If that explanation was confusing, it should make more sense after we apply the decorator to a function and step through the code, which will happen very shortly.</p>
-    </li>
-    <li>
-      <p><strong>Lines 43-45: </strong>Within the <code>_check_access_token</code> function, <code>request</code> is the global <code>flask.request</code> object, which allows us to access the headers from the current request, among other things. For more info, check out <a href="https://flask.palletsprojects.com/en/1.1.x/reqcontext/" target="_blank">the Flask docs</a>. If no token is found in the header's <code>Authorization</code> field, the current request is aborted to prevent access to the requested resource.</p>
-    </li>
-    <li>
-      <p><strong>Line 46: </strong>This line demonstrates how <code>Result</code> objects can be used to chain a sequence of function calls based on the outcome of the previous operation. If the call to <code>User.decode_access_token</code> was successful, the <code>result.value</code> from the decoded token is returned to the decorator function. If the token was not decoded successfully, then the <code>on_failure</code> method passes <code>result.error</code> from the failed operation to <code>_invalid_token</code>.</p>
-    </li>
-    <li>
-      <p><strong>Lines 50-55: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the request does not include an <code>access_token</code> in the header, then the request will be aborted by calling <code>_no_access_token</code>.</p>
-      <p>The <code>jsonify</code> function (in a nutshell) calls <code>json.dumps</code> and turns the JSON into a HTTP response (the <a href="https://flask.palletsprojects.com/en/1.1.x/api/?highlight=jsonify#flask.json.jsonify" target="_blank">actual behavior</a> is more nuanced than that). Creating a response object manually is necessary if you need to add a custom header, which is required whenever a request for a protected resource does not contain an access token.</p>
-      <P><a href="https://tools.ietf.org/html/rfc6750#section-3" target="_blank">Per Section 3 of RFC6750</a>:</P>
-      <blockquote class="rfc">If the protected resource request does not include authentication credentials or does not contain an access token that enables access to the protected resource, <strong>the resource server MUST include the HTTP
-   "WWW-Authenticate" response header field</strong> ... If the request lacks any authentication information (e.g., the client
-   was unaware that authentication is necessary or attempted using an unsupported authentication method), the resource server <strong>SHOULD NOT</strong> include an error code or other error information.
-        <p>For example:</p>
-        <p style="margin: 0 0 0 1em"><code>HTTP/1.1 401 Unauthorized<br>
-     WWW-Authenticate: Bearer realm="example"</code></p>
-      </blockquote>
-      <p>RFC6750 also states that <code>WWW-Authenticate: Bearer</code> "MUST be followed by one or more
-   auth-param values" and goes on to suggest that "a <span class="bold-text">realm</span> attribute MAY be included to indicate the scope of
-   protection". <a href="https://tools.ietf.org/html/rfc2617#section-3.2.1" target="_blank">Section 3.2.1 of RFC2167</a> (HTTP Authentication: Basic and Digest Access Authentication) defines the <span class="bold-text">realm</span> attribute:</p>
-      <blockquote class="rfc"><strong>realm</strong>
-        <p style="margin: 0 0 0 1em">A string to be displayed to users so they know which username and password to use. This string should contain at least the name of the host performing the authentication and might additionally indicate the collection of users who might have access. An example might be "registered_users@gotham.news.com".</p>
-      </blockquote>
-      <p>If a request is recieved without an access token in the request header, the <span class="bold-text">realm</span> attribute in the <span class="bold-text">WWW-Authenticate</span> field of the response header will communicate the access level necessary for the requested resource &mdash; either <code>registered_users@mydomain.com</code> or <code>admin_users@mydomain.com</code>.</p>
-    </li>
-    <li>
-      <p><strong>Line 58: </strong>If a function is decorated with either <code>@token_required</code> or <code>@admin_token_required</code>, and the <code>access_token</code> is invalid or expired, then the request will be aborted by calling <code>_invalid_token</code>.</p>
-    </li>
-    <li>
-      <p><strong>Lines 62-65: </strong>The required response to a request where the token failed authentication is given in <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">Section 3.1 of RFC6750</a>:</p>
-      <blockquote class="rfc">If the protected resource request included an access token and failed authentication, <strong>the resource server SHOULD include the "error" attribute</strong> to provide the client with the reason why the access request was declined ... In addition, <strong>the resource server MAY include the "error_description" attribute</strong> to provide developers a human-readable explanation that is not meant to be displayed to end-users.
-      <p>For example, ... in response to a protected resource request with an authentication attempt using an expired access token:</p>
-      <p style="margin: 0 0 0 1em"><code>HTTP/1.1 401 Unauthorized<br>
-     WWW-Authenticate: Bearer realm="example", error="invalid_token", error_description="The access token expired"</code></p></blockquote>
-    </li>
-    <li>
-      <p><strong>Line 70: </strong>If a function is decorated with <code>@admin_token_required</code> and the <code>access_token</code> is decoded successfully <span class="emphasis">BUT</span> the user does not have administrator priveleges, then the request will be aborted by calling <code>_admin_token_required</code>.</p>
-    </li>
-    <li>
-      <p><strong>Lines 73-76: </strong>The required response to a request where the token was successfully decoded but the user does not have administrator privileges is nearly the same as the required response to a request where the token failed authentication. The "error" attribute of the response should be <a href="https://tools.ietf.org/html/rfc6750#section-3.1" target="_blank">"insufficient_scope"</a>, and the HTTP status code is 403 <code>HTTPStatus.FORBIDDEN</code> rather than 401 <code>HTTPStatus.UNAUTHORIZED</code>:</p>
-      <blockquote class="rfc"><strong>insufficient_scope</strong>
-      <p style="margin: 0 0 0 1em">The request requires higher privileges than provided by the access token.  The resource server SHOULD respond with the HTTP 403 (Forbidden) status code and MAY include the "scope" attribute with the scope necessary to access the protected resource.</p></blockquote>
-    </li>
-  </ul>
+    <ul>
+		  <li>
+		      <p><strong>Line X: </strong>.</p>
+		  </li>
+		  <li>
+		      <p><strong>Line X: </strong>.</p>
+		  </li>
+		  <li>
+		      <p><strong>Line X: </strong>.</p>
+		  </li>
+		  <li>
+		      <p><strong>Line X: </strong>.</p>
+        </li>
+	     <li>
+	         <p><strong>Line X: </strong>.</p>
+	     </li>
+        <li>
+	         <p><strong>Line X: </strong>.</p>
+        </li>
+	     <li>
+	         <p><strong>Line X: </strong>.</p>
+	     </li>
+    </ul>
 </div>
+
+# OLD OLD OLD
 
 Let's see how we can apply the <code>@token_required</code> decorator to the remaining API endpoints since both rely upon the <code>access_token</code> being sent with the HTTP request.
 
