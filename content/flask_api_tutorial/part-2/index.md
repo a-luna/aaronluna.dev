@@ -238,14 +238,13 @@ Whenever we make a change to our database schema (e.g., add new table, change co
 The Flask-Migrate extension adds a new set of commands to the Flask CLI grouped under `flask db`. In order to create the migration database, we must run `flask db init`:
 
 <pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask db init</span>
-<span class="cmd-results">  Creating directory /Users/aaronluna/Projects/flask_api_tutorial/migrations ...  done
-  Creating directory /Users/aaronluna/Projects/flask_api_tutorial/migrations/versions ...  done
-  Generating /Users/aaronluna/Projects/flask_api_tutorial/migrations/script.py.mako ...  done
-  Generating /Users/aaronluna/Projects/flask_api_tutorial/migrations/env.py ...  done
-  Generating /Users/aaronluna/Projects/flask_api_tutorial/migrations/README ...  done
-  Generating /Users/aaronluna/Projects/flask_api_tutorial/migrations/alembic.ini ...  done
-  Please edit configuration/connection/logging settings in
-  '/Users/aaronluna/Projects/flask_api_tutorial/migrations/alembic.ini' before proceeding.</span></code></pre>
+<span class="cmd-results">  Creating directory /Users/aaronluna/Projects/flask-api-tutorial/migrations ...  done
+  Creating directory /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions ...  done
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/script.py.mako ...  done
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/env.py ...  done
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/README ...  done
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/alembic.ini ...  done
+  Please edit configuration/connection/logging settings in '/Users/aaronluna/Projects/flask-api-tutorial/migrations/alembic.ini' before proceeding.</span></code></pre>
 
 In order for Flask-Migrate to detect the `User` model, we must import it in the `run.py` module. Open `run.py` in the project root folder and make the changes highlighted below:
 
@@ -285,15 +284,14 @@ Ok, after making the changes to `run.py` we are ready to create our first migrat
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'site_user'
-  Generating
-  /Users/aaronluna/Projects/flask_api_tutorial/migrations/versions/5789387e80dd_add_user_model.py ...  done</span></code></pre>
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/eb6c2faa0708_add_user_model.py ...  done</span></code></pre>
 
 The `flask db migrate` command creates the migration script but does not apply the changes to the database. To upgrade the database and execute the migration script you must run the `flask db upgrade` command:
 
 <pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade  -> 5789387e80dd, add User model</span></code></pre>
+INFO  [alembic.runtime.migration] Running upgrade  -> eb6c2faa0708, add User model</span></code></pre>
 
 {{< info_box >}}
 Each time the database schema changes, repeat the `flask db migrate` and `flask db upgrade` steps demonstrated above. <span class="emphasis">Remember to add a message</span> describing the schema changes when a new migration is created with `flask db migrate`.

@@ -3361,6 +3361,9 @@ blockquote td {
     text-align: right;
     line-height: 1;
   }
+  .hanchor-text {
+    display: none;
+  }
   .blog-list .article-preview .post__title-wrapper,
   .tutorial .article-preview .post__title-wrapper {
     font-size: 1em;

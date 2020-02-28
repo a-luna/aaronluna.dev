@@ -7,12 +7,13 @@ function wrapHeaderElement(h, headerLevel) {
   range.surroundContents(headerText);
 }
 
-function addLinksToHeaderElement(h) {
-  h.insertAdjacentHTML(
+function addLinksToHeaderElement(headerWrapper) {
+  h = headerWrapper.querySelector("h2[id], h3[id], h4[id], h5[id]");
+  headerWrapper.insertAdjacentHTML(
     "afterbegin",
     `<a href="#${h.id}" class="hanchor hanchor-self" ariaLabel="Anchor" title="Link to this section"><i class="fa fa-hashtag"></i></a></a>`
   );
-  h.insertAdjacentHTML(
+  headerWrapper.insertAdjacentHTML(
     "beforeend",
     `<a href="#menu" class="hanchor hanchor-top" title="Return to top of page"><span class="hanchor-text">return to top</span><i class="fa fa-angle-up"></i></a></a>`
   );
