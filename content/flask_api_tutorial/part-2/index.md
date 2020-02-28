@@ -369,13 +369,18 @@ import jwt
 from flask import current_app
 from sqlalchemy.ext.hybrid import hybrid_property
 
-from app import db, bcrypt
-from app.util.datetime_util import get_local_utcoffset, make_tzaware, localized_dt_string
+from flask_api_tutorial import db, bcrypt
+from flask_api_tutorial.util.datetime_util import (
+    utc_now,
+    get_local_utcoffset,
+    make_tzaware,
+    localized_dt_string,
+)
 ```
 
 Then, add the `encode_access_token` method to `user.py`:
 
-```python {linenos=table,linenostart=56}
+```python {linenos=table,linenostart=55}
 def encode_access_token(self):
     now = datetime.now(timezone.utc)
     token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")
@@ -393,16 +398,16 @@ Let's breakdown how this method generates the access token:
 <div class="code-details">
     <ul>
         <li>
-            <p><strong>Lines 48-49: </strong>Using the <code>curent_app</code> proxy object, we retrieve the config settings <code>TOKEN_EXPIRE_HOURS</code> and <code>TOKEN_EXPIRE_MINUTES</code>. Remember, we defined different values for these settings for each environment (<code>development</code>, <code>testing</code>, <code>production</code>).</p>
+            <p><strong>Lines 57-58: </strong>Using the <code>curent_app</code> proxy object, we retrieve the config settings <code>TOKEN_EXPIRE_HOURS</code> and <code>TOKEN_EXPIRE_MINUTES</code>. Remember, we defined different values for these settings for each environment (<code>development</code>, <code>testing</code>, <code>production</code>).</p>
         </li>
         <li>
-            <p><strong>Line 50: </strong>We calculate the time when the token will expire based on the config settings and the current time.</p>
+            <p><strong>Line 59: </strong>We calculate the time when the token will expire based on the config settings and the current time.</p>
         </li>
         <li>
-            <p><strong>Lines 51-52: </strong>All tokens generated with the <code>testing</code> config settings will expire after five seconds, allowing us to write and execute test cases where the tokens actually expire so we can verify the expected behavior.</p>
+            <p><strong>Lines 60-61: </strong>All tokens generated with the <code>testing</code> config settings will expire after five seconds, allowing us to write and execute test cases where the tokens actually expire so we can verify the expected behavior.</p>
         </li>
         <li>
-            <p><strong>Line 53: </strong>The payload object is where data about the token and the user is stored. The payload contains a set of key/value pairs known as "claims" (refer to <a href="/flask-api-tutorial-part-1/">Part 1</a> for more info on claims). Our token will contain the following <a href="https://tools.ietf.org/html/rfc7519#section-4.1" target="_blank">registered claims</a>:</p>
+            <p><strong>Line 62: </strong>The payload object is where data about the token and the user is stored. The payload contains a set of key/value pairs known as "claims" (refer to <a href="/flask-api-tutorial-part-1/">Part 1</a> for more info on claims). Our token will contain the following <a href="https://tools.ietf.org/html/rfc7519#section-4.1" target="_blank">registered claims</a>:</p>
             <ul>
                 <li><strong>exp: </strong>Date/time when the token will expire</li>
                 <li><strong>iat: </strong>Date/time when the token was generated</li>
@@ -414,10 +419,10 @@ Let's breakdown how this method generates the access token:
             </ul>
         </li>
         <li>
-            <p><strong>Line 54: </strong>In order to calculate the token's signature, we must retrieve the <code>SECRET_KEY</code> config setting. We will use this same value to decode the token and ensure that the contents have not been modified.</p>
+            <p><strong>Line 63: </strong>In order to calculate the token's signature, we must retrieve the <code>SECRET_KEY</code> config setting. We will use this same value to decode the token and ensure that the contents have not been modified.</p>
         </li>
         <li>
-            <p><strong>Line 55: </strong>The <code>jwt.encode()</code> function accepts three arguments. The first two of which we have just described: the payload and the secret key. The third argument is the signing algorithm. Most applications use the <code>HS256</code> algorithm, which is short for HMAC-SHA256. The signing algorithm is what protects the payload of the JWT against tampering.</p>
+            <p><strong>Line 64: </strong>The <code>jwt.encode()</code> function accepts three arguments. The first two of which we have just described: the payload and the secret key. The third argument is the signing algorithm. Most applications use the <code>HS256</code> algorithm, which is short for HMAC-SHA256. The signing algorithm is what protects the payload of the JWT against tampering.</p>
         </li>
     </ul>
 </div>
@@ -526,62 +531,61 @@ def test_encode_access_token(user):
 Run the `tox` command and verify that all tests pass:
 
 <pre><code class="tox"><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
-<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
-py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
-py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
-py37 run-test-pre: PYTHONHASHSEED='3647398212'
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask-api-tutorial/setup.py
+py37 create: /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37
+py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
+py37 inst: /Users/aaronluna/Projects/flask-api-tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.9,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.11.0,python-editor==1.0.4,pytz==2019.3,regex==2020.2.20,requests==2.23.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==3.0.0
+py37 run-test-pre: PYTHONHASHSEED='1533942126'
 py37 run-test: commands[0] | pytest
-========================================= test session starts ==========================================
-platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/bin/python
 cachedir: .tox/py37/.pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
 collected 38 items
 
-run.py::BLACK PASSED                                                                             [  2%]
-run.py::FLAKE8 PASSED                                                                            [  5%]
-setup.py::BLACK PASSED                                                                           [  7%]
-setup.py::FLAKE8 PASSED                                                                          [ 10%]
-src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                [ 13%]
-src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                               [ 15%]
-src/flask_api_tutorial/config.py::BLACK PASSED                                                   [ 18%]
-src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                  [ 21%]
-src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                            [ 23%]
-src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                           [ 26%]
-src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                       [ 28%]
-src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                      [ 31%]
-src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                    [ 34%]
-src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                   [ 36%]
-src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                         [ 39%]
-src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                        [ 42%]
-src/flask_api_tutorial/models/user.py::BLACK PASSED                                              [ 44%]
-src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                             [ 47%]
-src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                           [ 50%]
-src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                          [ 52%]
-src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                       [ 55%]
-src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                      [ 57%]
-src/flask_api_tutorial/util/result.py::BLACK PASSED                                              [ 60%]
-src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                             [ 63%]
-tests/__init__.py::BLACK SKIPPED                                                                 [ 65%]
-tests/__init__.py::FLAKE8 SKIPPED                                                                [ 68%]
-tests/conftest.py::BLACK PASSED                                                                  [ 71%]
-tests/conftest.py::FLAKE8 PASSED                                                                 [ 73%]
-tests/test_config.py::BLACK PASSED                                                               [ 76%]
-tests/test_config.py::FLAKE8 PASSED                                                              [ 78%]
-tests/test_config.py::test_config_development PASSED                                             [ 81%]
-tests/test_config.py::test_config_testing PASSED                                                 [ 84%]
-tests/test_config.py::test_config_production PASSED                                              [ 86%]
-tests/test_user.py::BLACK PASSED                                                                 [ 89%]
-tests/test_user.py::FLAKE8 PASSED                                                                [ 92%]
-tests/test_user.py::test_encode_access_token PASSED                                              [ 94%]
-tests/util.py::BLACK PASSED                                                                      [ 97%]
-tests/util.py::FLAKE8 PASSED                                                                     [100%]
+run.py::FLAKE8 PASSED                                                                                            [  2%]
+run.py::BLACK PASSED                                                                                             [  5%]
+setup.py::FLAKE8 PASSED                                                                                          [  7%]
+setup.py::BLACK PASSED                                                                                           [ 10%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                [ 13%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                 [ 15%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                  [ 18%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                                   [ 21%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                            [ 23%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                             [ 26%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                       [ 28%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                        [ 31%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                    [ 34%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                     [ 36%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                         [ 39%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                          [ 42%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                             [ 44%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                              [ 47%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                           [ 50%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                            [ 52%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                      [ 55%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                       [ 57%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                             [ 60%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                              [ 63%]
+tests/__init__.py::FLAKE8 PASSED                                                                                 [ 65%]
+tests/__init__.py::BLACK PASSED                                                                                  [ 68%]
+tests/conftest.py::FLAKE8 PASSED                                                                                 [ 71%]
+tests/conftest.py::BLACK PASSED                                                                                  [ 73%]
+tests/test_config.py::FLAKE8 PASSED                                                                              [ 76%]
+tests/test_config.py::BLACK PASSED                                                                               [ 78%]
+tests/test_config.py::test_config_development PASSED                                                             [ 81%]
+tests/test_config.py::test_config_testing PASSED                                                                 [ 84%]
+tests/test_config.py::test_config_production PASSED                                                              [ 86%]
+tests/test_user.py::FLAKE8 PASSED                                                                                [ 89%]
+tests/test_user.py::BLACK PASSED                                                                                 [ 92%]
+tests/test_user.py::test_encode_access_token PASSED                                                              [ 94%]
+tests/util.py::FLAKE8 PASSED                                                                                     [ 97%]
+tests/util.py::BLACK PASSED                                                                                      [100%]
 
-======================================= short test summary info ========================================
-SKIPPED [7] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
-SKIPPED [7] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
-==================================== 24 passed, 14 skipped in 3.96s ====================================
-_______________________________________________ summary ________________________________________________
+================================================== 38 passed in 6.33s ==================================================
+_______________________________________________________ summary ________________________________________________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 
@@ -678,7 +682,7 @@ import json
 import time
 from base64 import urlsafe_b64encode, urlsafe_b64decode
 
-from app.models.user import User{{< /highlight >}}
+from flask_api_tutorial.models.user import User{{< /highlight >}}
 
 The first test will verify the expected behavior for a valid access token. Add the `test_decode_access_token_success` method to `test_user.py`:
 
@@ -763,8 +767,8 @@ App: flask-api-tutorial [development]
 Instance: /Users/aaronluna/Projects/flask_api_tutorial</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">import json</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from base64 import urlsafe_b64encode, urlsafe_b64decode</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app import db</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app.models.user import User</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from flask_api_tutorial import db</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from flask_api_tutorial.models.user import User</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">USER_EMAIL = "new_user@email.com"</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">USER_PASSWORD = "test1234"</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">user = User(email=USER_EMAIL, password=USER_PASSWORD)</span>
@@ -836,65 +840,64 @@ As expected, the modified access token is not decoded successfully and the error
 Let's run `tox` and make sure that all test cases pass:
 
 <pre><code class="tox"><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
-<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
-py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
-py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
-py37 run-test-pre: PYTHONHASHSEED='3853757016'
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask-api-tutorial/setup.py
+py37 create: /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37
+py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
+py37 inst: /Users/aaronluna/Projects/flask-api-tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.9,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.11.0,python-editor==1.0.4,pytz==2019.3,regex==2020.2.20,requests==2.23.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==3.0.0
+py37 run-test-pre: PYTHONHASHSEED='2592492654'
 py37 run-test: commands[0] | pytest
-========================================= test session starts ==========================================
-platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/bin/python
 cachedir: .tox/py37/.pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
 collected 41 items
 
-run.py::BLACK SKIPPED                                                                            [  2%]
-run.py::FLAKE8 SKIPPED                                                                           [  4%]
-setup.py::BLACK SKIPPED                                                                          [  7%]
-setup.py::FLAKE8 SKIPPED                                                                         [  9%]
-src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                [ 12%]
-src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                               [ 14%]
-src/flask_api_tutorial/config.py::BLACK SKIPPED                                                  [ 17%]
-src/flask_api_tutorial/config.py::FLAKE8 SKIPPED                                                 [ 19%]
-src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                            [ 21%]
-src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                           [ 24%]
-src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                       [ 26%]
-src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                      [ 29%]
-src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                    [ 31%]
-src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                   [ 34%]
-src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                         [ 36%]
-src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                        [ 39%]
-src/flask_api_tutorial/models/user.py::BLACK SKIPPED                                             [ 41%]
-src/flask_api_tutorial/models/user.py::FLAKE8 SKIPPED                                            [ 43%]
-src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                           [ 46%]
-src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                          [ 48%]
-src/flask_api_tutorial/util/datetime_util.py::BLACK SKIPPED                                      [ 51%]
-src/flask_api_tutorial/util/datetime_util.py::FLAKE8 SKIPPED                                     [ 53%]
-src/flask_api_tutorial/util/result.py::BLACK SKIPPED                                             [ 56%]
-src/flask_api_tutorial/util/result.py::FLAKE8 SKIPPED                                            [ 58%]
-tests/__init__.py::BLACK SKIPPED                                                                 [ 60%]
-tests/__init__.py::FLAKE8 SKIPPED                                                                [ 63%]
-tests/conftest.py::BLACK SKIPPED                                                                 [ 65%]
-tests/conftest.py::FLAKE8 SKIPPED                                                                [ 68%]
-tests/test_config.py::BLACK SKIPPED                                                              [ 70%]
-tests/test_config.py::FLAKE8 SKIPPED                                                             [ 73%]
-tests/test_config.py::test_config_development PASSED                                             [ 75%]
-tests/test_config.py::test_config_testing PASSED                                                 [ 78%]
-tests/test_config.py::test_config_production PASSED                                              [ 80%]
-tests/test_user.py::BLACK PASSED                                                                 [ 82%]
-tests/test_user.py::FLAKE8 PASSED                                                                [ 85%]
-tests/test_user.py::test_encode_access_token PASSED                                              [ 87%]
-tests/test_user.py::test_decode_access_token_success PASSED                                      [ 90%]
-tests/test_user.py::test_decode_access_token_expired PASSED                                      [ 92%]
-tests/test_user.py::test_decode_access_token_invalid PASSED                                      [ 95%]
-tests/util.py::BLACK SKIPPED                                                                     [ 97%]
-tests/util.py::FLAKE8 SKIPPED                                                                    [100%]
+run.py::FLAKE8 PASSED                                                                                            [  2%]
+run.py::BLACK PASSED                                                                                             [  4%]
+setup.py::FLAKE8 PASSED                                                                                          [  7%]
+setup.py::BLACK PASSED                                                                                           [  9%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                [ 12%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                 [ 14%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                  [ 17%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                                   [ 19%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                            [ 21%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                             [ 24%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                       [ 26%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                        [ 29%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                    [ 31%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                     [ 34%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                         [ 36%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                          [ 39%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                             [ 41%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                              [ 43%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                           [ 46%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                            [ 48%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                      [ 51%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                       [ 53%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                             [ 56%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                              [ 58%]
+tests/__init__.py::FLAKE8 PASSED                                                                                 [ 60%]
+tests/__init__.py::BLACK PASSED                                                                                  [ 63%]
+tests/conftest.py::FLAKE8 PASSED                                                                                 [ 65%]
+tests/conftest.py::BLACK PASSED                                                                                  [ 68%]
+tests/test_config.py::FLAKE8 PASSED                                                                              [ 70%]
+tests/test_config.py::BLACK PASSED                                                                               [ 73%]
+tests/test_config.py::test_config_development PASSED                                                             [ 75%]
+tests/test_config.py::test_config_testing PASSED                                                                 [ 78%]
+tests/test_config.py::test_config_production PASSED                                                              [ 80%]
+tests/test_user.py::FLAKE8 PASSED                                                                                [ 82%]
+tests/test_user.py::BLACK PASSED                                                                                 [ 85%]
+tests/test_user.py::test_encode_access_token PASSED                                                              [ 87%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                      [ 90%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                      [ 92%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                      [ 95%]
+tests/util.py::FLAKE8 PASSED                                                                                     [ 97%]
+tests/util.py::BLACK PASSED                                                                                      [100%]
 
-======================================= short test summary info ========================================
-SKIPPED [16] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
-SKIPPED [16] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
-==================================== 9 passed, 32 skipped in 7.21s =====================================
-_______________________________________________ summary ________________________________________________
+================================================= 41 passed in 12.27s ==================================================
+_______________________________________________________ summary ________________________________________________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 

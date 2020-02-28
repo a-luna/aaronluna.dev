@@ -1150,7 +1150,7 @@ NameError: name 'app' is not defined</span>
   File "<stdin>", line 1, in <module>
 NameError: name 'db' is not defined</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from run import app</span>
-<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from app import db</span>
+<span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">from flask_api_tutorial import db</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">app</span>
 <span class="cmd-repl-results">&#60;Flask 'app'&#62;</span>
 <span class="cmd-repl-prompt">>>></span> <span class="cmd-repl-input">db</span>

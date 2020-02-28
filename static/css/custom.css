@@ -32,28 +32,43 @@
   text-decoration: none;
 }
 
-.content .header-text a.hanchor-top {
-  font-size: 0.9em;
-  margin: 0 0 0 6px;
+.content .header-text a.hanchor-self {
+  align-self: baseline;
 }
 
-.content .header-text a.hanchor-self {
-  margin: 0 7px 0 0;
-  align-self: center;
-  line-height: 24px;
+.content h2 {
+  font-size: 24px;
+  line-height: 1.2;
 }
 
 .content .header-text.level1 a.hanchor-self {
-  font-size: 0.95em;
+  font-size: 20px;
+  line-height: 20px;
+  margin: 4px 7px 0 0;
+}
+
+.content h3 {
+  font-size: 20px;
+  line-height: 1.2;
 }
 
 .content .header-text.level2 a.hanchor-self {
-  font-size: 0.85em;
+  font-size: 18px;
+  line-height: 18px;
+  margin: 4px 7px 0 0;
+}
+
+.content h4,
+.content h5 {
+  font-size: 18px;
+  line-height: 1.2;
 }
 
 .content .header-text.level3 a.hanchor-self,
 .content .header-text.level4 a.hanchor-self {
-  font-size: 0.8em;
+  font-size: 16px;
+  line-height: 16px;
+  margin: 4px 7px 0 0;
 }
 
 .content .header-text a.hanchor-top {
@@ -69,6 +84,7 @@
 .header-text h4,
 .header-text h5 {
   flex: 1;
+  align-self: center;
 }
 
 .hanchor-text {
@@ -366,10 +382,6 @@ h4 {
   line-height: 1.2;
 }
 
-.content h2 {
-  font-size: 1.35em;
-}
-
 h1,
 h1.post__title {
   font-size: 2em;
@@ -496,7 +508,6 @@ h5 {
 .content h4,
 .content h5 {
   font-weight: 400;
-  line-height: 1.2;
   margin: 0;
 }
 
@@ -3356,7 +3367,7 @@ blockquote td {
 
 @media screen and (max-width: 767px) {
   .content .header-text a.hanchor-top {
-    font-size: 0.95em;
+    font-size: 1.4em;
     margin: 0 10px 0 6px;
     text-align: right;
     line-height: 1;
