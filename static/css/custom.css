@@ -11,6 +11,13 @@
   opacity: .01;
 }
 
+.header-text {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  margin: 1.5em 0 0.75em;
+}
+
 .content a.hanchor {
   color: var(--header-anchor-link);
   opacity: 0.4;
@@ -22,30 +29,54 @@
 .content a.hanchor:focus  {
   color: var(--header-anchor-link-hover);
   opacity: 1;
+  text-decoration: none;
 }
 
-.content h2 a.hanchor-self {
-  font-size: 0.7em;
-  margin: 0 0 0 7px;
-}
-
-.content h2 a.hanchor-top {
+.content .header-text a.hanchor-top {
   font-size: 0.9em;
   margin: 0 0 0 6px;
 }
 
-.content h3 a.hanchor-self,
-.content h4 a.hanchor-self,
-.content h5 a.hanchor-self {
-  font-size: 0.8em;
-  margin: 0 0 0 7px;
+.content .header-text a.hanchor-self {
+  margin: 0 7px 0 0;
+  align-self: center;
+  line-height: 24px;
 }
 
-.content h3 a.hanchor-top,
-.content h4 a.hanchor-top,
-.content h5 a.hanchor-top {
-  font-size: 1em;
+.content .header-text.level1 a.hanchor-self {
+  font-size: 0.95em;
+}
+
+.content .header-text.level2 a.hanchor-self {
+  font-size: 0.85em;
+}
+
+.content .header-text.level3 a.hanchor-self,
+.content .header-text.level4 a.hanchor-self {
+  font-size: 0.8em;
+}
+
+.content .header-text a.hanchor-top {
+  font-size: 0.95em;
   margin: 0 0 0 6px;
+  text-align: right;
+  align-self: flex-start;
+  line-height: 1;
+}
+
+.header-text h2,
+.header-text h3,
+.header-text h4,
+.header-text h5 {
+  flex: 1;
+}
+
+.hanchor-text {
+  font-size: 0.95em;
+  letter-spacing: 0.85px;
+  word-spacing: 2px;
+  margin: 0 7px 0 0;
+  vertical-align: baseline;
 }
 
 html {
@@ -444,7 +475,8 @@ h1.post__title {
 }
 
 h3,
-h4 {
+h4,
+h5 {
   font-size: 1.25em;
 }
 
@@ -452,35 +484,34 @@ h4 {
   font-size: 1.25rem;
 }
 
-.content h2 {
-  color: var(--header-color);
-}
-
-.content h3 {
-  color: var(--header-color);
-}
-
-.content h4 {
+.content h2,
+.content h3,
+.content h4,
+.content h5 {
   color: var(--header-color);
 }
 
 .content h2,
 .content h3,
-.content h4 {
+.content h4,
+.content h5 {
   font-weight: 400;
-  margin: 1.5em 0 0.5em;
   line-height: 1.2;
+  margin: 0;
 }
 
 .content h2 code,
 .content h3 code,
-.content h4 code {
+.content h4 code,
+.content h5 code {
   background-color: initial;
   font-size: 0.9em;
-  padding: 0 2px;
+  padding: 0;
+  margin: 0 6px 0 0
 }
 
-.content h4 code {
+.content h4 code,
+.content h5 code {
   font-size: 0.8em;
 }
 
@@ -909,6 +940,7 @@ div.note {
 }
 
 div.command {
+  font-size: 0.75em;
   background: var(--widget-bg-color);
   padding: 2px 5px;
   margin: 0 0 20px;
@@ -1052,26 +1084,18 @@ li pre code {
   white-space: pre;
 }
 
-code,
-p code,
-li code {
-  font-size: 0.85em;
-  background-color: inherit;
-  border: none;
-  padding: 2px;
-  border-radius: 4px;
-  font-style: normal;
-}
-
-code,
-p code,
-li code {
+code {
   color: var(--code-text-color1);
+  border: none;
 }
 
-.post__content p code {
+.post__content p code,
+p code,
+li code {
   font-size: 0.8em;
   background: var(--widget-bg-color);
+  border-radius: 4px;
+  font-style: normal;
   padding: 2px 4px;
   margin: 0 1px;
 }
@@ -2315,8 +2339,10 @@ table tfoot td p {
   margin: 0 0 3px 9px;
 }
 
-table tfoot code {
+table.tutorial tfoot code {
   color: var(--code-text-color1);
+  background-color: var(--page-bg-color);
+  padding: 0;
 }
 
 .tutorial .table-wrapper {
@@ -2438,7 +2464,7 @@ th.last-column,
 }
 
 .responsive td.table-footer {
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .table-wrapper thead td {
@@ -3329,6 +3355,12 @@ blockquote td {
 }
 
 @media screen and (max-width: 767px) {
+  .content .header-text a.hanchor-top {
+    font-size: 0.95em;
+    margin: 0 10px 0 6px;
+    text-align: right;
+    line-height: 1;
+  }
   .blog-list .article-preview .post__title-wrapper,
   .tutorial .article-preview .post__title-wrapper {
     font-size: 1em;

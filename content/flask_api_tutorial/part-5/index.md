@@ -265,7 +265,7 @@ You might be wondering how is this different than the idea I dismissed, <span cl
 
 Also, help documentation is automatically generated for CLI commands (via click). You can view the documentation for the `add-user` command by running `flask add-user --help`:
 
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user --help</span>
+<pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask add-user --help</span>
 <span class="cmd-results">Usage: flask add-user [OPTIONS] EMAIL
 
   Add a new user to the database with email address = EMAIL.
@@ -277,7 +277,7 @@ Options:
 
 Users can view all Flask CLI commands, including custom commands by running `flask`:
 
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask</span>
+<pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask</span>
 <span class="cmd-results">Usage: flask [OPTIONS] COMMAND [ARGS]...
 
   A general utility script for Flask applications.
@@ -309,7 +309,7 @@ Finally, let's demonstrate how to use the `flask add-user` command:
 <ul style="list-style: none; margin: 0 0 20px 0">
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Create regular user</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="light-blue bold-text">Successfully added new user:
@@ -317,7 +317,7 @@ Repeat for confirmation:
   </li>
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Create admin user</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user admin@test.com --admin</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask add-user admin@test.com --admin</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="light-blue bold-text">Successfully added new admin user:
@@ -325,7 +325,7 @@ Repeat for confirmation:
   </li>
   <li>
     <p style="margin: 0 0 5px"><span class="bold-text">Error: Email already exists</span></p>
-    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
+    <pre style="margin: 5px 0 20px"><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask add-user user@test.com</span>
 <span class="cmd-results">Password:
 Repeat for confirmation:
 <span class="pink bold-text">Error: user@test.com is already registered</span></span></code></pre>
@@ -474,7 +474,7 @@ def shell():
 
 Next, run <code>flask db migrate</code> and add a message explaining the changes that will be made by executing this migration script:
 
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget model"</span>
+<pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask db migrate --message "add widget model"</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'widget'
@@ -491,7 +491,7 @@ INFO  [alembic.autogenerate.compare] Detected added table 'widget'
 
 Next, run <code>flask db upgrade</code> to run the migration script on the database in your development environment:
 
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask db upgrade</span>
+<pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.runtime.migration] Running upgrade 8fa4b4909211 -> fdd8ca8d8666, add widget table</span></code></pre>
@@ -696,7 +696,7 @@ def widget_name(name):
 
 We can see how this function works by testing it in the `flask shell`:
 
-<pre><code><span class="cmd-venv">(venv) flask_api_tutorial $</span> <span class="cmd-input">flask shell</span>
+<pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
 <span class="cmd-repl-results">Python 3.7.6 (default, Jan 19 2020, 06:08:58)
 [Clang 11.0.0 (clang-1100.0.33.8)] on darwin
 App: flask-api-tutorial [development]
@@ -807,25 +807,25 @@ There really isn't anything else to say about how the `info_url` attribute is pa
             <tbody>
                 <tr>
                     <td class="first-column"><code>date</code></td>
-                    <td><code class="green">YYYY<span class="pink">-</span>MM<span class="pink">-</span>DD</code></td>
+                    <td><code class="teal">YYYY<span class="orange">-</span>MM<span class="orange">-</span>DD</code></td>
                     <td>2019-10-02</td>
                     <td class="last-column">N/A</td>
                 </tr>
                 <tr>
                     <td class="first-column"><code>date_from_iso8601</code></td>
-                    <td><code class="green">YYYY<span class="pink">-</span>MM<span class="pink">-</span>DD</code></td>
+                    <td><code class="teal">YYYY<span class="orange">-</span>MM<span class="orange">-</span>DD</code></td>
                     <td>2019-10-02</td>
                     <td class="last-column"><a href="https://www.iso.org/iso-8601-date-and-time-format.html" target="_blank">ISO 8601</a></td>
                 </tr>
                 <tr>
                     <td class="first-column"><code>datetime_from_iso8601</code></td>
-                    <td><code class="green">YYYY<span class="pink">-</span>MM<span class="pink">-</span>DD<span class="pink">T</span>hh<span class="pink">:</span>mm<span class="pink">:</span>ss<span class="pink">(+/-)</span>zh<span class="pink">:</span>zm</code></td>
+                    <td><code class="teal">YYYY<span class="orange">-</span>MM<span class="orange">-</span>DD<span class="orange">T</span>hh<span class="orange">:</span>mm<span class="orange">:</span>ss<span class="orange">(+/-)</span>zh<span class="orange">:</span>zm</code></td>
                     <td>2019-10-02T15:05:06-07:00</td>
                     <td class="last-column"><a href="https://www.iso.org/iso-8601-date-and-time-format.html" target="_blank">ISO 8601</a></td>
                 </tr>
                 <tr>
                     <td class="first-column"><code>datetime_from_rfc822</code></td>
-                    <td><code class="green">DN<span class="pink">, </span>DD MN YYYY hh<span class="pink">:</span>mm<span class="pink">:</span>ss <span class="pink">(+/-)</span>zhzm</code></td>
+                    <td><code class="teal">DN<span class="orange">, </span>DD MN YYYY hh<span class="orange">:</span>mm<span class="orange">:</span>ss <span class="orange">(+/-)</span>zhzm</code></td>
                     <td>Wed, 02 Oct 2019 15:05:06 -0700</td>
                     <td class="last-column"><a href="https://tools.ietf.org/html/rfc5322#section-3.3" target="_blank">RFC 5322</a> <sup>3</sup></td>
                 </tr>
