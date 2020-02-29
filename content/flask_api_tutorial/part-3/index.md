@@ -727,7 +727,7 @@ If you attempt to register with an email address that already exists in the data
 <span class="purple">Content-Length</span>: <span class="light-blue">37</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/x-www-form-urlencoded; charset=utf-8</span>
 <span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
-<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/2.0.0</span>
 
 <span class="bold-text">email=user%40test.com&password=123456</span>
 
@@ -758,7 +758,7 @@ Here's an example of a successful request using httpie. Note that on the command
 <span class="purple">Content-Length</span>: <span class="light-blue">37</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/x-www-form-urlencoded; charset=utf-8</span>
 <span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
-<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/2.0.0</span>
 
 <span class="bold-text">email=user2%40test.com&password=123456</span>
 
@@ -952,7 +952,7 @@ The last test case we will cover at this point is where the client submits an em
 <span class="purple">Content-Length</span>: <span class="light-blue">32</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/x-www-form-urlencoded; charset=utf-8</span>
 <span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
-<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/2.0.0</span>
 
 <span class="bold-text">email=first+last&password=123456</span>
 

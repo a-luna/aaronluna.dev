@@ -1060,7 +1060,7 @@ If you enter a URL without a domain, for example `:5000/api/v1/auth/user`, the <
 <span class="purple">Accept-Encoding</span>: <span class="light-blue">gzip, deflate</span>
 <span class="purple">Connection</span>: <span class="light-blue">keep-alive</span>
 <span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
-<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/2.0.0</span>
 
 
 <span class="bold-text goldenrod">HTTP/1.0 401 UNAUTHORIZED</span>
@@ -1095,7 +1095,7 @@ We need to obtain an access token, so let's login and retrieve the token generat
 <span class="purple">Content-Length</span>: <span class="light-blue">37</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/x-www-form-urlencoded; charset=utf-8</span>
 <span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
-<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/2.0.0</span>
 
 <span class="bold-text">email=user%40test.com&password=123456</span>
 
@@ -1135,7 +1135,7 @@ Now that we have an access token, the only thing we need to do is send it in the
 <span class="purple">Authorization</span>: <span class="light-blue">Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQ4NzUzMjksImlhdCI6MTU2NDg3NDQyOSwic3ViIjoiNzdiNGYzYjctNzg2NC00ZmM0LWE4MzQtZjJhNjQ5OWYxNzJhIiwiYWRtaW4iOmZhbHNlfQ.LBYrCr5-8FqCKIF_1WEpk8ake235cB9hZNL01oQjPvw</span>
 <span class="purple">Connection</span>: <span class="light-blue">keep-alive</span>
 <span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
-<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/2.0.0</span>
 
 
 <span class="bold-text goldenrod">HTTP/1.0 200 OK</span>
