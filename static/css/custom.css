@@ -86,7 +86,7 @@
 .content .header-text a.hanchor-top {
   margin: 0 0 0 6px;
   text-align: right;
-  align-self: center;
+  align-self: flex-start;
 }
 
 .header-text h2,
@@ -528,7 +528,7 @@ h5 {
   background-color: initial;
   font-size: 0.9em;
   padding: 0;
-  margin: 0 6px 0 0;
+  margin: 0 3px 0 0;
   vertical-align: inherit;
 }
 
@@ -3379,10 +3379,8 @@ blockquote td {
 
 @media screen and (max-width: 767px) {
   .content .header-text a.hanchor-top {
-    font-size: 1.4em;
-    margin: 0 10px 0 6px;
+    margin: 4px 10px 0 6px;
     text-align: right;
-    line-height: 1;
   }
   .hanchor-text {
     display: none;

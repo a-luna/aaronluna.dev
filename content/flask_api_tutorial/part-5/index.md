@@ -223,7 +223,7 @@ from flask_api_tutorial.models.user import User
 Then, add the content below and save the file:
 
 ```python {linenos=table,linenostart=18}
-@app.cli.command("add-user", short_help="add a new user")
+@app.cli.command("add-user", short_help="Add a new user")
 @click.argument("email")
 @click.option(
     "--admin", is_flag=True, default=False, help="New user has administrator role"
@@ -478,7 +478,7 @@ Next, run <code>flask db migrate</code> and add a message explaining the changes
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'widget'
-  Generating /Users/aaronluna/Projects/flask_api_tutorial/migrations/versions/fdd8ca8d8666_add_widget_table.py ... done</span></code></pre>
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/7c66df0e878f_add_widget_model.py ...  done</span></code></pre>
 
 <div class="note note-flex">
     <div class="note-icon">
@@ -494,7 +494,7 @@ Next, run <code>flask db upgrade</code> to run the migration script on the datab
 <pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade 8fa4b4909211 -> fdd8ca8d8666, add widget table</span></code></pre>
+INFO  [alembic.runtime.migration] Running upgrade 079d26d45cc9 -> 7c66df0e878f, add widget model</span></code></pre>
 
 After the `widget` table has been added to the database, we can begin implementing the API endpoints specified in [Table 1](#table-1).
 
@@ -561,7 +561,7 @@ owner = db.relationship("User", backref=db.backref("widgets"))
     </ul>
 </div>
 
-Flask-RESTx includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. When we created the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth_reqparser-request-parser), we imported the `email` class from `flask_restplus.inputs` to verify if a value provided by the client is a valid email address. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
+Flask-RESTx includes helpful pre-defined types (e.g., email, URL, etc.) in the `inputs` module for validating request data. When we created the `auth_reqparser` in [Part 3](/series/flask-api-tutorial/part-3/#auth_reqparser-request-parser), we imported the `email` class from `flask_restx.inputs` to verify if a value provided by the client is a valid email address. You can also define custom input types if none of the pre-defined types are sufficient, and we will do so for both the `name` and `deadline` attributes.
 
 Create a new file named `dto.py` in `src/flask_api_tutorial/api/widgets` and enter the content below:
 
@@ -832,7 +832,7 @@ There really isn't anything else to say about how the `info_url` attribute is pa
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4" class="table-footer"><sup>1</sup> Pre-defined types are located in the <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank"><code class="light-blue">flask_restplus.inputs</code></a> module.</td>
+                    <td colspan="4" class="table-footer"><sup>1</sup> Pre-defined types are located in the <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restx.inputs" target="_blank"><code class="light-blue">flask_restx.inputs</code></a> module.</td>
                 </tr>
                 <tr>
                     <td colspan="4" class="table-footer">
@@ -1056,16 +1056,16 @@ widget_ns = Namespace(name="widgets", validate=True)
 
 
 @widget_ns.route("", endpoint="widget_list")
-@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
-@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+@widget_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+@widget_ns.response(int(HTTPStatus.UNAUTHORIZED), "Unauthorized.")
+@widget_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
 class WidgetList(Resource):
     """Handles HTTP requests to URL: /widgets."""
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
-    @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
-    @widget_ns.response(HTTPStatus.CONFLICT, "Widget name already exists.")
+    @widget_ns.response(int(HTTPStatus.CREATED), "Added new widget.")
+    @widget_ns.response(int(HTTPStatus.FORBIDDEN), "Administrator token required.")
+    @widget_ns.response(int(HTTPStatus.CONFLICT), "Widget name already exists.")
     @widget_ns.expect(create_widget_reqparser)
     def post(self):
         """Create a widget."""

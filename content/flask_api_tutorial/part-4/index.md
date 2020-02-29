@@ -586,7 +586,7 @@ The way we implement this endpoint will demonstrate a few new concepts:
 
 ### `user_model` API Model
 
-The first thing we need to do is create an API model for the `User` class. In `src/flask_api_tutorial/api/auth/dto.py`, update the import statements to incude the `Model` class from `flask_restplus` and the `String` and `Boolean` classes from the `flask_restplus.fields` module **(Lines 2-3)**:
+The first thing we need to do is create an API model for the `User` class. In `src/flask_api_tutorial/api/auth/dto.py`, update the import statements to include the `Model` class from `flask_restx` and the `String` and `Boolean` classes from the `flask_restx.fields` module **(Lines 2-3)**:
 
 ```python {linenos=table,hl_lines=["2-3"]}
 """Parsers and serializers for /auth API endpoints."""

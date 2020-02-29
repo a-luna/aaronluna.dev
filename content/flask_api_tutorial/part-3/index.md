@@ -574,7 +574,7 @@ Next, we need to create the API endpoint and incorporate it with the `auth_reqpa
 
 If you look back at all of the material covered in this tutorial, it's amazing (IMO) that we haven't written one line of code that that makes our Flask application perform one of the basic functions of a web server: URL routing. It's time to fix that.
 
-In an application that adheres to the [principles of REST](#understanding-rest), each API endpoint (IOW, each URL) is a representation of a resource. Clients interact with resources by sending HTTP requests. The method type of the client's request (e.g., `GET`, `PUT`, `POST`) is used to perform different operations, and the nature of the operation should be related to the. For this reason, when we need to add a URL route to the API, we define a class that inherits from the `flask_restplus.Resource` base class.
+In an application that adheres to the [principles of REST](#understanding-rest), each API endpoint (IOW, each URL) is a representation of a resource. Clients interact with resources by sending HTTP requests. The method type of the client's request (e.g., `GET`, `PUT`, `POST`) is used to perform different operations, and the nature of the operation should be related to the. For this reason, when we need to add a URL route to the API, we define a class that inherits from the `flask_restx.Resource` base class.
 
 
 

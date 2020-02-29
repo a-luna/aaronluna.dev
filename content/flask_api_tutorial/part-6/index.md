@@ -247,9 +247,9 @@ With the background info regarding pagination and HATEOAS in mind, we are ready 
 
 When a client sends a request to retrieve a list of `widgets`, what data should we expect to be included with the request? The answer should be fairly obvious based on the information covered in the <a href="#pagination">Introduction</a>.
 
-The request to retrieve a list of `widget` objects should include two values: the page number and number of items per page. Luckily, both of these values are integers, and there are several pre-built types in the `flask_restplus.inputs` module that convert request data to integer values.
+The request to retrieve a list of `widget` objects should include two values: the page number and number of items per page. Luckily, both of these values are integers, and there are several pre-built types in the `flask_restx.inputs` module that convert request data to integer values.
 
-Open `src/flask_api_tutorial/api/widgets/dto.py` and update the import statements to include the `flask_restplus.inputs.positive` class **(Line 6)**:
+Open `src/flask_api_tutorial/api/widgets/dto.py` and update the import statements to include the `flask_restx.inputs.positive` class **(Line 6)**:
 
 ```python {linenos=table,hl_lines=["6"]}
 """Parsers and serializers for /widgets API endpoints."""
@@ -277,7 +277,7 @@ pagination_reqparser.add_argument(
 By specifying `type=positive`, the value provided in the request data will be coerced to an integer. If the value represents a positive, non-zero integer, the request will succeed and the server will send the paginated list to the client. Otherwise, the server will reject the request with status code 400 `HTTPStatus.BAD_REQUEST`.
 
 {{< info_box >}}
-Why did I choose [the `flask_restplus.inputs.positive` class](https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive)? For both the `page` and `per_page` parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.
+Why did I choose [the `flask_restx.inputs.positive` class](https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.positive)? For both the `page` and `per_page` parameters, zero and negative values are invalid. Checking the parsed values to ensure they are positive numbers would be simple, but since a class already exists that performs the same check, IMO, it is wasteful to re-implement the same logic.
 {{< /info_box >}}
 
 This is the first time that we have specified a `RequestParser` argument as `required=False`. This allows the client to send a request **without** either parameter and the request will still succeed (e.g., `GET /api/v1/widgets` will return the same response as `GET /api/v1/widgets?page=1&per_page=10`).
@@ -288,7 +288,7 @@ What would happen if `required=True` and the client sends a request without eith
 
 The range of valid values for the `page` parameter is any positive integer. However, the `per_page` parameter must have an upper bound since the point of employing pagination is to prevent the API from becoming sluggish due to sending/receiving a large amount of data.
 
-Flask-RESTx includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range" target="_blank"><code>flask_restplus.inputs.int_range</code></a>) that will restrict values to a range of integers. This would allow the client to request any number of items per page, but I think it makes more sense to restrict the page size to a small, fixed set of choices.
+Flask-RESTx includes a pre-built type (<a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.inputs.int_range" target="_blank"><code>flask_restx.inputs.int_range</code></a>) that will restrict values to a range of integers. This would allow the client to request any number of items per page, but I think it makes more sense to restrict the page size to a small, fixed set of choices.
 
 The list provided to the `choices` keyword defines the set of allowable values. This has an additional benefit &mdash; on the Swagger UI page, the input form for `per_page` will render a select element containing the list of choices.
 
@@ -391,7 +391,7 @@ from flask_api_tutorial.util.datetime_util import make_tzaware, DATE_MONTH_NAME
 
 Next, add the content below:
 
-```python {linenos=table,linenostart=86}
+```python {linenos=table,linenostart=78}
 widget_owner_model = Model("Widget Owner", {"email": String, "public_id": String})
 
 widget_model = Model(
@@ -441,7 +441,7 @@ Let's work our way from the inside-out. As demonstrated in the interactive shell
 
 Rather than re-using `user_model`, we will create `widget_owner_model` which exposes only the `email` and `public_id` values of the `User` object:
 
-```python {linenos=table,linenostart=86}
+```python
 widget_owner_model = Model(
     "Widget Owner",
     {
@@ -453,12 +453,13 @@ widget_owner_model = Model(
 
 The `widget_model` has a bunch of features that we are seeing for the first time. Let's take a look at it in more depth:
 
-```python {linenos=table,linenostart=94}
+```python {linenos=table,linenostart=80}
 widget_model = Model(
     "Widget",
     {
         "name": String,
         "info_url": String,
+        "created_at": String(attribute="created_at_str"),
         "created_at_iso8601": DateTime(attribute="created_at"),
         "created_at_rfc822": DateTime(attribute="created_at", dt_format="rfc822"),
         "deadline": String(attribute="deadline_str"),
@@ -473,7 +474,7 @@ widget_model = Model(
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Lines 99-100: </strong>This is the first time that we are using <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.DateTime" target="_blank">the <code>flask_restplus.fields.DateTime</code> class</a>, which formats a <code>datetime</code> value as a string. There are two supported formats: RFC 822 and ISO 8601. The format which is returned is determined by the <code>dt_format</code> parameter.</p>
+        <p><strong>Lines 86-87: </strong>This is the first time that we are using <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.DateTime" target="_blank">the <code>flask_restx.fields.DateTime</code> class</a>, which formats a <code>datetime</code> value as a string. There are two supported formats: RFC 822 and ISO 8601. The format which is returned is determined by the <code>dt_format</code> parameter.</p>
         <p>By default, ISO 8601 format is used. Since <code>dt_format</code> is not specified, <code>created_at_iso8601</code> will use this format. On the other hand, <code>created_at_rfc822</code> specifies <code>dt_format="rfc822"</code> so the same date will be returned using RFC 822 format.</p>
         <p>What do these two formats look like? Here's an example:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"created_at_iso8601"</span><span class="p">:</span> <span class="s2">"2019-09-20T04:47:50"</span><span class="p">,</span>
@@ -481,21 +482,21 @@ widget_model = Model(
         <p>The benefit of using a standard output format is that it can be easily parsed back to the original <code>datetime</code> value. If this is not a requirement and you (like me) find these formats difficult to quickly parse visually, there are other ways to format <code>datetime</code> values within an API model.</p>
       </li>
       <li>
-        <p><strong>Line 101: </strong><code>deadline_str</code> is a formatted string version of <code>deadline</code>, which is a <code>datetime</code> value. Since <code>deadline</code> is localized to UTC, <code>deadline_str</code> converts this value to the local time zone where the code is executed.</p>
+        <p><strong>Line 88: </strong><code>deadline_str</code> is a formatted string version of <code>deadline</code>, which is a <code>datetime</code> value. Since <code>deadline</code> is localized to UTC, <code>deadline_str</code> converts this value to the local time zone where the code is executed.</p>
         <p>Here's an example of the format used by <code>deadline_str</code>:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"deadline"</span><span class="p">:</span> <span class="s2">"09/20/19 10:59:59 PM UTC-08:00"</span><span class="p">,</span></code></pre>
-        <p>I prefer this style of formatting to either ISO 8601 or RFC 822 format since it is localized to the user's timezone and is (IMO) more readable. However, if the <code>datetime</code> value will not be read by humans and/or will be provided to a function expecting either ISO 8601 or RFC 822 format, obviously use the built-in <code>flask_restplus.fields.Datetime</code> class.</p>
+        <p>I prefer this style of formatting to either ISO 8601 or RFC 822 format since it is localized to the user's timezone and is (IMO) more readable. However, if the <code>datetime</code> value will not be read by humans and/or will be provided to a function expecting either ISO 8601 or RFC 822 format, obviously use the built-in <code>flask_restx.fields.Datetime</code> class.</p>
       </li>
       <li>
-        <p><strong>Line 102: </strong>We used the <code>Boolean</code> class already (in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a>), so refer back to that section if you need to review how it works.</p>
+        <p><strong>Line 89: </strong>We used the <code>Boolean</code> class already (in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">the <code>user_model</code> API model</a>), so refer back to that section if you need to review how it works.</p>
       </li>
       <li>
-        <p><strong>Line 103: </strong><code>time_remaining_str</code> is a formatted string version of  <code>time_remaining</code>, which is a <code>timedelta</code> value. Since Flask-RESTx does not include built-in types for serializing <code>timedelta</code> values, formatting <code>time_remaining</code> as a string is the only way to include it in the serialized JSON.</p>
+        <p><strong>Line 90: </strong><code>time_remaining_str</code> is a formatted string version of  <code>time_remaining</code>, which is a <code>timedelta</code> value. Since Flask-RESTx does not include built-in types for serializing <code>timedelta</code> values, formatting <code>time_remaining</code> as a string is the only way to include it in the serialized JSON.</p>
         <p>Here's an example of the format used by <code>time_remaining_str</code>:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"time_remaining"</span><span class="p">:</span> <span class="s2">"16 hours 41 minutes 42 seconds"</span><span class="p">,</span></code></pre>
       </li>
       <li>
-        <p><strong>Line 104: </strong>In order to serialize a <code>Widget</code> object and preserve the structure where <code>owner</code> is a <code>User</code> object nested within the parent <code>Widget</code> object, we use <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.Nested" target="_blank">the <code>Nested</code> class</a> in conjunction with the <code>widget_owner_model</code>.</p>
+        <p><strong>Line 91: </strong>In order to serialize a <code>Widget</code> object and preserve the structure where <code>owner</code> is a <code>User</code> object nested within the parent <code>Widget</code> object, we use <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.fields.Nested" target="_blank">the <code>Nested</code> class</a> in conjunction with the <code>widget_owner_model</code>.</p>
         <p>Here's what the <code>widget_owner_model</code> will look like within the parent <code>Widget</code> object:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"owner"</span><span class="p">:</span> <span class="p">{</span>
     <span class="nt">"email"</span><span class="p">:</span> <span class="s2">"admin@test.com"</span><span class="p">,</span>
@@ -506,7 +507,7 @@ For more information and examples of serializing complex structures to JSON, ple
 {{< /info_box >}}
       </li>
       <li>
-        <p><strong>Line 105: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTx documentation</a>:</p>
+        <p><strong>Line 92: </strong>The <code>Widget</code> class doesn't contain an attribute named <code>link</code>, so what's going on here? I think the best explanation of the <code>fields.Url</code> class is given in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#url-other-concrete-fields" target="_blank">the Flask-RESTx documentation</a>:</p>
         <blockquote>Flask-RESTx includes a special field, <code>fields.Url</code>, that synthesizes a uri for the resource that’s being requested. This is also a good example of how to add data to your response that’s not actually present on your data object.</blockquote>
         <p>By including a <code>link</code> to the URI with each <code>Widget</code>, the client can perform CRUD actions without manually constructing or storing the URI (which is an example of <a href="#hateoas">HATEOAS</a>). By default, the value returned for <code>link</code> will be a relative URI as shown below:</p>
 <pre class="chroma"><code class="language-json" data-lang="json"><span class="nt">"link"</span><span class="p">:</span> <span class="s2">"/api/v1/widgets/first_widget"</span><span class="p">,</span></code></pre>
@@ -525,7 +526,7 @@ I hope that all of the material we encountered for the first time in the `widget
 
 If you go back and look at the <a href="#pagination">pagination example in the Introduction</a> , there's something important that is included in the example that <span class="emphasis">is not</span> part of the Flask-RESTx `Pagination` object. Here's a hint: it has to do with <a href="#hateoas">HATEOAS</a>. The answer is: **navigational links**:
 
-```python {linenos=table,linenostart=108}
+```python
 pagination_links_model = Model(
     "Nav Links",
     {
@@ -542,7 +543,7 @@ Since all of the fields in `pagination_links_model` are serialized using the `St
 
 Finally, the `widget_model` and `pagination_links_model` are integrated into the `pagination_model`:
 
-```python {linenos=table,linenostart=119}
+```python {linenos=table,linenostart=101}
 pagination_model = Model(
     "Pagination",
     {
@@ -563,15 +564,15 @@ There are only a few things in `pagination_model` that we are seeing for the fir
 <div class="code-details">
     <ul>
       <li>
-        <p><strong>Line 122: </strong>In order to match the object structure shown in the <a href="#pagination">Introduction</a>, <code>pagination_model</code> must have a field named <code>links</code> containing navigational links that allow the client to access all <code>Widget</code> instances available in the database.</p>
+        <p><strong>Line 104: </strong>In order to match the object structure shown in the <a href="#pagination">Introduction</a>, <code>pagination_model</code> must have a field named <code>links</code> containing navigational links that allow the client to access all <code>Widget</code> instances available in the database.</p>
         <p>Notice that we are using the <code>Nested</code> field type the same way we did in <code>widget_model</code>, the only difference is that now we are including the keyword argument <code>skip_none=True</code>. As explained in <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#skip-none-in-nested-fields" target="_blank">the Flask-RESTx documentation</a>, by default, if any of the fields in <code>pagination_links_model</code> have value <code>None</code>, the JSON output will contain these fields with value <code>null</code>.</p>
         <p>There are many situations where one or more of the navigational links will be <code>None</code> (e.g., for the first page of results <code>prev</code> will always be <code>None</code>). <span class="bold-italics">By specifying</span> <code>skip_none=True</code>, <span class="bold-italics">these values will not be rendered in the JSON output</span>, making it much cleaner and reducing the size of the response.</p>
       </li>
       <li>
-        <p><strong>Lines 126-128: </strong>This isn't new information, I just want to point out that I have renamed these three fields to be more descriptive. IMHO, <code>total_pages</code> is a better name than <code>pages</code>, and the same thing goes for <code>items_per_page</code>/<code>per_page</code>, as well as <code>total_items</code>/<code>total</code>.</p>
+        <p><strong>Lines 108-110: </strong>This isn't new information, I just want to point out that I have renamed these three fields to be more descriptive. IMHO, <code>total_pages</code> is a better name than <code>pages</code>, and the same thing goes for <code>items_per_page</code>/<code>per_page</code>, as well as <code>total_items</code>/<code>total</code>.</p>
       </li>
       <li>
-        <p><strong>Line 129: </strong>We have already seen examples using the <code>Nested</code> type, which allows us to create complex API models which are composed of built-in types, custom types, and other API models. However, in order to serialize the most important part of the pagination object, we need a way to marshal a list of <code>widget</code> objects to JSON.</p>
+        <p><strong>Line 111: </strong>We have already seen examples using the <code>Nested</code> type, which allows us to create complex API models which are composed of built-in types, custom types, and other API models. However, in order to serialize the most important part of the pagination object, we need a way to marshal a list of <code>widget</code> objects to JSON.</p>
         <p>This is easily accomplished using the <code>List</code> type in conjunction with the <code>Nested</code> type. For more information on the <code>List</code> type, refer to <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html#list-field" target="_blank">the Flask-RESTx documentation for Response Marshalling</a>.</p>
       </li>
     </ul>
@@ -599,6 +600,7 @@ We finally covered everything necessary to create the `pagination_model` API mod
     {
       "name": "foo",
       "info_url": "https://www.foo.bar",
+      "created_at": "11/18/19 06:07:20 AM UTC-08:00",
       "created_at_iso8601": "2019-11-18T14:07:20",
       "created_at_rfc822": "Mon, 18 Nov 2019 14:07:20 -0000",
       "deadline": "11/19/19 11:59:59 PM UTC-08:00",
@@ -613,6 +615,7 @@ We finally covered everything necessary to create the `pagination_model` API mod
     {
       "name": "new-test-555",
       "info_url": "http://www.newtest.net",
+      "created_at": "12/01/19 09:45:26 AM UTC-08:00",
       "created_at_iso8601": "2019-12-01T17:45:26",
       "created_at_rfc822": "Sun, 01 Dec 2019 17:45:26 -0000",
       "deadline": "12/02/19 11:59:59 PM UTC-08:00",
@@ -633,7 +636,7 @@ We finally covered everything necessary to create the `pagination_model` API mod
 Next, we need to create a function that performs the following actions:
 
 - Create a `pagination` object given the `page` and `per_page` values parsed from the request data.
-- Serialize the `pagination` object to JSON using `pagination_model` and <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the `flask_restplus.marshal` method</a>.
+- Serialize the `pagination` object to JSON using `pagination_model` and <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restx.marshal" target="_blank">the `flask_restx.marshal` method</a>.
 - Construct <code>dict</code> of navigational links and add links to response header and body.
 - Manually construct HTTP response using <a href="https://flask.palletsprojects.com/en/1.1.x/api/#flask.json.jsonify" target="_blank">the `flask.jsonify` method</a> and send response to client.
 
@@ -660,7 +663,7 @@ from flask_api_tutorial.models.widget import Widget
         <p><strong>Line 4: </strong>Update to include the <code>flask.url_for</code> method.</p>
       </li>
       <li>
-        <p><strong>Line 5: </strong>Update to include the <code>flask_restplus.marshal</code> method.</p>
+        <p><strong>Line 5: </strong>Update to include the <code>flask_restx.marshal</code> method.</p>
       </li>
       <li>
         <p><strong>Line 8: </strong>Update to include the <code>token_required</code> decorator.</p>
@@ -727,9 +730,9 @@ This code implements the process of responding to a valid request for a list of 
         <p><strong>Line 33: </strong><a href="#flask-sqlalchemy-paginate-method">As demonstrated in the Python interactive shell</a>, <code>pagination</code> objects are created by calling <code>Widget.query.paginate</code>, with the <code>page</code> and <code>per_page</code> values provided by the client.</p>
       </li>
       <li>
-        <p><strong>Line 34: </strong>This is the first time that we are seeing <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restplus.marshal" target="_blank">the <code>flask_restplus.marshal</code> function</a>. However, we already know how it works since we used <a href="/series/flask-api-tutorial/part-4/#getuser-resource">the <code>@marshall_with</code> decorator in Part 4</a>.</p>
+        <p><strong>Line 34: </strong>This is the first time that we are seeing <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#flask_restx.marshal" target="_blank">the <code>flask_restx.marshal</code> function</a>. However, we already know how it works since we used <a href="/series/flask-api-tutorial/part-4/#getuser-resource">the <code>@marshall_with</code> decorator in Part 4</a>.</p>
         <p>There is only a single, subtle difference between these two functions/decorators. Both operate on an object and filter the object's attributes/keys against the provided API model and validate the object's data against the set of fields configured in the API model.</p>
-        <p>However, <code>@marshal_with</code> operates on the value returned from the function it decorates, while <code>flask_restplus.marshal</code> operates on whatever is passed to the function as the first parameter. So why are we calling the <code>marshal</code> function directly? In <span class="bold-text">Lines 37-38</span> custom header fields are added to the response before it is sent to the client, and there is no way to add these headers using <code>@marshal_with</code>.</p>
+        <p>However, <code>@marshal_with</code> operates on the value returned from the function it decorates, while <code>flask_restx.marshal</code> operates on whatever is passed to the function as the first parameter. So why are we calling the <code>marshal</code> function directly? In <span class="bold-text">Lines 37-38</span> custom header fields are added to the response before it is sent to the client, and there is no way to add these headers using <code>@marshal_with</code>.</p>
       </li>
       <li>
         <p><strong>Line 35: </strong>Remember, the output of the <code>marshal</code> function is a <code>dict</code>. Also remember that the <code>flask_sqlalchemy.Pagination</code> class <span class="emphasis">does not</span> contain navigational links. We will discuss the <code>_pagination_nav_links</code> function shortly, but what is important to know is that it returns a <code>dict</code> that matches the fields in <code>pagination_links_model</code>. This <code>dict</code> is then added to the <code>pagination</code> object with key-name <code>links</code>, which matches the field on <code>pagination_model</code> containing <code>Nested(pagination_links_model, skip_none=True)</code>.</p>
@@ -808,14 +811,14 @@ widget_ns.models[pagination_model.name] = pagination_model
 
 
 @widget_ns.route("", endpoint="widget_list")
-@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
-@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+@widget_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+@widget_ns.response(int(HTTPStatus.UNAUTHORIZED), "Unauthorized.")
+@widget_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
 class WidgetList(Resource):
     """Handles HTTP requests to URL: /widgets."""
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.OK, "Retrieved widget list.", pagination_model)
+    @widget_ns.response(int(HTTPStatus.OK), "Retrieved widget list.", pagination_model)
     @widget_ns.expect(pagination_reqparser)
     def get(self):
         """Retrieve a list of widgets."""
@@ -825,9 +828,9 @@ class WidgetList(Resource):
         return retrieve_widget_list(page, per_page)
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
-    @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
-    @widget_ns.response(HTTPStatus.CONFLICT, "Widget name already exists.")
+    @widget_ns.response(int(HTTPStatus.CREATED), "Added new widget.")
+    @widget_ns.response(int(HTTPStatus.FORBIDDEN), "Administrator token required.")
+    @widget_ns.response(int(HTTPStatus.CONFLICT), "Widget name already exists.")
     @widget_ns.expect(create_widget_reqparser)
     def post(self):
         """Create a widget."""
@@ -929,15 +932,15 @@ Next, add the content below:
 ```python {linenos=table,linenostart=55}
 @widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
-@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-@widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
-@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
-@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+@widget_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+@widget_ns.response(int(HTTPStatus.NOT_FOUND), "Widget not found.")
+@widget_ns.response(int(HTTPStatus.UNAUTHORIZED), "Unauthorized.")
+@widget_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
 class Widget(Resource):
     """Handles HTTP requests to URL: /widgets/{name}."""
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
+    @widget_ns.response(int(HTTPStatus.OK), "Retrieved widget.", widget_model)
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
@@ -1142,24 +1145,24 @@ Next, add the highlighted lines to `endpoints.py` and save the file:
 ```python {linenos=table,linenostart=57,hl_lines=["17-27"]}
 @widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
-@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-@widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
-@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
-@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+@widget_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+@widget_ns.response(int(HTTPStatus.NOT_FOUND), "Widget not found.")
+@widget_ns.response(int(HTTPStatus.UNAUTHORIZED), "Unauthorized.")
+@widget_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
 class Widget(Resource):
     """Handles HTTP requests to URL: /widgets/{name}."""
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
+    @widget_ns.response(int(HTTPStatus.OK), "Retrieved widget.", widget_model)
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
         return retrieve_widget(name)
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
-    @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
-    @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
+    @widget_ns.response(int(HTTPStatus.OK), "Widget was updated.", widget_model)
+    @widget_ns.response(int(HTTPStatus.CREATED), "Added new widget.")
+    @widget_ns.response(int(HTTPStatus.FORBIDDEN), "Administrator token required.")
     @widget_ns.expect(update_widget_reqparser)
     def put(self, name):
         """Update a widget."""
@@ -1242,24 +1245,24 @@ Next, add the highlighted lines to `endpoints.py` and save the file:
 ```python {linenos=table,linenostart=58,hl_lines=["27-33"]}
 @widget_ns.route("/<name>", endpoint="widget")
 @widget_ns.param("name", "Widget name")
-@widget_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-@widget_ns.response(HTTPStatus.NOT_FOUND, "Widget not found.")
-@widget_ns.response(HTTPStatus.UNAUTHORIZED, "Unauthorized.")
-@widget_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+@widget_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+@widget_ns.response(int(HTTPStatus.NOT_FOUND), "Widget not found.")
+@widget_ns.response(int(HTTPStatus.UNAUTHORIZED), "Unauthorized.")
+@widget_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
 class Widget(Resource):
     """Handles HTTP requests to URL: /widgets/{name}."""
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.OK, "Retrieved widget.", widget_model)
+    @widget_ns.response(int(HTTPStatus.OK), "Retrieved widget.", widget_model)
     @widget_ns.marshal_with(widget_model)
     def get(self, name):
         """Retrieve a widget."""
         return retrieve_widget(name)
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.OK, "Widget was updated.", widget_model)
-    @widget_ns.response(HTTPStatus.CREATED, "Added new widget.")
-    @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
+    @widget_ns.response(int(HTTPStatus.OK), "Widget was updated.", widget_model)
+    @widget_ns.response(int(HTTPStatus.CREATED), "Added new widget.")
+    @widget_ns.response(int(HTTPStatus.FORBIDDEN), "Administrator token required.")
     @widget_ns.expect(update_widget_reqparser)
     def put(self, name):
         """Update a widget."""
@@ -1267,8 +1270,8 @@ class Widget(Resource):
         return update_widget(name, widget_dict)
 
     @widget_ns.doc(security="Bearer")
-    @widget_ns.response(HTTPStatus.NO_CONTENT, "Widget was deleted.")
-    @widget_ns.response(HTTPStatus.FORBIDDEN, "Administrator token required.")
+    @widget_ns.response(int(HTTPStatus.NO_CONTENT), "Widget was deleted.")
+    @widget_ns.response(int(HTTPStatus.FORBIDDEN), "Administrator token required.")
     def delete(self, name):
         """Delete a widget."""
         return delete_widget(name)
@@ -1400,27 +1403,35 @@ def test_create_widget_valid_name(client, db, admin, widget_name):
 
 This is the first time we are using the `@pytest.mark.parameterize` decorator, which is used to parameterize an argument to a test function. In the `test_create_widget_valid_name` function, we are parameterizing the `widget_name` argument, and the test will be executed three times; once for each value defined for `widget_name`. For example, this is the output from pytest if we were to execute just this single test function:
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
+<pre><code class="pytest"><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
 <span class="cmd-results">================================================= test session starts ==================================================
-platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/venv/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
 collected 5 items
 
-tests/test_create_widget.py::BLACK PASSED                                                                        [ 20%]
-tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 40%]
-<span class="cmd-hl-gold">tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 60%]</span>
-<span class="cmd-hl-gold">tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 80%]</span>
-<span class="cmd-hl-gold">tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [100%]</span>
+tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 20%]
+tests/test_create_widget.py::BLACK PASSED                                                                        [ 40%]
+<span class="cmd-hl-gold">tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 60%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 80%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [100%]</span>
 
 =================================================== warnings summary ===================================================
 tests/test_create_widget.py::test_create_widget_valid_name[abc123]
-  /Users/aaronluna/Projects/flask_api_tutorial/venv/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+    from werkzeug import cached_property
+
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, Hashable
+
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-============================================= 5 passed, 1 warning in 0.57s =============================================</span></code></pre>
+============================================ 5 passed, 3 warnings in 0.80s =============================================</span></code></pre>
 
 You can see the three tests executed by the parameterized test highlighted above. `pytest` helpfully includes the values used to parameterize the test in brackets after the name of the test. This function is designed to verify the response to a successful request to create a new widget, so the three values used for parameterization are all valid widget names, per the specs we followed. An obvious next step would be to create a `test_create_widget_invalid_name` test case, but I will leave that to you.
 
@@ -1471,30 +1482,38 @@ In the first two highlighted lines above **(Lines 27-28)**, we call the `datetim
 
 The third highlighted line **(Line 29)** utilizes a `timedelta` object to generate a date three days in the future (we obviously want to test dates other than the current date). Run `pytest tests/test_create_widget.py` to execute these test cases:
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
-<span class="cmd-results">=============================================== test session starts ================================================
-platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
+<pre><code class="pytest"><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
+<span class="cmd-results">================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/venv/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
 collected 8 items
 
-tests/test_create_widget.py::BLACK PASSED                                                                    [ 12%]
-tests/test_create_widget.py::FLAKE8 PASSED                                                                   [ 25%]
-tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                    [ 37%]
-tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                               [ 50%]
-tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                               [ 62%]
-<span class="cmd-hl-teal">tests/test_create_widget.py::test_create_widget_valid_deadline[01/29/2020] PASSED                            [ 75%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[2020-01-29] PASSED                            [ 87%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 01 2020] PASSED                           [100%]</span>
+tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 12%]
+tests/test_create_widget.py::BLACK PASSED                                                                        [ 25%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 37%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 50%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [ 62%]
+<span class="cmd-hl-teal">tests/test_create_widget.py::test_create_widget_valid_deadline[02/29/2020] PASSED                                [ 75%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-29] PASSED                                [ 87%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Mar 03 2020] PASSED                               [100%]</span>
 
-================================================= warnings summary =================================================
+=================================================== warnings summary ===================================================
 tests/test_create_widget.py::test_create_widget_valid_name[abc123]
-  /Users/aaronluna/Projects/flask_api_tutorial/venv/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+    from werkzeug import cached_property
+
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, Hashable
+
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-=========================================== 8 passed, 1 warning in 0.87s ===========================================</span></code></pre>
+============================================ 8 passed, 3 warnings in 1.13s =============================================</span></code></pre>
 
 We can easily see what values were used to test the `deadline` value in the results above. For the first two parameterized values, the current date was converted to string values `01/29/2020` and `2020-01-29`, which succeeded in creating a new widget object in the database. Finally, `Feb 01 2020` was used to verify that a date in the future is a valid value for `deadline`.
 
@@ -1543,33 +1562,41 @@ Next, we construct a string value for a date three days in the past using a `tim
 
 Run `pytest tests/test_create_widget.py` to execute these test cases:
 
-<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
-<span class="cmd-results">=============================================== test session starts ================================================
-platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/venv/bin/python
+<pre><code class="pytest"><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">pytest tests/test_create_widget.py</span>
+<span class="cmd-results">================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/venv/bin/python
 cachedir: .pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
 collected 11 items
 
-tests/test_create_widget.py::BLACK PASSED                                                                    [  9%]
-tests/test_create_widget.py::FLAKE8 PASSED                                                                   [ 18%]
-tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                    [ 27%]
-tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                               [ 36%]
-tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                               [ 45%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[01/29/2020] PASSED                            [ 54%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[2020-01-29] PASSED                            [ 63%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 01 2020] PASSED                           [ 72%]
-<span class="cmd-hl-purple">tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                            [ 81%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-01-26] PASSED                          [ 90%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                       [  9%]
+tests/test_create_widget.py::BLACK PASSED                                                                        [ 18%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 27%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 36%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [ 45%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[02/29/2020] PASSED                                [ 54%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-29] PASSED                                [ 63%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Mar 03 2020] PASSED                               [ 72%]
+<span class="cmd-hl-purple">tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                                [ 81%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-26] PASSED                              [ 90%]
 tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [100%]</span>
 
-================================================= warnings summary =================================================
+=================================================== warnings summary ===================================================
 tests/test_create_widget.py::test_create_widget_valid_name[abc123]
-  /Users/aaronluna/Projects/flask_api_tutorial/venv/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+    from werkzeug import cached_property
+
+tests/test_create_widget.py::test_create_widget_valid_name[abc123]
+  /Users/aaronluna/Projects/flask-api-tutorial/venv/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, Hashable
+
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-========================================== 11 passed, 1 warning in 0.97s ===========================================</span></code></pre>
+============================================ 11 passed, 3 warnings in 1.18s ============================================</span></code></pre>
 
 {{< info_box >}}
 Don't be confused by the `PASSED` result for these three test cases. This does not mean that the request succeeded and a new widget was created, since the `assert` statements verify that the status code of the response is 400 `HTTPStatus.BAD_REQUEST` **(Line 58)**, and that the response includes an error message indicating that the value of the `deadline` attribute was invalid **(Line 60)**.
@@ -1618,7 +1645,7 @@ from tests.util import (
 
 Next, add the test case below (`test_create_widget_no_admin_token`) to `test_create_widget.py` and save the file:
 
-```python {linenos=table,linenostart=84}
+```python {linenos=table,linenostart=83}
 def test_create_widget_no_admin_token(client, db, user):
     response = login_user(client, email=EMAIL)
     assert "access_token" in response.json
@@ -1634,120 +1661,129 @@ As in the previous test case, the main thing we need to verify is that the HTTP 
 Let's verify that all of our test cases are still passing by running `tox`:
 
 <pre><code class="tox"><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
-<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
-py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
-py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.4.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.1.0,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.3,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==1.0.0
-py37 run-test-pre: PYTHONHASHSEED='396877841'
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask-api-tutorial/setup.py
+py37 create: /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37
+py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
+py37 inst: /Users/aaronluna/Projects/flask-api-tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.9,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.12.0,python-editor==1.0.4,pytz==2019.3,regex==2020.2.20,requests==2.23.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==3.0.0
+py37 run-test-pre: PYTHONHASHSEED='2677345098'
 py37 run-test: commands[0] | pytest
-================================================= test session starts =================================================
-platform darwin -- Python 3.7.5, pytest-5.3.3, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/bin/python
 cachedir: .tox/py37/.pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
-collected 90 items
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
+collected 92 items
 
-run.py::BLACK SKIPPED                                                                                           [  1%]
-run.py::FLAKE8 SKIPPED                                                                                          [  2%]
-setup.py::BLACK SKIPPED                                                                                         [  3%]
-setup.py::FLAKE8 SKIPPED                                                                                        [  4%]
-src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                               [  5%]
-src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                                              [  6%]
-src/flask_api_tutorial/config.py::BLACK SKIPPED                                                                 [  7%]
-src/flask_api_tutorial/config.py::FLAKE8 SKIPPED                                                                [  8%]
-src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                                           [ 10%]
-src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                                          [ 11%]
-src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                                      [ 12%]
-src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                                     [ 13%]
-src/flask_api_tutorial/api/auth/business.py::BLACK SKIPPED                                                      [ 14%]
-src/flask_api_tutorial/api/auth/business.py::FLAKE8 SKIPPED                                                     [ 15%]
-src/flask_api_tutorial/api/auth/decorators.py::BLACK SKIPPED                                                     [ 16%]
-src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 SKIPPED                                                    [ 17%]
-src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                           [ 18%]
-src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                          [ 20%]
-src/flask_api_tutorial/api/auth/endpoints.py::BLACK SKIPPED                                                     [ 21%]
-src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 SKIPPED                                                    [ 22%]
-src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                                   [ 23%]
-src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                                  [ 24%]
-src/flask_api_tutorial/api/widgets/business.py::BLACK SKIPPED                                                   [ 25%]
-src/flask_api_tutorial/api/widgets/business.py::FLAKE8 SKIPPED                                                  [ 26%]
-src/flask_api_tutorial/api/widgets/dto.py::BLACK SKIPPED                                                        [ 27%]
-src/flask_api_tutorial/api/widgets/dto.py::FLAKE8 SKIPPED                                                       [ 28%]
-src/flask_api_tutorial/api/widgets/endpoints.py::BLACK SKIPPED                                                  [ 30%]
-src/flask_api_tutorial/api/widgets/endpoints.py::FLAKE8 SKIPPED                                                 [ 31%]
-src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                                        [ 32%]
-src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                                       [ 33%]
-src/flask_api_tutorial/models/token_blacklist.py::BLACK SKIPPED                                                 [ 34%]
-src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 SKIPPED                                                [ 35%]
-src/flask_api_tutorial/models/user.py::BLACK SKIPPED                                                            [ 36%]
-src/flask_api_tutorial/models/user.py::FLAKE8 SKIPPED                                                           [ 37%]
-src/flask_api_tutorial/models/widget.py::BLACK SKIPPED                                                          [ 38%]
-src/flask_api_tutorial/models/widget.py::FLAKE8 SKIPPED                                                         [ 40%]
-src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                                          [ 41%]
-src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                                         [ 42%]
-src/flask_api_tutorial/util/datetime_util.py::BLACK SKIPPED                                                     [ 43%]
-src/flask_api_tutorial/util/datetime_util.py::FLAKE8 SKIPPED                                                    [ 44%]
-src/flask_api_tutorial/util/result.py::BLACK SKIPPED                                                            [ 45%]
-src/flask_api_tutorial/util/result.py::FLAKE8 SKIPPED                                                           [ 46%]
-tests/__init__.py::BLACK SKIPPED                                                                                [ 47%]
-tests/__init__.py::FLAKE8 SKIPPED                                                                               [ 48%]
-tests/conftest.py::BLACK SKIPPED                                                                                [ 50%]
-tests/conftest.py::FLAKE8 SKIPPED                                                                               [ 51%]
-tests/test_auth_login.py::BLACK SKIPPED                                                                         [ 52%]
-tests/test_auth_login.py::FLAKE8 SKIPPED                                                                        [ 53%]
-tests/test_auth_login.py::test_login PASSED                                                                     [ 54%]
-tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                                [ 55%]
-tests/test_auth_logout.py::BLACK SKIPPED                                                                        [ 56%]
-tests/test_auth_logout.py::FLAKE8 SKIPPED                                                                       [ 57%]
-tests/test_auth_logout.py::test_logout PASSED                                                                   [ 58%]
-tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                                 [ 60%]
-tests/test_auth_register.py::BLACK SKIPPED                                                                      [ 61%]
-tests/test_auth_register.py::FLAKE8 SKIPPED                                                                     [ 62%]
-tests/test_auth_register.py::test_auth_register PASSED                                                          [ 63%]
-tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                 [ 64%]
-tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                            [ 65%]
-tests/test_auth_user.py::BLACK SKIPPED                                                                          [ 66%]
-tests/test_auth_user.py::FLAKE8 SKIPPED                                                                         [ 67%]
-tests/test_auth_user.py::test_auth_user PASSED                                                                  [ 68%]
-tests/test_auth_user.py::test_auth_user_no_token PASSED                                                         [ 70%]
-tests/test_auth_user.py::test_auth_user_expired_token PASSED                                                    [ 71%]
-tests/test_config.py::BLACK SKIPPED                                                                             [ 72%]
-tests/test_config.py::FLAKE8 SKIPPED                                                                            [ 73%]
-tests/test_config.py::test_config_development PASSED                                                            [ 74%]
-tests/test_config.py::test_config_testing PASSED                                                                [ 75%]
-tests/test_config.py::test_config_production PASSED                                                             [ 76%]
-tests/test_create_widget.py::BLACK PASSED                                                                       [ 77%]
-tests/test_create_widget.py::FLAKE8 PASSED                                                                      [ 78%]
-tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                       [ 80%]
-tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                  [ 81%]
-tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                  [ 82%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[02/10/2020] PASSED                               [ 83%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-10] PASSED                               [ 84%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 13 2020] PASSED                              [ 85%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                               [ 86%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-07] PASSED                             [ 87%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 88%]
-tests/test_create_widget.py::test_create_widget_already_exists PASSED                                           [ 90%]
-tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                           [ 91%]
-tests/test_user.py::BLACK SKIPPED                                                                               [ 92%]
-tests/test_user.py::FLAKE8 SKIPPED                                                                              [ 93%]
-tests/test_user.py::test_encode_access_token PASSED                                                             [ 94%]
-tests/test_user.py::test_decode_access_token_success PASSED                                                     [ 95%]
-tests/test_user.py::test_decode_access_token_expired PASSED                                                     [ 96%]
-tests/test_user.py::test_decode_access_token_invalid PASSED                                                     [ 97%]
-tests/util.py::BLACK SKIPPED                                                                                    [ 98%]
-tests/util.py::FLAKE8 SKIPPED                                                                                   [100%]
+run.py::FLAKE8 PASSED                                                                                            [  1%]
+run.py::BLACK PASSED                                                                                             [  2%]
+setup.py::FLAKE8 PASSED                                                                                          [  3%]
+setup.py::BLACK PASSED                                                                                           [  4%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                [  5%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                 [  6%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                  [  7%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                                   [  8%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                            [  9%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                             [ 10%]
+src/flask_api_tutorial/api/exceptions.py::FLAKE8 PASSED                                                          [ 11%]
+src/flask_api_tutorial/api/exceptions.py::BLACK PASSED                                                           [ 13%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                       [ 14%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                        [ 15%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                       [ 16%]
+src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                        [ 17%]
+src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 PASSED                                                     [ 18%]
+src/flask_api_tutorial/api/auth/decorators.py::BLACK PASSED                                                      [ 19%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 PASSED                                                            [ 20%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK PASSED                                                             [ 21%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                                      [ 22%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                       [ 23%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                    [ 25%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                     [ 26%]
+src/flask_api_tutorial/api/widgets/business.py::FLAKE8 PASSED                                                    [ 27%]
+src/flask_api_tutorial/api/widgets/business.py::BLACK PASSED                                                     [ 28%]
+src/flask_api_tutorial/api/widgets/dto.py::FLAKE8 PASSED                                                         [ 29%]
+src/flask_api_tutorial/api/widgets/dto.py::BLACK PASSED                                                          [ 30%]
+src/flask_api_tutorial/api/widgets/endpoints.py::FLAKE8 PASSED                                                   [ 31%]
+src/flask_api_tutorial/api/widgets/endpoints.py::BLACK PASSED                                                    [ 32%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                         [ 33%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                          [ 34%]
+src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 PASSED                                                  [ 35%]
+src/flask_api_tutorial/models/token_blacklist.py::BLACK PASSED                                                   [ 36%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                             [ 38%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                              [ 39%]
+src/flask_api_tutorial/models/widget.py::FLAKE8 PASSED                                                           [ 40%]
+src/flask_api_tutorial/models/widget.py::BLACK PASSED                                                            [ 41%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                           [ 42%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                            [ 43%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                      [ 44%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                       [ 45%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                             [ 46%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                              [ 47%]
+tests/__init__.py::FLAKE8 PASSED                                                                                 [ 48%]
+tests/__init__.py::BLACK PASSED                                                                                  [ 50%]
+tests/conftest.py::FLAKE8 PASSED                                                                                 [ 51%]
+tests/conftest.py::BLACK PASSED                                                                                  [ 52%]
+tests/test_auth_login.py::FLAKE8 PASSED                                                                          [ 53%]
+tests/test_auth_login.py::BLACK PASSED                                                                           [ 54%]
+tests/test_auth_login.py::test_login PASSED                                                                      [ 55%]
+tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                                 [ 56%]
+tests/test_auth_logout.py::FLAKE8 PASSED                                                                         [ 57%]
+tests/test_auth_logout.py::BLACK PASSED                                                                          [ 58%]
+tests/test_auth_logout.py::test_logout PASSED                                                                    [ 59%]
+tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                                  [ 60%]
+tests/test_auth_register.py::FLAKE8 PASSED                                                                       [ 61%]
+tests/test_auth_register.py::BLACK PASSED                                                                        [ 63%]
+tests/test_auth_register.py::test_auth_register PASSED                                                           [ 64%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                  [ 65%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                             [ 66%]
+tests/test_auth_user.py::FLAKE8 PASSED                                                                           [ 67%]
+tests/test_auth_user.py::BLACK PASSED                                                                            [ 68%]
+tests/test_auth_user.py::test_auth_user PASSED                                                                   [ 69%]
+tests/test_auth_user.py::test_auth_user_no_token PASSED                                                          [ 70%]
+tests/test_auth_user.py::test_auth_user_expired_token PASSED                                                     [ 71%]
+tests/test_config.py::FLAKE8 PASSED                                                                              [ 72%]
+tests/test_config.py::BLACK PASSED                                                                               [ 73%]
+tests/test_config.py::test_config_development PASSED                                                             [ 75%]
+tests/test_config.py::test_config_testing PASSED                                                                 [ 76%]
+tests/test_config.py::test_config_production PASSED                                                              [ 77%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 78%]
+tests/test_create_widget.py::BLACK PASSED                                                                        [ 79%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 80%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 81%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [ 82%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[02/29/2020] PASSED                                [ 83%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-29] PASSED                                [ 84%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Mar 03 2020] PASSED                               [ 85%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                                [ 86%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-26] PASSED                              [ 88%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 89%]
+tests/test_create_widget.py::test_create_widget_already_exists PASSED                                            [ 90%]
+tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                            [ 91%]
+tests/test_user.py::FLAKE8 PASSED                                                                                [ 92%]
+tests/test_user.py::BLACK PASSED                                                                                 [ 93%]
+tests/test_user.py::test_encode_access_token PASSED                                                              [ 94%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                      [ 95%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                      [ 96%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                      [ 97%]
+tests/util.py::FLAKE8 PASSED                                                                                     [ 98%]
+tests/util.py::BLACK PASSED                                                                                      [100%]
 
-================================================== warnings summary ===================================================
-src/flask_api_tutorial/api/auth/business.py::BLACK
-  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+=================================================== warnings summary ===================================================
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+    from werkzeug import cached_property
+
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, Hashable
+
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-=============================================== short test summary info ===============================================
-SKIPPED [30] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
-SKIPPED [30] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
-===================================== 30 passed, 60 skipped, 1 warning in 15.11s ======================================
-_______________________________________________________ summary _______________________________________________________
+=========================================== 92 passed, 3 warnings in 25.40s ============================================
+_______________________________________________________ summary ________________________________________________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 
@@ -2175,143 +2211,143 @@ The second test case, `test_delete_widget_no_admin_token`, is a very simple unha
 Let's verify that all of our test cases are still passing by running `tox`:
 
 <pre><code class="tox"><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
-<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
-py37 recreate: /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask-api-tutorial/setup.py
+py37 create: /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37
 py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
-py37 inst: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
-py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.11.0,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==2.2.0
-py37 run-test-pre: PYTHONHASHSEED='2239596822'
+py37 inst: /Users/aaronluna/Projects/flask-api-tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.9,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.12.0,python-editor==1.0.4,pytz==2019.3,regex==2020.2.20,requests==2.23.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==3.0.0
+py37 run-test-pre: PYTHONHASHSEED='4200454201'
 py37 run-test: commands[0] | pytest
-=============================================== test session starts ================================================
-platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/bin/python
 cachedir: .tox/py37/.pytest_cache
-rootdir: /Users/aaronluna/Projects/flask_api_tutorial, inifile: pytest.ini
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
 plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
 collected 106 items
 
-run.py::FLAKE8 PASSED                                                                                        [  0%]
-run.py::BLACK PASSED                                                                                         [  1%]
-setup.py::FLAKE8 PASSED                                                                                      [  2%]
-setup.py::BLACK PASSED                                                                                       [  3%]
-src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                            [  4%]
-src/flask_api_tutorial/__init__.py::BLACK PASSED                                                             [  5%]
-src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                              [  6%]
-src/flask_api_tutorial/config.py::BLACK PASSED                                                               [  7%]
-src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                        [  8%]
-src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                         [  9%]
-src/flask_api_tutorial/api/exceptions.py::FLAKE8 PASSED                                                      [ 10%]
-src/flask_api_tutorial/api/exceptions.py::BLACK PASSED                                                       [ 11%]
-src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                   [ 12%]
-src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                    [ 13%]
-src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                   [ 14%]
-src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                    [ 15%]
-src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 PASSED                                                  [ 16%]
-src/flask_api_tutorial/api/auth/decorators.py::BLACK PASSED                                                   [ 16%]
-src/flask_api_tutorial/api/auth/dto.py::FLAKE8 PASSED                                                        [ 17%]
-src/flask_api_tutorial/api/auth/dto.py::BLACK PASSED                                                         [ 18%]
-src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                                  [ 19%]
-src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                   [ 20%]
-src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                [ 21%]
-src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                 [ 22%]
-src/flask_api_tutorial/api/widgets/business.py::FLAKE8 PASSED                                                [ 23%]
-src/flask_api_tutorial/api/widgets/business.py::BLACK PASSED                                                 [ 24%]
-src/flask_api_tutorial/api/widgets/dto.py::FLAKE8 PASSED                                                     [ 25%]
-src/flask_api_tutorial/api/widgets/dto.py::BLACK PASSED                                                      [ 26%]
-src/flask_api_tutorial/api/widgets/endpoints.py::FLAKE8 PASSED                                               [ 27%]
-src/flask_api_tutorial/api/widgets/endpoints.py::BLACK PASSED                                                [ 28%]
-src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                     [ 29%]
-src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                      [ 30%]
-src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 PASSED                                              [ 31%]
-src/flask_api_tutorial/models/token_blacklist.py::BLACK PASSED                                               [ 32%]
-src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                         [ 33%]
-src/flask_api_tutorial/models/user.py::BLACK PASSED                                                          [ 33%]
-src/flask_api_tutorial/models/widget.py::FLAKE8 PASSED                                                       [ 34%]
-src/flask_api_tutorial/models/widget.py::BLACK PASSED                                                        [ 35%]
-src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                       [ 36%]
-src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                        [ 37%]
-src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                  [ 38%]
-src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                   [ 39%]
-src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                         [ 40%]
-src/flask_api_tutorial/util/result.py::BLACK PASSED                                                          [ 41%]
-tests/__init__.py::FLAKE8 PASSED                                                                             [ 42%]
-tests/__init__.py::BLACK PASSED                                                                              [ 43%]
-tests/conftest.py::FLAKE8 PASSED                                                                             [ 44%]
-tests/conftest.py::BLACK PASSED                                                                              [ 45%]
-tests/test_auth_login.py::FLAKE8 PASSED                                                                      [ 46%]
-tests/test_auth_login.py::BLACK PASSED                                                                       [ 47%]
-tests/test_auth_login.py::test_login PASSED                                                                  [ 48%]
-tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                             [ 49%]
-tests/test_auth_logout.py::FLAKE8 PASSED                                                                     [ 50%]
-tests/test_auth_logout.py::BLACK PASSED                                                                      [ 50%]
-tests/test_auth_logout.py::test_logout PASSED                                                                [ 51%]
-tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                              [ 52%]
-tests/test_auth_register.py::FLAKE8 PASSED                                                                   [ 53%]
-tests/test_auth_register.py::BLACK PASSED                                                                    [ 54%]
-tests/test_auth_register.py::test_auth_register PASSED                                                       [ 55%]
-tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                              [ 56%]
-tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                         [ 57%]
-tests/test_auth_user.py::FLAKE8 PASSED                                                                       [ 58%]
-tests/test_auth_user.py::BLACK PASSED                                                                        [ 59%]
-tests/test_auth_user.py::test_auth_user PASSED                                                               [ 60%]
-tests/test_auth_user.py::test_auth_user_no_token PASSED                                                      [ 61%]
-tests/test_auth_user.py::test_auth_user_expired_token PASSED                                                 [ 62%]
-tests/test_config.py::FLAKE8 PASSED                                                                          [ 63%]
-tests/test_config.py::BLACK PASSED                                                                           [ 64%]
-tests/test_config.py::test_config_development PASSED                                                         [ 65%]
-tests/test_config.py::test_config_testing PASSED                                                             [ 66%]
-tests/test_config.py::test_config_production PASSED                                                          [ 66%]
-tests/test_create_widget.py::FLAKE8 PASSED                                                                   [ 67%]
-tests/test_create_widget.py::BLACK PASSED                                                                    [ 68%]
-tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                    [ 69%]
-tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                               [ 70%]
-tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                               [ 71%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[02/16/2020] PASSED                            [ 72%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-16] PASSED                            [ 73%]
-tests/test_create_widget.py::test_create_widget_valid_deadline[Feb 19 2020] PASSED                           [ 74%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                            [ 75%]
-tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-13] PASSED                          [ 76%]
+run.py::FLAKE8 PASSED                                                                                            [  0%]
+run.py::BLACK PASSED                                                                                             [  1%]
+setup.py::FLAKE8 PASSED                                                                                          [  2%]
+setup.py::BLACK PASSED                                                                                           [  3%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                [  4%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                 [  5%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                  [  6%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                                   [  7%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                            [  8%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                             [  9%]
+src/flask_api_tutorial/api/exceptions.py::FLAKE8 PASSED                                                          [ 10%]
+src/flask_api_tutorial/api/exceptions.py::BLACK PASSED                                                           [ 11%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                       [ 12%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                        [ 13%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                       [ 14%]
+src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                        [ 15%]
+src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 PASSED                                                     [ 16%]
+src/flask_api_tutorial/api/auth/decorators.py::BLACK PASSED                                                      [ 16%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 PASSED                                                            [ 17%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK PASSED                                                             [ 18%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                                      [ 19%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                       [ 20%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                    [ 21%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                     [ 22%]
+src/flask_api_tutorial/api/widgets/business.py::FLAKE8 PASSED                                                    [ 23%]
+src/flask_api_tutorial/api/widgets/business.py::BLACK PASSED                                                     [ 24%]
+src/flask_api_tutorial/api/widgets/dto.py::FLAKE8 PASSED                                                         [ 25%]
+src/flask_api_tutorial/api/widgets/dto.py::BLACK PASSED                                                          [ 26%]
+src/flask_api_tutorial/api/widgets/endpoints.py::FLAKE8 PASSED                                                   [ 27%]
+src/flask_api_tutorial/api/widgets/endpoints.py::BLACK PASSED                                                    [ 28%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                         [ 29%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                          [ 30%]
+src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 PASSED                                                  [ 31%]
+src/flask_api_tutorial/models/token_blacklist.py::BLACK PASSED                                                   [ 32%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                             [ 33%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                              [ 33%]
+src/flask_api_tutorial/models/widget.py::FLAKE8 PASSED                                                           [ 34%]
+src/flask_api_tutorial/models/widget.py::BLACK PASSED                                                            [ 35%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                           [ 36%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                            [ 37%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                      [ 38%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                       [ 39%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                             [ 40%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                              [ 41%]
+tests/__init__.py::FLAKE8 PASSED                                                                                 [ 42%]
+tests/__init__.py::BLACK PASSED                                                                                  [ 43%]
+tests/conftest.py::FLAKE8 PASSED                                                                                 [ 44%]
+tests/conftest.py::BLACK PASSED                                                                                  [ 45%]
+tests/test_auth_login.py::FLAKE8 PASSED                                                                          [ 46%]
+tests/test_auth_login.py::BLACK PASSED                                                                           [ 47%]
+tests/test_auth_login.py::test_login PASSED                                                                      [ 48%]
+tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                                 [ 49%]
+tests/test_auth_logout.py::FLAKE8 PASSED                                                                         [ 50%]
+tests/test_auth_logout.py::BLACK PASSED                                                                          [ 50%]
+tests/test_auth_logout.py::test_logout PASSED                                                                    [ 51%]
+tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                                  [ 52%]
+tests/test_auth_register.py::FLAKE8 PASSED                                                                       [ 53%]
+tests/test_auth_register.py::BLACK PASSED                                                                        [ 54%]
+tests/test_auth_register.py::test_auth_register PASSED                                                           [ 55%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                  [ 56%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                             [ 57%]
+tests/test_auth_user.py::FLAKE8 PASSED                                                                           [ 58%]
+tests/test_auth_user.py::BLACK PASSED                                                                            [ 59%]
+tests/test_auth_user.py::test_auth_user PASSED                                                                   [ 60%]
+tests/test_auth_user.py::test_auth_user_no_token PASSED                                                          [ 61%]
+tests/test_auth_user.py::test_auth_user_expired_token PASSED                                                     [ 62%]
+tests/test_config.py::FLAKE8 PASSED                                                                              [ 63%]
+tests/test_config.py::BLACK PASSED                                                                               [ 64%]
+tests/test_config.py::test_config_development PASSED                                                             [ 65%]
+tests/test_config.py::test_config_testing PASSED                                                                 [ 66%]
+tests/test_config.py::test_config_production PASSED                                                              [ 66%]
+tests/test_create_widget.py::FLAKE8 PASSED                                                                       [ 67%]
+tests/test_create_widget.py::BLACK PASSED                                                                        [ 68%]
+tests/test_create_widget.py::test_create_widget_valid_name[abc123] PASSED                                        [ 69%]
+tests/test_create_widget.py::test_create_widget_valid_name[widget-name] PASSED                                   [ 70%]
+tests/test_create_widget.py::test_create_widget_valid_name[new_widget1] PASSED                                   [ 71%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[02/29/2020] PASSED                                [ 72%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[2020-02-29] PASSED                                [ 73%]
+tests/test_create_widget.py::test_create_widget_valid_deadline[Mar 03 2020] PASSED                               [ 74%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[1/1/1970] PASSED                                [ 75%]
+tests/test_create_widget.py::test_create_widget_invalid_deadline[2020-02-26] PASSED                              [ 76%]
 tests/test_create_widget.py::test_create_widget_invalid_deadline[a long time ago, in a galaxy far, far away] PASSED [ 77%]
-tests/test_create_widget.py::test_create_widget_already_exists PASSED                                        [ 78%]
-tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                        [ 79%]
-tests/test_delete_widget.py::FLAKE8 PASSED                                                                   [ 80%]
-tests/test_delete_widget.py::BLACK PASSED                                                                    [ 81%]
-tests/test_delete_widget.py::test_delete_widget PASSED                                                       [ 82%]
-tests/test_delete_widget.py::test_delete_widget_no_admin_token PASSED                                        [ 83%]
-tests/test_retrieve_widget.py::FLAKE8 PASSED                                                                 [ 83%]
-tests/test_retrieve_widget.py::BLACK PASSED                                                                  [ 84%]
-tests/test_retrieve_widget.py::test_retrieve_widget_non_admin_user PASSED                                    [ 85%]
-tests/test_retrieve_widget.py::test_retrieve_widget_does_not_exist PASSED                                    [ 86%]
-tests/test_retrieve_widget_list.py::FLAKE8 PASSED                                                            [ 87%]
-tests/test_retrieve_widget_list.py::BLACK PASSED                                                             [ 88%]
-tests/test_retrieve_widget_list.py::test_retrieve_paginated_widget_list PASSED                               [ 89%]
-tests/test_update_widget.py::FLAKE8 PASSED                                                                   [ 90%]
-tests/test_update_widget.py::BLACK PASSED                                                                    [ 91%]
-tests/test_update_widget.py::test_update_widget PASSED                                                       [ 92%]
-tests/test_user.py::FLAKE8 PASSED                                                                            [ 93%]
-tests/test_user.py::BLACK PASSED                                                                             [ 94%]
-tests/test_user.py::test_encode_access_token PASSED                                                          [ 95%]
-tests/test_user.py::test_decode_access_token_success PASSED                                                  [ 96%]
-tests/test_user.py::test_decode_access_token_expired PASSED                                                  [ 97%]
-tests/test_user.py::test_decode_access_token_invalid PASSED                                                  [ 98%]
-tests/util.py::FLAKE8 PASSED                                                                                 [ 99%]
-tests/util.py::BLACK PASSED                                                                                  [100%]
+tests/test_create_widget.py::test_create_widget_already_exists PASSED                                            [ 78%]
+tests/test_create_widget.py::test_create_widget_no_admin_token PASSED                                            [ 79%]
+tests/test_delete_widget.py::FLAKE8 PASSED                                                                       [ 80%]
+tests/test_delete_widget.py::BLACK PASSED                                                                        [ 81%]
+tests/test_delete_widget.py::test_delete_widget PASSED                                                           [ 82%]
+tests/test_delete_widget.py::test_delete_widget_no_admin_token PASSED                                            [ 83%]
+tests/test_retrieve_widget.py::FLAKE8 PASSED                                                                     [ 83%]
+tests/test_retrieve_widget.py::BLACK PASSED                                                                      [ 84%]
+tests/test_retrieve_widget.py::test_retrieve_widget_non_admin_user PASSED                                        [ 85%]
+tests/test_retrieve_widget.py::test_retrieve_widget_does_not_exist PASSED                                        [ 86%]
+tests/test_retrieve_widget_list.py::FLAKE8 PASSED                                                                [ 87%]
+tests/test_retrieve_widget_list.py::BLACK PASSED                                                                 [ 88%]
+tests/test_retrieve_widget_list.py::test_retrieve_paginated_widget_list PASSED                                   [ 89%]
+tests/test_update_widget.py::FLAKE8 PASSED                                                                       [ 90%]
+tests/test_update_widget.py::BLACK PASSED                                                                        [ 91%]
+tests/test_update_widget.py::test_update_widget PASSED                                                           [ 92%]
+tests/test_user.py::FLAKE8 PASSED                                                                                [ 93%]
+tests/test_user.py::BLACK PASSED                                                                                 [ 94%]
+tests/test_user.py::test_encode_access_token PASSED                                                              [ 95%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                      [ 96%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                      [ 97%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                      [ 98%]
+tests/util.py::FLAKE8 PASSED                                                                                     [ 99%]
+tests/util.py::BLACK PASSED                                                                                      [100%]
 
-================================================= warnings summary =================================================
+=================================================== warnings summary ===================================================
 src/flask_api_tutorial/api/exceptions.py::FLAKE8
-  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
 src/flask_api_tutorial/api/exceptions.py::FLAKE8
-  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be rebmoved in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
     from werkzeug import cached_property
 
 src/flask_api_tutorial/api/exceptions.py::FLAKE8
-  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, Hashable
 
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-========================================= 106 passed, 3 warnings in 30.00s =========================================
-_____________________________________________________ summary ______________________________________________________
+=========================================== 106 passed, 3 warnings in 27.42s ===========================================
+_______________________________________________________ summary ________________________________________________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 

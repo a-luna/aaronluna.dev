@@ -22,7 +22,7 @@ function colorizeToxResults(codeElement) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll("pre > .tox").forEach(
+    document.querySelectorAll(".tox, .pytest").forEach(
         tox => colorizeToxResults(tox)
     )
 })
