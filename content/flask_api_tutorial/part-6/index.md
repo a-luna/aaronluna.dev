@@ -2363,7 +2363,9 @@ You should spend some time testing all of the endpoints. If you need a refresher
 
 ## Checkpoint
 
-At long last, we have implemented all of the required features for this project. However, that does not mean that
+At long last, we have implemented all of the required features for this project. However, that does not mean that our application is finished and ready to be deployed/shared with the world. In fact, the current state of the project is lacking many vital features and tools to make it more maintainable and approachable for users in the open-source community. At this point we will focus on improving the quality of our project by focusing on test coverage, CICD, logging and security hardening.
+
+I am always interested in hearing feedback on the tutorial, I hope you have enjoyed what has been provided so far.
 
 <div class="requirements">
   <p class="title complete">User Management/JWT Authentication</p>
