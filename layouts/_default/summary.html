@@ -1,14 +1,6 @@
-{{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
 <article class="article-preview list__item post default">
     <div class="article-preview-top-flex">
-        {{ if $postImage }}
-        {{ $thumbnail := $postImage.Fill "400x256" }}
-        <figure>
-            <a href="{{ .RelPermalink }}">
-                <img src="{{ $thumbnail.RelPermalink }}" alt="{{ .Title }}" />
-            </a>
-        </figure>
-        {{ end }}
+        {{ partial "thumbnail_image" . }}
         <div class="post__title-wrapper">
             <h3 class="list__title post__title ">
                 <a href="{{ .RelPermalink }}">{{ .Title }}</a>

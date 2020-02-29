@@ -40,9 +40,13 @@
 }
 
 .content .header-text.level1 a.hanchor-self {
+  margin: 4px 7px 0 0;
+}
+
+.content .header-text.level1 a.hanchor-self,
+.content .header-text.level1 a.hanchor-top {
   font-size: 20px;
   line-height: 20px;
-  margin: 4px 7px 0 0;
 }
 
 .content h3 {
@@ -51,9 +55,13 @@
 }
 
 .content .header-text.level2 a.hanchor-self {
+  margin: 4px 6px 0 0;
+}
+
+.content .header-text.level2 a.hanchor-self,
+.content .header-text.level2 a.hanchor-top {
   font-size: 18px;
   line-height: 18px;
-  margin: 4px 6px 0 0;
 }
 
 .content h4,
@@ -64,17 +72,21 @@
 
 .content .header-text.level3 a.hanchor-self,
 .content .header-text.level4 a.hanchor-self {
-  font-size: 16px;
-  line-height: 16px;
   margin: 4px 7px 0 0;
 }
 
+.content .header-text.level3 a.hanchor-self,
+.content .header-text.level4 a.hanchor-self,
+.content .header-text.level3 a.hanchor-top,
+.content .header-text.level4 a.hanchor-top {
+  font-size: 16px;
+  line-height: 16px;
+}
+
 .content .header-text a.hanchor-top {
-  font-size: 0.95em;
   margin: 0 0 0 6px;
   text-align: right;
   align-self: center;
-  line-height: 1;
 }
 
 .header-text h2,
@@ -516,7 +528,8 @@ h5 {
   background-color: initial;
   font-size: 0.9em;
   padding: 0;
-  margin: 0 6px 0 0
+  margin: 0 6px 0 0;
+  vertical-align: inherit;
 }
 
 .content h4 code,
@@ -933,11 +946,6 @@ div.alert {
   background-color: var(--widget-bg-color);
 }
 
-div.steps div.alert,
-div.steps div.note {
-  background-color: var(--page-bg-color);
-}
-
 div.alert,
 div.note {
   padding: 5px;
@@ -1013,6 +1021,10 @@ figcaption p code {
 }
 
 blockquote p code {
+  background: var(--page-bg-color);
+}
+
+.toc code {
   background: var(--page-bg-color);
 }
 
@@ -1102,11 +1114,13 @@ code {
 p code,
 li code {
   font-size: 0.8em;
-  background: var(--widget-bg-color);
+  background: var(--black3);
   border-radius: 4px;
   font-style: normal;
   padding: 2px 4px;
   margin: 0 1px;
+  line-height: inherit;
+  vertical-align: text-bottom;
 }
 
 pre.chroma {
