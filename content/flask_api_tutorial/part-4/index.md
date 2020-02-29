@@ -22,34 +22,34 @@ resources:
     params:
       credit: "Photo by Alex Pudov on Unsplash"
   - name: img1
-    src: images/p04-01-login-endpoint.jpg
+    src: images/p04-01-login-endpoint.png
     title: Figure 1 - Swagger UI with /auth/login endpoint
   - name: img2
-    src: images/p04-02-swagger-ui-auth.jpg
+    src: images/p04-02-swagger-ui-auth.png
     title: Figure 2 - Swagger UI with /auth/user endpoint
   - name: img3
-    src: images/p04-03-auth-user-no-token-swagger.jpg
+    src: images/p04-03-auth-user-no-token-swagger.png
     title: Figure 3 - Endpoint requires authorization (Swagger UI)
   - name: img4
-    src: images/p04-04-retrieve-access-token-swagger.jpg
+    src: images/p04-04-retrieve-access-token-swagger.png
     title: Figure 4 - Retrieve access token from response body (Swagger UI)
   - name: img5
-    src: images/p04-05-configure-access-token-swagger.jpg
+    src: images/p04-05-configure-access-token-swagger.png
     title: Figure 5 - Configure Swagger UI access token
   - name: img6
-    src: images/p04-06-close-authorizations-dialog-swagger.jpg
+    src: images/p04-06-close-authorizations-dialog-swagger.png
     title: Figure 6 - Access token configuration complete
   - name: img7
-    src: images/p04-07-lock-icons-swagger.jpg
+    src: images/p04-07-lock-icons-swagger.png
     title: Figure 7 - Authorization required icons are locked after configuring access token
   - name: img8
-    src: images/p04-08-auth-user-success-swagger.jpg
+    src: images/p04-08-auth-user-success-swagger.png
     title: Figure 8 - Request for /auth/user successful (Swagger UI)
   - name: img9
-    src: images/p04-09-auth-user-token-expired-swagger.jpg
+    src: images/p04-09-auth-user-token-expired-swagger.png
     title: Figure 9 - Request failed (Token expired)
   - name: img10
-    src: images/p04-10-auth-user-invalid-token-swagger.jpg
+    src: images/p04-10-auth-user-invalid-token-swagger.png
     title: Figure 10 - Request failed (Invalid token)
 ---
 ## Project Structure
@@ -71,6 +71,7 @@ The chart below shows the folder structure for this section of the tutorial. In 
 |       |   |   |- <span class="project-empty-file">__init__.py</span>
 |       |   |
 |       |   |- <span class="unmodified-file">__init__.py</span>
+|       |   |- <span class="work-file">exceptions.py</span>
 |       |
 |       |- <span class="project-folder">models</span>
 |       |   |- <span class="project-empty-file">__init__.py</span>
@@ -125,36 +126,91 @@ Why is this the case? The data required to register a new user or authenticate a
 
 When a user sends a login request and their credentials are successfully validated, the server must return an HTTP response that includes an access token. As we saw when we implemented the registration process, any response that includes sensitive information (e.g., an access token) must satisfy all <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">OAuth 2.0 requirements</a>, which we thoroughly documented and implemented [in Part 3](/series/flask-api-tutorial/part-3/#process-registration-request). The implementation for the response to a successful login request will be nearly identical.
 
-Open `src/flask_api_tutorial/api/auth/business.py`, add the content below and save the file:
+In observance of <a href="https://hellofuture.co/be-dry-dont-repeat-yourself-in-all-things/" target="_blank">DRY</a>, I decided to refactor the code that constructs the HTTP response out of the `process_registration_request` function (extracted to new method `_create_auth_successful_response`), in order to avoid repeating nearly the same code in `process_login_request`. I've provided the entire code for the updated version of `src/flask_api_tutorial/api/auth/business.py` below:
 
-```python {linenos=table,linenostart=31}
+```python {linenos=table}
+"""Business logic for /auth API endpoints."""
+from http import HTTPStatus
+
+from flask import current_app, jsonify
+from flask_restx import abort
+
+from flask_api_tutorial import db
+from flask_api_tutorial.models.user import User
+
+
+def process_registration_request(email, password):
+    if User.find_by_email(email):
+        abort(HTTPStatus.CONFLICT, f"{email} is already registered", status="fail")
+    new_user = User(email=email, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    access_token = new_user.encode_access_token()
+    return _create_auth_successful_response(
+        token=access_token.decode(),
+        status_code=HTTPStatus.CREATED,
+        message="successfully registered",
+    )
+
+
 def process_login_request(email, password):
     user = User.find_by_email(email)
     if not user or not user.check_password(password):
         abort(HTTPStatus.UNAUTHORIZED, "email or password does not match", status="fail")
     access_token = user.encode_access_token()
+    return _create_auth_successful_response(
+        token=access_token.decode(),
+        status_code=HTTPStatus.OK,
+        message="successfully logged in",
+    )
+
+
+def _create_auth_successful_response(token, status_code, message):
     response = jsonify(
         status="success",
-        message="successfully logged in",
-        access_token=access_token.decode(),
+        message=message,
+        access_token=token,
         token_type="bearer",
         expires_in=_get_token_expire_time(),
     )
-    response.status_code = HTTPStatus.OK
+    response.status_code = status_code
     response.headers["Cache-Control"] = "no-store"
     response.headers["Pragma"] = "no-cache"
     return response
-  ```
+
+
+def _get_token_expire_time():
+    token_age_h = current_app.config.get("TOKEN_EXPIRE_HOURS")
+    token_age_m = current_app.config.get("TOKEN_EXPIRE_MINUTES")
+    expires_in_seconds = token_age_h * 3600 + token_age_m * 60
+    return expires_in_seconds if not current_app.config["TESTING"] else 5
+
+```
+
+With that taken care of, let's take a look at the `process_login_request` function:
+
+```python {linenos=table,linenostart=25}
+def process_login_request(email, password):
+    user = User.find_by_email(email)
+    if not user or not user.check_password(password):
+        abort(HTTPStatus.UNAUTHORIZED, "email or password does not match", status="fail")
+    access_token = user.encode_access_token()
+    return _create_auth_successful_response(
+        token=access_token.decode(),
+        status_code=HTTPStatus.OK,
+        message="successfully logged in",
+    )
+```
 
 The first thing we do in this function is call `User.find_by_email` with the email address provided by the user. If no user exists with this email address, the current request is aborted with a response including 401 `HTTPStatus.UNAUTHORIZED`.
 
 If a user matching the provided email address was found in the database, we call `check_password` on the `user` instance, which verifies that the password provided by the user matches the `password_hash` value stored in the database. If the password does not match, the current request is aborted with a response including 401 `HTTPStatus.UNAUTHORIZED`.
 
-If the password is verified, then the response is almost exactly the same as a successful response to a registration request &mdash; we create an access token for the user and include the token in the response. Also, we adhere to the <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">requirements from RFC6749</a> which were [fully explained earlier](#process-registration-request). The only difference is the status code, instead of 201 we use 200 `HTTPStatus.OK`.
+If the password is verified, then the response is almost exactly the same as a successful response to a registration request &mdash; we create an access token for the user and include the token in the response. Also, we adhere to the <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">requirements from RFC6749</a> which were [fully explained earlier](#process-registration-request). The only difference is the status code (200 `HTTPStatus.OK` instead of 201 `HTTPStatus.CREATED`) and the message ("successfully logged in" instead of "successfully registered").
 
 ### `LoginUser` Resource
 
-The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `src/flask_api_tutorial/api/auth/endpoints.py` to include the `process_login_request` function that we just created (**Line 9**):
+The API resource that processes login requests will be very similar to the `RegisterUser` resource. First, update the import statements in `src/flask_api_tutorial/api/auth/endpoints.py` to include the `process_login_request` function that we just created **(Line 9)**:
 
 ```python {linenos=table,hl_lines=[9]}
 """API endpoint definitions for /auth namespace."""
@@ -216,8 +272,6 @@ restplus_doc.static  GET      /swaggerui/&lt;path:filename&gt;
 static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 
 The Swagger UI should also be updated to include the new API endpoint:
-
-<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
 
 {{< linked_image img1 >}}
 
@@ -348,7 +402,7 @@ from flask_api_tutorial.models.user import User
 
 
 def token_required(f):
-    """Allow access to the wrapped function if the request contains a valid access token."""
+    """Execute function if request contains valid access token."""
 
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -361,7 +415,7 @@ def token_required(f):
 
 
 def admin_token_required(f):
-    """Allow access to the wrapped function if the request contains a valid access token AND the user has admin privileges."""
+    """Execute function if request contains valid access token AND user is admin."""
 
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -532,7 +586,7 @@ The way we implement this endpoint will demonstrate a few new concepts:
 
 ### `user_model` API Model
 
-The first thing we need to do is create an API model for the `User` class. In `src/flask_api_tutorial/api/auth/dto.py`, update the import statements to incude the `Model` class from `flask_restplus` and the `String` and `Boolean` classes from the `flask_restplus.fields` module (**Lines 2-3**):
+The first thing we need to do is create an API model for the `User` class. In `src/flask_api_tutorial/api/auth/dto.py`, update the import statements to incude the `Model` class from `flask_restplus` and the `String` and `Boolean` classes from the `flask_restplus.fields` module **(Lines 2-3)**:
 
 ```python {linenos=table,hl_lines=["2-3"]}
 """Parsers and serializers for /auth API endpoints."""
@@ -559,7 +613,7 @@ user_model = Model(
 
 `"User"` is the name of the API Model, and this value will be used to identify the JSON object in the Swagger UI page. Please read <a href="https://flask-restplus.readthedocs.io/en/stable/marshalling.html" target="_blank">the Flask-RESTx documentation</a> for detailed examples of creating API models. Basically, an API model is a dictionary where the keys are the names of attributes on the object that we need to serialize, and the values are a class from the `fields` module that formats the value of the attibute on the object to ensure that it can be safely included in the HTTP response.
 
-Any other attributes of the object are considered private and will not be included in the JSON. If the name of the attribute on the object is different than the name that you wish to use in the JSON, specify the name of the attribute on the object using the `attribute` parameter, which is what we are doing for `registered_on` in the code above (**Line 22**).
+Any other attributes of the object are considered private and will not be included in the JSON. If the name of the attribute on the object is different than the name that you wish to use in the JSON, specify the name of the attribute on the object using the `attribute` parameter, which is what we are doing for `registered_on` in the code above **(Line 22)**.
 
 You may have noticed that the `User` class has attributes named `registered_on` and `registered_on_str`, a `datetime` and `str` value, respectively. `registered_on_str` is the `datetime` value formatted as a concise, easy-to-read string. We want to use the string version in our JSON, but would rather use `registered_on` as the name, rather than `registered_on_str`. Specifying `attribute="registered_on_str"` in the `fields.String` constructor achieves this.
 
@@ -573,9 +627,9 @@ The Flask-RESTx docs contain a <a href="https://flask-restplus.readthedocs.io/en
 
 Our next task is to create the business logic for the `api.auth_user` endpoint. The first thing we need to do is verify that the access token included in the request is valid. Sounds like a job for the `@token_required` decorator!
 
-Open `src/flask_api_tutorial/api/auth/business.py` and update the import statements to include the `@token_required` decorator and a few helper functions from the `datetime_util` module (<strong>Line 8</strong> and <strong>Line 10</strong>).
+Open `src/flask_api_tutorial/api/auth/business.py` and update the import statements to include the `@token_required` decorator and a few helper functions from the `datetime_util` module **(Line 8 and Lines 10-13)**.
 
-```python {linenos=table,hl_lines=[8,10]}
+```python {linenos=table,hl_lines=[8,"10-13"]}
 """Business logic for /auth API endpoints."""
 from http import HTTPStatus
 
@@ -593,7 +647,7 @@ from flask_api_tutorial.util.datetime_util import (
 
 Then, add the decorated function:
 
-```python {linenos=table,linenostart=54}
+```python {linenos=table,linenostart=42}
 @token_required
 def get_logged_in_user():
     public_id = get_logged_in_user.public_id
@@ -698,7 +752,7 @@ Whew! That was a lot of detail for a simple function. The next step is to define
 
 ### `GetUser` Resource
 
-Next, open `src/flask_api_tutorial/api/auth/endpoints.py` and update the import statements to include the `user_model` we created in the `flask_api_tutorial.api.auth.dto` module (**Line 6**) and the `get_logged_in_user` function we created in `flask_api_tutorial.api.auth.business` (**Line 10**). We also need to register `user_model` with the `auth_ns` namespace (**Line 14**):
+Next, open `src/flask_api_tutorial/api/auth/endpoints.py` and update the import statements to include the `user_model` we created in the `flask_api_tutorial.api.auth.dto` module **(Line 6)** and the `get_logged_in_user` function we created in `flask_api_tutorial.api.auth.business` **(Line 10)**. We also need to register `user_model` with the `auth_ns` namespace **(Line 14)**:
 
 ```python {linenos=table,hl_lines=[6,10,14]}
 """API endpoint definitions for /auth namespace."""
@@ -725,9 +779,9 @@ class GetUser(Resource):
     """Handles HTTP requests to URL: /api/v1/auth/user."""
 
     @auth_ns.doc(security="Bearer")
-    @auth_ns.response(HTTPStatus.OK, "Token is currently valid.", user_model)
-    @auth_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @auth_ns.response(HTTPStatus.UNAUTHORIZED, "Token is invalid or expired.")
+    @auth_ns.response(int(HTTPStatus.OK), "Token is currently valid.", user_model)
+    @auth_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+    @auth_ns.response(int(HTTPStatus.UNAUTHORIZED), "Token is invalid or expired.")
     @auth_ns.marshal_with(user_model)
     def get(self):
         """Validate access token and return user info."""
@@ -771,9 +825,9 @@ By now, you should know what's next: unit tests for the `api.auth_user` endpoint
 
 ### Unit Tests: `test_auth_user.py`
 
-As with the two previous API endpoints, before we write any test cases we need to update the `tests/util.py` file with any error/success message string values and functions that will be re-used across the test set. Add `WWW_AUTH_NO_TOKEN` on **Line 8**:
+As with the two previous API endpoints, before we write any test cases we need to update the `tests/util.py` file with any error/success message string values and functions that will be re-used across the test set. Add `WWW_AUTH_NO_TOKEN` on **Line 7**:
 
-```python {linenos=table,hl_lines=[8]}
+```python {linenos=table,hl_lines=[7]}
 """Shared functions and constants for unit tests."""
 from flask import url_for
 
@@ -783,7 +837,7 @@ BAD_REQUEST = "Input payload validation failed"
 WWW_AUTH_NO_TOKEN = 'Bearer realm="registered_users@mydomain.com"'
 ```
 
-Then, reate a function to send a `GET` request to the `api.auth_user` endpoint. Open the `tests/util.py` file and add the function below:
+Then, create a function to send a `GET` request to the `api.auth_user` endpoint. Open the `tests/util.py` file and add the function below:
 
 ```python {linenos=table,linenostart=26}
 def get_user(test_client, access_token):
@@ -836,7 +890,7 @@ from tests.util import EMAIL, WWW_AUTH_NO_TOKEN, register_user, login_user, get_
 
 Copy the test case below and add it to `test_auth_user.py`:
 
-```python {linenos=table,linenostart=22}
+```python {linenos=table,linenostart=20}
 def test_auth_user_no_token(client, db):
     response = client.get(url_for("api.auth_user"))
     assert response.status_code == HTTPStatus.UNAUTHORIZED
@@ -850,16 +904,16 @@ There are a few things to note about this test case:
 <div class="code-details">
   <ul>
     <li>
-      <p><strong>Line 23: </strong>The first thing we do is send a <code>GET</code> request using the test client to the <code>api.auth_user</code> endpoint without any headers.</p>
+      <p><strong>Line 21: </strong>The first thing we do is send a <code>GET</code> request using the test client to the <code>api.auth_user</code> endpoint without any headers.</p>
     </li>
     <li>
-      <p><strong>Line 24: </strong>The expected response code when a request is sent to a protected resource without an access token is 401 <code>HTTPStatus.UNAUTHORIZED</code>.</p>
+      <p><strong>Line 22: </strong>The expected response code when a request is sent to a protected resource without an access token is 401 <code>HTTPStatus.UNAUTHORIZED</code>.</p>
     </li>
     <li>
-      <p><strong>Lines 25-26: </strong>These two lines verify that the <strong>status</strong> and <strong>message</strong> attributes exist in the response JSON and that the values indicate that the request did not succeed because the requested resource requires authorization which was not included in the request.</p>
+      <p><strong>Lines 23-24: </strong>These two lines verify that the <strong>status</strong> and <strong>message</strong> attributes exist in the response JSON and that the values indicate that the request did not succeed because the requested resource requires authorization which was not included in the request.</p>
     </li>
     <li>
-      <p><strong>Lines 27-28: </strong>We <a href="#decorators">previously explained</a> the different values that the <code>WWW-Authenticate</code> header must include based on whether or not the request was successfully authorized, so please refer back to the <a href="#decorators">Decorators</a> section if you are unclear why this is the expected value.</p>
+      <p><strong>Lines 25: </strong>We <a href="#decorators">previously explained</a> the different values that the <code>WWW-Authenticate</code> header must include based on whether or not the request was successfully authorized, so please refer back to the <a href="#decorators">Decorators</a> section if you are unclear why this is the expected value.</p>
       <p>When a request for a protected resource does not include an access token, <code>WWW-Authenticate</code> must only include the <span class="bold-text">realm</span> attribute and must not contain any error information.</p>
     </li>
   </ul>
@@ -887,7 +941,7 @@ WWW_AUTH_EXPIRED_TOKEN = (
 
 Then, add the content below:
 
-```python {linenos=table,linenostart=36}
+```python {linenos=table,linenostart=35}
 def test_auth_user_expired_token(client, db):
     register_user(client)
     response = login_user(client)
@@ -918,7 +972,7 @@ As always, please note the following:
       <p><strong>Lines 43-44: </strong>These two lines verify that the status and message attributes exist in the response JSON and that the values indicate that the request did not succeed because the access token sent by the client is expired.</p>
     </li>
     <li>
-      <p><strong>Lines 45-46: </strong>We verify that the <code>WWW-Authenticate</code> header contains the <span class="bold-text">realm</span> attribute as well as the <span class="bold-text">error</span> attribute and the <span class="bold-text">error_description</span> attribute.</p>
+      <p><strong>Lines 45: </strong>We verify that the <code>WWW-Authenticate</code> header contains the <span class="bold-text">realm</span> attribute as well as the <span class="bold-text">error</span> attribute and the <span class="bold-text">error_description</span> attribute.</p>
     </li>
   </ul>
 </div>
@@ -1013,13 +1067,12 @@ If you enter a URL without a domain, for example `:5000/api/v1/auth/user`, the <
 <span class="purple">Access-Control-Allow-Origin</span>: <span class="light-blue">*</span>
 <span class="purple">Content-Length</span>: <span class="light-blue">53</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
-<span class="purple">Date</span>: <span class="light-blue">Sat, 03 Aug 2019 23:19:16 GMT</span>
-<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
+<span class="purple">Date</span>: <span class="light-blue">Sat, 29 Feb 2020 08:02:40 GMT</span>
+<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.16.1 Python/3.7.6</span>
 <span class="purple">WWW-Authenticate</span>: <span class="light-blue">Bearer realm="registered_users@mydomain.com"</span>
 
 <span class="bold-text">{
-  <span class="purple">"message"</span>: <span class="light-blue">"Unauthorized"</span>,
-  <span class="purple">"status"</span>: <span class="light-blue">"fail"</span>
+  <span class="purple">"message"</span>: <span class="light-blue">"Unauthorized"</span>
 }</span></span></code></pre>
 
 <div class="note note-flex">
@@ -1051,9 +1104,9 @@ We need to obtain an access token, so let's login and retrieve the token generat
 <span class="purple">Access-Control-Allow-Origin</span>: <span class="light-blue">*</span>
 <span class="purple">Content-Length</span>: <span class="light-blue">345</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
-<span class="purple">Date</span>: <span class="light-blue">Sat, 03 Aug 2019 23:20:29 GMT</span>
+<span class="purple">Date</span>: <span class="light-blue">Sat, 29 Feb 2020 08:06:39 GMT</span>
 <span class="purple">Pragma</span>: <span class="light-blue">no-cache</span>
-<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
+<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.16.1 Python/3.7.6</span>
 
 <span class="bold-text">{
   <span class="purple">"access_token"</span>: <span class="light-blue">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQ4NzUzMjksImlhdCI6MTU2NDg3NDQyOSwic3ViIjoiNzdiNGYzYjctNzg2NC00ZmM0LWE4MzQtZjJhNjQ5OWYxNzJhIiwiYWRtaW4iOmZhbHNlfQ.LBYrCr5-8FqCKIF_1WEpk8ake235cB9hZNL01oQjPvw"</span>,
@@ -1089,14 +1142,15 @@ Now that we have an access token, the only thing we need to do is send it in the
 <span class="purple">Access-Control-Allow-Origin</span>: <span class="light-blue">*</span>
 <span class="purple">Content-Length</span>: <span class="light-blue">159</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
-<span class="purple">Date</span>: <span class="light-blue">Sat, 03 Aug 2019 23:25:13 GMT</span>
-<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
+<span class="purple">Date</span>: <span class="light-blue">Sat, 29 Feb 2020 08:23:46 GMT</span>
+<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.16.1 Python/3.7.6</span>
 
 <span class="bold-text">{
   <span class="purple">"admin"</span>: <span class="orange">false</span>,
   <span class="purple">"email"</span>: <span class="light-blue">"user@test.com"</span>,
   <span class="purple">"public_id"</span>: <span class="light-blue">"77b4f3b7-7864-4fc4-a834-f2a6499f172a"</span>,
-  <span class="purple">"registered_on"</span>: <span class="light-blue">"08/01/19 10:34:41 PM UTC"</span>
+  <span class="purple">"registered_on"</span>: <span class="light-blue">"02/28/20 03:38:53 PM UTC-08:00"</span>,
+  <span class="purple">"token_expires_in"</span>: <span class="light-blue">"00:14:42"</span>
 }</span></span></code></pre>
 
 ## `api.auth_logout` Endpoint
@@ -1214,15 +1268,15 @@ First, run <code>flask db migrate</code> and add a message explaining the change
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
 INFO  [alembic.autogenerate.compare] Detected added table 'token_blacklist'
-  Generating
-  /Users/aaronluna/Projects/flask_api_tutorial/migrations/versions/97f449048b52_add_blacklistedtoken_model.py ...  done</span></code></pre>
+  Generating /Users/aaronluna/Projects/flask-api-tutorial/migrations/versions/079d26d45cc9_add_blacklistedtoken_model.py
+  ...  done</span></code></pre>
 
 Next, run <code>flask db upgrade</code> to run the migration script and add the new table to the database:
 
 <pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask db upgrade</span>
 <span class="cmd-results">INFO  [alembic.runtime.migration] Context impl SQLiteImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-INFO  [alembic.runtime.migration] Running upgrade 5789387e80dd -> 97f449048b52, add BlacklistedToken model</span></code></pre>
+INFO  [alembic.runtime.migration] Running upgrade eb6c2faa0708 -> 079d26d45cc9, add BlacklistedToken model</span></code></pre>
 
 With the `BlacklistedToken` class fully implemented, we have everything we need to create the business logic for the `api.auth_logout` endpoint.
 
@@ -1230,7 +1284,7 @@ With the `BlacklistedToken` class fully implemented, we have everything we need 
 
 After receiving a logout request containing a valid, unexpired token, the server then proceeds to create a `BlasklistedToken` object, add it to the database and commit the changes. Then, the server sends an HTTP response indicating that the logout request succeeded.
 
-The function that performs this process will be defined in`src/flask_api_tutorial/api/auth/business.py`. Open that file and update the import statements to include the `BlacklistedToken` class: (**Line 9**)
+The function that performs this process will be defined in`src/flask_api_tutorial/api/auth/business.py`. Open that file and update the import statements to include the `BlacklistedToken` class: **(Line 9)**
 
 ```python {linenos=table,hl_lines=[9]}
 """Business logic for /auth API endpoints."""
@@ -1251,7 +1305,7 @@ from flask_api_tutorial.util.datetime_util import (
 
 Next, add the `process_logout_request` function and save the file:
 
-```python {linenos=table,linenostart=64}
+```python {linenos=table,linenostart=52}
 @token_required
 def process_logout_request():
     access_token = process_logout_request.token
@@ -1269,7 +1323,7 @@ As explained in the [Decorators](#decorators) section of this post, the `access_
 
 There's one more process we need to update in order to make the blacklist fully functional. Currently, when verifying an access token, it is only rejected by the server if the token is invalid or expired. Now, the server must also check if the token has been blacklisted before processing the client's request.
 
-Open `src/flask_api_tutorial/models/user.py` and update the import statements to include the `BlacklistedToken` class: (**Line 10**)
+Open `src/flask_api_tutorial/models/user.py` and update the import statements to include the `BlacklistedToken` class: **(Line 10)**
 
 ```python {linenos=table,hl_lines=[10]}
 """Class definition for User model."""
@@ -1293,7 +1347,7 @@ from flask_api_tutorial.util.result import Result
 
 We need to modify the `decode_access_token` method to reurn a `Result` object indicating the token has been blacklisted if that is the case. Add **Lines 76-78** and save the changes:
 
-```python {linenos=table,linenostart=59,hl_lines=["18-20"]}
+```python {linenos=table,linenostart=68,hl_lines=["18-20"]}
 @staticmethod
 def decode_access_token(access_token):
     if isinstance(access_token, bytes):
@@ -1352,10 +1406,10 @@ class LogoutUser(Resource):
     """Handles HTTP requests to URL: /auth/logout."""
 
     @auth_ns.doc(security="Bearer")
-    @auth_ns.response(HTTPStatus.OK, "Log out succeeded, token is no longer valid.")
-    @auth_ns.response(HTTPStatus.BAD_REQUEST, "Validation error.")
-    @auth_ns.response(HTTPStatus.UNAUTHORIZED, "Token is invalid or expired.")
-    @auth_ns.response(HTTPStatus.INTERNAL_SERVER_ERROR, "Internal server error.")
+    @auth_ns.response(int(HTTPStatus.OK), "Log out succeeded, token is no longer valid.")
+    @auth_ns.response(int(HTTPStatus.BAD_REQUEST), "Validation error.")
+    @auth_ns.response(int(HTTPStatus.UNAUTHORIZED), "Token is invalid or expired.")
+    @auth_ns.response(int(HTTPStatus.INTERNAL_SERVER_ERROR), "Internal server error.")
     def post(self):
         """Add token to blacklist, deauthenticating the current user."""
         return process_logout_request()
@@ -1365,7 +1419,16 @@ This should all look very familiar, the only difference between the `LogoutUser`
 
 ### Unit Tests: `test_auth_logout.py`
 
-Finally, we need to create tests for the `api.auth_logout` endpoint. The "happy path" test case shown below simply registers a new user, logs in and then logs out. Create a new file `/test/test_auth_logout.py` and add the content below:
+Before we create any test cases, we need a way to send a `POST` request to the `api.auth_logout` endpoint.  Open `tests/util.py` and add the `logout_user` function:
+
+```python {linenos=table,linenostart=32}
+def logout_user(test_client, access_token):
+    return test_client.post(
+        url_for("api.auth_logout"), headers={"Authorization": f"Bearer {access_token}"}
+    )
+```
+
+The "happy path" test case shown below simply registers a new user, logs in and then logs out. Create a new file `/test/test_auth_logout.py` and add the content below:
 
 ```python {linenos=table}
 """Unit tests for api.auth_logout API endpoint."""
@@ -1414,7 +1477,7 @@ There are a few things in this test case that we are seeing for the fist time, p
 
 We should definitely ensure that any requests for a protected resource using a blacklisted token does not succeed, and that the response indicates that the reason the request failed is due to the token being blacklisted.
 
-First, update the import statements to include the `WWW_AUTH_NO_TOKEN` string from `tests.util` **(Line 4)**, and then add the highlighted lines to `test_auth_logout.py`
+First, update the import statements to include the `WWW_AUTH_NO_TOKEN` string from `tests.util` **(Line 5)**, and then add the highlighted lines to `test_auth_logout.py`
 
 ```python {linenos=table,hl_lines=[5,"8-13"]}
 """Unit tests for api.auth_logout API endpoint."""
@@ -1465,99 +1528,108 @@ There are plenty of necessary test cases that are missing from the current set. 
 You should run <code>tox</code> to make sure the new test case passes and that nothing else broke because of the changes:
 
 <pre><code class="tox"><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
-<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
-py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
-py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
-py37 run-test-pre: PYTHONHASHSEED='3343573933'
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask-api-tutorial/setup.py
+py37 create: /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37
+py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
+py37 inst: /Users/aaronluna/Projects/flask-api-tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.9,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.12.0,python-editor==1.0.4,pytz==2019.3,regex==2020.2.20,requests==2.23.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==3.0.0
+py37 run-test-pre: PYTHONHASHSEED='3206075645'
 py37 run-test: commands[0] | pytest
-============================================== test session starts ==============================================
-platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/bin/python
 cachedir: .tox/py37/.pytest_cache
-rootdir: /Users/aaronluna/Desktop/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
-collected 69 items
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
+collected 71 items
 
-run.py::BLACK PASSED                                                                                      [  1%]
-run.py::FLAKE8 PASSED                                                                                     [  2%]
-setup.py::BLACK SKIPPED                                                                                   [  4%]
-setup.py::FLAKE8 SKIPPED                                                                                  [  5%]
-src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                         [  7%]
-src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                                        [  8%]
-src/flask_api_tutorial/config.py::BLACK SKIPPED                                                           [ 10%]
-src/flask_api_tutorial/config.py::FLAKE8 SKIPPED                                                          [ 11%]
-src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                                     [ 13%]
-src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                                    [ 14%]
-src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                                [ 15%]
-src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                               [ 17%]
-src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                 [ 18%]
-src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                [ 20%]
-src/flask_api_tutorial/api/auth/decorators.py::BLACK SKIPPED                                               [ 21%]
-src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 SKIPPED                                              [ 23%]
-src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                     [ 24%]
-src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                    [ 26%]
-src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                [ 27%]
-src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                               [ 28%]
-src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                             [ 30%]
-src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                            [ 31%]
-src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                                  [ 33%]
-src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                                 [ 34%]
-src/flask_api_tutorial/models/token_blacklist.py::BLACK PASSED                                            [ 36%]
-src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 PASSED                                           [ 37%]
-src/flask_api_tutorial/models/user.py::BLACK PASSED                                                       [ 39%]
-src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                      [ 40%]
-src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                                    [ 42%]
-src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                                   [ 43%]
-src/flask_api_tutorial/util/datetime_util.py::BLACK SKIPPED                                               [ 44%]
-src/flask_api_tutorial/util/datetime_util.py::FLAKE8 SKIPPED                                              [ 46%]
-src/flask_api_tutorial/util/result.py::BLACK SKIPPED                                                      [ 47%]
-src/flask_api_tutorial/util/result.py::FLAKE8 SKIPPED                                                     [ 49%]
-tests/__init__.py::BLACK SKIPPED                                                                          [ 50%]
-tests/__init__.py::FLAKE8 SKIPPED                                                                         [ 52%]
-tests/conftest.py::BLACK SKIPPED                                                                          [ 53%]
-tests/conftest.py::FLAKE8 SKIPPED                                                                         [ 55%]
-tests/test_auth_login.py::BLACK SKIPPED                                                                   [ 56%]
-tests/test_auth_login.py::FLAKE8 SKIPPED                                                                  [ 57%]
-tests/test_auth_login.py::test_login PASSED                                                               [ 59%]
-tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                          [ 60%]
-tests/test_auth_logout.py::BLACK PASSED                                                                   [ 62%]
-tests/test_auth_logout.py::FLAKE8 PASSED                                                                  [ 63%]
-tests/test_auth_logout.py::test_logout PASSED                                                             [ 65%]
-tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                           [ 66%]
-tests/test_auth_register.py::BLACK SKIPPED                                                                [ 68%]
-tests/test_auth_register.py::FLAKE8 SKIPPED                                                               [ 69%]
-tests/test_auth_register.py::test_auth_register PASSED                                                    [ 71%]
-tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                           [ 72%]
-tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                      [ 73%]
-tests/test_auth_user.py::BLACK PASSED                                                                     [ 75%]
-tests/test_auth_user.py::FLAKE8 PASSED                                                                    [ 76%]
-tests/test_auth_user.py::test_auth_user PASSED                                                            [ 78%]
-tests/test_auth_user.py::test_auth_user_no_token PASSED                                                   [ 79%]
-tests/test_auth_user.py::test_auth_user_expired_token PASSED                                              [ 81%]
-tests/test_config.py::BLACK SKIPPED                                                                       [ 82%]
-tests/test_config.py::FLAKE8 SKIPPED                                                                      [ 84%]
-tests/test_config.py::test_config_development PASSED                                                      [ 85%]
-tests/test_config.py::test_config_testing PASSED                                                          [ 86%]
-tests/test_config.py::test_config_production PASSED                                                       [ 88%]
-tests/test_user.py::BLACK SKIPPED                                                                         [ 89%]
-tests/test_user.py::FLAKE8 SKIPPED                                                                        [ 91%]
-tests/test_user.py::test_encode_access_token PASSED                                                       [ 92%]
-tests/test_user.py::test_decode_access_token_success PASSED                                               [ 94%]
-tests/test_user.py::test_decode_access_token_expired PASSED                                               [ 95%]
-tests/test_user.py::test_decode_access_token_invalid PASSED                                               [ 97%]
-tests/util.py::BLACK PASSED                                                                               [ 98%]
-tests/util.py::FLAKE8 PASSED                                                                              [100%]
+run.py::FLAKE8 PASSED                                                                                            [  1%]
+run.py::BLACK PASSED                                                                                             [  2%]
+setup.py::FLAKE8 PASSED                                                                                          [  4%]
+setup.py::BLACK PASSED                                                                                           [  5%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                [  7%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                 [  8%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                  [  9%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                                   [ 11%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                            [ 12%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                             [ 14%]
+src/flask_api_tutorial/api/exceptions.py::FLAKE8 PASSED                                                          [ 15%]
+src/flask_api_tutorial/api/exceptions.py::BLACK PASSED                                                           [ 16%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                       [ 18%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                        [ 19%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                       [ 21%]
+src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                        [ 22%]
+src/flask_api_tutorial/api/auth/decorators.py::FLAKE8 PASSED                                                     [ 23%]
+src/flask_api_tutorial/api/auth/decorators.py::BLACK PASSED                                                      [ 25%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 PASSED                                                            [ 26%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK PASSED                                                             [ 28%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                                      [ 29%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                       [ 30%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                    [ 32%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                     [ 33%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                         [ 35%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                          [ 36%]
+src/flask_api_tutorial/models/token_blacklist.py::FLAKE8 PASSED                                                  [ 38%]
+src/flask_api_tutorial/models/token_blacklist.py::BLACK PASSED                                                   [ 39%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                             [ 40%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                              [ 42%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                           [ 43%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                            [ 45%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                      [ 46%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                       [ 47%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                             [ 49%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                              [ 50%]
+tests/__init__.py::FLAKE8 PASSED                                                                                 [ 52%]
+tests/__init__.py::BLACK PASSED                                                                                  [ 53%]
+tests/conftest.py::FLAKE8 PASSED                                                                                 [ 54%]
+tests/conftest.py::BLACK PASSED                                                                                  [ 56%]
+tests/test_auth_login.py::FLAKE8 PASSED                                                                          [ 57%]
+tests/test_auth_login.py::BLACK PASSED                                                                           [ 59%]
+tests/test_auth_login.py::test_login PASSED                                                                      [ 60%]
+tests/test_auth_login.py::test_login_email_does_not_exist PASSED                                                 [ 61%]
+tests/test_auth_logout.py::FLAKE8 PASSED                                                                         [ 63%]
+tests/test_auth_logout.py::BLACK PASSED                                                                          [ 64%]
+tests/test_auth_logout.py::test_logout PASSED                                                                    [ 66%]
+tests/test_auth_logout.py::test_logout_token_blacklisted PASSED                                                  [ 67%]
+tests/test_auth_register.py::FLAKE8 PASSED                                                                       [ 69%]
+tests/test_auth_register.py::BLACK PASSED                                                                        [ 70%]
+tests/test_auth_register.py::test_auth_register PASSED                                                           [ 71%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                  [ 73%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                             [ 74%]
+tests/test_auth_user.py::FLAKE8 PASSED                                                                           [ 76%]
+tests/test_auth_user.py::BLACK PASSED                                                                            [ 77%]
+tests/test_auth_user.py::test_auth_user PASSED                                                                   [ 78%]
+tests/test_auth_user.py::test_auth_user_no_token PASSED                                                          [ 80%]
+tests/test_auth_user.py::test_auth_user_expired_token PASSED                                                     [ 81%]
+tests/test_config.py::FLAKE8 PASSED                                                                              [ 83%]
+tests/test_config.py::BLACK PASSED                                                                               [ 84%]
+tests/test_config.py::test_config_development PASSED                                                             [ 85%]
+tests/test_config.py::test_config_testing PASSED                                                                 [ 87%]
+tests/test_config.py::test_config_production PASSED                                                              [ 88%]
+tests/test_user.py::FLAKE8 PASSED                                                                                [ 90%]
+tests/test_user.py::BLACK PASSED                                                                                 [ 91%]
+tests/test_user.py::test_encode_access_token PASSED                                                              [ 92%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                      [ 94%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                      [ 95%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                      [ 97%]
+tests/util.py::FLAKE8 PASSED                                                                                     [ 98%]
+tests/util.py::BLACK PASSED                                                                                      [100%]
 
-=============================================== warnings summary ================================================
-src/flask_api_tutorial/api/auth/business.py::BLACK
-  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+=================================================== warnings summary ===================================================
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+    from werkzeug import cached_property
+
+src/flask_api_tutorial/api/exceptions.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, Hashable
+
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-============================================ short test summary info ============================================
-SKIPPED [18] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
-SKIPPED [18] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
-================================== 33 passed, 36 skipped, 1 warning in 16.09s ===================================
-____________________________________________________ summary ____________________________________________________
+=========================================== 71 passed, 3 warnings in 29.32s ============================================
+_______________________________________________________ summary ________________________________________________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 

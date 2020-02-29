@@ -20,7 +20,6 @@
 
 .content a.hanchor {
   color: var(--header-anchor-link);
-  opacity: 0.4;
 }
 
 .content a.hanchor:hover,
@@ -28,7 +27,6 @@
 .content a.hanchor:active:hover,
 .content a.hanchor:focus  {
   color: var(--header-anchor-link-hover);
-  opacity: 1;
   text-decoration: none;
 }
 
@@ -55,7 +53,7 @@
 .content .header-text.level2 a.hanchor-self {
   font-size: 18px;
   line-height: 18px;
-  margin: 4px 7px 0 0;
+  margin: 4px 6px 0 0;
 }
 
 .content h4,
@@ -75,7 +73,7 @@
   font-size: 0.95em;
   margin: 0 0 0 6px;
   text-align: right;
-  align-self: flex-start;
+  align-self: center;
   line-height: 1;
 }
 
@@ -1169,7 +1167,7 @@ p code.chroma {
   font-weight: 700;
   line-height: 14px;
   letter-spacing: 0.5px;
-  width: 60px;
+  width: 65px;
   color: var(--copy-code-button-text);
   background-color: var(--copy-code-button);
   border: 1.25px solid var(--widget-bg-color);

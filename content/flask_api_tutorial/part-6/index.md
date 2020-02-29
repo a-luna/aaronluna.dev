@@ -195,7 +195,7 @@ An example of a request/response pair containing paginated data is given below:
 <span class="cmd-hl"><span class="cmd-lineno-hl">18</span>  <span class="light-blue">&lt;/api/v1/widgets?page=1&per_page=10>; rel="first",</span></span>
 <span class="cmd-hl"><span class="cmd-lineno-hl">19</span>  <span class="light-blue">&lt;/api/v1/widgets?page=2&per_page=10>; rel="next",</span></span>
 <span class="cmd-hl"><span class="cmd-lineno-hl">20</span>  <span class="light-blue">&lt;/api/v1/widgets?page=5&per_page=10>; rel="last"</span></span>
-<span class="cmd-lineno">21</span>  <span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
+<span class="cmd-lineno">21</span>  <span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.16.1 Python/3.7.6</span>
 <span class="cmd-lineno">22</span>  <span class="purple">Total-Count</span>: <span class="pink">23</span>
 <span class="cmd-lineno">23</span>
 <span class="cmd-lineno">24</span>  <span class="bold-text">{

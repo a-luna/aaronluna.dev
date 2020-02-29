@@ -22,26 +22,20 @@ resources:
     params:
       credit: "Photo by ZSun Fu on Unsplash"
   - name: img1
-    src: images/p03-01-empty-api.jpg
+    src: images/p03-01-empty-api.png
     title: Figure 1 - Swagger UI without API Routes
   - name: img2
-    src: images/p03-02-swagger-ui.jpg
+    src: images/p03-02-swagger-ui.png
     title: Figure 2 - Swagger UI with api.auth_register endpoint
   - name: img3
-    src: images/p03-03-register-endpoint.jpg
+    src: images/p03-03-register-endpoint.png
     title: Figure 3 - api.auth_register endpoint expanded
   - name: img4
-    src: images/p03-04-register-endpoint.jpg
+    src: images/p03-04-register-endpoint.png
     title: Figure 4 - api.auth_register endpoint ready to test
   - name: img5
-    src: images/p03-05-register-response.jpg
+    src: images/p03-05-register-response.png
     title: Figure 5 - New user successfully registered (Swagger UI)
-  - name: img6
-    src: images/p03-06-conflict-409.jpg
-    title: Figure 6 - Email address already registered
-  - name: img7
-    src: images/p03-07-register-response-cli.jpg
-    title: Figure 7 - New user successfully registered (CLI)
 ---
 ## Project Structure
 
@@ -221,7 +215,7 @@ There are a few important things to note about how we are configuring the `api` 
           <p><strong>Line 5: </strong>This is where we create the Flask blueprint object for our API. The first parameter, <code>"api"</code>, is the name of the blueprint. All API endpoint names will be prefixed with this value (e.g., <code>api.func_name</code>). The <code>url_prefix</code> value makes all API routes begin with <code>/api/v1</code> (e.g., <code>api/v1/auth/login</code>).</p>
       </li>
       <li>
-          <p><strong>Lines 6, 14: </strong>The API will implement <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer token authentication</a>. This dictionary value is passed to the Flask-RESTx <code>Api</code> constructor which adds the authorization to the Swagger UI page. This creates a "Authorize" button in the Swagger UI that prompts you to enter a Bearer token value (i.e., JWT value). After providing a token, all API methods that require authorization will automatically send the token in the Authorization field of the request header.</p>
+          <p><strong>Lines 6, 14: </strong>The API will implement <a href="https://tools.ietf.org/html/rfc6750" target="_blank">Bearer token authentication</a>. Providing a value for <code>authorizations</code> to the Flask-RESTx <code>Api</code> constructor will allow the user to add a JWT to the header of all requests sent through the Swagger UI. Specifically, the Swagger UI will contain a button labeled "Authorize" that opens a modal dialog prompting the user for the value of the <code>Bearer</code> access token.</p>
 {{< info_box >}}
 Currently, Flask-RESTx only supports OpenAPI 2.0, which lacks sufficient configuration settings to accurately describe Bearer token authentication as a security scheme object. This is not the case in OpenAPI 3.0. Defining an `apiKey` named `Bearer` which is located in the `Authorization` field of the request header achieves nearly the same behavior as Bearer Token Authentication, and provides a dialog window on the Swagger UI page to send requests with the access token in the header.
 {{< /info_box >}}
@@ -271,7 +265,9 @@ def create_app(config_name):
     return app
 ```
 
-The placement of the import statement is deliberate. To avoid a circular import, we do not want the `app.api` package to be imported <span class="bold-text">unless</span> the `create_app` method is invoked.
+{{< alert_box >}}
+The placement of the import statement is deliberate. To avoid a circular import, we do not want the `app.api` package to be imported **unless** the `create_app` method is invoked.
+{{< /alert_box >}}
 
 It's a good idea to make sure that everything still works and we have not broken anything, so run the unit tests with `tox`. They should all pass. Then, run `flask routes` to see the new URL routes that have been registered in our application:
 
@@ -287,8 +283,6 @@ static               GET      /static/&lt;path:filename&gt;</span></code></pre>
 The first four routes in the list were added by registering the `api_bp` blueprint with our application. Next, run `flask run` to start the development server and point your browser to `http://localhost:5000/api/v1/ui` (if you are using a different port or hostname on your dev machine, adjust accordingly).
 
 You should see something similar to the screenshot below. Note that the URL path, API version, title and description are taken directly from values we provided to the `Api` constructor in the `src/flask_api_tutorial/api/__init__.py` file.
-
-<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
 
 {{< linked_image img1 >}}
 
@@ -491,17 +485,7 @@ For any response containing sensitive information (e.g., access tokens, credenti
   <p style="margin: 1em 0 0.5em 1em">The parameters are included in the entity-body of the HTTP response using the "application/json" media type as defined by [RFC4627].  The parameters are serialized into a JavaScript Object Notation (JSON) structure by adding each parameter at the highest structure level.  Parameter names and string values are included as JSON strings.  Numerical values are included as JSON numbers.  The order of parameters does not matter and can vary.</p>
   <p style="margin: 1em 0 0.5em 1em">The authorization server MUST include the HTTP "Cache-Control" response header field [RFC2616] with a value of "no-store" in any response containing tokens, credentials, or other sensitive information, as well as the "Pragma" response header field [RFC2616] with a value of "no-cache".</p>
   <p style="margin: 1em 0 0.5em 1em">For example:</p>
-  <pre><code>HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Cache-Control: no-store
-Pragma: no-cache
-{
-&nbsp;&nbsp;"access_token": "2YotnFZFEjr1zCsicMWpAA",
-&nbsp;&nbsp;"token_type": "example",
-&nbsp;&nbsp;"expires_in": 3600,
-&nbsp;&nbsp;"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",
-&nbsp;&nbsp;"example_parameter": "example_value"
-}</code></pre>
+  <p style="margin: 0 0 0 2em; line-height: 1.4;"><code>HTTP/1.1 200 OK<br>Content-Type: application/json;charset=UTF-8<br>Cache-Control: no-store<br>Pragma: no-cache<br>{<br>&nbsp;&nbsp;"access_token": "2YotnFZFEjr1zCsicMWpAA",<br>&nbsp;&nbsp;"token_type": "example",<br>&nbsp;&nbsp;"expires_in": 3600,<br>&nbsp;&nbsp;"refresh_token": "tGzv3JOkF0XG5Qx2TlKWIA",<br>&nbsp;&nbsp;"example_parameter": "example_value"<br>}</code></p>
 </blockquote>
 
 Open `src/flask_api_tutorial/api/auth/business.py`, add the content below and save the file:
@@ -714,25 +698,17 @@ The presence of the `api.auth_register` endpoint in the list of routes confirms 
 
 Start the development server by running `flask run` and point your browser to `http://localhost:5000/api/v1/ui` to check out the Swagger UI:
 
-<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
-
 {{< linked_image img2 >}}
 
 You can click anywhere on the green bar to expand the component. It might not seem like a huge deal, but everything you see was automatically generated by Flask-RESTx (from the `api` object, `auth_ns` object, `auth_reqparser`, `RegisterUser`, etc):
-
-<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
 
 {{< linked_image img3 >}}
 
 If you'd like to send a request, click the **Try It Out** button. Then, enter any valid email address and any value for password and click **Execute**:
 
-<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
-
 {{< linked_image img4 >}}
 
 You should receive a response with status code 201 `HTTPStatus.CREATED` if the email address is formatted correctly (this is the only validation process being performed by `auth_reqparser`):
-
-<span class="pink bold-italics" style="font-size: 1.5em">UPDATE THIS PICTURE</span>
 
 {{< linked_image img5 >}}
 
@@ -742,9 +718,30 @@ The Swagger UI helpfully provides a **Curl** textbox that contains the exact req
 
 If you attempt to register with an email address that already exists in the database, you should receive a response with status code 409 `HTTPStatus.CONFLICT`. You can also test the API with a command-line tool (e.g., httpie, curl, wget, etc):
 
-<span class="pink bold-italics" style="font-size: 1.5em">REDO WITH TEXT</span>
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">http -f :5000/api/v1/auth/register email=user@test.com password=123456</span>
 
-{{< linked_image img6 >}}
+<span class="cmd-results"><span class="bold-text goldenrod">POST /api/v1/auth/login HTTP/1.1</span>
+<span class="purple">Accept</span>: <span class="light-blue">*/*</span>
+<span class="purple">Accept-Encoding</span>: <span class="light-blue">gzip, deflate</span>
+<span class="purple">Connection</span>: <span class="light-blue">keep-alive</span>
+<span class="purple">Content-Length</span>: <span class="light-blue">37</span>
+<span class="purple">Content-Type</span>: <span class="light-blue">application/x-www-form-urlencoded; charset=utf-8</span>
+<span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+
+<span class="bold-text">email=user%40test.com&password=123456</span>
+
+<span class="bold-text goldenrod">HTTP/1.0 409 CONFLICT</span>
+<span class="purple">Access-Control-Allow-Origin</span>: <span class="light-blue">*</span>
+<span class="purple">Content-Length</span>: <span class="light-blue">79</span>
+<span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
+<span class="purple">Date</span>: <span class="light-blue">Sat, 03 Aug 2019 23:20:29 GMT</span>
+<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.16.1 Python/3.7.6</span>
+
+<span class="bold-text">{
+  <span class="purple">"message"</span>: <span class="light-blue">"user@test.com is already registered"</span>,
+  <span class="purple">"status"</span>: <span class="light-blue">"fail"</span>,
+}</span></span></code></pre>
 
 {{< info_box >}}
 The CLI examples I provide in this tutorial will <span class="emphasis">NOT</span> use `cURL` I prefer [httpie](https://httpie.org/) because the syntax is much cleaner and more intuitive. The options for styling and formatting the output are a huge plus as well.
@@ -752,17 +749,41 @@ The CLI examples I provide in this tutorial will <span class="emphasis">NOT</spa
 
 Here's an example of a successful request using httpie. Note that on the command-line or Swagger UI the response from the server is always formatted as JSON:
 
-<span class="pink bold-italics" style="font-size: 1.5em">REDO WITH TEXT</span>
+<pre><code><span class="cmd-prompt">flask-api-tutorial $</span> <span class="cmd-input">http -f :5000/api/v1/auth/register email=user2@test.com password=123456</span>
 
-{{< linked_image img7 >}}
+<span class="cmd-results"><span class="bold-text goldenrod">POST /api/v1/auth/login HTTP/1.1</span>
+<span class="purple">Accept</span>: <span class="light-blue">*/*</span>
+<span class="purple">Accept-Encoding</span>: <span class="light-blue">gzip, deflate</span>
+<span class="purple">Connection</span>: <span class="light-blue">keep-alive</span>
+<span class="purple">Content-Length</span>: <span class="light-blue">37</span>
+<span class="purple">Content-Type</span>: <span class="light-blue">application/x-www-form-urlencoded; charset=utf-8</span>
+<span class="purple">Host</span>: <span class="light-blue">localhost:5000</span>
+<span class="purple">User-Agent</span>: <span class="light-blue">HTTPie/1.0.2</span>
+
+<span class="bold-text">email=user2%40test.com&password=123456</span>
+
+<span class="bold-text goldenrod">HTTP/1.0 201 CREATED</span>
+<span class="purple">Access-Control-Allow-Origin</span>: <span class="light-blue">*</span>
+<span class="purple">Content-Length</span>: <span class="light-blue">79</span>
+<span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
+<span class="purple">Date</span>: <span class="light-blue">Sat, 03 Aug 2019 23:20:29 GMT</span>
+<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.16.1 Python/3.7.6</span>
+
+<span class="bold-text">{
+  <span class="purple">"access_token"</span>: <span class="light-blue">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1ODI5MzQwMzMsImlhdCI6MTU4MjkzMzEzMywic3ViIjoiNjcwOTVlZDUtZjdhYS00MGE3LTgzZGUtNzQ1YmMzYjA5NDFmIiwiYWRtaW4iOmZhbHNlfQ.ylvNfoWwhI-NRU2WS65t4ti6sTbOEDQcJYIQC6ua0Do"</span>,
+  <span class="purple">"expires_in"</span>: <span class="pink">900</span>,
+  <span class="purple">"message"</span>: <span class="light-blue">"successfully registered"</span>,
+  <span class="purple">"status"</span>: <span class="light-blue">"success"</span>,
+  <span class="purple">"token_type"</span>: <span class="light-blue">"bearer"</span>
+}</span></span></code></pre>
 
 Everything appears to be working correctly for the `/register` endpoint. Next, we will figure out how to create unit tests that interact with the API.
 
 ### Unit Tests: `test_auth_register.py`
 
-Before we start writing test cases for the newly-created endpoint, we need to add a function to `tests/util.py`. Open the file and add the lines highlighted below (**Lines 8-13**):
+Before we start writing test cases for the newly-created endpoint, we need to add a function to `tests/util.py`. Open the file and add the lines highlighted below **(Lines 2, 8-13)**:
 
-```python {linenos=table,hl_lines=["8-13"]}
+```python {linenos=table,hl_lines=["2","8-13"]}
 """Shared functions and constants for unit tests."""
 from flask import url_for
 
@@ -940,7 +961,7 @@ The last test case we will cover at this point is where the client submits an em
 <span class="purple">Content-Length</span>: <span class="light-blue">127</span>
 <span class="purple">Content-Type</span>: <span class="light-blue">application/json</span>
 <span class="purple">Date</span>: <span class="light-blue">Fri, 02 Aug 2019 17:45:40 GMT</span>
-<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.15.5 Python/3.7.4</span>
+<span class="purple">Server</span>: <span class="light-blue">Werkzeug/0.16.1 Python/3.7.6</span>
 
 <span class="bold-text">{
   <span class="purple">"errors"</span>: {
@@ -991,7 +1012,7 @@ EMAIL_ALREADY_EXISTS = f"{EMAIL} is already registered"
 
 Next, add the content below to `test_auth_register.py` and save the file:
 
-```python {linenos=table,linenostart=43}
+```python {linenos=table,linenostart=42}
 def test_auth_register_invalid_email(client):
     invalid_email = "first last"
     response = register_user(client, email=invalid_email)
@@ -1013,82 +1034,89 @@ There are quite a few more test cases that we need to create for the <code>api.a
 You should run <code>tox</code> to make sure the new test cases all pass and that nothing else broke because of the changes:
 
 <pre><code class="tox"><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">tox</span>
-<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask_api_tutorial/setup.py
-py37 inst-nodeps: /Users/aaronluna/Projects/flask_api_tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
-py37 installed: alembic==1.3.2,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.13.2,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restplus==0.13.0,Flask-SQLAlchemy==2.4.1,idna==2.8,importlib-metadata==1.3.0,itsdangerous==1.1.0,Jinja2==2.10.3,jsonschema==3.2.0,Mako==1.1.0,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.0.2,packaging==20.0,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.2,pytest-black==0.3.7,pytest-clarity==0.2.0a1,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.0,python-dateutil==2.8.1,python-dotenv==0.10.3,python-editor==1.0.4,pytz==2019.3,regex==2020.1.8,requests==2.22.0,six==1.13.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.12,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.0,urllib3==1.25.7,wcwidth==0.1.8,Werkzeug==0.16.0,zipp==0.6.0
-py37 run-test-pre: PYTHONHASHSEED='2150258145'
+<span class="cmd-results">GLOB sdist-make: /Users/aaronluna/Projects/flask-api-tutorial/setup.py
+py37 create: /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37
+py37 installdeps: black, flake8, pydocstyle, pytest, pytest-black, pytest-clarity, pytest-dotenv, pytest-flake8, pytest-flask
+py37 inst: /Users/aaronluna/Projects/flask-api-tutorial/.tox/.tmp/package/1/flask-api-tutorial-0.1.zip
+py37 installed: alembic==1.4.0,aniso8601==8.0.0,appdirs==1.4.3,attrs==19.3.0,bcrypt==3.1.7,black==19.10b0,certifi==2019.11.28,cffi==1.14.0,chardet==3.0.4,Click==7.0,entrypoints==0.3,flake8==3.7.9,Flask==1.1.1,flask-api-tutorial==0.1,Flask-Bcrypt==0.7.1,Flask-Cors==3.0.8,Flask-Migrate==2.5.2,flask-restx==0.1.1,Flask-SQLAlchemy==2.4.1,idna==2.9,importlib-metadata==1.5.0,itsdangerous==1.1.0,Jinja2==2.11.1,jsonschema==3.2.0,Mako==1.1.1,MarkupSafe==1.1.1,mccabe==0.6.1,more-itertools==8.2.0,packaging==20.1,pathspec==0.7.0,pluggy==0.13.1,py==1.8.1,pycodestyle==2.5.0,pycparser==2.19,pydocstyle==5.0.2,pyflakes==2.1.1,PyJWT==1.7.1,pyparsing==2.4.6,pyrsistent==0.15.7,pytest==5.3.5,pytest-black==0.3.8,pytest-clarity==0.3.0a0,pytest-dotenv==0.4.0,pytest-flake8==1.0.4,pytest-flask==0.15.1,python-dateutil==2.8.1,python-dotenv==0.12.0,python-editor==1.0.4,pytz==2019.3,regex==2020.2.20,requests==2.23.0,six==1.14.0,snowballstemmer==2.0.0,SQLAlchemy==1.3.13,termcolor==1.1.0,toml==0.10.0,typed-ast==1.4.1,urllib3==1.25.8,wcwidth==0.1.8,Werkzeug==0.16.1,zipp==3.0.0
+py37 run-test-pre: PYTHONHASHSEED='1825844209'
 py37 run-test: commands[0] | pytest
-================================================== test session starts ===================================================
-platform darwin -- Python 3.7.5, pytest-5.3.2, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/bin/python
+================================================= test session starts ==================================================
+platform darwin -- Python 3.7.6, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/bin/python
 cachedir: .tox/py37/.pytest_cache
-rootdir: /Users/aaronluna/Desktop/flask_api_tutorial, inifile: pytest.ini
-plugins: dotenv-0.4.0, clarity-0.2.0a1, flake8-1.0.4, black-0.3.7, flask-0.15.0
+rootdir: /Users/aaronluna/Projects/flask-api-tutorial, inifile: pytest.ini
+plugins: clarity-0.3.0a0, black-0.3.8, dotenv-0.4.0, flask-0.15.1, flake8-1.0.4
 collected 52 items
 
-run.py::BLACK SKIPPED                                                                                              [  1%]
-run.py::FLAKE8 SKIPPED                                                                                             [  3%]
-setup.py::BLACK SKIPPED                                                                                            [  5%]
-setup.py::FLAKE8 SKIPPED                                                                                           [  7%]
-src/flask_api_tutorial/__init__.py::BLACK SKIPPED                                                                  [  9%]
-src/flask_api_tutorial/__init__.py::FLAKE8 SKIPPED                                                                 [ 11%]
-src/flask_api_tutorial/config.py::BLACK SKIPPED                                                                    [ 13%]
-src/flask_api_tutorial/config.py::FLAKE8 SKIPPED                                                                   [ 15%]
-src/flask_api_tutorial/api/__init__.py::BLACK SKIPPED                                                              [ 17%]
-src/flask_api_tutorial/api/__init__.py::FLAKE8 SKIPPED                                                             [ 19%]
-src/flask_api_tutorial/api/auth/__init__.py::BLACK SKIPPED                                                         [ 21%]
-src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 SKIPPED                                                        [ 23%]
-src/flask_api_tutorial/api/auth/business.py::BLACK SKIPPED                                                         [ 25%]
-src/flask_api_tutorial/api/auth/business.py::FLAKE8 SKIPPED                                                        [ 26%]
-src/flask_api_tutorial/api/auth/dto.py::BLACK SKIPPED                                                              [ 28%]
-src/flask_api_tutorial/api/auth/dto.py::FLAKE8 SKIPPED                                                             [ 30%]
-src/flask_api_tutorial/api/auth/endpoints.py::BLACK SKIPPED                                                        [ 32%]
-src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 SKIPPED                                                       [ 34%]
-src/flask_api_tutorial/api/widgets/__init__.py::BLACK SKIPPED                                                      [ 36%]
-src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 SKIPPED                                                     [ 38%]
-src/flask_api_tutorial/models/__init__.py::BLACK SKIPPED                                                           [ 40%]
-src/flask_api_tutorial/models/__init__.py::FLAKE8 SKIPPED                                                          [ 42%]
-src/flask_api_tutorial/models/user.py::BLACK SKIPPED                                                               [ 44%]
-src/flask_api_tutorial/models/user.py::FLAKE8 SKIPPED                                                              [ 46%]
-src/flask_api_tutorial/util/__init__.py::BLACK SKIPPED                                                             [ 48%]
-src/flask_api_tutorial/util/__init__.py::FLAKE8 SKIPPED                                                            [ 50%]
-src/flask_api_tutorial/util/datetime_util.py::BLACK SKIPPED                                                        [ 51%]
-src/flask_api_tutorial/util/datetime_util.py::FLAKE8 SKIPPED                                                       [ 53%]
-src/flask_api_tutorial/util/result.py::BLACK SKIPPED                                                               [ 55%]
-src/flask_api_tutorial/util/result.py::FLAKE8 SKIPPED                                                              [ 57%]
-tests/__init__.py::BLACK SKIPPED                                                                                   [ 59%]
-tests/__init__.py::FLAKE8 SKIPPED                                                                                  [ 61%]
-tests/conftest.py::BLACK SKIPPED                                                                                   [ 63%]
-tests/conftest.py::FLAKE8 SKIPPED                                                                                  [ 65%]
-tests/test_auth_register.py::BLACK PASSED                                                                          [ 67%]
-tests/test_auth_register.py::FLAKE8 PASSED                                                                         [ 69%]
-tests/test_auth_register.py::test_auth_register PASSED                                                             [ 71%]
-tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                    [ 73%]
-tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                               [ 75%]
-tests/test_config.py::BLACK SKIPPED                                                                                [ 76%]
-tests/test_config.py::FLAKE8 SKIPPED                                                                               [ 78%]
-tests/test_config.py::test_config_development PASSED                                                               [ 80%]
-tests/test_config.py::test_config_testing PASSED                                                                   [ 82%]
-tests/test_config.py::test_config_production PASSED                                                                [ 84%]
-tests/test_user.py::BLACK SKIPPED                                                                                  [ 86%]
-tests/test_user.py::FLAKE8 SKIPPED                                                                                 [ 88%]
-tests/test_user.py::test_encode_access_token PASSED                                                                [ 90%]
-tests/test_user.py::test_decode_access_token_success PASSED                                                        [ 92%]
-tests/test_user.py::test_decode_access_token_expired PASSED                                                        [ 94%]
-tests/test_user.py::test_decode_access_token_invalid PASSED                                                        [ 96%]
-tests/util.py::BLACK SKIPPED                                                                                       [ 98%]
-tests/util.py::FLAKE8 SKIPPED                                                                                      [100%]
+run.py::FLAKE8 PASSED                                                                                            [  1%]
+run.py::BLACK PASSED                                                                                             [  3%]
+setup.py::FLAKE8 PASSED                                                                                          [  5%]
+setup.py::BLACK PASSED                                                                                           [  7%]
+src/flask_api_tutorial/__init__.py::FLAKE8 PASSED                                                                [  9%]
+src/flask_api_tutorial/__init__.py::BLACK PASSED                                                                 [ 11%]
+src/flask_api_tutorial/config.py::FLAKE8 PASSED                                                                  [ 13%]
+src/flask_api_tutorial/config.py::BLACK PASSED                                                                   [ 15%]
+src/flask_api_tutorial/api/__init__.py::FLAKE8 PASSED                                                            [ 17%]
+src/flask_api_tutorial/api/__init__.py::BLACK PASSED                                                             [ 19%]
+src/flask_api_tutorial/api/auth/__init__.py::FLAKE8 PASSED                                                       [ 21%]
+src/flask_api_tutorial/api/auth/__init__.py::BLACK PASSED                                                        [ 23%]
+src/flask_api_tutorial/api/auth/business.py::FLAKE8 PASSED                                                       [ 25%]
+src/flask_api_tutorial/api/auth/business.py::BLACK PASSED                                                        [ 26%]
+src/flask_api_tutorial/api/auth/dto.py::FLAKE8 PASSED                                                            [ 28%]
+src/flask_api_tutorial/api/auth/dto.py::BLACK PASSED                                                             [ 30%]
+src/flask_api_tutorial/api/auth/endpoints.py::FLAKE8 PASSED                                                      [ 32%]
+src/flask_api_tutorial/api/auth/endpoints.py::BLACK PASSED                                                       [ 34%]
+src/flask_api_tutorial/api/widgets/__init__.py::FLAKE8 PASSED                                                    [ 36%]
+src/flask_api_tutorial/api/widgets/__init__.py::BLACK PASSED                                                     [ 38%]
+src/flask_api_tutorial/models/__init__.py::FLAKE8 PASSED                                                         [ 40%]
+src/flask_api_tutorial/models/__init__.py::BLACK PASSED                                                          [ 42%]
+src/flask_api_tutorial/models/user.py::FLAKE8 PASSED                                                             [ 44%]
+src/flask_api_tutorial/models/user.py::BLACK PASSED                                                              [ 46%]
+src/flask_api_tutorial/util/__init__.py::FLAKE8 PASSED                                                           [ 48%]
+src/flask_api_tutorial/util/__init__.py::BLACK PASSED                                                            [ 50%]
+src/flask_api_tutorial/util/datetime_util.py::FLAKE8 PASSED                                                      [ 51%]
+src/flask_api_tutorial/util/datetime_util.py::BLACK PASSED                                                       [ 53%]
+src/flask_api_tutorial/util/result.py::FLAKE8 PASSED                                                             [ 55%]
+src/flask_api_tutorial/util/result.py::BLACK PASSED                                                              [ 57%]
+tests/__init__.py::FLAKE8 PASSED                                                                                 [ 59%]
+tests/__init__.py::BLACK PASSED                                                                                  [ 61%]
+tests/conftest.py::FLAKE8 PASSED                                                                                 [ 63%]
+tests/conftest.py::BLACK PASSED                                                                                  [ 65%]
+tests/test_auth_register.py::FLAKE8 PASSED                                                                       [ 67%]
+tests/test_auth_register.py::BLACK PASSED                                                                        [ 69%]
+tests/test_auth_register.py::test_auth_register PASSED                                                           [ 71%]
+tests/test_auth_register.py::test_auth_register_email_already_registered PASSED                                  [ 73%]
+tests/test_auth_register.py::test_auth_register_invalid_email PASSED                                             [ 75%]
+tests/test_config.py::FLAKE8 PASSED                                                                              [ 76%]
+tests/test_config.py::BLACK PASSED                                                                               [ 78%]
+tests/test_config.py::test_config_development PASSED                                                             [ 80%]
+tests/test_config.py::test_config_testing PASSED                                                                 [ 82%]
+tests/test_config.py::test_config_production PASSED                                                              [ 84%]
+tests/test_user.py::FLAKE8 PASSED                                                                                [ 86%]
+tests/test_user.py::BLACK PASSED                                                                                 [ 88%]
+tests/test_user.py::test_encode_access_token PASSED                                                              [ 90%]
+tests/test_user.py::test_decode_access_token_success PASSED                                                      [ 92%]
+tests/test_user.py::test_decode_access_token_expired PASSED                                                      [ 94%]
+tests/test_user.py::test_decode_access_token_invalid PASSED                                                      [ 96%]
+tests/util.py::FLAKE8 PASSED                                                                                     [ 98%]
+tests/util.py::BLACK PASSED                                                                                      [100%]
 
-==================================================== warnings summary ====================================================
-src/flask_api_tutorial/api/auth/business.py::BLACK
-  /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/flask_restplus/model.py:8: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+=================================================== warnings summary ===================================================
+src/flask_api_tutorial/api/auth/business.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/model.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
     from collections import OrderedDict, MutableMapping
 
+src/flask_api_tutorial/api/auth/business.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/api.py:28: DeprecationWarning: The import 'werkzeug.cached_property' is deprecated and will be removed in Werkzeug 1.0. Use 'from werkzeug.utils import cached_property' instead.
+    from werkzeug import cached_property
+
+src/flask_api_tutorial/api/auth/business.py::FLAKE8
+  /Users/aaronluna/Projects/flask-api-tutorial/.tox/py37/lib/python3.7/site-packages/flask_restx/swagger.py:12: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3,and in 3.9 it will stop working
+    from collections import OrderedDict, Hashable
+
 -- Docs: https://docs.pytest.org/en/latest/warnings.html
-================================================ short test summary info =================================================
-SKIPPED [20] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_black.py:59: file(s) previously passed black format checks
-SKIPPED [20] /Users/aaronluna/Projects/flask_api_tutorial/.tox/py37/lib/python3.7/site-packages/pytest_flake8.py:106: file(s) previously passed FLAKE8 checks
-======================================= 12 passed, 40 skipped, 1 warning in 7.13s ========================================
-________________________________________________________ summary _________________________________________________________
+=========================================== 52 passed, 3 warnings in 14.47s ============================================
+_______________________________________________________ summary ________________________________________________________
   py37: commands succeeded
   congratulations :)</span></code></pre>
 

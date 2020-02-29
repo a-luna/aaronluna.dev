@@ -15,7 +15,7 @@ function addLinksToHeaderElement(headerWrapper) {
   );
   headerWrapper.insertAdjacentHTML(
     "beforeend",
-    `<a href="#menu" class="hanchor hanchor-top" title="Return to top of page"><span class="hanchor-text">return to top</span><i class="fa fa-angle-up"></i></a></a>`
+    `<a href="#menu" class="hanchor hanchor-top" title="Return to top of page"><i class="fa fa-arrow-up"></i></a></a>`
   );
 };
 
