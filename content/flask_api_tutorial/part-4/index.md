@@ -206,7 +206,7 @@ The first thing we do in this function is call `User.find_by_email` with the ema
 
 If a user matching the provided email address was found in the database, we call `check_password` on the `user` instance, which verifies that the password provided by the user matches the `password_hash` value stored in the database. If the password does not match, the current request is aborted with a response including 401 `HTTPStatus.UNAUTHORIZED`.
 
-If the password is verified, then the response is almost exactly the same as a successful response to a registration request &mdash; we create an access token for the user and include the token in the response. Also, we adhere to the <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">requirements from RFC6749</a> which were [fully explained earlier](#process-registration-request). The only difference is the status code (200 `HTTPStatus.OK` instead of 201 `HTTPStatus.CREATED`) and the message ("successfully logged in" instead of "successfully registered").
+If the password is verified, then the response is almost exactly the same as a successful response to a registration request &mdash; we create an access token for the user and include the token in the response. Also, we adhere to the <a href="https://tools.ietf.org/html/rfc6749#section-5.1" target="_blank">requirements from RFC6749</a> which were [fully explained earlier](/series/flask-api-tutorial/part-3/#process-registration-request). The only difference is the status code (200 `HTTPStatus.OK` instead of 201 `HTTPStatus.CREATED`) and the message ("successfully logged in" instead of "successfully registered").
 
 ### `LoginUser` Resource
 

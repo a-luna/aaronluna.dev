@@ -640,7 +640,7 @@ Let's break this down by looking at how each of the attributes are validated by 
 
 #### `name` Argument
 
-None of <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank">the pre-defined types in the <code>flask_restplus.inputs</code> module</a> perform input validation that satisfies the requirements of the `name` attribute. Thankfully, <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#advanced-types-handling" target="_blank">Flask-RESTx provides a way to create custom types</a> that can be used in the same way. The example of a custom type shown below is taken from the documentation:
+None of <a href="https://flask-restplus.readthedocs.io/en/stable/api.html#module-flask_restplus.inputs" target="_blank">the pre-defined types in the <code>flask_restx.inputs</code> module</a> perform input validation that satisfies the requirements of the `name` attribute. Thankfully, <a href="https://flask-restplus.readthedocs.io/en/stable/parsing.html#advanced-types-handling" target="_blank">Flask-RESTx provides a way to create custom types</a> that can be used in the same way. The example of a custom type shown below is taken from the documentation:
 
 ```python
 def my_type(value):

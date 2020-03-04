@@ -3004,7 +3004,8 @@ header,
   margin: 10px 0;
 }
 
-a.post-category {
+a.post-category,
+.category-list-header span  {
   --cat-color: var(--accent-color2);
   font-size: 15px;
   font-weight: 700;
@@ -3036,6 +3037,20 @@ a.post-category {
   margin: 4px;
 }
 
+.category-list-header {
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 0 0 20px 0;
+}
+
+.category-list-header span {
+  color: var(--black2);
+  font-size: 1.3em;
+  line-height: 1.2;
+  margin: 0 10px 0 0;
+  padding: 6px 12px;
+}
+
 a.post-category:hover,
 a.post-category:focus,
 a.post-category:active,
@@ -3053,47 +3068,58 @@ a.post-category:active:hover {
   background-color: var(--page-bg-color);
 }
 
-a.python {
+a.python,
+span.python {
   --cat-color: var(--python);
 }
 
-a.devops {
+a.devops,
+span.devops {
   --cat-color: var(--devops);
 }
 
-a.aws {
+a.aws,
+span.aws {
   --cat-color: var(--aws);
 }
 
-a.hugo {
+a.hugo,
+span.hugo {
   --cat-color: var(--hugo);
 }
 
-a.javascript {
+a.javascript,
+span.javascript {
   --cat-color: var(--javascript);
 }
 
-a.dotnet {
+a.dotnet,
+span.dotnet {
   --cat-color: var(--dotnet);
 }
 
-a.linux {
+a.linux,
+span.linux {
   --cat-color: var(--linux);
 }
 
-a.flask {
+a.flask,
+span.flask {
   --cat-color: var(--flask);
 }
 
-a.virtualization {
+a.virtualization,
+span.virtualization {
   --cat-color: var(--virtualization);
 }
 
-a.tutorial-series {
+a.tutorial-series,
+span.tutorial-series {
   --cat-color: var(--tutorial-series);
 }
 
-a.svelte {
+a.svelte,
+span.svelte {
   --cat-color: var(--svelte);
 }
 
@@ -3379,7 +3405,7 @@ blockquote td {
 
 @media screen and (max-width: 767px) {
   .content .header-text a.hanchor-top {
-    margin: 4px 10px 0 6px;
+    margin: 2px 0 0 6px;
     text-align: right;
   }
   .hanchor-text {
@@ -3398,6 +3424,12 @@ blockquote td {
   }
   .search-results {
     margin: 0 0 40px 0;
+  }
+  #search-header {
+    margin: 0 0 30px 0;
+  }
+  .search-results ul {
+    margin: 0;
   }
 
   main {

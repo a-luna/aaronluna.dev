@@ -370,7 +370,7 @@ Hopefully, this helps you understand the structure of the `Pagination` class and
 
 ### `pagination_model` API Model
 
-In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTx uses them to serialize database objects in <a href="/series/flask-api-tutorial/part-4/#user-model-api-model">Part 4</a>. If you need a refresher, please review it.
+In order to send a paginated list of widgets as part of an HTTP response, we need to serialize it to JSON. I explained the purpose of API Models and how Flask-RESTx uses them to serialize database objects in <a href="/series/flask-api-tutorial/part-4/#user_model-api-model">Part 4</a>. If you need a refresher, please review it.
 
 First, we need to update the import statements in `src/flask_api_tutorial/api/widgets/dto.py` to include the Flask-RESTx `Model` class, as well as a bunch of classes from the `fields` module . Add **Line 6** and **Line 7** and save the file:
 
