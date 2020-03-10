@@ -4,6 +4,7 @@ slug: hugo-chroma-add-copy-button-to-code-blocks
 date: '2019-11-13'
 aliases:
     - /blog/hugo-chroma-syntax-highlight-copy-button/
+    - /blog/hugo-add-copy-button-to-code-blocks-chroma-highlight/
 menu_section: "blog"
 categories:
   - Hugo
