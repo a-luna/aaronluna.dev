@@ -226,7 +226,7 @@ Did you notice that we never defined a <code>&#95;&#95;init&#95;&#95;</code> met
 ```python
 class User(db.Model):
     # ...
-    def __init__(**kwargs):
+    def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         # do custom stuff
 ```

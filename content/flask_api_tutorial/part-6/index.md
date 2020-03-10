@@ -301,7 +301,7 @@ It is possible to create the paginated list manually from scratch and define API
 The Flask-SQLAlchemy extension provides <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.BaseQuery.paginate" target="_blank">a `paginate` method</a> that produces <a href="https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.Pagination" target="_blank">`Pagination` objects</a>. The `paginate` method is a member of <a href="https://docs.sqlalchemy.org/en/13/orm/query.html#the-query-object" target="_blank">the <code>Query</code> class</a>, and I think the easiest way to understand how it works is with a demonstration in the interactive shell:
 
 <pre><code><span class="cmd-venv">(flask-api-tutorial) flask-api-tutorial $</span> <span class="cmd-input">flask shell</span>
-<span class="cmd-results">Python 3.7.4 (default, Jul 20 2019, 23:16:09)
+<span class="cmd-results">Python 3.7.6 (default, Jan 19 2020, 06:08:58)
 [Clang 10.0.1 (clang-1001.0.46.4)] on darwin
 App: flask-api-tutorial [development]
 Instance: /Users/aaronluna/Projects/flask_api_tutorial/instance</span>
