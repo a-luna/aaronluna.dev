@@ -16,7 +16,8 @@ resources:
 
 ```python {linenos=table}
 """Report function name, argument names and values, and execution time of decorated function."""
-import inspect, logging
+import inspect
+import logging
 from datetime import datetime
 from functools import wraps
 

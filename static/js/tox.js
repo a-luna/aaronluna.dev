@@ -1,13 +1,3 @@
-function htmlToDocFragment(html) {
-    let div = document.createElement('div')
-    let frag = document.createDocumentFragment()
-    div.innerHTML = html;
-    while (div.firstChild) {
-        frag.appendChild(div.firstChild);
-    }
-    return frag;
-}
-
 function colorizeToxResults(codeElement) {
     let toxResultsSpan = codeElement.querySelector(".cmd-results")
     let toxResultsHtml = toxResultsSpan.firstChild
@@ -19,6 +9,16 @@ function colorizeToxResults(codeElement) {
         .replace(/ERROR/g, '<span class="tox-error">$&</span>')
     let colorizedResults = htmlToDocFragment(newHtml)
     toxResultsSpan.replaceChild(colorizedResults, toxResultsHtml)
+}
+
+function htmlToDocFragment(html) {
+    let div = document.createElement('div')
+    let frag = document.createDocumentFragment()
+    div.innerHTML = html;
+    while (div.firstChild) {
+        frag.appendChild(div.firstChild);
+    }
+    return frag;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
