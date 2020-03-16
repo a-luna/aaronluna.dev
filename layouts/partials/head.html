@@ -18,19 +18,11 @@
         })(document.documentElement, "className");
     </script>
     <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Params.Summary }}{{ end }}">
-    {{ if .Site.Params.opengraph }}
-        {{ partial "opengraph" . }}
-    {{ end }}
-    {{ if .Site.Params.twitter_cards }}
-        {{ partial "twitter-card" . }}
-    {{ end }}
+    {{ if .Site.Params.opengraph }}{{ partial "opengraph" . }}{{ end }}
+    {{ if .Site.Params.twitter_cards }}{{ partial "twitter-card" . }}{{ end }}
     <link rel="manifest" href="/manifest.json">
-    {{ with .OutputFormats.Get "rss" -}}
-        {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
-    {{ end -}}
+    {{ with .OutputFormats.Get "rss" -}}{{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}{{ end -}}
     {{ partial "css_bundle" . }}
     <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
-    {{- if not .Site.IsServer }}
-        {{ template "_internal/google_analytics_async.html" . }}
-    {{- end }}
+    {{- if not .Site.IsServer }}{{ template "_internal/google_analytics_async.html" . }}{{- end }}
 </head>
