@@ -2,7 +2,7 @@
 <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
 <meta property="og:url" content="{{ .Permalink }}" />
-{{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}{{ if $postImage }}{{ $small := $postImage.Resize "800x" }}<meta property="og:image" content="{{ $small.RelPermalink }}"/>{{ end }}
+{{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}{{ if $postImage }}{{ $small := $postImage.Resize "800x" }}<meta property="og:image" content="{{ $small.Permalink }}"/>{{ end }}
 {{- $iso8601 := "2006-01-02T15:04:05-07:00" -}}
 {{- if .IsPage }}
 {{- if not .PublishDate.IsZero }}<meta property="article:published_time" {{ .PublishDate.Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />

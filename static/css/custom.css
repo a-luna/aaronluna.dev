@@ -197,6 +197,10 @@ ol li p {
   margin: 0 0 10px;
 }
 
+.tutorial .list .content {
+  margin: 0;
+}
+
 .sidebar {
   font-size: 1.1em;
   flex: 0 0 31%;
@@ -525,10 +529,11 @@ h5 {
 .content h3 code,
 .content h4 code,
 .content h5 code {
-  background-color: initial;
+  background-color: var(--black3);
   font-size: 0.9em;
-  padding: 0;
+  padding: 0 4px;
   margin: 0 3px 0 0;
+  border-radius: 4px;
   vertical-align: inherit;
 }
 
@@ -3486,7 +3491,7 @@ blockquote td {
 
 
   .wrapper {
-    padding: 40px 20px 0 20px;
+    padding: 30px 20px 0 20px;
   }
 
   .primary {

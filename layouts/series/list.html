@@ -1,0 +1,7 @@
+{{ define "main" }}
+<main class="main list" role="main">
+    <div class="content main__content clearfix">{{ .Content }}</div>
+    {{- range .Paginator.Pages }}{{- .Render "summary" }}{{- end }}
+</main>
+{{ partial "pagination.html" . }}
+{{ end }}

@@ -1,13 +1,15 @@
 {{ $page := .Site.GetPage "/flask_api_tutorial/part-0" }}
-<article class="list__item post blog-series">
-    <header class="list__header">
-        <div class="post__image">
-            <a href="{{ $page.RelPermalink }}" rel="bookmark">{{ partial "main_article_image" $page }}</a>
+<article class="article-preview list__item post default">
+    <div class="article-preview-top-flex">
+        {{ partial "thumbnail_image" $page }}
+        <div class="post__title-wrapper">
+            <h3 class="list__title post__title ">
+                <a href="{{ $page.RelPermalink }}">{{ $page.Params.series_title }}</a>
+            </h3>
+            {{- partial "post_meta/categories.html" $page -}}
         </div>
-        <h3 class="list__title post__title ">
-            <a href="{{ $page.RelPermalink }}" rel="bookmark"> {{ $page.Params.series_title }}</a>
-        </h3>
-    </header>
-    <div class="content list__excerpt post__content clearfix">{{ $page.Summary }}</div>
-    {{- partial "post_meta/categories.html" . -}}
+    </div>
+    <div class="article-preview-summary">
+        <p>{{- if not .Date.IsZero }}<span class="date-published">{{.Date.Format ( .Site.Params.dateformat | default "Jan 02 2006")}} &mdash; </span>{{ end -}}{{ $page.Summary }}</p>
+    </div>
 </article>
