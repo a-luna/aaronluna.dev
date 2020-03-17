@@ -4,6 +4,7 @@ slug: python-decorator-examples-timeout-retry
 aliases:
     - /blog/python-decorators-retry-timeout-exec-time/
 date: '2020-02-12'
+draft: true
 menu_section: "blog"
 categories:
   - Python
