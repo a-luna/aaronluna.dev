@@ -756,6 +756,10 @@ a:active:hover {
   font-weight: 700;
 }
 
+.note .bold-text {
+  color: var(--note-box);
+}
+
 .italics {
   font-style: italic;
 }
