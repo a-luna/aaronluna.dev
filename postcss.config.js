@@ -4,14 +4,7 @@ module.exports = {
             grid: true,
         }),
         require('postcss-uncss')({
-            html: ['public/**/*.html'],
-            whitelist: [
-                '.hide-element',
-                '.copyable-text-area',
-                '.hanchor',
-                '.hanchor-self',
-                '.hanchor-top'
-            ]
+            html: ['public/**/*.html']
         })
     ]
 }
