@@ -1029,6 +1029,8 @@ blockquote p code {
 
 .toc code {
   background: var(--page-bg-color);
+  vertical-align: baseline;
+  font-size: 0.75em;
 }
 
 .steps ul,
@@ -1724,7 +1726,7 @@ figcaption {
 .toc__menu ul li {
   padding: 0;
   margin: 0 0 15px 0;
-  line-height: 1.3;
+  line-height: 20px;
 }
 
 .toc__menu ul li:last-child {
@@ -2675,7 +2677,7 @@ table.aws-hosting-costs {
 }
 
 #project-repo .message {
-  margin: 5px 0;
+  margin: 5px 0 10px;
 }
 
 #project-repo ul a {

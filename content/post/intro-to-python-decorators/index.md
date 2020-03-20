@@ -57,13 +57,13 @@ def undecorated_function():
         <p><strong>Line 3: </strong><code>function_wrapper</code> (defined within <code>simple_decorator</code>) allows us to execute code before and after executing the wrapped function.</p>
       </li>
       <li>
-        <p><strong>Line 5: </strong>The print statement will be executed BEFORE the wrapped function.</p>
+        <p><strong>Line 5: </strong>This print statement will be executed <span class="bold-text">before</span> the wrapped function.</p>
       </li>
       <li>
-        <p><strong>Line 6: </strong>The wrapped function is executed within the <code>function_wrapper</code> function.</p>
+        <p><strong>Line 6: </strong>The wrapped function is executed within <code>function_wrapper</code>.</p>
       </li>
       <li>
-        <p><strong>Line 7: </strong>The print statement will be executed AFTER the wrapped function</p>
+        <p><strong>Line 7: </strong>This print statement will be executed <span class="bold-text">after</span> the wrapped function</p>
       </li>
       <li>
         <p><strong>Line 9: </strong>This is probably the most confusing part. <code>function_wrapper</code> is the return value of the decorator function (<code>simple_decorator</code>). At this point, the wrapped function (<code>function_to_decorate</code>) <span class="bold-text">HAS NOT</span> been executed.</p>
@@ -595,9 +595,9 @@ class LogCall:
 
 The code below tests the `@LogCall()` decorator with a custom logger and with the default logger. With the default logger, we expect the name of the logger to be the name of the module containing the decorated function, `tests.test_log_call` **(Line 30)**. When a custom logger is provided, we expect the name to match the value we specified when the logger was created, `custom_log` **(Lines 10, 38)**.
 
-A nice feature of this decorator is that the function call signature contains the names and values of all keyword arguments, even if a default value was used or if the name was not given when the call occurred. For example, the call to the decorated function in **Line 28** is `save_values("Aaron", "Charlie", "Ollie")`, but the call signature that is logged contains the names of all three arguments, `save_values(a=Aaron, b=Charlie, c=Ollie)` **Line 32**.
+A nice feature of this decorator is that the function call signature contains the names and values of all keyword arguments, even if a default value was used or if the name was not given when the call occurred. For example, the call to the decorated function in **Line 28** is `save_values("Aaron", "Charlie", "Ollie")`, but the call signature that is logged contains the names of all three arguments, `save_values(a=Aaron, b=Charlie, c=Ollie)` **(Line 32)**.
 
-Similarly, the call to the decorated function in **Line 36** is `rand_time(max=4, add_random=True)`, which only provides two arguments. The call signature that is logged includes the default value of the missing argument, `rand_time(min=1, max=4, add_random=True)` **Line 40**.
+Similarly, the call to the decorated function in **Line 36** is `rand_time(max=4, add_random=True)`, which only provides two arguments. The call signature that is logged includes the default value of the missing argument, `rand_time(min=1, max=4, add_random=True)` **(Line 40)**.
 
 ```python {linenos=table}
 """tests.test_log_call"""
@@ -669,5 +669,9 @@ tests/test_timeout.py::test_timeout PASSED                                      
 </span></code></pre>
 
 ## Summary
+
+If you would like to download all or some of the code from this post, you can easily do so from the Github gist linked below:
+
+<a href="https://gist.github.com/a-luna/0a20912a82a8b867e19ab3734fce482a" target="_blank">Python Decorators [gist.github.com]</a>
 
 I hope this introduction to decorators in Python was helpful and easy to understand. If you have any questions, criticism or feedback please leave a comment. Thanks!
