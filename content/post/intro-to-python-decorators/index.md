@@ -252,13 +252,13 @@ Type "help", "copyright", "credits" or "license" for more information.</span>
 <span class="cmd-repl-results">Allow me to give a very special welcome to Harold!</span>
 <span class="cmd-repl-results">Second argument provided to decorator: bar</span></code></pre>
 
-As you can see, the arguments that were passed into the decorator (`"foo"` and `"bar"`) were used by the wrapper function, and the value passed into the decorated function (`"Aaron"`/`"Harold"`) is also used when the wrapper function is executed.
+As you can see, the arguments that were passed into the decorator (`"foo"` and `"bar"`) were used by the wrapper function, and the value passed into the decorated function (`"Dennis"`/`"Harold"`) is also used when the wrapper function is executed.
 
 ### Functions, Classes and Callables
 
 Are you familiar with <a href="https://docs.python.org/3/library/functions.html#callable" target="_blank">the built-in `callable` function</a>? `callable` accepts a single argument and returns a bool value: `True` if the object provided appears to be callable and `False` if it does not. If you think that functions are the only "callable" that exists you might consider this function rather useless or unnecessary. However, classes are also callable since this is how new instances are created (e.g., `object = MyObject()`).
 
-The call syntax, `(...)`, can call functions or create class instances as we have just seen. But Python has a unique feature that objects other than functions can also be called. Adding the `__call__` method to any class will make **instances of that class callable**. This allows us to create decorators that are implemented using classes.
+The call syntax, `(...)`, can call functions or create class instances as we have just seen. But Python has a unique feature that objects other than functions can also be called. Adding the `__call__` method to any class **will make instances of that class callable**. This allows us to create decorators that are implemented using classes.
 
 ### Class-based Design
 

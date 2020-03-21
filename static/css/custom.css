@@ -3362,6 +3362,18 @@ span.svelte {
   margin: 0 10px;
 }
 
+video {
+  margin: 0 auto;
+}
+
+#vid-cypress {
+  max-width: 550px;
+}
+
+.vid-wrapper {
+  text-align: center;
+}
+
 /* RFC Table */
 
 blockquote table {

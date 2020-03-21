@@ -12,6 +12,9 @@ resources:
     src: images/cover.jpg
     params:
       credit: "Photo by Joshua Sortino on Unsplash"
+  - name: cypress
+    src: media/base64.js.mp4
+    title: Automated Cypress Tests (4 Tests on 2 Screen Sizes Shown)
 ---
 I am currently teaching myself svelte and I have enjoyed pretty much everything about it. I decided to create a simple application that encodes ASCII text or hex strings to base64, and vice-versa. In order to take advantage of svelte's strengths, the application contains reactive UI components to help illustrate the encoding process.
 
@@ -41,6 +44,9 @@ I am currently teaching myself svelte and I have enjoyed pretty much everything 
 - Cypress E2E tests created for basic encode/decode scenarios.
 - 5 test cases are each executed with 4 different screen types/orientations.
 - Input and expected output for both ASCII and Hex strings taken directly from the [Examples and Illustrations](https://tools.ietf.org/html/rfc4648#section-9) and [Test Vectors](https://tools.ietf.org/html/rfc4648#section-10) sections of RFC4648 which is the original specification for Base64 and other print-safe binary encodings.
+- Github action configured to run all Cypress tests on each push to master branch, build is deployed only if all tests pass.
+
+{{< autoplay_video cypress >}}
 
 I deployed this project to Netlify (click the Netlify button below to open the application in a new tab/window). I also included a button to view/fork the project with codesandbox, please feel free to <a href="https://github.com/a-luna/svelte-base64/issues" target="_blank">log a github issue</a> if you find any bugs. Thank you!
 
