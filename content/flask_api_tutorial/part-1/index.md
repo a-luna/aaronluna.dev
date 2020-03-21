@@ -31,7 +31,7 @@ In addition to the user management and authentication functions, the API will co
 
 Performing CRUD actions and restricting access based on a user's assigned role/permissions are extremely common requirements, and the code to do so is the same for a widget, blog post or anything else that you expose to clients via HTTP.
 
-The feature specification for the API is given below. I hope that the various methodologies and "best practices" that I present are well-founded and justified by the arguments I present for them. Any and all comments/criticism are appreciated, please feel free to <a href="https://github.com/a-luna/flask-api-tutorial/issues" target="blank">log issues in the github repository</a> for suggested improvements and/or any bugs that I missed.
+The feature specification for the API is given below. I hope that the various methodologies and "best practices" that I present are well-founded and justified by the arguments I present for them. Any and all comments/criticism are appreciated, please feel free to <a href="https://github.com/a-luna/flask-api-tutorial/issues" target="_blank">log issues in the github repository</a> for suggested improvements and/or any bugs that I missed.
 
 At the end of each section, any requirements that have been completely implemented will be marked as complete (<span class="fa fa-star goldenrod"></span>):
 

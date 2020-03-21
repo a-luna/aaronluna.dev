@@ -164,7 +164,7 @@ ol li p {
 
 .content {
   font-size: 1em;
-  margin: 0 0 20px;
+  margin: 0 0 30px;
 }
 
 .content p {
@@ -1940,7 +1940,7 @@ a.pagination__item--next {
 .post-nav {
   font-size: 1.2em;
   border: none;
-  margin: 0 2em 20px 0;
+  margin: 0 2em 0 0;
   padding: 10px 0 10px 0;
   background-color: var(--page-bg-color);
   border-bottom: 2px dotted var(--accent-color2);
@@ -3329,7 +3329,7 @@ span.svelte {
 }
 
 .comments {
-  margin: 1.5em 2em 1.5em 0;
+  margin: 30px 2em 30px 0;
   padding: 0 1em 0 0.5em;
   background-color: var(--comments-bg);
   border-radius: 4px;
@@ -3547,7 +3547,7 @@ blockquote td {
 
   #widgets {
     margin: 0 0 40px 0;
-    padding: 40px 0 0 0;
+    padding: 20px 0 0 0;
     border-top: 2px dotted var(--accent-color2);
   }
 
@@ -3560,7 +3560,7 @@ blockquote td {
   }
 
   .comments {
-    margin: 0 0 40px 0;
+    margin: 0 0 20px 0;
   }
 
   .pagination {
@@ -3609,7 +3609,7 @@ blockquote td {
   }
 
   .post-nav {
-    margin: 0 0 40px 0;
+    margin: 0 0 20px 0;
   }
 
   #menu {

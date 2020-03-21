@@ -1,6 +1,13 @@
+function addRelNoOpenerToExernalLinks(a) {
+  if (a.getAttribute("target").startsWith("_blank")) {
+    a.setAttribute("rel", "noopener");
+  }
+}
+
 function addTargetBlankToExternalLinks(a) {
   if (!a.getAttribute("href").startsWith("/")) {
     a.setAttribute("target", "_blank");
+    a.setAttribute("rel", "noopener");
   }
 }
 
@@ -15,6 +22,9 @@ function toggleAccordion(accordianSection) {
   accordianSection.classList.toggle("ac_hidden");
 }
 
+document
+  .querySelectorAll("a[target]")
+  .forEach(a => addRelNoOpenerToExernalLinks(a));
 document
   .querySelectorAll(".note a, .alert a")
   .forEach(a => addTargetBlankToExternalLinks(a));
