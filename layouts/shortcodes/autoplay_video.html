@@ -3,7 +3,7 @@
 {{ if $vid }}
 <div class="vid-wrapper">
     <figure>
-        <video id="vid-{{ $name }}" autoplay loop muted controls>
+        <video id="vid-{{ $name }}" autoplay playsinline loop muted controls>
             <source src="{{ $vid.RelPermalink }}" type="video/mp4">
             Sorry, your browser doesn't support embedded videos, but don't worry, you can <a href="{{ $vid.RelPermalink }}">download it</a> and watch it with your favorite video player!
         </video>

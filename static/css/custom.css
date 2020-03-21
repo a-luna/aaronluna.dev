@@ -3362,16 +3362,14 @@ span.svelte {
   margin: 0 10px;
 }
 
-video {
-  margin: 0 auto;
-}
-
-#vid-cypress {
-  max-width: 550px;
-}
-
 .vid-wrapper {
   text-align: center;
+  width: 100%
+}
+
+.vid-wrapper figure {
+  width: 90%;
+  margin: 0 auto;
 }
 
 /* RFC Table */
