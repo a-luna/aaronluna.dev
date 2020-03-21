@@ -55,7 +55,7 @@ I deployed this project to Netlify (click the Netlify button below to open the a
 <div class="cs-embed-wrapper">
   <div class="cs-embed">
     <iframe
-        src="https://aaronluna.dev/base64"
+        src="https://codesandbox.io/embed/github/a-luna/svelte-base64?codemirror=1&fontsize=12&hidenavigation=1&theme=dark&view=preview&runonclick=1"
         style="width:100%; height:500px; border: none; overflow-x:auto; overflow-y:auto"
         title="svelte-base64"
       ></iframe>

@@ -1,3 +1,4 @@
+/* uncss:ignore start */
 .hide-element,
 .primary.hide-element,
 #search-form .search-error.hide-element {
@@ -9,13 +10,6 @@
   height: 0;
   z-index: -1;
   opacity: .01;
-}
-
-.header-text {
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: baseline;
-  margin: 1.5em 0 0.75em;
 }
 
 .content a.hanchor {
@@ -30,80 +24,64 @@
   text-decoration: none;
 }
 
-.content .header-text a.hanchor-self {
+.content .heading-text a.hanchor-self {
   align-self: baseline;
 }
 
-.content h2 {
-  font-size: 24px;
-  line-height: 1.2;
-}
-
-.content .header-text.level1 a.hanchor-self {
+.content .heading-text.level1 a.hanchor-self {
   margin: 4px 7px 0 0;
 }
 
-.content .header-text.level1 a.hanchor-self,
-.content .header-text.level1 a.hanchor-top {
+.content .heading-text.level1 a.hanchor-self,
+.content .heading-text.level1 a.hanchor-top {
   font-size: 20px;
   line-height: 20px;
 }
 
-.content h3 {
-  font-size: 20px;
-  line-height: 1.2;
-}
-
-.content .header-text.level2 a.hanchor-self {
+.content .heading-text.level2 a.hanchor-self {
   margin: 4px 6px 0 0;
 }
 
-.content .header-text.level2 a.hanchor-self,
-.content .header-text.level2 a.hanchor-top {
+.content .heading-text.level2 a.hanchor-self,
+.content .heading-text.level2 a.hanchor-top {
   font-size: 18px;
   line-height: 18px;
 }
 
-.content h4,
-.content h5 {
-  font-size: 18px;
-  line-height: 1.2;
-}
-
-.content .header-text.level3 a.hanchor-self,
-.content .header-text.level4 a.hanchor-self {
+.content .heading-text.level3 a.hanchor-self,
+.content .heading-text.level4 a.hanchor-self {
   margin: 4px 7px 0 0;
 }
 
-.content .header-text.level3 a.hanchor-self,
-.content .header-text.level4 a.hanchor-self,
-.content .header-text.level3 a.hanchor-top,
-.content .header-text.level4 a.hanchor-top {
+.content .heading-text.level3 a.hanchor-self,
+.content .heading-text.level4 a.hanchor-self,
+.content .heading-text.level3 a.hanchor-top,
+.content .heading-text.level4 a.hanchor-top {
   font-size: 16px;
   line-height: 16px;
 }
 
-.content .header-text a.hanchor-top {
+.content .heading-text a.hanchor-top {
   margin: 0 0 0 6px;
   text-align: right;
   align-self: flex-start;
 }
 
-.header-text h2,
-.header-text h3,
-.header-text h4,
-.header-text h5 {
+.heading-text {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  margin: 1.5em 0 0.75em;
+}
+
+.heading-text h2,
+.heading-text h3,
+.heading-text h4,
+.heading-text h5 {
   flex: 1;
   align-self: center;
 }
-
-.hanchor-text {
-  font-size: 0.95em;
-  letter-spacing: 0.85px;
-  word-spacing: 2px;
-  margin: 0 7px 0 0;
-  vertical-align: baseline;
-}
+/* uncss:ignore start */
 
 html {
   font-size: 16px;
@@ -385,6 +363,22 @@ pre .project-structure-key-wrapper {
 pre .key-item {
   flex: 0 0 auto;
   margin: 2px 5px;
+}
+
+.content h2 {
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.content h3 {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.content h4,
+.content h5 {
+  font-size: 18px;
+  line-height: 1.2;
 }
 
 h1,
@@ -756,6 +750,10 @@ a:active:hover {
   font-weight: 700;
 }
 
+.note .bold-text {
+  color: var(--note-box);
+}
+
 .italics {
   font-style: italic;
 }
@@ -1031,6 +1029,8 @@ blockquote p code {
 
 .toc code {
   background: var(--page-bg-color);
+  vertical-align: baseline;
+  font-size: 0.75em;
 }
 
 .steps ul,
@@ -1726,7 +1726,7 @@ figcaption {
 .toc__menu ul li {
   padding: 0;
   margin: 0 0 15px 0;
-  line-height: 1.3;
+  line-height: 20px;
 }
 
 .toc__menu ul li:last-child {
@@ -2677,7 +2677,7 @@ table.aws-hosting-costs {
 }
 
 #project-repo .message {
-  margin: 5px 0;
+  margin: 5px 0 10px;
 }
 
 #project-repo ul a {
@@ -3400,12 +3400,9 @@ blockquote td {
 }
 
 @media screen and (max-width: 767px) {
-  .content .header-text a.hanchor-top {
+  .content .heading-text a.hanchor-top {
     margin: 2px 0 0 6px;
     text-align: right;
-  }
-  .hanchor-text {
-    display: none;
   }
   .blog-list .article-preview .post__title-wrapper,
   .tutorial .article-preview .post__title-wrapper {
