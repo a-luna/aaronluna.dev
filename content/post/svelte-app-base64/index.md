@@ -39,7 +39,6 @@ I am currently teaching myself svelte and I have enjoyed pretty much everything 
 ## Tests
 
 - Cypress E2E tests created for basic encode/decode scenarios.
-- 1 test case is failing (out of 5 total) due to a bug that can not be reproduced outside of Cypress.
 - 5 test cases are each executed with 4 different screen types/orientations.
 - Input and expected output for both ASCII and Hex strings taken directly from the [Examples and Illustrations](https://tools.ietf.org/html/rfc4648#section-9) and [Test Vectors](https://tools.ietf.org/html/rfc4648#section-10) sections of RFC4648 which is the original specification for Base64 and other print-safe binary encodings.
 
