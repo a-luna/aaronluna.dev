@@ -1,4 +1,4 @@
-function addRelNoOpenerToExernalLinks(a) {
+function addRelNoOpenerToExternalLinks(a) {
   if (a.getAttribute("target").startsWith("_blank")) {
     a.setAttribute("rel", "noopener");
   }
@@ -24,7 +24,7 @@ function toggleAccordion(accordianSection) {
 
 document
   .querySelectorAll("a[target]")
-  .forEach(a => addRelNoOpenerToExernalLinks(a));
+  .forEach(a => addRelNoOpenerToExternalLinks(a));
 document
   .querySelectorAll(".note a, .alert a")
   .forEach(a => addTargetBlankToExternalLinks(a));
