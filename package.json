@@ -17,7 +17,7 @@
     },
     "homepage": "https://github.com/a-luna/aaronluna.dev",
     "devDependencies": {
-        "autoprefixer": "^9.7.4",
+        "autoprefixer": "^9.7.5",
         "postcss": "^7.0.27",
         "postcss-cli": "^7.1.0",
         "postcss-uncss": "^0.17.0",
