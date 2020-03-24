@@ -23,6 +23,14 @@ I am currently teaching myself svelte and I have enjoyed pretty much everything 
   <a href="https://github.com/a-luna/svelte-base64" class="hero-button" target="_blank">View Github Repo</a>
 </div>
 
+I deployed this project to Netlify (click the **Launch App** button above to open the application in a new tab/window). I also included a button to view/fork the project with codesandbox (below), please feel free to <a href="https://github.com/a-luna/svelte-base64/issues" target="_blank">log a github issue</a> if you find any bugs. Thank you!
+
+<div class="cs-embed-buttons">
+  <a href="https://codesandbox.io/s/github/a-luna/svelte-base64/tree/master/?fontsize=12&hidenavigation=1&theme=dark" target="_blank">
+    <img alt="Edit svelte-base64" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+  </a>
+</div>
+
 
 ## Base64 Encoder/Decoder
 
@@ -53,23 +61,3 @@ I am currently teaching myself svelte and I have enjoyed pretty much everything 
 - Github action configured to run all Cypress tests on each push to master branch, build is deployed only if all tests pass.
 
 {{< autoplay_video cypress >}}
-
-I deployed this project to Netlify (click the Netlify button below to open the application in a new tab/window). I also included a button to view/fork the project with codesandbox, please feel free to <a href="https://github.com/a-luna/svelte-base64/issues" target="_blank">log a github issue</a> if you find any bugs. Thank you!
-
-<div class="cs-embed-buttons">
-  <a href="https://codesandbox.io/s/github/a-luna/svelte-base64/tree/master/?fontsize=12&hidenavigation=1&theme=dark" target="_blank">
-    <img alt="Edit svelte-base64" src="https://codesandbox.io/static/img/play-codesandbox.svg">
-  </a>
-  <a href="https://aaronluna.dev/base64" target="_blank">
-    <img src="https://api.netlify.com/api/v1/badges/6fbc8193-d75d-4dea-a3eb-64d9e97681f1/deploy-status" alt="Netlify Status">
-  </a>
-</div>
-<div class="cs-embed-wrapper">
-  <div class="cs-embed">
-    <iframe
-        src="https://codesandbox.io/embed/github/a-luna/svelte-base64?codemirror=1&fontsize=12&hidenavigation=1&theme=dark&view=preview&runonclick=1"
-        style="width:100%; height:500px; border: none; overflow-x:auto; overflow-y:auto"
-        title="svelte-base64"
-      ></iframe>
-  </div>
-</div>

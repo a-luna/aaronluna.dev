@@ -2732,6 +2732,7 @@ table.aws-hosting-costs {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
+  margin: 0 0 20px 0;
 }
 
 #search {
@@ -3387,7 +3388,7 @@ span.svelte {
   flex-flow: row nowrap;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+  margin: 20px 0 30px 0;
 }
 
 .cs-embed-buttons a {
