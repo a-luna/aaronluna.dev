@@ -208,6 +208,28 @@ ol li p {
   margin: 20px 0;
 }
 
+.content a.hero-button {
+  font-weight: 700;
+  color: var(--widget-bg-color);
+  background-color: var(--teal1);
+  text-align: center;
+  flex: 40%;
+  font-size: 1.5em;
+  border-radius: 4px;
+  margin: 0 10px;
+  padding: 10px 20px;
+}
+
+.content a.hero-button:hover,
+.content a.hero-button:active,
+.content a.hero-button:focus,
+.content a.hero-button:active:hover {
+  font-weight: 700;
+  color: var(--widget-bg-color);
+  background-color: var(--teal2);
+  text-decoration: none;
+}
+
 .content a.eyeballs {
   font-size: 1.2em;
   font-weight: 500;
@@ -787,7 +809,7 @@ article p strong {
 }
 
 .green {
-  color: var(--green3);
+  color: var(--green1);
 }
 
 .steps .emphasis {
@@ -834,6 +856,10 @@ span.italics.requirements {
   color: var(--blue2);
 }
 
+.blue-circle {
+  color: var(--blue4);
+}
+
 .note {
   color: var(--note-box);
 }
@@ -847,6 +873,10 @@ span.italics.requirements {
 
 .orange {
   color: var(--orange2);
+}
+
+.red {
+  color: var(--red3);
 }
 
 .light-blue {
@@ -1385,7 +1415,7 @@ figure img {
 
 figcaption {
   text-align: center;
-  color: #a9fb68;
+  color: var(--teal2);
   font-weight: 400;
   font-size: 0.9em;
   font-style: italic;
@@ -2697,9 +2727,11 @@ table.aws-hosting-costs {
   margin: 0 0 5px;
 }
 
-#menu {
+#menu,
+.hero-buttons {
   display: flex;
   flex-flow: row nowrap;
+  justify-content: center;
 }
 
 #search {
@@ -3407,6 +3439,9 @@ blockquote td {
   .blog-list .article-preview .post__title-wrapper {
     font-size: 0.825em;
   }
+  .content a.hero-button {
+    font-size: 1.3em;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -3698,6 +3733,13 @@ blockquote td {
 }
 
 @media screen and (max-width: 525px) {
+  .hero-buttons {
+    flex-flow: row wrap;
+  }
+  .content a.hero-button {
+    flex: 100%;
+    margin: 10px 0;
+  }
   .site-social a {
     padding: 0 5px;
   }
