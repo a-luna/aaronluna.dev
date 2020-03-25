@@ -24,7 +24,12 @@ function toggleAccordion(accordianSection) {
 
 function setSelectedCategory(pathname) {
   const categorySelect = document.querySelector(".select-css-wrapper select")
-  categorySelect.value = pathname
+  if (categorySelect === null) return
+  for (let i = 0; i < categorySelect.options.length; i++) {
+    let thisOption = categorySelect.options[i]
+    if (thisOption.value !== pathname) continue
+    thisOption.selected = true
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function() {

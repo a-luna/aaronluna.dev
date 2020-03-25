@@ -2924,8 +2924,7 @@ header,
 }
 
 .site-social ul,
-.site-menu,
-#sourcerer-header {
+.site-menu {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
