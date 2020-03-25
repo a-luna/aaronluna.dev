@@ -57,8 +57,8 @@
   --page-bg-color: var(--dark-gray1);
   --body-text-color: var(--off-white2);
   --header-color: var(--white2);
-  --header-anchor-link: var(--mid-gray1);
-  --header-anchor-link-hover: var(--off-white1);
+  --header-anchor-link: var(--light-gray2);
+  --header-anchor-link-hover: var(--white1);
   --widget-bg-color: var(--black1);
   --link-color: var(--blue2);
   --header-link-color1: var(--light-gray2);

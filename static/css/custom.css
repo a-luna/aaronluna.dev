@@ -29,28 +29,27 @@
 }
 
 .content .heading-text.level1 a.hanchor-self {
-  margin: 0 7px 0 0;
+  margin: 1px 7px 0 0;
 }
 
 .content .heading-text.level1 a.hanchor-self,
 .content .heading-text.level1 a.hanchor-top {
   font-size: 20px;
-  line-height: 20px;
 }
 
 .content .heading-text.level2 a.hanchor-self {
-  margin: 0 6px 0 0;
+  margin: 1px 6px 0 0;
 }
 
 .content .heading-text.level2 a.hanchor-self,
 .content .heading-text.level2 a.hanchor-top {
   font-size: 18px;
-  line-height: 18px;
+  line-height: 20px;
 }
 
 .content .heading-text.level3 a.hanchor-self,
 .content .heading-text.level4 a.hanchor-self {
-  margin: 0 7px 0 0;
+  margin: 1px 7px 0 0;
 }
 
 .content .heading-text.level3 a.hanchor-self,

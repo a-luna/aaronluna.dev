@@ -27,10 +27,8 @@ function addLinkToTopOfPage(headingWrapper) {
 function addMagicalUnderline(h) {
   const headingWrapper = document.createElement("span")
   headingWrapper.classList.add('underline--magical')
-  const headingHtml = h.firstChild
-  headingHtml.normalize()
   const range = document.createRange()
-  range.selectNode(headingHtml)
+  range.selectNodeContents(h)
   range.surroundContents(headingWrapper)
 }
 
