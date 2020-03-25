@@ -98,6 +98,19 @@
 }
 
 @font-face {
+  font-family: "Raleway";
+  font-style: normal;
+  font-weight: 500;
+  src: url(/fonts/Raleway-Medium-subset.woff2) format("woff2"),
+    url(/fonts/Raleway-Medium-subset.woff) format("woff"),
+    url(/fonts/Raleway-Medium-subset.ttf) format("truetype");
+  unicode-range: U+A, U+20-5D, U+5F, U+61-7E, U+A9, U+2013, U+2014, U+2018,
+    U+2019, U+201C, U+201D, U+F002, U+F005, U+F040, U+F053, U+F054, U+F062,
+    U+F067, U+F071, U+F099, U+F09B, U+F0C1, U+F0E0, U+F0E1, U+F0ED, U+F111,
+    U+F11C, U+F121, U+F126, U+F178, U+F2B5;
+}
+
+@font-face {
   font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 700;

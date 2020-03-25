@@ -29,7 +29,7 @@
 }
 
 .content .heading-text.level1 a.hanchor-self {
-  margin: 4px 7px 0 0;
+  margin: 0 7px 0 0;
 }
 
 .content .heading-text.level1 a.hanchor-self,
@@ -39,7 +39,7 @@
 }
 
 .content .heading-text.level2 a.hanchor-self {
-  margin: 4px 6px 0 0;
+  margin: 0 6px 0 0;
 }
 
 .content .heading-text.level2 a.hanchor-self,
@@ -50,7 +50,7 @@
 
 .content .heading-text.level3 a.hanchor-self,
 .content .heading-text.level4 a.hanchor-self {
-  margin: 4px 7px 0 0;
+  margin: 0 7px 0 0;
 }
 
 .content .heading-text.level3 a.hanchor-self,
@@ -406,7 +406,9 @@ pre .key-item {
 h1,
 h2,
 h3,
-h4 {
+h4,
+h5 {
+  font-family: raleway, sans-serif;
   font-weight: 500;
   margin: 1em 0;
   line-height: 1.2;
@@ -414,10 +416,23 @@ h4 {
 
 h1,
 h1.post__title {
-  font-size: 2em;
+  font-size: 2.2em;
   color: var(--header-color);
   font-weight: 500;
   margin: 0 0 0 0;
+}
+
+h1.post__title {
+  font-family: roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}
+
+.underline--magical {
+  background-image: linear-gradient(120deg, var(--purple1) 0%,var(--purple1) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 0.2em;
+  background-position: 0 88%;
+  transition: background-size 0.25s ease-in;
 }
 
 .series__title {
@@ -537,7 +552,7 @@ h5 {
 .content h3,
 .content h4,
 .content h5 {
-  font-weight: 400;
+  font-weight: 500;
   margin: 0;
 }
 
@@ -1691,6 +1706,7 @@ figcaption {
 }
 
 .article-preview .list__title {
+  font-family: roboto, Helvetica, Arial, sans-serif;
   font-size: 1.5em;
   margin: 0;
 }
@@ -2162,8 +2178,9 @@ input {
 .widget__title {
   color: #e2e2e2;
   font-size: 1.45em;
-  border-bottom: 1px solid var(--accent-color1);
+  border:none;
   text-transform: none;
+  padding: none;
 }
 
 #api-tutorial {
@@ -2657,6 +2674,7 @@ table.aws-hosting-costs {
 }
 
 .accordion section h2 {
+  font-family: roboto, Helvetica, Arial, sans-serif;
   color: var(--accordion-header-text-color);
   background-color: var(--accordion-header-bg-color);
   font-size: 1.2em;
@@ -2894,12 +2912,12 @@ header,
 
 .home h1 {
   color: var(--home-title-color);
-  font-size: 2.9em;
+  font-size: 3.8em;
   margin: 0 0 10px;
 }
 
 .home header p {
-  font-size: 2.2em;
+  font-size: 2.5em;
   font-weight: 500;
   color: var(--home-lead-color);
   font-style: normal;
@@ -3447,7 +3465,7 @@ blockquote td {
 
 @media screen and (max-width: 767px) {
   .content .heading-text a.hanchor-top {
-    margin: 2px 0 0 6px;
+    margin: 0 0 0 6px;
     text-align: right;
   }
   .blog-list .article-preview .post__title-wrapper,
@@ -3481,11 +3499,11 @@ blockquote td {
   }
 
   .home h1 {
-    font-size: 2.8em;
+    font-size: 3.5em;
   }
 
   .home header p {
-    font-size: 2em;
+    font-size: 2.5em;
   }
 
   main.home {
