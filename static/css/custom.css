@@ -9,7 +9,7 @@
   position: absolute;
   height: 0;
   z-index: -1;
-  opacity: .01;
+  opacity: 0.01;
 }
 
 .content a.hanchor {
@@ -19,7 +19,7 @@
 .content a.hanchor:hover,
 .content a.hanchor:active,
 .content a.hanchor:active:hover,
-.content a.hanchor:focus  {
+.content a.hanchor:focus {
   color: var(--header-anchor-link-hover);
   text-decoration: none;
 }
@@ -108,7 +108,7 @@ main {
 }
 
 main.home {
-  margin: 20px auto 0 auto;
+  margin: 0 auto;
   max-width: 750px;
   width: 80%;
 }
@@ -203,6 +203,44 @@ ol li p {
   justify-content: space-evenly;
 }
 
+.select-css {
+  display: block;
+  font-size: 16px;
+  font-family: roboto, sans-serif;
+  font-weight: 700;
+  text-align: center;
+  color: var(--black2);
+  line-height: 1.3;
+  padding: 0.6em 1.4em 0.5em 0.8em;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 10px 0;
+  border: 1px solid var(--dark-gray1);
+  box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
+  border-radius: 0.5em;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--mid-gray2);
+}
+.select-css::-ms-expand {
+  display: none;
+}
+.select-css:hover {
+  border-color: var(--dark-gray2);
+}
+.select-css:focus {
+  border-color: var(--mid-gray1);
+  box-shadow: 0 0 1px 3px var(--purple1);
+  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  color: var(--black2);
+  outline: none;
+}
+.select-css option {
+  font-weight: normal;
+}
+
 .center {
   text-align: center;
   margin: 20px 0;
@@ -294,7 +332,7 @@ ol li p {
 }
 
 .widget h4 {
-  margin: 0;
+  margin: 0 0 5px 0;
 }
 
 .main__header h1 {
@@ -306,7 +344,7 @@ ol li p {
 }
 
 .series__title a {
-  color: var(--link-color)
+  color: var(--link-color);
 }
 
 .about-me .post__header {
@@ -428,7 +466,11 @@ h1.post__title {
 }
 
 .underline--magical {
-  background-image: linear-gradient(120deg, var(--purple1) 0%,var(--purple1) 100%);
+  background-image: linear-gradient(
+    120deg,
+    var(--purple1) 0%,
+    var(--purple1) 100%
+  );
   background-repeat: no-repeat;
   background-size: 100% 0.2em;
   background-position: 0 88%;
@@ -773,9 +815,18 @@ a:active:hover {
 }
 
 .widget li {
+  font-size: 1.1em;
   padding: 0;
-  margin: 7px 0;
-  line-height: 1.3;
+  margin: 15px 0;
+  line-height: 1.4;
+}
+
+.widget li:first-child {
+  margin: 0 0 15px 0;
+}
+
+.widget li:last-child {
+  margin: 0 0 10px 0;
 }
 
 .widget-categories li a {
@@ -1331,8 +1382,7 @@ pre.chroma code {
   background-color: var(--widget-bg-color);
 }
 
-.chroma [data-lang]:before
-{
+.chroma [data-lang]:before {
   position: absolute;
   z-index: 0;
   top: -22px;
@@ -1371,7 +1421,6 @@ blockquote.rfc .bold-text,
   color: var(--rfc-bold-text-color);
   text-transform: none;
 }
-
 
 blockquote.rfc {
   color: var(--rfc-text-color);
@@ -1672,7 +1721,6 @@ figcaption {
   text-decoration: none;
   color: var(--tut-link-color);
   background-color: var(--widget-bg-color);
-
 }
 
 .github-links .fa {
@@ -1729,7 +1777,7 @@ figcaption {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  margin: 0 0 10px 0
+  margin: 0 0 10px 0;
 }
 
 .article-preview-top-row .post-categories {
@@ -2021,7 +2069,7 @@ a.post-nav__link:focus {
   align-items: center;
   font-size: 1.05em;
   margin: 20px 0;
-  padding:0;
+  padding: 0;
 }
 
 #header-nav .post-nav-flex-item-prev,
@@ -2178,7 +2226,7 @@ input {
 .widget__title {
   color: #e2e2e2;
   font-size: 1.45em;
-  border:none;
+  border: none;
   text-transform: none;
   padding: none;
 }
@@ -2357,7 +2405,7 @@ input {
 #all-github-links .fa:active,
 #all-github-links .fa:focus,
 #all-github-links .fa:active:hover {
-  color: var(--body-text-color)
+  color: var(--body-text-color);
 }
 
 table code {
@@ -2999,7 +3047,6 @@ header,
   margin: 0 0 3px;
 }
 
-
 .post__header .post-meta-date .meta__text {
   font-size: 1.1em;
 }
@@ -3061,7 +3108,7 @@ header,
 }
 
 a.post-category,
-.category-list-header span  {
+.category-list-header span {
   --cat-color: var(--accent-color2);
   font-size: 15px;
   font-weight: 700;
@@ -3301,7 +3348,7 @@ span.svelte {
 #search-header .button {
   cursor: pointer;
   font-size: 16px;
-  font-weight: 700;;
+  font-weight: 700;
   color: #323232;
   background-color: var(--pink2);
   border: 1px solid var(--pink2);
@@ -3415,7 +3462,7 @@ span.svelte {
 
 .vid-wrapper {
   text-align: center;
-  width: 100%
+  width: 100%;
 }
 
 .vid-wrapper figure {
@@ -3550,9 +3597,8 @@ blockquote td {
     margin: 10px auto;
   }
 
-
   .wrapper {
-    padding: 30px 20px 0 20px;
+    padding: 20px 20px 0 20px;
   }
 
   .primary {
@@ -3668,6 +3714,7 @@ blockquote td {
 
   #menu {
     min-height: 30px;
+    margin: 0;
   }
 
   .menu-bar {
@@ -3877,6 +3924,5 @@ blockquote td {
   .site-menu a {
     font-size: 1em;
     padding: 3px 5px;
-
   }
 }
