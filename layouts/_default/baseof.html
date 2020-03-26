@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-{{ if eq .Section "blog" }}
+{{ if eq .Params.menu_section "home" }}
+	{{ .Scratch.Set "section_class" " home-page" }}
+{{ else if eq .Params.menu_section "about" }}
+    {{ .Scratch.Set "section_class" " about-me"}}
+{{ else if eq .Section "blog" }}
 	{{ .Scratch.Set "section_class" " blog-list" }}
 {{ else if eq .Section "post" }}
     {{ .Scratch.Set "section_class" " blog-post"}}

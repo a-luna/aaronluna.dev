@@ -144,9 +144,17 @@ ol li p {
 
 .wrapper {
   background: var(--page-bg-color);
-  padding: 30px 30px 0 30px;
+  padding: 0 30px;
   border: none;
   width: 100%;
+}
+
+.home-page .wrapper,
+.about-me .wrapper,
+.blog-list .wrapper,
+.blog-post .wrapper,
+.tutorial .wrapper {
+  padding: 30px 30px 0 30px;
 }
 
 .primary {
@@ -182,6 +190,16 @@ ol li p {
   font-size: 1.1em;
   flex: 0 0 31%;
   margin: 0;
+  padding: 50px 0 0 0;
+}
+
+.home-page .sidebar,
+.about-me .sidebar,
+.blog-list .sidebar,
+.blog-post .sidebar,
+.tutorial .sidebar {
+  margin: 0;
+  padding: 0;
 }
 
 #widgets div {
@@ -208,12 +226,12 @@ ol li p {
   align-items: center;
   justify-content: space-evenly;
   font-size: 16px;
-  color: var(--mid-gray2);
-  background-color: var(--widget-bg-color);
+  color: var(--off-white1);
+  background-color: var(--black3);
   line-height: 1.3;
   padding: 5px 10px;
   margin: 10px 0;
-  border: 1px solid var(--mid-gray2);
+  border: 1px solid var(--dark-gray2);
   box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
   border-radius: 0.5em;
 }
@@ -222,13 +240,18 @@ ol li p {
   border-color: var(--mid-gray1);
 }
 
+#post-categories .select-css-wrapper.focused {
+  border-color: var(--purple1);
+  box-shadow: 0 0 1px 2px var(--purple1);
+}
+
 .select-css {
   flex: 1 0;
-  color: var(--mid-gray2);
-  background-color: var(--widget-bg-color);
+  color: var(--off-white1);
+  background-color: var(--black3);
+  border: none;
   font-family: roboto, sans-serif;
-  border: 1px solid var(--widget-bg-color);
-  text-align: center;
+  background-color: var(--black3);
   box-sizing: border-box;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -238,7 +261,8 @@ ol li p {
 .select-css-wrapper i {
   flex: 0;
   font-size: 1.3em;
-  margin: 0 0 0 10px;
+  margin: 0 0 -4px 10px;
+  color: var(--off-white1);
 }
 
 .select-css::-ms-expand {
@@ -246,19 +270,19 @@ ol li p {
 }
 
 .select-css:hover {
-  border-color: var(--widget-bg-color);
+  background-color: var(--black3);
 }
 
 .select-css:focus {
-  border-color: var(--widget-bg-color);
-  box-shadow: 0 0 1px 3px var(--widget-bg-color);
-  box-shadow: 0 0 0 3px -moz-mac-focusring;
+  border-color: var(--black3);
+  box-shadow: none;
   color: var(--off-white1);
   outline: none;
 }
 
 .select-css option {
   font-weight: normal;
+  color: var(--off-white1);
 }
 
 .center {
@@ -474,7 +498,7 @@ h5 {
 
 h1,
 h1.post__title {
-  font-size: 2.2em;
+  font-size: 2em;
   color: var(--header-color);
   font-weight: 500;
   margin: 0 0 0 0;
@@ -985,8 +1009,7 @@ span.italics.requirements {
   color: var(--teal2);
 }
 
-p .fa,
-.about-me div .fa {
+p .fa {
   font-size: 12px;
   margin: 0 2px;
 }
@@ -1636,7 +1659,7 @@ figcaption {
 .list__header,
 .main__header {
   background-color: #323232;
-  margin: 0 0 10px;
+  margin: 10px 0;
   padding: 0;
 }
 
@@ -2818,6 +2841,15 @@ table.aws-hosting-costs {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
+  margin: 0;
+}
+
+.home-page #menu,
+.about-me #menu,
+.blog-list #menu,
+.blog-post #menu,
+.tutorial #menu,
+.hero-buttons {
   margin: 0 0 20px 0;
 }
 
@@ -2978,15 +3010,16 @@ header,
 }
 
 .home h1 {
+  font-family: roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
   color: var(--home-title-color);
   font-size: 3.8em;
   margin: 0 0 10px;
 }
 
 .home header p {
-  font-family: raleway, sans-serif;
   font-size: 2.5em;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--home-lead-color);
   font-style: normal;
   margin: 0 0 20px;
@@ -3163,15 +3196,15 @@ a.post-category,
 .category-list-header {
   display: flex;
   flex-flow: row nowrap;
-  margin: 0 0 20px 0;
+  margin: 0;
 }
 
 .category-list-header span {
   color: var(--black2);
-  font-size: 1.3em;
+  font-size: 1.25em;
   line-height: 1.2;
   margin: 0 10px 0 0;
-  padding: 6px 12px;
+  padding: 3px 10px;
 }
 
 a.post-category:hover,

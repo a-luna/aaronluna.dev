@@ -2,6 +2,7 @@
 title: "About Me"
 slug: "about"
 type: "about"
+menu_section: "about"
 sidebar: false
 ---
 <div class="fa-bullet-list">

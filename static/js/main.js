@@ -22,13 +22,25 @@ function toggleAccordion(accordianSection) {
   accordianSection.classList.toggle("ac_hidden")
 }
 
-function setSelectedCategory(pathname) {
-  const categorySelect = document.querySelector(".select-css-wrapper select")
+function categorySelectorFocused() {
+  const selectWrapper = document.querySelector(".select-css-wrapper")
+  const categorySelect = document.getElementById("category-select")
+  selectWrapper.classList.add("focused")
+  categorySelect.addEventListener("focusout", () => categorySelectorFocusOut())
+}
+
+function categorySelectorFocusOut() {
+  const selectWrapper = document.querySelector(".select-css-wrapper")
+  selectWrapper.classList.remove("focused")
+}
+
+function setSelectedCategory() {
+  const categorySelect = document.getElementById("category-select")
   if (categorySelect === null) return
-  for (let i = 0; i < categorySelect.options.length; i++) {
-    let thisOption = categorySelect.options[i]
-    if (thisOption.value !== pathname) continue
-    thisOption.selected = true
+  for (const option of categorySelect.options) {
+    if (option.value !== window.location.pathname) continue
+    option.selected = true
+    break
   }
 }
 
@@ -42,5 +54,8 @@ document.addEventListener("DOMContentLoaded", function() {
   document
     .querySelectorAll(".accordion")
     .forEach(accordion => createToggle(accordion))
-  setSelectedCategory(window.location.pathname)
+  document
+    .getElementById("category-select")
+    .addEventListener("focus", () => categorySelectorFocused())
+  setSelectedCategory()
 });
