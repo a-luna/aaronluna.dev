@@ -3,3 +3,4 @@
 resources/**/*.css*
 resources/**/*.js*
 node_modules
+node_modules_OLD

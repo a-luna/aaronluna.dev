@@ -19,8 +19,8 @@ resources:
 I am currently teaching myself svelte and I have enjoyed pretty much everything about it. I decided to create a simple application that encodes ASCII text or hex strings to base64, and vice-versa. In order to take advantage of svelte's strengths, the application contains reactive UI components to help illustrate the encoding process.
 
 <div class="hero-buttons">
-  <a href="https://aaronluna.dev/base64" class="hero-button" target="_blank">Launch App</a>
-  <a href="https://github.com/a-luna/svelte-base64" class="hero-button" target="_blank">View Github Repo</a>
+  <a href="https://aaronluna.dev/base64" target="_blank">Launch App</a>
+  <a href="https://github.com/a-luna/svelte-base64" target="_blank">View Github Repo</a>
 </div>
 
 I deployed this project to Netlify (click the **Launch App** button above to open the application in a new tab/window). I also included a button to view/fork the project with codesandbox (below), please feel free to <a href="https://github.com/a-luna/svelte-base64/issues" target="_blank">log a github issue</a> if you find any bugs. Thank you!

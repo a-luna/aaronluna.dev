@@ -4,6 +4,9 @@ slug: "about"
 type: "about"
 menu_section: "about"
 sidebar: false
+resources:
+  - name: author
+    src: images/AaronLuna.jpg
 ---
 <div class="fa-bullet-list">
     <p class="fa-bullet-list-item">

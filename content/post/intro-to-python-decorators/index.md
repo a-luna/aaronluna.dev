@@ -672,6 +672,8 @@ tests/test_timeout.py::test_timeout PASSED                                      
 
 If you would like to download all or some of the code from this post, you can easily do so from the Github gist linked below:
 
-<a href="https://gist.github.com/a-luna/0a20912a82a8b867e19ab3734fce482a" target="_blank">Python Decorators [gist.github.com]</a>
+<div class="hero-buttons">
+  <a href="https://gist.github.com/a-luna/0a20912a82a8b867e19ab3734fce482a" target="_blank">Python Decorators</a>
+</div>
 
 I hope this introduction to decorators in Python was helpful and easy to understand. If you have any questions, criticism or feedback please leave a comment. Thanks!

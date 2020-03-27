@@ -290,25 +290,33 @@ ol li p {
   margin: 20px 0;
 }
 
-.content a.hero-button {
+.hero-buttons {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  margin: 0;
+}
+
+.content .hero-buttons a {
   font-weight: 700;
   color: var(--widget-bg-color);
-  background-color: var(--teal1);
+  background-color: var(--purple2);
   text-align: center;
-  flex: 40%;
+  white-space: pre;
+  flex: 0 1 40%;
   font-size: 1.5em;
   border-radius: 4px;
-  margin: 0 10px;
+  margin: 0;
   padding: 10px 20px;
 }
 
-.content a.hero-button:hover,
-.content a.hero-button:active,
-.content a.hero-button:focus,
-.content a.hero-button:active:hover {
+.content .hero-buttons a:hover,
+.content .hero-buttons a:active,
+.content .hero-buttons a:focus,
+.content .hero-buttons a:active:hover {
   font-weight: 700;
   color: var(--widget-bg-color);
-  background-color: var(--teal2);
+  background-color: var(--purple3);
   text-decoration: none;
 }
 
@@ -2836,8 +2844,7 @@ table.aws-hosting-costs {
   margin: 0 0 5px;
 }
 
-#menu,
-.hero-buttons {
+#menu {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -3858,7 +3865,7 @@ blockquote td {
   .hero-buttons {
     flex-flow: row wrap;
   }
-  .content a.hero-button {
+  .content .hero-buttons a {
     flex: 100%;
     margin: 10px 0;
   }
