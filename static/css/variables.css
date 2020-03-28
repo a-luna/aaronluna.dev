@@ -18,7 +18,7 @@
   --blue1: hsl(206, 100%, 57%);
   --blue2: hsl(206, 100%, 72%);
   --blue3: hsl(206, 100%, 67%);
-  --blue4: hsl(206, 100%, 47%);
+  --blue4: hsl(206, 100%, 44%);
   --green1: hsl(93, 95%, 45%);
   --green2: hsl(93, 95%, 60%);
   --green3: hsl(93, 95%, 70%);
@@ -30,19 +30,20 @@
   --orange2: hsl(32, 98%, 56%);
   --orange3: hsl(31, 100%, 63%);
   --orange4: hsl(31, 100%, 73%);
-  --gold1: hsl(45, 100%, 54%);
+  --gold1: hsl(45, 100%, 50%);
   --gold2: hsl(45, 100%, 68%);
   --gold3: rgb(229, 185, 102);
-  --pink1: hsl(338, 95%, 43%);
+  --pink1: hsl(338, 95%, 45%);
   --pink2: hsl(338, 95%, 56%);
-  --pink3: hsl(342, 100%, 59%);
+  --pink3: hsl(342, 100%, 64%);
   --red1: hsl(2, 93%, 35%);
   --red2: hsl(357, 93%, 45%);
   --red3: hsl(9, 97%, 55%);
   --magenta1: hsl(301, 93%, 41%);
   --magenta2: hsl(301, 93%, 51%);
-  --magenta3: hsl(301, 93%, 71%);
-  --yellow1: hsla(59, 98%, 55%);
+  --magenta3: rgb(250, 112, 248);
+  --yellow1: hsla(59, 98%, 40%);
+  --yellow2: hsla(59, 98%, 55%);
 
   /* Spacing */
   --no-margin: 0;
@@ -94,17 +95,28 @@
   --list-header-date-color: var(--header-color);
 
   /* Categories */
-  --aws: var(--purple2);
-  --devops: var(--magenta2);
-  --dotnet: var(--blue4);
-  --flask: var(--red2);
+  --aws: var(--purple3);
+  --aws-hover: var(--purple2);
+  --devops: var(--magenta3);
+  --devops-hover: var(--magenta2);
+  --dotnet: var(--orange2);
+  --dotnet-hover: var(--orange1);
+  --flask: var(--red3);
+  --flask-hover: var(--red2);
   --hugo: var(--teal2);
-  --javascript: var(--gold1);
-  --tutorial-series: var(--pink2);
-  --linux: var(--yellow1);
-  --python: var(--green1);
-  --virtualization: var(--teal1);
-  --svelte: var(--red3);
+  --hugo-hover: var(--teal1);
+  --javascript: var(--gold2);
+  --javascript-hover: var(--gold1);
+  --tutorial-series: var(--pink3);
+  --tutorial-series-hover: var(--pink2);
+  --linux: var(--yellow2);
+  --linux-hover: var(--yellow1);
+  --python: var(--green2);
+  --python-hover: var(--green1);
+  --virtualization: var(--teal2);
+  --virtualization-hover: var(--teal1);
+  --svelte: var(--blue1);
+  --svelte-hover: var(--blue4);
 
   /* Section: Blog Posts */
   --blog-link-color: var(--accent-color1);

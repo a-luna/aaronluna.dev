@@ -300,7 +300,7 @@ ol li p {
 .content .hero-buttons a {
   font-weight: 700;
   color: var(--widget-bg-color);
-  background-color: var(--purple2);
+  background-color: var(--purple3);
   text-align: center;
   white-space: pre;
   flex: 0 1 40%;
@@ -316,7 +316,7 @@ ol li p {
 .content .hero-buttons a:active:hover {
   font-weight: 700;
   color: var(--widget-bg-color);
-  background-color: var(--purple3);
+  background-color: var(--purple2);
   text-decoration: none;
 }
 
@@ -1881,16 +1881,12 @@ figcaption {
 .toc__menu ul ul {
   list-style: square;
   font-size: 0.9em;
-  margin: 5px 0 0 15px;
+  margin: 10px 0 0 20px;
 }
 
 .toc__menu ul li ul li {
   padding: 0;
-  margin: 0 0 5px;
-}
-
-.toc__menu ul li ul li:last-child {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
 .toc__menu ul a,
@@ -3167,20 +3163,35 @@ header,
   margin: 10px 0;
 }
 
+.repo-language i {
+  --cat-color: var(--mid-gray2);
+  color: var(--cat-color)
+}
+
 a.post-category,
 .category-list-header span {
-  --cat-color: var(--accent-color2);
+  --cat-color: var(--mid-gray2);
   font-size: 15px;
   font-weight: 700;
   text-align: center;
   text-transform: lowercase;
   color: var(--black2);
   background-color: var(--cat-color);
-  border: 1px solid var(--cat-color);
   border-radius: 4px;
   margin: 3px 10px 3px 0;
   padding: 2px 7px;
   white-space: nowrap;
+}
+
+a.post-category:hover,
+a.post-category:focus,
+a.post-category:active,
+a.post-category:active:hover {
+  --cat-color-hover: var(--light-gray1);
+  color: var(--black2);
+  background-color: var(--cat-color-hover);
+  text-decoration: none;
+  font-weight: 700;
 }
 
 .post__header a.post-category {
@@ -3194,7 +3205,6 @@ a.post-category,
 
 #widgets a.post-category {
   font-size: 16px;
-  border: 2px solid var(--cat-color);
   flex: 1 0 40%;
   min-width: 115px;
   margin: 4px;
@@ -3214,16 +3224,6 @@ a.post-category,
   padding: 3px 10px;
 }
 
-a.post-category:hover,
-a.post-category:focus,
-a.post-category:active,
-a.post-category:active:hover {
-  color: var(--cat-color);
-  background-color: var(--black2);
-  text-decoration: none;
-  font-weight: 700;
-}
-
 .post__header a.post-category:hover,
 .post__header a.post-category:focus,
 .post__header a.post-category:active,
@@ -3232,58 +3232,124 @@ a.post-category:active:hover {
 }
 
 a.python,
+i.python,
 span.python {
   --cat-color: var(--python);
 }
 
+a.python:hover,
+span.python:hover {
+  --cat-color-hover: var(--python-hover);
+}
+
 a.devops,
+i.devops,
 span.devops {
   --cat-color: var(--devops);
 }
 
+a.devops:hover,
+span.devops:hover {
+  --cat-color-hover: var(--devops-hover);
+}
+
 a.aws,
+i.aws,
 span.aws {
   --cat-color: var(--aws);
 }
 
+a.aws:hover,
+span.aws:hover {
+  --cat-color-hover: var(--aws-hover);
+}
+
 a.hugo,
+i.hugo,
 span.hugo {
   --cat-color: var(--hugo);
 }
 
+a.hugo:hover,
+span.hugo:hover {
+  --cat-color-hover: var(--hugo-hover);
+}
+
 a.javascript,
+i.javascript,
 span.javascript {
   --cat-color: var(--javascript);
 }
 
+a.javascript:hover,
+span.javascript:hover {
+  --cat-color-hover: var(--javascript-hover);
+}
+
 a.dotnet,
+i.dotnet,
 span.dotnet {
   --cat-color: var(--dotnet);
 }
 
+a.dotnet:hover,
+span.dotnet:hover {
+  --cat-color-hover: var(--dotnet-hover);
+}
+
 a.linux,
+i.linux,
 span.linux {
   --cat-color: var(--linux);
 }
 
+a.linux:hover,
+span.linux:hover {
+  --cat-color-hover: var(--linux-hover);
+}
+
 a.flask,
+i.flask,
 span.flask {
   --cat-color: var(--flask);
 }
 
+a.flask:hover,
+span.flask:hover {
+  --cat-color-hover: var(--flask-hover);
+}
+
 a.virtualization,
+i.virtualization,
 span.virtualization {
   --cat-color: var(--virtualization);
 }
 
+a.virtualization:hover,
+span.virtualization:hover {
+  --cat-color-hover: var(--virtualization-hover);
+}
+
 a.tutorial-series,
+i.tutorial-series,
 span.tutorial-series {
   --cat-color: var(--tutorial-series);
 }
 
+a.tutorial-series:hover,
+span.tutorial-series:hover {
+  --cat-color-hover: var(--tutorial-series-hover);
+}
+
 a.svelte,
+i.svelte,
 span.svelte {
   --cat-color: var(--svelte);
+}
+
+a.svelte:hover,
+span.svelte:hover {
+  --cat-color-hover: var(--svelte-hover);
 }
 
 #home-blog-link,
