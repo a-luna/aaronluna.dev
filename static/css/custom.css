@@ -255,7 +255,6 @@ ol li p {
   box-sizing: border-box;
   -moz-appearance: none;
   -webkit-appearance: none;
-  appearance: none;
 }
 
 .select-css-wrapper i {
@@ -1850,7 +1849,7 @@ figcaption {
 }
 
 #api-tutorial-preview .article-preview-summary .date-published {
-  color: var(--teal2);
+  color: var(--purple3);
   margin: 0 5px 0 0;
 }
 
@@ -3725,8 +3724,16 @@ blockquote td {
     margin: 10px auto;
   }
 
-  .wrapper {
+  .home-page .wrapper,
+  .about-me .wrapper,
+  .blog-list .wrapper,
+  .blog-post .wrapper,
+  .tutorial .wrapper  {
     padding: 20px 20px 0 20px;
+  }
+
+  .wrapper {
+    padding: 0 20px;
   }
 
   .primary {
@@ -3792,7 +3799,7 @@ blockquote td {
   }
 
   .pagination {
-    margin: 0 0 40px 0;
+    margin: 0 0 20px 0;
     justify-content: center;
   }
 
@@ -3866,6 +3873,14 @@ blockquote td {
     font-size: 0.95em;
     padding: 5px 5px 8px 5px;
     margin: 5px 5px 0;
+  }
+
+  .category-list-header span {
+    color: var(--black2);
+    font-size: 1.25em;
+    line-height: 1.2;
+    margin: 0;
+    padding: 3px 10px;
   }
 }
 
@@ -3998,28 +4013,28 @@ blockquote td {
   .article-preview {
     max-width: 440px;
     padding: 20px;
-    margin: 0 auto 40px auto;
+    margin: 0 auto 20px auto;
   }
   .article-preview-top-flex {
     flex-flow: column nowrap;
   }
   .article-preview .meta__text {
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
   .article-preview figure {
     width: 100%;
     margin: 0 0 20px 0;
   }
   .article-preview .post__title-wrapper {
-    font-size: 1.05em;
+    font-size: 1em;
   }
   .article-preview a.post-category {
     margin: 3px 10px 3px 0;
     padding: 2px 7px;
-    font-size: 18px;
+    font-size: 16px;
   }
   .article-preview-summary p {
-    font-size: 1.2em;
+    font-size: 1em;
   }
 }
 
