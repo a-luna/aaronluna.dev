@@ -3628,7 +3628,7 @@ blockquote td {
 }
 
 @media screen and (max-width: 900px) {
-  .blog-list .article-preview .post__title-wrapper {
+  .article-preview .post__title-wrapper {
     font-size: 0.825em;
   }
   .content a.hero-button {
@@ -3644,8 +3644,7 @@ blockquote td {
     margin: 0 0 0 6px;
     text-align: right;
   }
-  .blog-list .article-preview .post__title-wrapper,
-  .tutorial .article-preview .post__title-wrapper {
+  .article-preview .post__title-wrapper {
     font-size: 1em;
   }
   .article-preview a.post-category {
@@ -3871,11 +3870,8 @@ blockquote td {
 }
 
 @media screen and (max-width: 640px) {
-  .tutorial .article-preview .post__title-wrapper {
+  .article-preview .post__title-wrapper {
     font-size: 0.95em;
-  }
-  .blog-list .article-preview .post__title-wrapper {
-    font-size: 0.9em;
   }
 }
 
@@ -3907,18 +3903,14 @@ blockquote td {
 }
 
 @media screen and (max-width: 600px) {
-  .blog-list .article-preview .post__title-wrapper,
-  .tutorial .article-preview .post__title-wrapper {
+  .article-preview .post__title-wrapper {
     font-size: 0.85em;
   }
 }
 
 @media screen and (max-width: 560px) {
-  .tutorial .article-preview .post__title-wrapper {
+  .article-preview .post__title-wrapper {
     font-size: 0.85em;
-  }
-  .blog-list .article-preview .post__title-wrapper {
-    font-size: 0.8em;
   }
   .article-preview a.post-category {
     margin: 2px 8px 2px 0;
@@ -4018,8 +4010,7 @@ blockquote td {
     width: 100%;
     margin: 0 0 20px 0;
   }
-  .blog-list .article-preview .post__title-wrapper,
-  .tutorial .article-preview .post__title-wrapper {
+  .article-preview .post__title-wrapper {
     font-size: 1.05em;
   }
   .article-preview a.post-category {
@@ -4031,15 +4022,6 @@ blockquote td {
     font-size: 1.2em;
   }
 }
-
-/* @media screen and (max-width: 400px) {
-  .article-preview .post__title-wrapper {
-    font-size: 0.8em;
-  }
-  .article-preview figure {
-    min-width: 100px;
-  }
-} */
 
 @media screen and (max-width: 350px) {
   #site-name {
