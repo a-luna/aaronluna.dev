@@ -2,7 +2,7 @@
 <div id="post-categories" class="widget-post-categories widget">
     <h4 class="widget__title">{{ .Site.Params.widgets.categories_title }}</h4>
     <div class="widget__content">
-        <label>
+        <label for="category-select">
             <div class="select-css-wrapper">
                 <select name="categories" class="select-css" id="category-select" onchange="window.location = this.options[this.selectedIndex].value">
                     <option value="/blog/">all categories</option>
