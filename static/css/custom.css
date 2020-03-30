@@ -14,6 +14,8 @@
 
 .content a.hanchor {
   color: var(--header-anchor-link);
+  background-color: var(--page-bg-color);
+  box-shadow: none;
 }
 
 .content a.hanchor:hover,
@@ -21,7 +23,10 @@
 .content a.hanchor:active:hover,
 .content a.hanchor:focus {
   color: var(--header-anchor-link-hover);
+  background-color: var(--page-bg-color);
+  transition: color 350ms ease-out;
   text-decoration: none;
+  padding: 0;
 }
 
 .content .heading-text a.hanchor-self {
@@ -234,6 +239,7 @@ ol li p {
   border: 1px solid var(--dark-gray2);
   box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
   border-radius: 0.5em;
+  cursor: pointer;
 }
 
 #post-categories .select-css-wrapper:hover {
@@ -255,6 +261,7 @@ ol li p {
   box-sizing: border-box;
   -moz-appearance: none;
   -webkit-appearance: none;
+  cursor: pointer;
 }
 
 .select-css-wrapper i {
@@ -337,45 +344,6 @@ ol li p {
 .content .summary-read-more:focus {
   color: var(--link-color);
   font-weight: 500;
-}
-
-#showcase {
-  margin: 0 auto;
-  border-radius: 4px;
-}
-
-#showcase .showcase-message {
-  color: var(--pink2);
-  font-size: 1.3em;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-#showcase p {
-  margin: 0 0 10px;
-}
-
-#showcase a {
-  color: var(--tut-link-color);
-}
-
-#showcase a:hover,
-#showcase a:active,
-#showcase a:active:hover,
-#showcase a:focus {
-  color: var(--tut-link-color);
-  text-decoration: underline;
-}
-
-#showcase h2 {
-  color: var(--tut-link-color);
-  font-size: 1.25rem;
-  margin: 7px 0;
-}
-
-#showcase strong {
-  color: var(--white2);
-  font-weight: 700;
 }
 
 .widget__list {
@@ -505,7 +473,7 @@ h5 {
 
 h1,
 h1.post__title {
-  font-size: 2em;
+  font-size: 1.9em;
   color: var(--header-color);
   font-weight: 500;
   margin: 0 0 0 0;
@@ -539,6 +507,10 @@ h1.post__title {
   margin: 15px 0 0 0;
 }
 
+.post__image img {
+  border: none;
+}
+
 .list__item .post__image {
   margin: 0 0 15px 0;
   border: none;
@@ -547,81 +519,6 @@ h1.post__title {
 .list__item figcaption,
 #recent-posts figcaption {
   display: none;
-}
-
-.article-badges {
-  margin: 0 0 15px;
-}
-
-.article-badges .badge {
-  margin: 0 5px;
-}
-
-.article-badges .badge:first-child {
-  margin: 0 5px 0 0;
-}
-
-.article-badges .badge:last-child {
-  margin: 0 0 0 5px;
-}
-
-.badge {
-  --cat-color: var(--accent-color2);
-  color: #d8d8d8;
-  background-color: var(--cat-color);
-  color: var(--widget-bg-color);
-  font-size: 0.9em;
-  font-weight: 500;
-  padding: 3px 5px;
-  text-transform: lowercase;
-  border-radius: 4px;
-}
-
-#showcase .badge {
-  font-weight: 700;
-  padding: 3px 6px;
-  font-size: 0.9em;
-}
-
-.new-badge,
-.tutorial-series-badge {
-  --cat-color: var(--teal2);
-}
-
-.badge.python {
-  --cat-color: var(--python);
-}
-
-.badge.devops {
-  --cat-color: var(--devops);
-}
-
-.badge.aws {
-  --cat-color: var(--aws);
-}
-
-.badge.hugo {
-  --cat-color: var(--hugo);
-}
-
-.badge.javascript {
-  --cat-color: var(--javascript);
-}
-
-.badge.dotnet {
-  --cat-color: var(--dotnet);
-}
-
-.badge.linux {
-  --cat-color: var(--linux);
-}
-
-.badge.flask {
-  --cat-color: var(--flask);
-}
-
-.badge.virtualization {
-  --cat-color: var(--virtualization);
 }
 
 h3,
@@ -765,19 +662,33 @@ h5 {
   color: var(--pink2);
 }
 
-a {
+a,
+.content a,
+.article-preview .list__title a {
   font-weight: 400;
   color: var(--link-color);
   text-decoration: none;
+  box-shadow: none;
 }
 
 a:hover,
 a:focus,
 a:active,
-a:active:hover {
+a:active:hover,
+.content a:hover,
+.content a:focus,
+.content a:active,
+.content a:active:hover,
+.article-preview .list__title a:hover,
+.article-preview .list__title a:focus,
+.article-preview .list__title a:active,
+.article-preview .list__title a:active:hover {
   font-weight: 400;
   color: var(--link-color);
   text-decoration: underline;
+  box-shadow: none;
+  padding: 0;
+  background-color: inherit;
 }
 
 .widget a,
@@ -790,10 +701,25 @@ a:active:hover {
   text-decoration: underline;
 }
 
-.content a {
+.content p a,
+.warning a {
   font-weight: 400;
-  color: var(--link-color);
+  color: var(--body-text-color);
+  box-shadow: inset 0 -2px 0 var(--new-link-color);
   text-decoration: none;
+}
+
+.content p a:hover,
+.warning a:hover {
+  font-weight: 400;
+  color: var(--body-text-color);
+  background-color: var(--new-link-color-hover);
+  text-decoration: none;
+  padding-top: 2px;
+  padding-bottom: 0;
+  border-bottom: none;
+  transition: background-color 350ms ease-out;
+  box-shadow: none;
 }
 
 .content .list__header .post-meta-date .meta__text {
@@ -803,12 +729,6 @@ a:active:hover {
 
 .content .list__header .post__title {
   margin: 0;
-}
-
-.content a:hover {
-  font-weight: 400;
-  color: var(--link-color);
-  text-decoration: underline;
 }
 
 .content ul,
@@ -902,7 +822,7 @@ a:active:hover {
 }
 
 .content p a .italics {
-  color: var(--link-color);
+  font-weight: 700;
 }
 
 .bold-italics {
@@ -1367,10 +1287,6 @@ pre.chroma code {
   padding: 0 0 5px;
 }
 
-.list-of-links {
-  color: var(--link-color);
-}
-
 .chroma .lntable tr td:first-child pre {
   padding: 7px 0 7px 10px;
   margin: 0;
@@ -1513,14 +1429,21 @@ blockquote.rfc .bold-text {
   font-size: 1em;
 }
 
-figure {
+.content figure {
   text-align: center;
   display: block;
   margin: 0;
 }
 
-figure img {
+.content figure img {
   margin: auto;
+  border: 1px solid var(--mid-gray2);
+}
+
+#api-tutorial-preview figure img,
+#api-tutorial-sections figure img,
+#recent-posts figure img {
+  border: none;
 }
 
 .main__header {
@@ -1654,15 +1577,6 @@ figcaption {
   padding: 0;
 }
 
-.warning a {
-  font-weight: 400;
-  color: var(--link-color);
-}
-
-.warning a:hover {
-  color: var(--link-color);
-}
-
 .list__header,
 .main__header {
   background-color: #323232;
@@ -1745,9 +1659,10 @@ figcaption {
 .github-links a,
 .github-links .disabled {
   color: var(--widget-bg-color);
-  background-color: var(--tut-link-color);
-  border: 1px solid var(--tut-link-color);
+  background-color: var(--github-links-button);
+  border: 1px solid var(--github-links-button);
   border-radius: 20px;
+  box-shadow: none;
   font-weight: 700;
   text-align: center;
   white-space: nowrap;
@@ -1768,9 +1683,14 @@ figcaption {
 .github-links a:focus,
 .github-links a:active,
 .github-links a:active:hover {
+  font-weight: 700;
   text-decoration: none;
-  color: var(--tut-link-color);
-  background-color: var(--widget-bg-color);
+  color: var(--widget-bg-color);
+  border: 1px solid var(--github-links-button-hover);
+  background-color: var(--github-links-button-hover);
+  box-shadow: none;
+  padding: 5px 7px;
+  transition: none;
 }
 
 .github-links .fa {
@@ -2394,7 +2314,7 @@ input {
 }
 
 #search-form #search {
-  border: 1px #909090;
+  border: none;
   border-radius: 4px;
   margin: 0 5px 0 10px;
   outline: 0;
@@ -3180,6 +3100,7 @@ a.post-category,
   margin: 3px 10px 3px 0;
   padding: 2px 7px;
   white-space: nowrap;
+  box-shadow: none;
 }
 
 a.post-category:hover,
@@ -3191,15 +3112,18 @@ a.post-category:active:hover {
   background-color: var(--cat-color-hover);
   text-decoration: none;
   font-weight: 700;
+  box-shadow: none;
+  padding: 2px 7px;
 }
 
 .post__header a.post-category {
-  padding: 2px 4px;
-  font-size: 14px;
+  padding: 2px 7px;
+  font-size: 17px;
 }
 
 .article-preview a.post-category {
   margin: 0 10px 0 0;
+  box-shadow: none;
 }
 
 #widgets a.post-category {
@@ -3227,7 +3151,7 @@ a.post-category:active:hover {
 .post__header a.post-category:focus,
 .post__header a.post-category:active,
 .post__header a.post-category:active:hover {
-  background-color: var(--page-bg-color);
+  background-color: var(--cat-color-hover);
 }
 
 a.python,

@@ -24,6 +24,7 @@
   --green3: hsl(93, 95%, 70%);
   --green4: hsl(133, 96%, 42%);
   --purple1: hsl(261, 100%, 45%);
+  --purple1-hov: rgba(80, 0, 230, 70%);
   --purple2: hsl(261, 100%, 65%);
   --purple3: hsl(261, 100%, 72%);
   --orange1: hsl(32, 98%, 43%);
@@ -61,6 +62,8 @@
   --header-anchor-link: var(--mid-gray1);
   --header-anchor-link-hover: var(--off-white1);
   --widget-bg-color: var(--black1);
+  --new-link-color: var(--purple1);
+  --new-link-color-hover: var(--purple1-hov);
   --link-color: var(--blue2);
   --header-link-color1: var(--light-gray2);
   --header-link-color2: var(--white2);
@@ -171,6 +174,8 @@
   --accordion-content-link-color: var(--tut-link-color);
 
   /* Github Links Box */
+  --github-links-button: var(--blue1);
+  --github-links-button-hover: var(--blue4);
   --project-repo-bg-color: var(--black2);
   --project-repo-title-color: var(--pink2);
   --project-repo-message-color: var(--off-white1);
