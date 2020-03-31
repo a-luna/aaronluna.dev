@@ -54,8 +54,9 @@ document.addEventListener("DOMContentLoaded", function() {
   document
     .querySelectorAll(".accordion")
     .forEach(accordion => createToggle(accordion))
-  document
-    .getElementById("category-select")
-    .addEventListener("focus", () => categorySelectorFocused())
-  setSelectedCategory()
+  const categorySelect = document.getElementById("category-select")
+  if (categorySelect != null) {
+    categorySelect.addEventListener("focus", () => categorySelectorFocused())
+    setSelectedCategory()
+  }
 });
