@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "Aaron Luna's Blog",
     "dependencies": {
-        "css-doodle": "^0.8.2",
+        "css-doodle": "^0.8.4",
         "lunr": "^2.3.8",
         "netlify-lambda": "^1.6.3",
         "serialize-javascript": "^3.0.0"
