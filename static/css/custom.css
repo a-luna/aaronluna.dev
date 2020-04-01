@@ -2348,6 +2348,11 @@ input {
   border: 1px solid #909090;
 }
 
+.search-hit {
+  color: var(--pink2);
+  font-weight: 700;
+}
+
 .footer {
   font-size: 0.85em;
   color: #7f7f7f;
@@ -3431,9 +3436,8 @@ span.svelte:hover {
 #search-header .button:active,
 #search-header .button:focus,
 #search-header .button:active:hover {
-  color: var(--pink2);
-  background-color: #323232;
-  border: 1px solid var(--pink2);
+  background-color: var(--pink1);
+  border: 1px solid var(--pink1);
   text-decoration: none;
 }
 

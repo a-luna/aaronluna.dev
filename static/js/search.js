@@ -39,7 +39,7 @@ function handleSearchButtonClicked() {
     return;
   }
   setQueryLabel(query);
-  renderResults(searchResults);
+  renderResults(query, searchResults);
 }
 
 function displayErrorMessage(message) {
@@ -56,9 +56,9 @@ function searchSite(queryString) {
   });
 }
 
-function renderResults(searchResults) {
+function renderResults(query, searchResults) {
   clearSearchResults();
-  updateSearchResults(searchResults);
+  updateSearchResults(query, searchResults);
   showSearchResults();
   scrollToTop();
 }
@@ -68,23 +68,45 @@ function clearSearchResults() {
   while (results.firstChild) results.removeChild(results.firstChild);
 }
 
-function updateSearchResults(searchResults) {
+function updateSearchResults(query, searchResults) {
   searchResults.slice(0, 10).forEach(function(hit) {
-    result = createSearchResult(hit)
+    result = createSearchResult(query, hit)
     document.querySelector(".search-results ul").appendChild(result);
   });
 }
 
-function createSearchResult(hit) {
+function createSearchResult(query, hit) {
   const resultTitle = document.createElement("a");
   resultTitle.setAttribute("href", hit.href);
   resultTitle.innerHTML = hit.title;
   const resultContent = document.createElement("p");
-  resultContent.innerHTML = hit.content.slice(0, 250) + "...";
+  resultContent.innerHTML = createSearchResultContent(query, hit.content);
   const result = document.createElement("li");
   result.appendChild(resultTitle);
   result.appendChild(resultContent);
   return result
+}
+
+function createSearchResultContent(query, content) {
+  const regex = /\b\./gm
+  const periodLocations = Array.from(content.matchAll(regex), m => m.index)
+  const queryLocations = Array.from(content.matchAll(query), m => m.index)
+  let resultContent = ""
+  for (const hitLocation of queryLocations) {
+    for (let i = 0; i < periodLocations.length; i++) {
+      if (periodLocations[i] > hitLocation) {
+        const start = periodLocations[i - 1] + 1
+        const end = periodLocations[i]
+        const result = content.slice(start, end).trim()
+        resultContent+=result.replace(query, '<span class="search-hit">$&</span>') + " ... "
+        break
+      }
+    }
+    if (resultContent.length > 500) {
+      break
+    }
+  }
+  return resultContent
 }
 
 function showSearchResults() {
