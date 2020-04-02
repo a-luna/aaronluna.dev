@@ -67,6 +67,7 @@
   --link-color: var(--blue2);
   --header-link-color1: var(--light-gray2);
   --header-link-color2: var(--white2);
+  --search-color: var(--mid-gray1);
   --accent-color1: var(--blue2);
   --accent-color2: var(--mid-gray2);
   --code-text-color1: var(--teal2);
@@ -180,4 +181,18 @@
   --project-repo-title-color: var(--pink2);
   --project-repo-message-color: var(--off-white1);
   --project-repo-link-color: var(--project-repo-title-color);
+
+  /* input controls */
+  --input-bg-color: var(--black3);
+  --input-text-color: var(--off-white1);
+  --input-button-bg-color: var(--dark-gray2);
+  --input-button-text-color: var(--light-gray1);
+  --input-button-bg-color-hover: var(--mid-gray1);
+  --input-button-text-color-hover: var(--light-gray2);
+  --input-border-color: var(--dark-gray2);
+  --input-border-color-hover: var(--mid-gray1);
+  --input-box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
+  --input-border-color-focus: var(--purple1);
+  --input-box-shadow-focus: 0 0 1px 2px var(--purple1);
+  --error-message-text-color: var(--pink2);
 }

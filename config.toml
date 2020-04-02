@@ -125,6 +125,7 @@ pygmentsUseClasses = true
   social_title = "Contact"
   recent_title = "Recent Posts"
   categories_title = "Categories"
+  search_title = "Search"
   tags_title = "Tags"
   tutorials_title = "Tutorials"
   flask_api_tutorials_title = "Flask API Tutorial"
