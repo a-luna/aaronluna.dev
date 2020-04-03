@@ -1,7 +1,6 @@
 let searchIndex, pagesIndex
 
-const MAX_SUMMARY_LENGTH = 750
-
+const MAX_SUMMARY_LENGTH = 600
 const getSearchQuery = () => document.getElementById("search").value.trim().toLowerCase();
 const clearSearchInput = () => { document.getElementById("search").value = ""; }
 const setQueryLabel = query => { document.getElementById("query").innerHTML = query; }
