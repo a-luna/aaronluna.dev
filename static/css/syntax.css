@@ -151,7 +151,7 @@
 /* NameDecorator */
 
 .chroma .nd {
-    color: #ffa500
+    color: #a270ff
 }
 
 
@@ -195,147 +195,147 @@
 /* LiteralString */
 
 .chroma .s {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringAffix */
 
 .chroma .sa {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringBacktick */
 
 .chroma .sb {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringChar */
 
 .chroma .sc {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringDelimiter */
 
 .chroma .dl {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringDoc */
 
 .chroma .sd {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringDouble */
 
 .chroma .s2 {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringEscape */
 
 .chroma .se {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringHeredoc */
 
 .chroma .sh {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringInterpol */
 
 .chroma .si {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringOther */
 
 .chroma .sx {
-    color: #ffa500
+    color: #a270ff
 }
 
 
 /* LiteralStringRegex */
 
 .chroma .sr {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringSingle */
 
 .chroma .s1 {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralStringSymbol */
 
 .chroma .ss {
-    color: #ed9d13
+    color: #f39c12
 }
 
 
 /* LiteralNumber */
 
 .chroma .m {
-    color: #3677a9
+    color: #6390DE
 }
 
 
 /* LiteralNumberBin */
 
 .chroma .mb {
-    color: #3677a9
+    color: #6390DE
 }
 
 
 /* LiteralNumberFloat */
 
 .chroma .mf {
-    color: #3677a9
+    color: #6390DE
 }
 
 
 /* LiteralNumberHex */
 
 .chroma .mh {
-    color: #3677a9
+    color: #6390DE
 }
 
 
 /* LiteralNumberInteger */
 
 .chroma .mi {
-    color: #3677a9
+    color: #6390DE
 }
 
 
 /* LiteralNumberIntegerLong */
 
 .chroma .il {
-    color: #3677a9
+    color: #6390DE
 }
 
 
 /* LiteralNumberOct */
 
 .chroma .mo {
-    color: #3677a9
+    color: #6390DE
 }
 
 
@@ -436,7 +436,7 @@
 /* GenericInserted */
 
 .chroma .gi {
-    color: #589819
+    color: #50a14f
 }
 
 
