@@ -1,11 +1,11 @@
 <div id="site-search" class="widget-site-search widget">
     <h4 class="widget__title">{{ .Site.Params.widgets.search_title }}</h4>
     <div class="widget__content">
-        <form id="search-form" role="form" onsubmit="return false">
+        <form id="search-form" name="searchForm" role="form" onsubmit="return false">
             <div class="search-wrapper">
                 <div class="search-container">
+                    <i class="fa fa-search"></i>
                     <input autocomplete="off" placeholder="" id="search" class="search-input" aria-label="Search site" type="text" name="q">
-                    <button id="search-button" type="submit">submit</button>
                 </div>
                 <div class="search-error hide-element"><span class="search-error-message"></span></div>
             </div>

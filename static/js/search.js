@@ -1,5 +1,7 @@
-let searchIndex, pagesIndex
+// const matchAll = require('string.prototype.matchall')
+// matchAll.shim()
 
+let searchIndex, pagesIndex
 const MAX_SUMMARY_LENGTH = 600
 const getSearchQuery = () => document.getElementById("search").value.trim().toLowerCase();
 const clearSearchInput = () => { document.getElementById("search").value = ""; }
@@ -189,9 +191,6 @@ document.addEventListener("DOMContentLoaded", function() {
     )
     document.getElementById("search").addEventListener(
       "focus", () => searchBoxFocused()
-    )
-    document.getElementById("search-button").addEventListener(
-      "click", () => handleSearchButtonClicked()
     )
     document.getElementById("clear-search-results").addEventListener(
       "click", () => handleClearSearchButtonClicked()

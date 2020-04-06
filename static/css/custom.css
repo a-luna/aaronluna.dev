@@ -295,6 +295,11 @@ ol li p {
   color: var(--input-text-color);
 }
 
+#search-form .fa {
+  margin: 0 0 0 8px;
+  font-size: 0.9em;
+}
+
 #search-button {
   flex: 0;
   font-size: 0.8em;
@@ -416,6 +421,10 @@ ol li p {
   color: var(--light-gray2);
   line-height: 1.5;
   margin: 5px 0 10px 0;
+}
+
+.search-result-item {
+  margin: 0 0 20px 0;
 }
 
 .search-hit {
