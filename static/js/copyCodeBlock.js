@@ -27,10 +27,17 @@ async function copyCodeToClipboard(button, highlight) {
 
 function copyCodeBlockExecCommand(codeToCopy, highlight) {
   const textArea = document.createElement("textArea");
+  textArea.contentEditable = 'true'
+  textArea.readOnly = 'false'
   textArea.className = "copyable-text-area";
   textArea.value = codeToCopy;
   highlight.insertBefore(textArea, highlight.firstChild);
-  textArea.select();
+  const range = document.createRange()
+  range.selectNodeContents(textArea)
+  const sel = window.getSelection()
+  sel.removeAllRanges()
+  sel.addRange(range)
+  textArea.setSelectionRange(0, 999999)
   document.execCommand("copy");
   highlight.removeChild(textArea);
 }
