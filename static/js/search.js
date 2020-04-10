@@ -1,6 +1,3 @@
-// const matchAll = require('string.prototype.matchall')
-// matchAll.shim()
-
 let searchIndex, pagesIndex
 const MAX_SUMMARY_LENGTH = 600
 const getSearchQuery = () => document.getElementById("search").value.trim().toLowerCase();
@@ -113,8 +110,9 @@ function createSearchResult(query, hit) {
 
 function createSearchResultContent(query, content) {
   const regex = /\b\./gm
+  const queryRegex = new RegExp(query, 'gm')
   const periodLocations = Array.from(content.matchAll(regex), m => m.index)
-  const queryLocations = Array.from(content.matchAll(query), m => m.index)
+  const queryLocations = Array.from(content.matchAll(queryRegex), m => m.index)
   let results = ""
   for (const hitLocation of queryLocations) {
     for (let i = 0; i < periodLocations.length; i++) {
@@ -181,6 +179,25 @@ function searchBoxFocused() {
 function searchBoxFocusOut() {
   const searchWrapper = document.querySelector(".search-container")
   searchWrapper.classList.remove("focused")
+}
+
+// polyfill String.prototype.matchAll()
+if (!String.prototype.matchAll) {
+  String.prototype.matchAll = function (regex) {
+      'use strict';
+      function ensureFlag(flags, flag) {
+        return flags.includes(flag) ? flags : flags + flag;
+      }
+      function* matchAll(str, regex) {
+        const localCopy = new RegExp(
+          regex, ensureFlag(regex.flags, 'g'));
+        let match;
+        while (match = localCopy.exec(str)) {
+          yield { index: localCopy.lastIndex - 1 };
+        }
+      }
+      return matchAll(this, regex)
+  };
 }
 
 initSearchIndex()
