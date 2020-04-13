@@ -79,13 +79,15 @@ function updateSearchResults(query, searchResults) {
       document.querySelector(".search-results ul").appendChild(result)
     }
   })
+  if (searchResults.length == 0) {
+    displayErrorMessage("Your search returned no results")
+    return
+  }
   const resultListItems = document.querySelectorAll(".search-results ul li")
   const resultsCount = document.getElementById("results-count")
-  if (resultListItems.length > 1) {
-    resultsCount.innerHTML = `${resultListItems.length} posts`
-  }
-  else {
-    resultsCount.innerHTML = `${resultListItems.length} post`
+  resultsCount.innerHTML = `${resultListItems.length} posts`
+  if (resultListItems.length == 1) {
+    resultsCount.innerHTML = resultsCount.innerHTML.slice(0,-1)
   }
 }
 

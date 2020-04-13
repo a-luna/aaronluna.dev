@@ -403,7 +403,7 @@ ol li p {
 }
 
 .search-result-page-title {
-  font-size: 1.3em;
+  font-size: 1.4em;
   line-height: 1.2;
 }
 
@@ -417,13 +417,15 @@ ol li p {
 }
 
 .search-results p {
-  font-size: 0.9em;
+  font-size: 1em;
   color: var(--light-gray2);
   line-height: 1.5;
-  margin: 5px 0 10px 0;
+  margin: 10px 0 0 0;;
 }
 
 .search-result-item {
+  background-color: var(--widget-bg-color);
+  padding: 20px;
   margin: 0 0 20px 0;
 }
 
@@ -3609,10 +3611,18 @@ blockquote td {
     margin: 0;
   }
 
+  #search-header {
+  margin: 0 0 20px 0;
+}
+
+  .search-results ul {
+    margin: 0;
+}
+
   .post-nav-flex-item-prev,
   .post-nav-flex-item-next {
-    flex: 100%;
-  }
+      flex: 100%;
+}
 
   .home h1 {
     font-size: 3.5em;
