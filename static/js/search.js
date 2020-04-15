@@ -112,7 +112,7 @@ function createSearchResult(query, hit) {
 
 function createSearchResultContent(query, content) {
   const regex = /\b\./gm
-  const queryRegex = new RegExp(query, 'gm')
+  const queryRegex = new RegExp(query, 'gmi')
   const periodLocations = Array.from(content.matchAll(regex), m => m.index)
   const queryLocations = Array.from(content.matchAll(queryRegex), m => m.index)
   let results = ""
@@ -122,7 +122,7 @@ function createSearchResultContent(query, content) {
         const start = periodLocations[i - 1] + 1
         const end = periodLocations[i]
         const result = content.slice(start, end).trim()
-        results+=result.replace(query, '<span class="search-hit">$&</span>') + " ... "
+        results+=result.replace(queryRegex, '<span class="search-hit">$&</span>') + " ... "
         break
       }
     }
@@ -139,6 +139,8 @@ function createSearchResultContent(query, content) {
 function showSearchResults() {
   document.querySelector(".primary").classList.add("hide-element")
   document.querySelector(".search-results").classList.remove("hide-element")
+  document.getElementById("site-search").classList.add("expanded")
+  document.getElementById("clear-search-results").classList.remove("hide-element")
 }
 
 function scrollToTop() {
@@ -167,6 +169,8 @@ function handleClearSearchButtonClicked() {
 }
 
 function hideSearchResults() {
+  document.getElementById("clear-search-results").classList.add("hide-element")
+  document.getElementById("site-search").classList.remove("expanded")
   document.querySelector(".search-results").classList.add("hide-element")
   document.querySelector(".primary").classList.remove("hide-element")
 }

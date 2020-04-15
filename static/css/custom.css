@@ -226,6 +226,11 @@ ol li p {
 
 #site-search {
   height: 105px;
+  transition: height 0.7s ease-out;
+}
+
+#site-search.expanded {
+  height: 131px
 }
 
 #post-categories .select-css-wrapper,
@@ -295,9 +300,42 @@ ol li p {
   color: var(--input-text-color);
 }
 
+.search-flex {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+#site-search.expanded #search-form {
+  margin: 0 0 11px 0;
+}
+
 #search-form .fa {
   margin: 0 0 0 8px;
   font-size: 0.9em;
+}
+
+#clear-search-results {
+  cursor: pointer;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: #323232;
+  background-color: var(--purple3);
+  border: 1px solid var(--purple3);
+  border-radius: 4px;
+  line-height: 16px;
+  margin: 0 auto;
+  padding: 4px 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#clear-search-results:hover,
+#clear-search-results:active,
+#clear-search-results:focus,
+#clear-search-results:active:hover {
+  background-color: var(--purple2);
+  border: 1px solid var(--purple2);
+  text-decoration: none;
 }
 
 #search-button {
@@ -417,9 +455,9 @@ ol li p {
 }
 
 .search-results p {
-  font-size: 1em;
+  font-size: 0.95em;
   color: var(--light-gray2);
-  line-height: 1.5;
+  line-height: 1.45;
   margin: 10px 0 0 0;;
 }
 
@@ -427,6 +465,7 @@ ol li p {
   background-color: var(--widget-bg-color);
   padding: 20px;
   margin: 0 0 20px 0;
+  border-radius: 4px
 }
 
 .search-hit {
@@ -444,31 +483,6 @@ ol li p {
 #query {
   color: #f2f2f2;
   margin: 0 0 0 5px;
-}
-
-#search-header .button {
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: 700;
-  color: #323232;
-  background-color: var(--pink2);
-  border: 1px solid var(--pink2);
-  border-radius: 4px;
-  line-height: 16px;
-  margin: 0 0 10px 0;
-  padding: 10px 15px;
-  box-sizing: border-box;
-  max-width: 220px;
-  text-align: center;
-}
-
-#search-header .button:hover,
-#search-header .button:active,
-#search-header .button:focus,
-#search-header .button:active:hover {
-  background-color: var(--pink1);
-  border: 1px solid var(--pink1);
-  text-decoration: none;
 }
 
 .fade {
