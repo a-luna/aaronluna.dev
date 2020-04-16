@@ -107,7 +107,7 @@ code {
 }
 
 main {
-  margin: 0 20px 0 0;
+  margin: 0 30px 0 0;
 }
 
 main.home {
@@ -226,11 +226,12 @@ ol li p {
 
 #site-search {
   height: 105px;
-  transition: height 0.7s ease-out;
+  transition: height 0.4s linear;
 }
 
 #site-search.expanded {
-  height: 131px
+  height: 131px;
+  transition: height 0.4s linear;
 }
 
 #post-categories .select-css-wrapper,
@@ -314,7 +315,18 @@ ol li p {
   font-size: 0.9em;
 }
 
-#clear-search-results {
+#clear-search-results-primary {
+  display: none;
+}
+
+#clear-search-results-primary.hide-element,
+#clear-search-results-side.hide-element {
+  background-color: var(--widget-bg-color);
+  transition: all 0.4s linear 0.4s;
+}
+
+#clear-search-results-primary,
+#clear-search-results-side {
   cursor: pointer;
   font-size: 0.8em;
   font-weight: 700;
@@ -323,16 +335,22 @@ ol li p {
   border: 1px solid var(--purple3);
   border-radius: 4px;
   line-height: 16px;
-  margin: 0 auto;
   padding: 4px 10px;
   box-sizing: border-box;
   text-align: center;
+  max-width: 100%;
+  min-width: 200px;
+  transition: all 0.4s linear;
 }
 
-#clear-search-results:hover,
-#clear-search-results:active,
-#clear-search-results:focus,
-#clear-search-results:active:hover {
+#clear-search-results-side:hover,
+#clear-search-results-side:active,
+#clear-search-results-side:focus,
+#clear-search-results-side:active:hover,
+#clear-search-results-primary:hover,
+#clear-search-results-primary:active,
+#clear-search-results-primary:focus,
+#clear-search-results-primary:active:hover {
   background-color: var(--purple2);
   border: 1px solid var(--purple2);
   text-decoration: none;
@@ -427,6 +445,15 @@ ol li p {
 .search-results {
   flex: 1 0 67%;
   margin: 0 0 40px 0;
+  padding: 30px 0 0 0;
+}
+
+.home-page .search-results,
+.about-me .search-results,
+.blog-list .search-results,
+.blog-post .search-results,
+.tutorial .search-results {
+  padding: 0;
 }
 
 .search-query,
@@ -437,7 +464,7 @@ ol li p {
 
 .search-query {
   font-size: 1.8em;
-  margin: 0 0 20px 0;
+  margin: 0;
 }
 
 .search-result-page-title {
@@ -3627,6 +3654,21 @@ blockquote td {
 
   #search-header {
   margin: 0 0 20px 0;
+}
+
+#clear-search-results-primary {
+  display: block;
+  font-size: 1.3em;
+  padding: 10px 15px;
+  margin: 0 0 20px 0;
+}
+
+#clear-search-results-side {
+  display: none;
+}
+
+#site-search.expanded {
+  height: 105px;
 }
 
   .search-results ul {

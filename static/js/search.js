@@ -140,7 +140,8 @@ function showSearchResults() {
   document.querySelector(".primary").classList.add("hide-element")
   document.querySelector(".search-results").classList.remove("hide-element")
   document.getElementById("site-search").classList.add("expanded")
-  document.getElementById("clear-search-results").classList.remove("hide-element")
+  document.getElementById("clear-search-results-primary").classList.remove("hide-element")
+  document.getElementById("clear-search-results-side").classList.remove("hide-element")
 }
 
 function scrollToTop() {
@@ -169,7 +170,8 @@ function handleClearSearchButtonClicked() {
 }
 
 function hideSearchResults() {
-  document.getElementById("clear-search-results").classList.add("hide-element")
+  document.getElementById("clear-search-results-primary").classList.add("hide-element")
+  document.getElementById("clear-search-results-side").classList.add("hide-element")
   document.getElementById("site-search").classList.remove("expanded")
   document.querySelector(".search-results").classList.add("hide-element")
   document.querySelector(".primary").classList.remove("hide-element")
@@ -215,7 +217,10 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("search").addEventListener(
       "focus", () => searchBoxFocused()
     )
-    document.getElementById("clear-search-results").addEventListener(
+    document.getElementById("clear-search-results-primary").addEventListener(
+      "click", () => handleClearSearchButtonClicked()
+    )
+    document.getElementById("clear-search-results-side").addEventListener(
       "click", () => handleClearSearchButtonClicked()
     )
     document.querySelector(".search-error").addEventListener(
