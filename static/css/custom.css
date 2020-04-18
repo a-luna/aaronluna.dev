@@ -230,7 +230,7 @@ ol li p {
 }
 
 #site-search.expanded {
-  height: 131px;
+  height: 140px;
   transition: height 0.4s linear;
 }
 
@@ -307,7 +307,7 @@ ol li p {
 }
 
 #site-search.expanded #search-form {
-  margin: 0 0 11px 0;
+  margin: 0 0 15px 0;
 }
 
 #search-form .fa {
@@ -315,17 +315,17 @@ ol li p {
   font-size: 0.9em;
 }
 
-#clear-search-results-primary {
+.clear-search-results-primary {
   display: none;
 }
 
-#clear-search-results-primary.hide-element,
+.clear-search-results-primary.hide-element,
 #clear-search-results-side.hide-element {
   background-color: var(--widget-bg-color);
   transition: all 0.4s linear 0.4s;
 }
 
-#clear-search-results-primary,
+.clear-search-results-primary,
 #clear-search-results-side {
   cursor: pointer;
   font-size: 0.8em;
@@ -347,10 +347,10 @@ ol li p {
 #clear-search-results-side:active,
 #clear-search-results-side:focus,
 #clear-search-results-side:active:hover,
-#clear-search-results-primary:hover,
-#clear-search-results-primary:active,
-#clear-search-results-primary:focus,
-#clear-search-results-primary:active:hover {
+.clear-search-results-primary:hover,
+.clear-search-results-primary:active,
+.clear-search-results-primary:focus,
+.clear-search-results-primary:active:hover {
   background-color: var(--purple2);
   border: 1px solid var(--purple2);
   text-decoration: none;
@@ -462,8 +462,12 @@ ol li p {
   line-height: 1.2;
 }
 
+#results-count {
+  margin: 0 3px 0 0;
+}
+
 .search-query {
-  font-size: 1.8em;
+  font-size: 1.5em;
   margin: 0;
 }
 
@@ -977,6 +981,7 @@ a:active:hover,
 }
 
 .content p a,
+header p a,
 .warning a {
   font-weight: 400;
   color: var(--body-text-color);
@@ -988,6 +993,10 @@ a:active:hover,
 .content p a:active,
 .content p a:focus,
 .content p a:active:hover,
+header p a:hover,
+header p a:active,
+header p a:focus,
+header p a:active:hover,
 .warning a:hover {
   font-weight: 400;
   color: var(--body-text-color);
@@ -3656,7 +3665,7 @@ blockquote td {
   margin: 0 0 20px 0;
 }
 
-#clear-search-results-primary {
+.clear-search-results-primary {
   display: block;
   font-size: 1.3em;
   padding: 10px 15px;
