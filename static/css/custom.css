@@ -474,6 +474,8 @@ ol li p {
 
 .search-query-right {
   text-align: right;
+  white-space: nowrap;
+  align-self: flex-end;
 }
 
 .search-result-page-title {

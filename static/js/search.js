@@ -60,13 +60,17 @@ function displayErrorMessage(message) {
 }
 
 function searchSite(queryString) {
-  return searchIndex.search(queryString).map(function (result) {
+  const queryWordCount = queryString.split(" ").length
+  let searchResults =  searchIndex.search(queryString).map(function (result) {
       let page_match = pagesIndex.filter(function (page) {
         return page.href === result.ref;
       })[0];
+      const resultMetadata =Object.entries(result.matchData.metadata)
+      page_match.queryWordCount=queryWordCount;
+      page_match.queryWordCountInResult=resultMetadata.length;
       page_match.score = result.score;
       page_match.hitLocations = [];
-      Object.entries(result.matchData.metadata).forEach(([_, searchTerm]) => {
+      resultMetadata.forEach(([_, searchTerm]) => {
         if (searchTerm.content) {
           searchTerm.content.position.forEach((pos) =>
             page_match.hitLocations.push(pos[0])
@@ -75,6 +79,7 @@ function searchSite(queryString) {
       });
       return page_match;
   });
+  return searchResults.filter(result => result.queryWordCount === result.queryWordCountInResult);
 }
 
 function renderResults(query, searchResults) {
