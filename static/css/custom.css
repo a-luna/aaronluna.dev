@@ -463,7 +463,7 @@ ol li p {
 }
 
 #results-count {
-  margin: 0 3px 0 0;
+  margin: 0 7px 0 0;
 }
 
 .search-query {
@@ -1820,7 +1820,7 @@ figcaption {
   margin: 0;
   padding: 0;
   flex: 1 0;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   overflow: hidden;
 }
 
@@ -3990,15 +3990,15 @@ blockquote td {
 
   .site-menu {
     font-size: 1em;
-    justify-content: space-around;
+    justify-content: space-between;
     align-self: stretch;
-    padding: 3px 1em 0;
+    padding: 3px 20px 0;
     height: auto;
   }
 
   .menu-bar {
-    padding: 5px 1em 0;
-    justify-content: space-between;
+    padding: 5px 40px 0;
+    justify-content: space-around;
     flex: 1 0;
   }
 
@@ -4066,6 +4066,15 @@ blockquote td {
   }
   .article-preview-summary p {
     font-size: 1em;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .menu-bar {
+    padding: 5px 30px 0;
+  }
+  .site-menu a {
+    padding: 5px 10px 10px;
   }
 }
 
