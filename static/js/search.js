@@ -102,7 +102,7 @@ function updateSearchResults(query, searchResults) {
   }
   const resultListItems = document.querySelectorAll(".search-results ul li");
   const resultsCount = document.getElementById("results-count");
-  resultsCount.innerHTML = `${resultListItems.length} posts`;
+  resultsCount.innerHTML = resultListItems.length;
   if (resultListItems.length == 1) {
     resultsCount.innerHTML = resultsCount.innerHTML.slice(0, -1);
   }
@@ -129,7 +129,6 @@ function createSearchResult(query, hit) {
 
 function createSearchResultContent(query, hit) {
   const regex = /\b\.\s/gm;
-  const queryRegex = new RegExp(query, "gmi");
   const periodLocations = Array.from(
     hit.content.matchAll(regex),
     (m) => m.index
@@ -143,10 +142,7 @@ function createSearchResultContent(query, hit) {
           const start = periodLocations[i - 1] + 1;
           const end = periodLocations[i];
           lastResultIndex = end;
-          const result = hit.content.slice(start, end).trim();
-          results +=
-            result.replace(queryRegex, '<span class="search-hit">$&</span>') +
-            " ... ";
+          results = hit.content.slice(start, end).trim() + " ... ";
           break;
         }
       }
@@ -158,6 +154,21 @@ function createSearchResultContent(query, hit) {
   if (results.length == 0) {
     return { success: false, results: "" };
   }
+  if (results.length > MAX_SUMMARY_LENGTH) {
+    const periodLocations = Array.from(
+      results.matchAll(/\b\./gm),
+      (m) => m.index
+    );
+    for (let i = 0; i < periodLocations.length; i++) {
+      if (periodLocations[i] > MAX_SUMMARY_LENGTH) {
+        const newEnd = periodLocations[i - 1] + 1;
+        results = results.slice(0, newEnd).trim() + " ...";
+        break;
+      }
+    }
+  }
+  const queryRegex = new RegExp(query, "gmi");
+  results = results.replace(queryRegex, '<span class="search-hit">$&</span>')
   return { success: true, results: results };
 }
 
