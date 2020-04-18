@@ -60,26 +60,28 @@ function displayErrorMessage(message) {
 }
 
 function searchSite(queryString) {
-  const queryWordCount = queryString.split(" ").length
-  let searchResults =  searchIndex.search(queryString).map(function (result) {
-      let page_match = pagesIndex.filter(function (page) {
-        return page.href === result.ref;
-      })[0];
-      const resultMetadata =Object.entries(result.matchData.metadata)
-      page_match.queryWordCount=queryWordCount;
-      page_match.queryWordCountInResult=resultMetadata.length;
-      page_match.score = result.score;
-      page_match.hitLocations = [];
-      resultMetadata.forEach(([_, searchTerm]) => {
-        if (searchTerm.content) {
-          searchTerm.content.position.forEach((pos) =>
-            page_match.hitLocations.push(pos[0])
-          );
-        }
-      });
-      return page_match;
+  const queryWordCount = queryString.split(" ").length;
+  let searchResults = searchIndex.search(queryString).map(function (result) {
+    let page_match = pagesIndex.filter(function (page) {
+      return page.href === result.ref;
+    })[0];
+    const resultMetadata = Object.entries(result.matchData.metadata);
+    page_match.queryWordCount = queryWordCount;
+    page_match.queryWordCountInResult = resultMetadata.length;
+    page_match.score = result.score;
+    page_match.hitLocations = [];
+    resultMetadata.forEach(([_, searchTerm]) => {
+      if (searchTerm.content) {
+        searchTerm.content.position.forEach((pos) =>
+          page_match.hitLocations.push(pos[0])
+        );
+      }
+    });
+    return page_match;
   });
-  return searchResults.filter(result => result.queryWordCount === result.queryWordCountInResult);
+  return searchResults.filter(
+    (result) => result.queryWordCount === result.queryWordCountInResult
+  );
 }
 
 function renderResults(query, searchResults) {
@@ -107,10 +109,10 @@ function updateSearchResults(query, searchResults) {
   }
   const resultListItems = document.querySelectorAll(".search-results ul li");
   const resultsCount = document.getElementById("results-count");
+  const resultsCountText = document.getElementById("results-count-text");
   resultsCount.innerHTML = resultListItems.length;
-  if (resultListItems.length == 1) {
-    resultsCount.innerHTML = resultsCount.innerHTML.slice(0, -1);
-  }
+  resultsCountText.innerHTML =
+    resultListItems.length > 1 ? "results" : "result";
 }
 
 function createSearchResult(query, hit) {
@@ -173,7 +175,7 @@ function createSearchResultContent(query, hit) {
     }
   }
   const queryRegex = new RegExp(query, "gmi");
-  results = results.replace(queryRegex, '<span class="search-hit">$&</span>')
+  results = results.replace(queryRegex, '<span class="search-hit">$&</span>');
   return { success: true, results: results };
 }
 
