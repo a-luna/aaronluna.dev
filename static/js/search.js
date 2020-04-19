@@ -34,18 +34,31 @@ function interceptSearchInput(event) {
 
 function handleSearchButtonClicked() {
   event.preventDefault();
-  const query = getSearchQuery();
-  if (!query) {
+  const lunrQuery = getLunrSearchQuery();
+  if (!lunrQuery) {
     displayErrorMessage("Please enter a search term");
     return;
   }
-  const searchResults = searchSite(query);
+  const searchResults = searchSite(lunrQuery);
   if (!searchResults.length) {
     displayErrorMessage("Your search returned no results");
     return;
   }
+  const query = getSearchQuery()
   setQueryLabel(query);
   renderResults(query, searchResults);
+}
+
+function getLunrSearchQuery() {
+  let query = document.getElementById("search").value.trim().toLowerCase();
+  const searchTerms = query.split(" ");
+  if (searchTerms.length > 1) {
+    query = "";
+    for (const term of searchTerms) {
+      query += `+${term} `;
+    }
+  }
+  return query.trim();
 }
 
 function displayErrorMessage(message) {
@@ -60,14 +73,11 @@ function displayErrorMessage(message) {
 }
 
 function searchSite(queryString) {
-  const queryWordCount = queryString.split(" ").length;
-  let searchResults = searchIndex.search(queryString).map(function (result) {
+  return searchIndex.search(queryString).map(function (result) {
     let page_match = pagesIndex.filter(function (page) {
       return page.href === result.ref;
     })[0];
     const resultMetadata = Object.entries(result.matchData.metadata);
-    page_match.queryWordCount = queryWordCount;
-    page_match.queryWordCountInResult = resultMetadata.length;
     page_match.score = result.score;
     page_match.hitLocations = [];
     resultMetadata.forEach(([_, searchTerm]) => {
@@ -79,9 +89,6 @@ function searchSite(queryString) {
     });
     return page_match;
   });
-  return searchResults.filter(
-    (result) => result.queryWordCount === result.queryWordCountInResult
-  );
 }
 
 function renderResults(query, searchResults) {
@@ -174,9 +181,22 @@ function createSearchResultContent(query, hit) {
       }
     }
   }
-  const queryRegex = new RegExp(query, "gmi");
+  const queryRegex = new RegExp(getQueryHighlightRegex(query), "gmi");
   results = results.replace(queryRegex, '<span class="search-hit">$&</span>');
   return { success: true, results: results };
+}
+
+function getQueryHighlightRegex(query) {
+  const searchTerms = query.split(" ");
+  if (searchTerms.length == 1) {
+    return query
+  }
+  query = "";
+  for (const term of searchTerms) {
+    query += `${term}|`;
+  }
+  query = query.slice(0,-1);
+  return `(${query})`
 }
 
 function showSearchResults() {
