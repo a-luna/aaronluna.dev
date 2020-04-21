@@ -81,8 +81,8 @@ function getLunrSearchQuery(query) {
 
 function renderResults(query, searchResults) {
   clearSearchResults();
-  updateSearchResults(query, searchResults);
-  showSearchResults();
+  const totalSearchResults = updateSearchResults(query, searchResults);
+  showSearchResults(totalSearchResults);
   scrollToTop();
 }
 
@@ -106,6 +106,7 @@ function updateSearchResults(query, searchResults) {
   document.getElementById("results-count").innerHTML = totalSearchResults;
   document.getElementById("results-count-text").innerHTML =
     totalSearchResults > 1 ? "results" : "result";
+    return totalSearchResults;
 }
 
 function createSearchResult(query, hit) {
@@ -224,14 +225,16 @@ function chunkify(input, chunkSize) {
   return output;
 }
 
-function showSearchResults() {
+function showSearchResults(totalSearchResults) {
   document.querySelector(".primary").classList.add("hide-element");
   document.querySelector(".search-results").classList.remove("hide-element");
   document.getElementById("site-search").classList.add("expanded");
+  document.querySelector(".clear-search-top").classList.remove("hide-element");
 
-  document
-    .querySelectorAll(".clear-search-results-primary")
-    .forEach((button) => button.classList.remove("hide-element"));
+  if (totalSearchResults > 2) {
+    document.querySelector(".clear-search-bottom").classList.remove("hide-element");
+  }
+
   document
     .getElementById("clear-search-results-side")
     .classList.remove("hide-element");

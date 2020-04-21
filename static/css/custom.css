@@ -321,6 +321,7 @@ ol li p {
 
 .clear-search-results-primary.hide-element,
 #clear-search-results-side.hide-element {
+  display: none;
   background-color: var(--widget-bg-color);
   transition: all 0.4s linear 0.4s;
 }
