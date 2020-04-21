@@ -329,10 +329,9 @@ ol li p {
 #clear-search-results-side {
   cursor: pointer;
   font-size: 0.8em;
-  font-weight: 700;
-  color: #323232;
-  background-color: var(--purple3);
-  border: 1px solid var(--purple3);
+  color: var(--light-gray2);
+  background-color: var(--purple1);
+  border: 1px solid var(--purple1);
   border-radius: 4px;
   line-height: 16px;
   padding: 4px 10px;
@@ -351,8 +350,8 @@ ol li p {
 .clear-search-results-primary:active,
 .clear-search-results-primary:focus,
 .clear-search-results-primary:active:hover {
-  background-color: var(--purple2);
-  border: 1px solid var(--purple2);
+  background-color: var(--purple1-hov);
+  border: 1px solid var(--purple1-hov);
   text-decoration: none;
 }
 
@@ -460,12 +459,13 @@ ol li p {
 
 .search-query,
 .search-detail {
-  color: #b3b3b3;
+  color: var(--light-gray2);
   line-height: 1.2;
 }
 
 #results-count {
-  margin: 0 3px 0 0;
+  font-size: 0.9em;
+  margin: 0 6px 0 0;
 }
 
 .search-query {
@@ -474,7 +474,12 @@ ol li p {
   margin: 0;
 }
 
+.search-query-left {
+  align-self:flex-end;
+}
+
 .search-query-right {
+  flex: 0 1 auto;
   text-align: right;
   white-space: nowrap;
   align-self: flex-end;
@@ -1813,7 +1818,7 @@ figcaption {
 
 #social a {
   font-weight: 400;
-  color: #b3b3b3;
+  color: var(--light-gray2);
 }
 
 #social a:active,
@@ -1879,20 +1884,20 @@ figcaption {
 
 .list__header,
 .main__header {
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   margin: 10px 0;
   padding: 0;
 }
 
 .home .post__header {
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   border: none;
   margin: 0;
   padding: 0;
 }
 
 .post__header {
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   padding: 0 0 10px;
   margin: 0 0 20px;
 }
@@ -2162,7 +2167,7 @@ span.pagination__item--current:hover,
 span.pagination__item--current:active,
 span.pagination__item--current:active:hover,
 span.pagination__item--current:focus {
-  color: #323232;
+  color: var(--dark-gray1);
   background: var(--link-color);
   border: 1px solid var(--link-color);
 }
@@ -2172,7 +2177,7 @@ a.pagination__item:active,
 a.pagination__item:active:hover,
 a.pagination__item:focus {
   color: var(--link-color);
-  background: #323232;
+  background: var(--dark-gray1);
   border: 1px solid var(--link-color);
 }
 
@@ -2311,7 +2316,7 @@ a.pagination__item--next {
 a.post-nav__link {
   display: inline;
   color: var(--blog-link-color);
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   border: none;
   border-radius: 4px;
 }
@@ -2552,7 +2557,7 @@ input {
 .footer {
   font-size: 0.85em;
   color: #7f7f7f;
-  background: #323232;
+  background: var(--dark-gray1);
   border-top: 2px solid var(--accent-color1);
 }
 
@@ -2677,14 +2682,14 @@ ul .table-wrapper {
   table-layout: auto;
   border: none;
   color: #d8d8d8;
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   margin: 0 auto;
 }
 
 .responsive th {
   font-weight: 700;
   border: none;
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   color: #d8d8d8;
 }
 
@@ -2722,7 +2727,7 @@ ul .table-wrapper {
 th.column-header,
 .responsive thead tr th {
   background-color: var(--accent-color1);
-  color: #323232;
+  color: var(--dark-gray1);
   line-height: 0.8;
   border: 1px solid var(--accent-color1);
   vertical-align: middle;
@@ -2772,7 +2777,7 @@ th.last-column,
 
 .table-wrapper thead td,
 .table-wrapper tfoot td {
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   color: #d8d8d8;
   border: none;
   padding: 5px;
@@ -2812,7 +2817,7 @@ th.last-column,
 }
 
 .table-wrapper .aws-hosting-costs tbody th {
-  background-color: #323232;
+  background-color: var(--dark-gray1);
   color: #d8d8d8;
   border-bottom: none;
   border-top: 1px solid #7f7f7f;
@@ -2856,7 +2861,7 @@ tr:nth-child(even) {
 }
 
 tr:nth-child(odd) {
-  background-color: #323232;
+  background-color: var(--dark-gray1);
 }
 
 .pricing-table-1 {

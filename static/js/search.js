@@ -1,264 +1,290 @@
-let searchIndex, pagesIndex;
-const MAX_SUMMARY_LENGTH = 600;
+let searchIndex, pagesIndex
+const MAX_SUMMARY_LENGTH = 150
+const WORD_REGEX = /\b(\w*)[\W|\s|\b]?/gm
+const JWT_REGEX = /[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*/gm
 const getSearchQuery = () =>
-  document.getElementById("search").value.trim().toLowerCase();
+  document.getElementById("search").value.trim().toLowerCase()
 const clearSearchInput = () => {
-  document.getElementById("search").value = "";
-};
+  document.getElementById("search").value = ""
+}
 const setQueryLabel = (query) => {
-  document.getElementById("query").innerHTML = query;
-};
+  document.getElementById("query").innerHTML = query
+}
 
 async function initSearchIndex() {
   try {
-    const response = await fetch("/index.json");
-    pagesIndex = await response.json();
+    const response = await fetch("/index.json")
+    pagesIndex = await response.json()
     searchIndex = lunr(function () {
-      this.field("title");
-      this.field("categories");
-      this.field("content");
-      this.ref("href");
-      this.metadataWhitelist = ["position"];
-      pagesIndex.forEach((page) => this.add(page));
-    });
+      this.field("title")
+      this.field("categories")
+      this.field("content")
+      this.ref("href")
+      pagesIndex.forEach((page) => this.add(page))
+    })
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 }
 
 function interceptSearchInput(event) {
   if (event.keyCode == 13) {
-    handleSearchButtonClicked();
+    handleSearchButtonClicked()
   }
 }
 
 function handleSearchButtonClicked() {
-  event.preventDefault();
-  const lunrQuery = getLunrSearchQuery();
-  if (!lunrQuery) {
-    displayErrorMessage("Please enter a search term");
-    return;
-  }
-  const searchResults = searchSite(lunrQuery);
-  if (!searchResults.length) {
-    displayErrorMessage("Your search returned no results");
-    return;
-  }
+  event.preventDefault()
   const query = getSearchQuery()
-  setQueryLabel(query);
-  renderResults(query, searchResults);
-}
-
-function getLunrSearchQuery() {
-  let query = document.getElementById("search").value.trim().toLowerCase();
-  const searchTerms = query.split(" ");
-  if (searchTerms.length > 1) {
-    query = "";
-    for (const term of searchTerms) {
-      query += `+${term} `;
-    }
+  if (!query) {
+    displayErrorMessage("Please enter a search term")
+    return
   }
-  return query.trim();
+  const searchResults = searchSite(query)
+  if (!searchResults.length) {
+    displayErrorMessage("Your search returned no results")
+    return
+  }
+  setQueryLabel(query)
+  renderResults(query, searchResults)
 }
 
 function displayErrorMessage(message) {
-  document.querySelector(".search-container").classList.remove("focused");
+  document.querySelector(".search-container").classList.remove("focused")
   document.querySelector(
     "#search-form .search-error-message"
-  ).innerHTML = message;
+  ).innerHTML = message
   document
     .querySelector("#search-form .search-error")
-    .classList.remove("hide-element");
-  document.querySelector("#search-form .search-error").classList.add("fade");
+    .classList.remove("hide-element")
+  document.querySelector("#search-form .search-error").classList.add("fade")
 }
 
-function searchSite(queryString) {
-  return searchIndex.search(queryString).map(function (result) {
+function searchSite(query) {
+  return searchIndex.search(getLunrSearchQuery(query)).map(function (result) {
     let page_match = pagesIndex.filter(function (page) {
-      return page.href === result.ref;
-    })[0];
-    const resultMetadata = Object.entries(result.matchData.metadata);
-    page_match.score = result.score;
-    page_match.hitLocations = [];
-    resultMetadata.forEach(([_, searchTerm]) => {
-      if (searchTerm.content) {
-        searchTerm.content.position.forEach((pos) =>
-          page_match.hitLocations.push(pos[0])
-        );
-      }
-    });
-    return page_match;
-  });
+      return page.href === result.ref
+    })[0]
+    page_match.score = result.score
+    return page_match
+  })
+}
+
+function getLunrSearchQuery(query) {
+  const searchTerms = query.split(" ")
+  if (searchTerms.length === 1) {
+    return query
+  }
+  query = ""
+  for (const term of searchTerms) {
+    query += `+${term} `
+  }
+  return query.trim()
 }
 
 function renderResults(query, searchResults) {
-  clearSearchResults();
-  updateSearchResults(query, searchResults);
-  showSearchResults();
-  scrollToTop();
+  clearSearchResults()
+  updateSearchResults(query, searchResults)
+  showSearchResults()
+  scrollToTop()
 }
 
 function clearSearchResults() {
-  const results = document.querySelector(".search-results ul");
-  while (results.firstChild) results.removeChild(results.firstChild);
+  const results = document.querySelector(".search-results ul")
+  while (results.firstChild) results.removeChild(results.firstChild)
 }
 
 function updateSearchResults(query, searchResults) {
-  searchResults.slice(0, 100).forEach(function (hit) {
-    const { success, result } = createSearchResult(query, hit);
-    if (success) {
-      document.querySelector(".search-results ul").appendChild(result);
-    }
-  });
-  if (searchResults.length == 0) {
-    displayErrorMessage("Your search returned no results");
-    return;
+  searchResults.forEach(function (hit) {
+    document
+      .querySelector(".search-results ul")
+      .appendChild(createSearchResult(query, hit))
+  })
+  if (searchResults.length === 0) {
+    displayErrorMessage("Your search returned no results")
+    return
   }
-  const resultListItems = document.querySelectorAll(".search-results ul li");
-  const resultsCount = document.getElementById("results-count");
-  const resultsCountText = document.getElementById("results-count-text");
-  resultsCount.innerHTML = resultListItems.length;
-  resultsCountText.innerHTML =
-    resultListItems.length > 1 ? "results" : "result";
+  const totalSearchResults = document.querySelectorAll(".search-results ul li").length
+  document.getElementById("results-count").innerHTML = totalSearchResults
+  document.getElementById("results-count-text").innerHTML = totalSearchResults > 1 ? "results" : "result"
 }
 
 function createSearchResult(query, hit) {
-  const resultTitle = document.createElement("a");
-  resultTitle.setAttribute("href", hit.href);
-  resultTitle.innerHTML = hit.title;
-  resultTitle.className = "search-result-page-title";
-  const resultContent = document.createElement("p");
-  const { success, results } = createSearchResultContent(query, hit);
-  if (success) {
-    resultContent.innerHTML = results;
-    const result = document.createElement("li");
-    result.className = "search-result-item";
-    result.dataset.score = hit.score.toFixed(2);
-    result.appendChild(resultTitle);
-    result.appendChild(resultContent);
-    return { success: true, result: result };
-  }
-  return { success: false, result: null };
+  const resultTitle = document.createElement("a")
+  resultTitle.setAttribute("href", hit.href)
+  resultTitle.innerHTML = hit.title
+  resultTitle.className = "search-result-page-title"
+  const previewText = createSearchResultPreviewText(query, hit)
+  const resultContent = document.createElement("p")
+  resultContent.innerHTML = previewText
+  const result = document.createElement("li")
+  result.className = "search-result-item"
+  result.dataset.score = hit.score.toFixed(2)
+  result.appendChild(resultTitle)
+  result.appendChild(resultContent)
+  //return previewText.length === 0 ? { success: false, result: null } : { success: true, result: result }
+  return result
 }
 
-function createSearchResultContent(query, hit) {
-  const regex = /\b\.\s/gm;
-  const periodLocations = Array.from(
-    hit.content.matchAll(regex),
+function createSearchResultPreviewText(query, hit) {
+  const queryRegex = new RegExp(getQueryHighlightRegex(query), "gmi")
+  const searchHits = Array.from(
+    hit.content.matchAll(queryRegex),
     (m) => m.index
-  );
-  let results = "";
-  let lastResultIndex = 0;
-  for (const hitLocation of hit.hitLocations) {
-    if (hitLocation > lastResultIndex) {
+  )
+  const periodLocations = Array.from(
+    hit.content.matchAll(/\b\.\s/gm),
+    (m) => m.index
+  )
+  let previewText = ""
+  let lastEndLocation = 0
+  for (const hitLocation of searchHits) {
+    if (hitLocation > lastEndLocation) {
       for (let i = 0; i < periodLocations.length; i++) {
         if (periodLocations[i] > hitLocation) {
-          const start = periodLocations[i - 1] + 1;
-          const end = periodLocations[i];
-          lastResultIndex = end;
-          results = hit.content.slice(start, end).trim() + " ... ";
-          break;
+          const start = periodLocations[i - 1] + 1
+          const end = periodLocations[i]
+          lastEndLocation = end
+          previewText += hit.content.slice(start, end).trim() + " ... "
+          break
         }
       }
     }
-    if (results.length > MAX_SUMMARY_LENGTH) {
-      break;
+    const previewTextWords = tokenize(previewText)
+    const pageBreakers = previewTextWords.filter(word => word.length > 50)
+    if (pageBreakers.length > 0) {
+      previewText = fixPageBreakers(previewText, pageBreakers)
     }
+    if (previewTextWords.length > MAX_SUMMARY_LENGTH) break
   }
-  if (results.length == 0) {
-    return { success: false, results: "" };
+  return ellipsize(previewText, MAX_SUMMARY_LENGTH).replace(
+    queryRegex,
+    '<span class="search-hit">$&</span>'
+  )
+}
+
+function tokenize(input) {
+  const matches = input.matchAll(WORD_REGEX)
+  const wordMatches = Array.from(matches, (m) => m)
+  const words = []
+  wordMatches.forEach((m) =>
+    words.push({
+      word: m[0],
+      start: m.index,
+      end: m.index + m[0].length,
+      length: m[0].length,
+    })
+  )
+  return words
+}
+
+function ellipsize(input, maxLength) {
+  const words = tokenize(input)
+  if (words.length <= maxLength) {
+    return input
   }
-  if (results.length > MAX_SUMMARY_LENGTH) {
-    const periodLocations = Array.from(
-      results.matchAll(/\b\./gm),
-      (m) => m.index
-    );
-    for (let i = 0; i < periodLocations.length; i++) {
-      if (periodLocations[i] > MAX_SUMMARY_LENGTH) {
-        const newEnd = periodLocations[i - 1] + 1;
-        results = results.slice(0, newEnd).trim() + " ...";
-        break;
-      }
-    }
-  }
-  const queryRegex = new RegExp(getQueryHighlightRegex(query), "gmi");
-  results = results.replace(queryRegex, '<span class="search-hit">$&</span>');
-  return { success: true, results: results };
+  return input.slice(0, words[maxLength].end) + "..."
 }
 
 function getQueryHighlightRegex(query) {
-  const searchTerms = query.split(" ");
+  const searchTerms = query.split(" ")
   if (searchTerms.length == 1) {
     return query
   }
-  query = "";
+  query = ""
   for (const term of searchTerms) {
-    query += `${term}|`;
+    query += `${term}|`
   }
-  query = query.slice(0,-1);
+  query = query.slice(0, -1)
   return `(${query})`
 }
 
+function fixPageBreakers(input, largeWords) {
+  largeWords.forEach(word => {
+    const chunked = chunkify(word.word, 20)
+    input = input.replace(word.word, chunked)
+  })
+  return input
+}
+
+function chunkify(input, chunkSize) {
+  let output = ""
+  let totalChunks = (input.length / chunkSize) | 0
+  let lastChunkIsUneven = input.length % chunkSize > 0
+  if (lastChunkIsUneven) {
+    totalChunks += 1
+  }
+  for (let i = 0; i < totalChunks; i++) {
+    let start = i * chunkSize
+    let end = start + chunkSize
+    if (lastChunkIsUneven && i === totalChunks - 1) {
+      end = input.length
+    }
+    output += input.slice(start, end) + " "
+  }
+  return output
+}
+
 function showSearchResults() {
-  document.querySelector(".primary").classList.add("hide-element");
-  document.querySelector(".search-results").classList.remove("hide-element");
-  document.getElementById("site-search").classList.add("expanded");
+  document.querySelector(".primary").classList.add("hide-element")
+  document.querySelector(".search-results").classList.remove("hide-element")
+  document.getElementById("site-search").classList.add("expanded")
 
   document
     .querySelectorAll(".clear-search-results-primary")
-    .forEach((button) => button.classList.remove("hide-element"));
+    .forEach((button) => button.classList.remove("hide-element"))
   document
     .getElementById("clear-search-results-side")
-    .classList.remove("hide-element");
+    .classList.remove("hide-element")
 }
 
 function scrollToTop() {
   const toTopInterval = setInterval(function () {
     const supportedScrollTop =
-      document.body.scrollTop > 0 ? document.body : document.documentElement;
+      document.body.scrollTop > 0 ? document.body : document.documentElement
     if (supportedScrollTop.scrollTop > 0) {
-      supportedScrollTop.scrollTop = supportedScrollTop.scrollTop - 50;
+      supportedScrollTop.scrollTop = supportedScrollTop.scrollTop - 50
     }
     if (supportedScrollTop.scrollTop < 1) {
-      clearInterval(toTopInterval);
+      clearInterval(toTopInterval)
     }
-  }, 10);
+  }, 10)
 }
 
 function removeAnimation() {
-  this.classList.remove("fade");
-  this.classList.add("hide-element");
-  document.querySelector(".search-container").classList.add("focused");
+  this.classList.remove("fade")
+  this.classList.add("hide-element")
+  document.querySelector(".search-container").classList.add("focused")
 }
 
 function handleClearSearchButtonClicked() {
-  hideSearchResults();
-  clearSearchResults();
-  clearSearchInput();
+  hideSearchResults()
+  clearSearchResults()
+  clearSearchInput()
 }
 
 function hideSearchResults() {
   document
     .querySelectorAll(".clear-search-results-primary")
-    .forEach((button) => button.classList.add("hide-element"));
+    .forEach((button) => button.classList.add("hide-element"))
   document
     .getElementById("clear-search-results-side")
-    .classList.add("hide-element");
-  document.getElementById("site-search").classList.remove("expanded");
-  document.querySelector(".search-results").classList.add("hide-element");
-  document.querySelector(".primary").classList.remove("hide-element");
+    .classList.add("hide-element")
+  document.getElementById("site-search").classList.remove("expanded")
+  document.querySelector(".search-results").classList.add("hide-element")
+  document.querySelector(".primary").classList.remove("hide-element")
 }
 
 function searchBoxFocused() {
-  const searchWrapper = document.querySelector(".search-container");
-  const searchBox = document.getElementById("search");
-  searchWrapper.classList.add("focused");
-  searchBox.addEventListener("focusout", () => searchBoxFocusOut());
+  const searchWrapper = document.querySelector(".search-container")
+  const searchBox = document.getElementById("search")
+  searchWrapper.classList.add("focused")
+  searchBox.addEventListener("focusout", () => searchBoxFocusOut())
 }
 
 function searchBoxFocusOut() {
-  const searchWrapper = document.querySelector(".search-container");
-  searchWrapper.classList.remove("focused");
+  const searchWrapper = document.querySelector(".search-container")
+  searchWrapper.classList.remove("focused")
 }
 
 // polyfill String.prototype.matchAll()
@@ -272,22 +298,23 @@ if (!String.prototype.matchAll) {
       const localCopy = new RegExp(regex, ensureFlag(regex.flags, "g"));
       let match;
       while ((match = localCopy.exec(str))) {
-        yield { index: localCopy.lastIndex - 1 };
+        match.index = localCopy.lastIndex - match[0].length;
+        yield match;
       }
     }
     return matchAll(this, regex);
   };
 }
 
-initSearchIndex();
+initSearchIndex()
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("search-form") != null) {
     document
       .getElementById("search")
-      .addEventListener("keydown", (event) => interceptSearchInput(event));
+      .addEventListener("keydown", (event) => interceptSearchInput(event))
     document
       .getElementById("search")
-      .addEventListener("focus", () => searchBoxFocused());
+      .addEventListener("focus", () => searchBoxFocused())
     document
       .querySelectorAll(".clear-search-results-primary")
       .forEach((button) =>
@@ -295,9 +322,9 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     document
       .getElementById("clear-search-results-side")
-      .addEventListener("click", () => handleClearSearchButtonClicked());
+      .addEventListener("click", () => handleClearSearchButtonClicked())
     document
       .querySelector(".search-error")
-      .addEventListener("animationend", removeAnimation);
+      .addEventListener("animationend", removeAnimation)
   }
-});
+})
