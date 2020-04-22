@@ -230,7 +230,7 @@ ol li p {
 }
 
 #site-search.expanded {
-  height: 140px;
+  height: 142px;
   transition: height 0.4s linear;
 }
 
@@ -330,12 +330,11 @@ ol li p {
 #clear-search-results-side {
   cursor: pointer;
   font-size: 0.8em;
-  color: var(--light-gray2);
+  color: var(--off-white2);
   background-color: var(--purple1);
-  border: 1px solid var(--purple1);
   border-radius: 4px;
   line-height: 16px;
-  padding: 4px 10px;
+  padding: 6px 10px;
   box-sizing: border-box;
   text-align: center;
   max-width: 100%;
@@ -351,8 +350,8 @@ ol li p {
 .clear-search-results-primary:active,
 .clear-search-results-primary:focus,
 .clear-search-results-primary:active:hover {
+  color: var(--white2);
   background-color: var(--purple1-hov);
-  border: 1px solid var(--purple1-hov);
   text-decoration: none;
 }
 
@@ -600,9 +599,8 @@ ol li p {
 }
 
 .content .hero-buttons a {
-  font-weight: 700;
-  color: var(--widget-bg-color);
-  background-color: var(--purple3);
+  color: var(--off-white2);
+  background-color: var(--purple1);
   text-align: center;
   white-space: pre;
   flex: 0 1 40%;
@@ -610,15 +608,15 @@ ol li p {
   border-radius: 4px;
   margin: 0;
   padding: 10px 20px;
+  transition: all 0.4s linear;
 }
 
 .content .hero-buttons a:hover,
 .content .hero-buttons a:active,
 .content .hero-buttons a:focus,
 .content .hero-buttons a:active:hover {
-  font-weight: 700;
-  color: var(--widget-bg-color);
-  background-color: var(--purple2);
+  color: var(--white2);
+  background-color: var(--purple1-hov);
   text-decoration: none;
 }
 

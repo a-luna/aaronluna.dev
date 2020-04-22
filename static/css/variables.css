@@ -24,7 +24,7 @@
   --green3: hsl(93, 95%, 70%);
   --green4: hsl(133, 96%, 42%);
   --purple1: hsl(261, 100%, 45%);
-  --purple1-hov: rgba(80, 0, 230, 70%);
+  --purple1-hov: hsla(261, 100%, 35%);
   --purple2: hsl(261, 100%, 65%);
   --purple3: hsl(261, 100%, 72%);
   --orange1: hsl(32, 98%, 43%);
@@ -43,8 +43,8 @@
   --magenta1: hsl(301, 93%, 41%);
   --magenta2: hsl(301, 93%, 51%);
   --magenta3: rgb(250, 112, 248);
-  --yellow1: hsla(59, 98%, 40%);
-  --yellow2: hsla(59, 98%, 55%);
+  --yellow1: hsl(59, 98%, 40%);
+  --yellow2: hsl(59, 98%, 55%);
 
   /* Spacing */
   --no-margin: 0;
