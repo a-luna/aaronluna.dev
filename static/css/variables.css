@@ -24,7 +24,7 @@
   --green3: hsl(93, 95%, 70%);
   --green4: hsl(133, 96%, 42%);
   --purple1: hsl(261, 100%, 45%);
-  --purple1-hov: hsla(261, 100%, 35%);
+  --purple1-hov: hsl(261, 100%, 35%);
   --purple2: hsl(261, 100%, 65%);
   --purple3: hsl(261, 100%, 72%);
   --orange1: hsl(32, 98%, 43%);
@@ -33,7 +33,7 @@
   --orange4: hsl(31, 100%, 73%);
   --gold1: hsl(45, 100%, 50%);
   --gold2: hsl(45, 100%, 68%);
-  --gold3: rgb(229, 185, 102);
+  --gold3: hsl(39, 71%, 65%);
   --pink1: hsl(338, 95%, 45%);
   --pink2: hsl(338, 95%, 56%);
   --pink3: hsl(342, 100%, 64%);
@@ -42,7 +42,7 @@
   --red3: hsl(9, 97%, 55%);
   --magenta1: hsl(301, 93%, 41%);
   --magenta2: hsl(301, 93%, 51%);
-  --magenta3: rgb(250, 112, 248);
+  --magenta3: hsl(301, 93%, 71%);
   --yellow1: hsl(59, 98%, 40%);
   --yellow2: hsl(59, 98%, 55%);
 

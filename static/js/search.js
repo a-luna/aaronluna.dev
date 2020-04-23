@@ -431,15 +431,15 @@ document.addEventListener("DOMContentLoaded", function () {
       .getElementById("search")
       .addEventListener("focus", () => searchBoxFocused());
     document
-      .querySelectorAll(".clear-search-results-primary")
-      .forEach((button) =>
-        button.addEventListener("click", () => handleClearSearchButtonClicked())
-      );
-    document
       .getElementById("clear-search-results-side")
       .addEventListener("click", () => handleClearSearchButtonClicked());
     document
       .querySelector(".search-error")
       .addEventListener("animationend", removeAnimation);
   }
+  document
+    .querySelectorAll(".clear-search-results-primary")
+    .forEach((button) =>
+      button.addEventListener("click", () => handleClearSearchButtonClicked())
+    );
 });

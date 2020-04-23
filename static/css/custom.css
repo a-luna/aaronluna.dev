@@ -230,7 +230,7 @@ ol li p {
 }
 
 #site-search.expanded {
-  height: 142px;
+  height: 143px;
   transition: height 0.4s linear;
 }
 
