@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 {{ if eq .Params.menu_section "home" }}
-	{{ .Scratch.Set "section_class" " home-page" }}
+	{{ .Scratch.Set "body_class" " home-page" }}
 {{ else if eq .Params.menu_section "about" }}
-    {{ .Scratch.Set "section_class" " about-me"}}
+    {{ .Scratch.Set "body_class" " about-me"}}
 {{ else if eq .Section "blog" }}
-	{{ .Scratch.Set "section_class" " blog-list" }}
+	{{ .Scratch.Set "body_class" " blog-list" }}
 {{ else if eq .Section "post" }}
-    {{ .Scratch.Set "section_class" " blog-post"}}
+    {{ .Scratch.Set "body_class" " blog-post"}}
 {{ else if or (eq .Section "series") (eq .Section "flask_api_tutorial") }}
-    {{ .Scratch.Set "section_class" " tutorial" }}
+    {{ .Scratch.Set "body_class" " tutorial" }}
 {{ else if or (eq .RelPermalink "/404.html") (eq .RelPermalink "/offline/") }}
-    {{ .Scratch.Set "section_class" " home-page" }}
+    {{ .Scratch.Set "body_class" " home-page" }}
 {{ end }}
 
 <html class="no-js" lang='{{ .Site.LanguageCode | default "en-us" }}'>
 {{ partial "head" . }}
-<body class='body{{ .Scratch.Get "section_class" }}'>
+<body class='body{{ .Scratch.Get "body_class" }}'>
     <div class="container container--outer">
         {{ partial "menu" . }}
         <div class="wrapper flex">
