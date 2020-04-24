@@ -6,7 +6,7 @@
 package = "netlify-plugin-search-index"
   [plugins.inputs]
     generatedFunctionName = "search"
-    publishDirJSONFileName = "null"
+    publishDirJSONFileName = "corpus.json"
 [context.production.environment]
   HUGO_VERSION = "0.69.2"
   HUGO_ENV = "production"
