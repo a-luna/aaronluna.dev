@@ -1,12 +1,13 @@
 baseurl = "/"
 title = "aaronluna.dev"
 languageCode = "en-us"
-paginate = "3" # Number of posts per page
+paginate = "4" # Number of posts per page
 assetDir = "static"
 googleAnalytics = "UA-111693264-1" # Enable Google Analytics by entering your tracking id
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsUseClasses = true
+rssLimit = 15
 
 [imaging]
   anchor = "smart"
@@ -54,6 +55,7 @@ pygmentsUseClasses = true
   read_more = "Read More"
   process_dev_css = false
   hide_sourcerer = true
+  search_result_preview_max_len = 100
   customCSS = ["css/syntax.css", "css/style.css", "css/fonts.css", "css/variables.css", "css/custom.css", ]
 
 [taxonomies]

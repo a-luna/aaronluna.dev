@@ -1,14 +1,16 @@
 <article class="article-preview list__item post default">
     <div class="article-preview-top-flex">
         {{ partial "thumbnail_image" . }}
+    </div>
+    <div class="article-preview-bottom-flex">
         <div class="post__title-wrapper">
             <h3 class="list__title post__title ">
                 <a href="{{ .RelPermalink }}">{{ .Title }}</a>
             </h3>
-            {{- partial "post_meta/categories.html" . -}}
         </div>
-    </div>
-    <div class="article-preview-summary">
-        <p>{{- if not .Date.IsZero }}<span class="date-published">{{.Date.Format ( .Site.Params.dateformat | default "Jan 02 2006")}} &mdash; </span>{{ end -}}{{ .Summary }}</p>
+        <div class="article-preview-summary">
+            <p class="line-clamp">{{- if not .Date.IsZero }}<span class="date-published">{{.Date.Format ( .Site.Params.dateformat | default "Jan 02 2006")}} &mdash; </span>{{ end -}}{{ .Summary }}</p>
+        </div>
+        {{ partial "post_categories" . }}
     </div>
 </article>

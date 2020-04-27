@@ -13,28 +13,28 @@
   --off-white2: hsl(0, 0%, 85%);
   --white1: hsl(0, 0%, 89%);
   --white2: hsl(0, 0%, 95%);
-  --teal1: hsl(171, 92%, 40%);
+  --teal1: hsl(171, 92%, 33%);
   --teal2: hsl(171, 92%, 53%);
   --blue1: hsl(206, 100%, 57%);
   --blue2: hsl(206, 100%, 72%);
   --blue3: hsl(206, 100%, 67%);
-  --blue4: hsl(206, 100%, 44%);
-  --green1: hsl(93, 95%, 45%);
+  --blue4: hsl(206, 100%, 38%);
+  --green1: hsl(93, 95%, 35%);
   --green2: hsl(93, 95%, 60%);
   --green3: hsl(93, 95%, 70%);
   --green4: hsl(133, 96%, 42%);
   --purple1: hsl(261, 100%, 45%);
   --purple1-hov: hsl(261, 100%, 35%);
-  --purple2: hsl(261, 100%, 65%);
+  --purple2: hsl(261, 100%, 57%);
   --purple3: hsl(261, 100%, 72%);
-  --orange1: hsl(32, 98%, 43%);
+  --orange1: hsl(32, 98%, 40%);
   --orange2: hsl(32, 98%, 56%);
   --orange3: hsl(31, 100%, 63%);
   --orange4: hsl(31, 100%, 73%);
-  --gold1: hsl(45, 100%, 50%);
+  --gold1: hsl(45, 100%, 40%);
   --gold2: hsl(45, 100%, 68%);
   --gold3: hsl(39, 71%, 65%);
-  --pink1: hsl(338, 95%, 45%);
+  --pink1: hsl(338, 95%, 40%);
   --pink2: hsl(338, 95%, 56%);
   --pink3: hsl(342, 100%, 64%);
   --red1: hsl(2, 93%, 35%);
@@ -43,15 +43,8 @@
   --magenta1: hsl(301, 93%, 41%);
   --magenta2: hsl(301, 93%, 51%);
   --magenta3: hsl(301, 93%, 71%);
-  --yellow1: hsl(59, 98%, 40%);
+  --yellow1: hsl(59, 98%, 32%);
   --yellow2: hsl(59, 98%, 55%);
-
-  /* Spacing */
-  --no-margin: 0;
-  --top-bot-margin-10: 10px 0;
-
-  /* Padding */
-  --bot-padding-10: 0 0 10px 0;
 
   /* Theme Colors */
   --site-bg-color: var(--mid-gray1);
@@ -78,6 +71,17 @@
   --blockquote-code-text-color: var(--body-text-color);
   --code-details-lineno: var(--white2);
 
+  /* Drop Shadow */
+  --outer-shadow: 0 3px 3px rgba(0, 0, 0, 0.2), 0 3px 20px rgba(0, 0, 0, 0.3);
+  --inner-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.3);
+
+  /* Spacing */
+  --no-margin: 0;
+  --top-bot-margin-10: 10px 0;
+
+  /* Padding */
+  --bot-padding-10: 0 0 10px 0;
+
   /* Top Nav Menu */
   --nav-link-color: var(--light-gray1);
   --nav-hover-link-color: var(--white2);
@@ -103,16 +107,16 @@
   --aws-hover: var(--purple2);
   --devops: var(--magenta3);
   --devops-hover: var(--magenta2);
-  --dotnet: var(--orange2);
+  --dotnet: var(--orange3);
   --dotnet-hover: var(--orange1);
   --flask: var(--red3);
-  --flask-hover: var(--red2);
+  --flask-hover: var(--red1);
   --hugo: var(--teal2);
   --hugo-hover: var(--teal1);
   --javascript: var(--gold2);
   --javascript-hover: var(--gold1);
   --tutorial-series: var(--pink3);
-  --tutorial-series-hover: var(--pink2);
+  --tutorial-series-hover: var(--pink1);
   --linux: var(--yellow2);
   --linux-hover: var(--yellow1);
   --python: var(--green2);
@@ -195,4 +199,9 @@
   --input-border-color-focus: var(--purple1);
   --input-box-shadow-focus: 0 0 1px 2px var(--purple1);
   --error-message-text-color: var(--pink2);
+
+  /* article preview */
+  --max-lines-count: 6;
+  --line-height: 1.5;
+  --font-size: 14px;
 }

@@ -7,22 +7,24 @@
         {{- range first $recent_num $recent }}
         <div class="recent-post">
             {{ partial "thumbnail_image" . }}
-            <div class="post-meta-date">
-                {{- if not .Date.IsZero }}
-                <div class="meta__item-datetime meta__item">
-                    <time class="meta__text" datetime="{{ .Date.Format " 2006-01-02T15:04:05 " }}">{{.Date.Format ( .Site.Params.dateformat | default "January 02, 2006")}}</time> {{- if ne .Date .Lastmod }}
-                    <time class="meta__text" datetime="{{ .Lastmod.Format " 2006-01-02T15:04:05 " }}"> ({{ T "meta_lastmod" }}: {{.Lastmod.Format ( .Site.Params.dateformat | default "January 02, 2006")}})</time> {{- end }}
+            <div class="recent-post-bottom_wrapper">
+                <div class="post-meta-date">
+                    {{- if not .Date.IsZero }}
+                    <div class="meta__item-datetime meta__item">
+                        <time class="meta__text" datetime="{{ .Date.Format " 2006-01-02T15:04:05 " }}">{{.Date.Format ( .Site.Params.dateformat | default "January 02, 2006")}}</time> {{- if ne .Date .Lastmod }}
+                        <time class="meta__text" datetime="{{ .Lastmod.Format " 2006-01-02T15:04:05 " }}"> ({{ T "meta_lastmod" }}: {{.Lastmod.Format ( .Site.Params.dateformat | default "January 02, 2006")}})</time> {{- end }}
+                    </div>
+                    {{ end -}}
                 </div>
+                <a class="post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+                {{- if .Params.categories }}
+                    <div class="post-categories">
+                        {{ range $index, $category := .Params.categories }}
+                        <a class="post-category {{ . | urlize | lower }}" href="{{ "categories/" | relLangURL }}{{ . | urlize | lower }}" rel="category">{{ . }}</a>
+                        {{ end }}
+                    </div>
                 {{ end -}}
             </div>
-            <a class="post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-            {{- if .Params.categories }}
-                <div class="post-categories">
-                    {{ range $index, $category := .Params.categories }}
-                    <a class="post-category {{ . | urlize | lower }}" href="{{ "categories/" | relLangURL }}{{ . | urlize | lower }}" rel="category">{{ . }}</a>
-                    {{ end }}
-                </div>
-            {{ end -}}
         </div>
         {{- end }}
     </div>

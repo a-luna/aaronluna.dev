@@ -17,7 +17,7 @@
             d[e] = d[e].replace("no-js", "js");
         })(document.documentElement, "className");
     </script>
-    <meta name="description" content="{{ if .IsHome }}{{ .Site.Params.description }}{{ else }}{{ .Params.Summary }}{{ end }}">
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
     {{ if .Site.Params.opengraph }}{{ partial "opengraph" . }}{{ end }}
     {{ if .Site.Params.twitter_cards }}{{ partial "twitter-card" . }}{{ end }}
     <link rel="manifest" href="/manifest.json">

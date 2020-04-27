@@ -1,12 +1,7 @@
 [build]
   publish = "public/"
-  functions= "functions/"
+#  functions= "functions/"
   command = "hugo --gc --minify"
-[[plugins]]
-package = "netlify-plugin-search-index"
-  [plugins.inputs]
-    generatedFunctionName = "search"
-    publishDirJSONFileName = "corpus.json"
 [context.production.environment]
   HUGO_VERSION = "0.69.2"
   HUGO_ENV = "production"

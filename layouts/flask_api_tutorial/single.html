@@ -3,7 +3,7 @@
     <article class="post">
         <header class="post__header">
             <h1 class="post__title">{{- if ne .Params.series_part "Overview" }}{{ .Params.lead }}{{- else }}{{ .Params.series_title }}{{- end }}</h1>
-            <div class="post__meta meta">{{ partial "post_meta" . }}</div>
+            {{ partial "post_categories" . }}
             <div class="post__image">{{ partial "main_article_image" . }}</div>
         {{- if ne .Params.series_part "Overview" }}
             {{ partial "post_nav_part_num" . }}

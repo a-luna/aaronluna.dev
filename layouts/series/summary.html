@@ -6,7 +6,7 @@
             <h3 class="list__title post__title ">
                 <a href="{{ $page.RelPermalink }}">{{ $page.Params.series_title }}</a>
             </h3>
-            {{- partial "post_meta/categories.html" $page -}}
+            {{ partial "post_categories" $page }}
         </div>
     </div>
     <div class="article-preview-summary">

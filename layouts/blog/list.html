@@ -1,12 +1,12 @@
 {{ define "main" }}
 <main class="main list blog-list" role="main">
-    {{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "post")) }}
-    {{ range $index, $page := $paginator.Pages }}
-        {{- if and (eq $paginator.PageNumber 1) (eq $index 0) -}}
-            <div class="content main__content clearfix">{{ partial "api_tutorial_preview" . }}</div>
+    <div class="content main__content clearfix">{{ partial "api_tutorial_preview" . }}</div>
+    <div class="list-wrapper">
+        {{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "post")) }}
+        {{ range $index, $page := $paginator.Pages }}
+            {{- .Render "summary" }}
         {{- end }}
-        {{- .Render "summary" }}
-    {{- end }}
+    </div>
 </main>
 {{ partial "pagination" . }}
 {{ end }}

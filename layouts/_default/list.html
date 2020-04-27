@@ -10,7 +10,9 @@
         {{ end }}
     </header>
     <div class="content main__content clearfix">{{ .Content }}</div>
-    {{- range .Paginator.Pages }}{{- .Render "summary" }}{{- end }}
+    <div class="list-wrapper">
+        {{- range .Paginator.Pages }}{{- .Render "summary" }}{{- end }}
+    </div>
 </main>
 {{ partial "pagination.html" . }}
 {{ end }}

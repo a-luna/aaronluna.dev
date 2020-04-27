@@ -3,7 +3,7 @@
         <article class="post">
             <header class="post__header">
                 <h1 class="post__title">{{ .Title }}</h1>
-                {{ partial "post_meta" . }}
+                {{ partial "post_categories" . }}
                 <div class="post__image">{{ partial "main_article_image" . }}</div>
             </header>
             {{- if .Param "toc" }}
