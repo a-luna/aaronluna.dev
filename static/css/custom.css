@@ -2075,7 +2075,7 @@ figcaption {
   display: flex;
   flex-flow: column nowrap;
   padding: 0 15px 15px 15px;
-  height: 100%
+  flex: 1;
 }
 
 .list-wrapper .article-preview-top-flex {

@@ -1,5 +1,5 @@
 ---
-title: "Introducing Vigorish: Python/Node.Js Hybrid Web Scraper"
+title: "Introducing Vigorish: Hybrid Python/Node.Js Web Scraper"
 slug: "vigorish-python-node-mlb-web-scraping"
 date: "2020-04-20"
 draft: true
