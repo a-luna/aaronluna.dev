@@ -199,9 +199,4 @@
   --input-border-color-focus: var(--purple1);
   --input-box-shadow-focus: 0 0 1px 2px var(--purple1);
   --error-message-text-color: var(--pink2);
-
-  /* article preview */
-  --max-lines-count: 6;
-  --line-height: 1.5;
-  --font-size: 14px;
 }

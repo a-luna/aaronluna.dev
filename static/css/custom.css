@@ -2075,13 +2075,7 @@ figcaption {
   display: flex;
   flex-flow: column nowrap;
   padding: 0 15px 15px 15px;
-  /* height: 295px; */
-}
-
-.line-clamp {
-  font-size: var(--font-size);
-  line-height: var(--line-height);
-  max-height: calc(var(--max-lines-count) * var(--font-size) * var(--line-height));
+  height: 100%
 }
 
 .list-wrapper .article-preview-top-flex {
@@ -2154,7 +2148,18 @@ figcaption {
   font-size: 1.2em;
 }
 
+.line-clamp {
+  --max-lines-count: 4;
+  --line-height: 1.5;
+  --font-size: 16px;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  max-height: calc(var(--max-lines-count) * var(--font-size) * var(--line-height));
+}
+
 .article-preview-summary p {
+  --max-lines-count: 6;
+  --font-size: 14px;
   margin: 0;
   text-overflow: ellipsis;
 }
