@@ -1557,7 +1557,6 @@ p code.chroma {
   font-size: 14px;
   font-weight: 700;
   line-height: 14px;
-  letter-spacing: 0.5px;
   width: 65px;
   color: var(--copy-code-button-text);
   background-color: var(--copy-code-button);
@@ -2194,7 +2193,8 @@ figcaption {
 }
 
 .toc__menu ul a,
-.toc__menu ul ul a {
+.toc__menu ul ul a,
+.toc__menu ul ul ul a {
   padding-left: 0;
 }
 
@@ -2955,6 +2955,7 @@ table.aws-hosting-costs {
 
 .accordion-wrapper {
   margin: 0 0 20px;
+  box-shadow: var(--outer-shadow);
 }
 
 .accordion:first-child section {
@@ -3779,6 +3780,10 @@ span.svelte:active:hover {
 
 .cs-embed-buttons a {
   margin: 0 10px;
+}
+
+.cp_embed_wrapper {
+  margin: 0 0 20px 0;
 }
 
 .vid-wrapper {
