@@ -263,7 +263,7 @@ When the user clicks a "Copy" button, the `copyCodeToClipboard` function is call
         <p><strong>Line 33: </strong>The <code>textarea</code> element is temporarily aded to the DOM next to the copy button.</p>
       </li>
       <li>
-        <p><strong>Line 34-39: </strong>In order for the copy operation to work on my iOS device, I researched and found the steps performed in these lines are needed. Source: <a href="https://stackoverflow.com/a/34046084" target="_blank">stackoverflow.com</a>.</p>
+        <p><strong>Line 34-39: </strong>While testing my code, I found that it worked correctly on all browsers on desktop. However, on my iPhone the text wasn't being copied. I <a href="https://stackoverflow.com/a/34046084" target="_blank">researched this issue and found the steps performed in these lines</a> are needed.</p>
       </li>
       <li>
         <p><strong>Line 40-41: </strong>The <code>textarea</code> element is selected before calling <code>document.execCommand("copy")</code>, which copies the text we assigned to the <code>textarea</code> element to the clipboard. After doing so, the <code>textarea</code> element is removed from the DOM.</p>
