@@ -218,7 +218,7 @@ document.querySelectorAll(".highlight")
   .forEach(highlightDiv => createCopyButton(highlightDiv));
 ```
 
-So what does is happening here? Whenever a page is loaded, all <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> elements are located and a "Copy" button is created for each. Then, the `copyCodeToClipboard` function is assigned as the event handler for the button's click event (**Lines 2-6**). Finally, some DOM manipulation is performed by calling `addCopyButtonToDom`. Let's examine how this function works:
+So what is happening here? Whenever a page is loaded, all <code class="chroma"><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"highlight"</span><span class="p">&gt;</span></code> elements are located and a "Copy" button is created for each. Then, the `copyCodeToClipboard` function is assigned as the event handler for the button's click event (**Lines 2-6**). Finally, some DOM manipulation is performed by calling `addCopyButtonToDom`. Let's examine how this function works:
 
 <div class="code-details">
     <ul>
