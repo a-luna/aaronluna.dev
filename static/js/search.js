@@ -1,14 +1,36 @@
 let searchIndex, pagesIndex;
-const MAX_SUMMARY_LENGTH = 150;
+const MAX_SUMMARY_LENGTH = 70;
+const END_OF_SENTENCE_REGEX = /\b\.\s/gm;
 const WORD_REGEX = /\b(\w*)[\W|\s|\b]?/gm;
 const JWT_REGEX = /[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*/gm;
 const BORDER_COLOR = "rgb(80, 0, 230)";
 
 const getSearchQuery = () =>
   document.getElementById("search").value.trim().toLowerCase();
-const clearSearchInput = () => (document.getElementById("search").value = "");
+const getTotalSearchResults = () =>
+  document.querySelectorAll(".search-results ul li").length;
 const setQueryLabel = (query) =>
   (document.getElementById("query").innerHTML = query);
+const clearSearchInput = () => (document.getElementById("search").value = "");
+
+// polyfill String.prototype.matchAll()
+if (!String.prototype.matchAll) {
+  String.prototype.matchAll = function (regex) {
+    "use strict";
+    function ensureFlag(flags, flag) {
+      return flags.includes(flag) ? flags : flags + flag;
+    }
+    function* matchAll(str, regex) {
+      const localCopy = new RegExp(regex, ensureFlag(regex.flags, "g"));
+      let match;
+      while ((match = localCopy.exec(str))) {
+        match.index = localCopy.lastIndex - match[0].length;
+        yield match;
+      }
+    }
+    return matchAll(this, regex);
+  };
+}
 
 async function initSearchIndex() {
   try {
@@ -28,11 +50,11 @@ async function initSearchIndex() {
 
 function interceptSearchInput(event) {
   if (event.keyCode == 13) {
-    handleSearchButtonClicked(event);
+    handleSearchQuery(event);
   }
 }
 
-function handleSearchButtonClicked(event) {
+function handleSearchQuery(event) {
   event.preventDefault();
   const query = getSearchQuery();
   if (!query) {
@@ -63,10 +85,8 @@ function displayErrorMessage(message) {
 }
 
 function searchSite(query) {
-  return searchIndex.search(getLunrSearchQuery(query)).map(function (result) {
-    let page_match = pagesIndex.filter(function (page) {
-      return page.href === result.ref;
-    })[0];
+  return searchIndex.search(getLunrSearchQuery(query)).map((result) => {
+    let page_match = pagesIndex.filter((page) => page.href === result.ref)[0];
     page_match.score = result.score;
     return page_match;
   });
@@ -85,12 +105,14 @@ function getLunrSearchQuery(query) {
 }
 
 function renderResults(query, searchResults) {
-  const totalSearchResults = updateSearchResults(query, searchResults);
-  if (totalSearchResults === 0) {
+  if (searchResults.length === 0) {
+    displayErrorMessage("Your search returned no results");
     return false;
   }
+  clearSearchResults();
+  updateSearchResults(query, searchResults);
   setQueryLabel(query);
-  showSearchResults(totalSearchResults);
+  showSearchResults();
   scrollToTop();
   return true;
 }
@@ -101,85 +123,76 @@ function clearSearchResults() {
 }
 
 function updateSearchResults(query, searchResults) {
-  clearSearchResults();
-  searchResults.forEach(function (hit) {
-    document
-      .querySelector(".search-results ul")
-      .appendChild(createSearchResult(query, hit));
-  });
-  if (searchResults.length === 0) {
-    displayErrorMessage("Your search returned no results");
-    return 0;
-  }
-  const totalSearchResults = document.querySelectorAll(".search-results ul li")
-    .length;
-  document.getElementById("results-count").innerHTML = totalSearchResults;
+  document.querySelector(".search-results ul").innerHTML = searchResults
+    .map(
+      (hit) => `
+    <li class="search-result-item" data-score="${hit.score.toFixed(2)}">
+      <a href="${hit.href}" class="search-result-page-title">${hit.title}</a>
+      <p>${createSearchResultText(query, hit.content)}</p>
+      <p class="search-result-score">Search Result Score: ${hit.score.toFixed(
+        2
+      )}</p>
+    </li>
+    `
+    )
+    .join("");
+  document.getElementById("results-count").innerHTML = getTotalSearchResults();
   document.getElementById("results-count-text").innerHTML =
-    totalSearchResults > 1 ? "results" : "result";
-  return totalSearchResults;
+    getTotalSearchResults() > 1 ? "results" : "result";
+  document.querySelectorAll(".search-results ul li").forEach((li) => {
+    colorForSearchResult = getColorForSearchResult(li.dataset.score);
+    li.querySelector(".search-result-score").style.color = colorForSearchResult;
+    li.querySelector(
+      ".search-result-page-title"
+    ).style.color = colorForSearchResult;
+  });
 }
 
-function createSearchResult(query, hit) {
-  const resultTitle = document.createElement("a");
-  resultTitle.setAttribute("href", hit.href);
-  resultTitle.innerHTML = hit.title;
-  resultTitle.className = "search-result-page-title";
-  const previewText = createSearchResultPreviewText(query, hit);
-  const resultContent = document.createElement("p");
-  resultContent.innerHTML = previewText;
-  const result = document.createElement("li");
-  result.className = "search-result-item";
-  result.dataset.score = hit.score.toFixed(2);
-  result.appendChild(resultTitle);
-  result.appendChild(resultContent);
-  //return previewText.length === 0 ? { success: false, result: null } : { success: true, result: result }
-  return result;
-}
-
-function createSearchResultPreviewText(query, hit) {
-  const queryRegex = new RegExp(getQueryHighlightRegex(query), "gmi");
-  const searchHits = Array.from(
-    hit.content.matchAll(queryRegex),
+function createSearchResultText(query, pageContent) {
+  const searchQueryRegex = new RegExp(createSearchQueryRegex(query), "gmi");
+  const searchQueryHits = Array.from(
+    pageContent.matchAll(searchQueryRegex),
     (m) => m.index
   );
-  const periodLocations = Array.from(
-    hit.content.matchAll(/\b\.\s/gm),
+  const endOfSentenceLocations = Array.from(
+    pageContent.matchAll(END_OF_SENTENCE_REGEX),
     (m) => m.index
   );
-  let previewText = "";
-  let lastEndLocation = 0;
-  for (const hitLocation of searchHits) {
-    if (hitLocation > lastEndLocation) {
-      for (let i = 0; i < periodLocations.length; i++) {
-        if (periodLocations[i] > hitLocation) {
-          const start = periodLocations[i - 1] + 1;
-          const end = periodLocations[i];
-          lastEndLocation = end;
-          previewText += hit.content.slice(start, end).trim() + " ... ";
+  let searchResultText = "";
+  let lastEndOfSentence = 0;
+  for (const hitLocation of searchQueryHits) {
+    if (hitLocation > lastEndOfSentence) {
+      for (let i = 0; i < endOfSentenceLocations.length; i++) {
+        if (endOfSentenceLocations[i] > hitLocation) {
+          const startOfSentence = endOfSentenceLocations[i - 1] + 1;
+          const endOfSentence = endOfSentenceLocations[i];
+          lastEndOfSentence = endOfSentence;
+          searchResultText +=
+            pageContent.slice(startOfSentence, endOfSentence).trim() + " ... ";
           break;
         }
       }
     }
-    const previewTextWords = tokenize(previewText);
-    const pageBreakers = previewTextWords.filter((word) => word.length > 50);
+    const searchResultWords = tokenize(searchResultText);
+    const pageBreakers = searchResultWords.filter((word) => word.length > 50);
     if (pageBreakers.length > 0) {
-      previewText = fixPageBreakers(previewText, pageBreakers);
+      searchResultText = fixPageBreakers(searchResultText, pageBreakers);
     }
-    if (previewTextWords.length > MAX_SUMMARY_LENGTH) break;
+    if (searchResultWords.length > MAX_SUMMARY_LENGTH) break;
   }
-  return ellipsize(previewText, MAX_SUMMARY_LENGTH).replace(
-    queryRegex,
+  return ellipsize(searchResultText, MAX_SUMMARY_LENGTH).replace(
+    searchQueryRegex,
     '<span class="search-hit">$&</span>'
   );
 }
 
-function showSearchResults(totalSearchResults) {
+function showSearchResults() {
   document.querySelector(".primary").classList.add("hide-element");
   document.querySelector(".search-results").classList.remove("hide-element");
   document.getElementById("site-search").classList.add("expanded");
   document.querySelector(".clear-search-top").classList.remove("hide-element");
 
-  if (totalSearchResults > 2) {
+  if (getTotalSearchResults() > 2) {
     document
       .querySelector(".clear-search-bottom")
       .classList.remove("hide-element");
@@ -213,7 +226,7 @@ function ellipsize(input, maxLength) {
   return input.slice(0, words[maxLength].end) + "...";
 }
 
-function getQueryHighlightRegex(query) {
+function createSearchQueryRegex(query) {
   const searchTerms = query.split(" ");
   if (searchTerms.length == 1) {
     return query;
@@ -301,124 +314,12 @@ function searchBoxFocusOut() {
   searchWrapper.classList.remove("focused");
 }
 
-//http://stackoverflow.com/a/13542669/2714730
-const pSBC = (p, c0, c1, l) => {
-  let r,
-    g,
-    b,
-    P,
-    f,
-    t,
-    h,
-    i = parseInt,
-    m = Math.round,
-    a = typeof c1 == "string";
-  if (
-    typeof p != "number" ||
-    p < -1 ||
-    p > 1 ||
-    typeof c0 != "string" ||
-    (c0[0] != "r" && c0[0] != "#") ||
-    (c1 && !a)
-  )
-    return null;
-  if (!this.pSBCr)
-    this.pSBCr = (d) => {
-      let n = d.length,
-        x = {};
-      if (n > 9) {
-        ([r, g, b, a] = d = d.split(",")), (n = d.length);
-        if (n < 3 || n > 4) return null;
-        (x.r = i(r[3] == "a" ? r.slice(5) : r.slice(4))),
-          (x.g = i(g)),
-          (x.b = i(b)),
-          (x.a = a ? parseFloat(a) : -1);
-      } else {
-        if (n == 8 || n == 6 || n < 4) return null;
-        if (n < 6)
-          d =
-            "#" +
-            d[1] +
-            d[1] +
-            d[2] +
-            d[2] +
-            d[3] +
-            d[3] +
-            (n > 4 ? d[4] + d[4] : "");
-        d = i(d.slice(1), 16);
-        if (n == 9 || n == 5)
-          (x.r = (d >> 24) & 255),
-            (x.g = (d >> 16) & 255),
-            (x.b = (d >> 8) & 255),
-            (x.a = m((d & 255) / 0.255) / 1000);
-        else
-          (x.r = d >> 16), (x.g = (d >> 8) & 255), (x.b = d & 255), (x.a = -1);
-      }
-      return x;
-    };
-  (h = c0.length > 9),
-    (h = a ? (c1.length > 9 ? true : c1 == "c" ? !h : false) : h),
-    (f = this.pSBCr(c0)),
-    (P = p < 0),
-    (t =
-      c1 && c1 != "c"
-        ? this.pSBCr(c1)
-        : P
-        ? { r: 0, g: 0, b: 0, a: -1 }
-        : { r: 255, g: 255, b: 255, a: -1 }),
-    (p = P ? p * -1 : p),
-    (P = 1 - p);
-  if (!f || !t) return null;
-  if (l)
-    (r = m(P * f.r + p * t.r)),
-      (g = m(P * f.g + p * t.g)),
-      (b = m(P * f.b + p * t.b));
-  else
-    (r = m((P * f.r ** 2 + p * t.r ** 2) ** 0.5)),
-      (g = m((P * f.g ** 2 + p * t.g ** 2) ** 0.5)),
-      (b = m((P * f.b ** 2 + p * t.b ** 2) ** 0.5));
-  (a = f.a),
-    (t = t.a),
-    (f = a >= 0 || t >= 0),
-    (a = f ? (a < 0 ? t : t < 0 ? a : a * P + t * p) : 0);
-  if (h)
-    return (
-      "rgb" +
-      (f ? "a(" : "(") +
-      r +
-      "," +
-      g +
-      "," +
-      b +
-      (f ? "," + m(a * 1000) / 1000 : "") +
-      ")"
-    );
-  else
-    return (
-      "#" +
-      (4294967296 + r * 16777216 + g * 65536 + b * 256 + (f ? m(a * 255) : 0))
-        .toString(16)
-        .slice(1, f ? undefined : -2)
-    );
-};
-
-// polyfill String.prototype.matchAll()
-if (!String.prototype.matchAll) {
-  String.prototype.matchAll = function (regex) {
-    "use strict";
-    function ensureFlag(flags, flag) {
-      return flags.includes(flag) ? flags : flags + flag;
-    }
-    function* matchAll(str, regex) {
-      const localCopy = new RegExp(regex, ensureFlag(regex.flags, "g"));
-      let match;
-      while ((match = localCopy.exec(str))) {
-        match.index = localCopy.lastIndex - match[0].length;
-        yield match;
-      }
-    }
-    return matchAll(this, regex);
-  };
+function getColorForSearchResult(score) {
+  borderColor = `hsl(171, 92%, 53%)`;
+  // borderColor = `hsl(261, 100%, 45%)`;
+  if (score > 3) return borderColor;
+  const hueAdjust = (parseFloat(score) / 3) * 41;
+  return `hsl(${212 - Math.ceil(hueAdjust)}, 92%, 53%)`;
 }
 
 initSearchIndex();

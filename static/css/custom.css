@@ -509,9 +509,15 @@ ol li p {
   word-wrap: break-word;
 }
 
+p.search-result-score {
+  font-size: 0.9em;
+  font-style: italic;
+  font-weight: 700;
+}
+
 .search-result-item {
   background-color: var(--widget-bg-color);
-  padding: 20px;
+  padding: 20px 20px 10px 20px;
   margin: 0 0 20px 0;
   border-radius: 4px;
   box-shadow: var(--outer-shadow);
