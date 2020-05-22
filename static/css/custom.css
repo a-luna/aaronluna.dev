@@ -3759,7 +3759,8 @@ span.svelte:active:hover {
   padding: 0 1em 0 0.5em;
   background-color: var(--comments-bg);
   border-radius: 4px;
-  border: 1px solid var(--comments-border);
+  transition: all .4s linear;
+  box-shadow: var(--outer-shadow);
 }
 
 .cs-embed {

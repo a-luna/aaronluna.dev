@@ -1,11 +1,10 @@
 {
     "name": "aaronluna.dev",
     "version": "0.1.0",
+    "license": "MIT",
     "description": "Aaron Luna's Blog",
     "dependencies": {
         "css-doodle": "^0.8.5",
-        "lunr": "^2.3.8",
-        "netlify-lambda": "^1.6.3",
         "serialize-javascript": "^3.0.0"
     },
     "repository": {
@@ -17,10 +16,15 @@
     },
     "homepage": "https://github.com/a-luna/aaronluna.dev",
     "devDependencies": {
-        "autoprefixer": "^9.7.6",
-        "postcss": "^7.0.29",
+        "@babel/cli": "^7.8.4",
+        "@babel/core": "^7.9.6",
+        "@babel/preset-env": "^7.9.6",
+        "autoprefixer": "^9.8.0",
+        "lunr": "^2.3.8",
+        "postcss": "^7.0.30",
         "postcss-cli": "^7.1.1",
         "postcss-uncss": "^0.17.0",
+        "root-variables": "^1.0.6",
         "uncss": "^0.17.3"
     },
     "browserslist": [
