@@ -5,7 +5,7 @@
     "description": "Aaron Luna's Blog",
     "dependencies": {
         "css-doodle": "^0.8.5",
-        "serialize-javascript": "^3.0.0"
+        "serialize-javascript": "^3.1.0"
     },
     "repository": {
         "type": "git",
