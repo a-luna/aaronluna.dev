@@ -1,0 +1,23 @@
+{{ define "main" }}
+<main class="main list project-list" role="main">
+    <header class="main__header hide-element">
+        {{ if in .Permalink "/categories/" }}
+            <div class="category-list-header">
+                <span class="{{ .Title | urlize | lower }}">{{ .Title }} posts</span>
+            </div>
+        {{ else }}
+            <h1 class="main__title">{{ .Title }}</h1>
+        {{ end }}
+    </header>
+    <div class="content main__content clearfix">{{ .Content }}</div>
+    <div class="list-wrapper">
+        {{ $paginator := .Paginate (where .Site.RegularPages "Section" "in" (slice "projects")) }}
+        {{ range $index, $page := $paginator.Pages }}
+            {{- if ne $page.Type "data" -}}
+                {{- .Render "summary" }}
+            {{- end }}
+        {{- end -}}
+    </div>
+</main>
+{{ partial "pagination" . }}
+{{ end }}

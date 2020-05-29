@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
     .querySelectorAll("a[target]")
     .forEach(a => addRelNoOpenerToExternalLinks(a))
   document
-    .querySelectorAll(".note a, .alert a")
+    .querySelectorAll(".note a, .alert a, .content p a")
     .forEach(a => addTargetBlankToExternalLinks(a))
   document
     .querySelectorAll(".accordion")

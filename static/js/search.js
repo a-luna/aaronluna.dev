@@ -1,5 +1,5 @@
 let searchIndex, pagesIndex
-const MAX_SUMMARY_LENGTH = 70
+const MAX_SUMMARY_LENGTH = 100
 const END_OF_SENTENCE_REGEX = /\b\.\s/gm
 const WORD_REGEX = /\b(\w*)[\W|\s|\b]?/gm
 const JWT_REGEX = /[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*/gm
@@ -10,25 +10,6 @@ const getTotalSearchResults = () =>
   document.querySelectorAll(".search-results ul li").length
 const setQueryLabel = (query) => (document.getElementById("query").innerHTML = query)
 const clearSearchInput = () => (document.getElementById("search").value = "")
-
-// polyfill String.prototype.matchAll()
-if (!String.prototype.matchAll) {
-  String.prototype.matchAll = function (regex) {
-    "use strict"
-    function ensureFlag(flags, flag) {
-      return flags.includes(flag) ? flags : flags + flag
-    }
-    function* matchAll(str, regex) {
-      const localCopy = new RegExp(regex, ensureFlag(regex.flags, "g"))
-      let match
-      while ((match = localCopy.exec(str))) {
-        match.index = localCopy.lastIndex - match[0].length
-        yield match
-      }
-    }
-    return matchAll(this, regex)
-  }
-}
 
 async function initSearchIndex() {
   try {
@@ -73,11 +54,14 @@ function displayErrorMessage(message) {
 }
 
 function searchSite(query) {
-  return searchIndex.search(getLunrSearchQuery(query)).map((result) => {
-    let page_match = pagesIndex.filter((page) => page.href === result.ref)[0]
-    page_match.score = result.score
-    return page_match
-  })
+  return searchIndex.search(getLunrSearchQuery(query)).reduce((result,hit) => {
+    if (hit.ref !== "undefined") {
+      let page_match = pagesIndex.filter((page) => page.href === hit.ref)[0]
+      page_match.score = hit.score
+      result.push(page_match)
+    }
+    return result
+  }, [])
 }
 
 function getLunrSearchQuery(query) {
@@ -117,7 +101,6 @@ function updateSearchResults(query, searchResults) {
     <li class="search-result-item" data-score="${hit.score.toFixed(2)}">
       <a href="${hit.href}" class="search-result-page-title">${hit.title}</a>
       <p>${createSearchResultText(query, hit.content)}</p>
-      <p class="search-result-score">Search Result Score: ${hit.score.toFixed(2)}</p>
     </li>
     `
     )
@@ -126,9 +109,9 @@ function updateSearchResults(query, searchResults) {
   document.getElementById("results-count-text").innerHTML =
     getTotalSearchResults() > 1 ? "results" : "result"
   document.querySelectorAll(".search-results ul li").forEach((li) => {
-    colorForSearchResult = getColorForSearchResult(li.dataset.score)
-    li.querySelector(".search-result-score").style.color = colorForSearchResult
-    li.querySelector(".search-result-page-title").style.color = colorForSearchResult
+    li.querySelector(".search-result-page-title").style.color = getColorForSearchResult(
+      li.dataset.score
+    )
   })
 }
 
@@ -293,8 +276,8 @@ function searchBoxFocusOut() {
 }
 
 function getColorForSearchResult(score) {
-  const highQualityColor = "hsl(171, 92%, 53%)"
-  const lowQualityColor = "hsl(212, 92%, 53%)"
+  const highQualityColor = "hsl(171, 100%, 50%)"
+  const lowQualityColor = "hsl(212, 100%, 50%)"
   return adjustHue(highQualityColor, lowQualityColor, score)
 }
 
@@ -325,20 +308,40 @@ function parseHslColor(input) {
 initSearchIndex()
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("search-form") != null) {
-    document.getElementById("search").addEventListener("keydown", (event) => {
+    const searchInput = document.getElementById("search")
+    searchInput.addEventListener("keydown", (event) => {
       if (event.keyCode == 13) handleSearchQuery(event)
     })
-    document.getElementById("search").addEventListener("focus", () => searchBoxFocused())
-    document
-      .getElementById("clear-search-results-side")
-      .addEventListener("click", () => handleClearSearchButtonClicked())
+    searchInput.addEventListener("focus", () => searchBoxFocused())
     document
       .querySelector(".search-error")
       .addEventListener("animationend", removeAnimation)
+    document
+      .querySelector(".fa-search")
+      .addEventListener("click", (event) => handleSearchQuery(event))
   }
   document
-    .querySelectorAll(".clear-search-results-primary")
+    .querySelectorAll(".clear-search-results")
     .forEach((button) =>
       button.addEventListener("click", () => handleClearSearchButtonClicked())
     )
 })
+
+// polyfill String.prototype.matchAll()
+if (!String.prototype.matchAll) {
+  String.prototype.matchAll = function (regex) {
+    "use strict"
+    function ensureFlag(flags, flag) {
+      return flags.includes(flag) ? flags : flags + flag
+    }
+    function* matchAll(str, regex) {
+      const localCopy = new RegExp(regex, ensureFlag(regex.flags, "g"))
+      let match
+      while ((match = localCopy.exec(str))) {
+        match.index = localCopy.lastIndex - match[0].length
+        yield match
+      }
+    }
+    return matchAll(this, regex)
+  }
+}

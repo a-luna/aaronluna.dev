@@ -21,18 +21,28 @@ rssLimit = 15
     ordered = false
     startLevel = 2
 
+[mediaTypes."text/netlify"]
+    suffixes = [""]
+    delimiter = ""
+
+[outputs]
+  home = ["HTML", "JSON", "RSS", "redirect"]
+  page = ["HTML"]
+
+[outputFormats.redirect]
+mediatype = "text/netlify"
+baseName = "_redirects"
+isPlainText = true
+
 [twitterCard]
   generate = true
   site = "https://aaronluna.dev"
   creator = "aaronlunadev"
 
-[outputs]
-  home = ["HTML", "JSON"]
-  page = ["HTML", "RSS"]
-
 [permalinks]
   post = "/blog/:slug/"
   flask_api_tutorial = "/series/flask-api-tutorial/:slug/"
+  projects = "/projects/:slug/"
 
 [Author]
   name = "Aaron Luna"
@@ -54,35 +64,35 @@ rssLimit = 15
   menu_label = "Menu"
   read_more = "Read More"
   process_dev_css = false
-  hide_sourcerer = true
   search_result_preview_max_len = 100
   customCSS = ["css/syntax.css", "css/style.css", "css/fonts.css", "css/variables.css", "css/custom.css", ]
 
 [taxonomies]
   series = "series"
   category = "categories"
+  project = "projects"
 
 [menu]
-  [[menu.main]]
-    identifier = "home"
-    name = "Home"
-    url = "/"
-    weight = 1
   [[menu.main]]
     identifier = "blog"
     name = "Blog"
     url = "/blog/"
     weight = 2
   [[menu.main]]
+    identifier = "projects"
+    name = "Projects"
+    url = "/projects"
+    weight = 3
+  [[menu.main]]
     identifier = "tutorials"
     name = "Tutorials"
     url = "/series/"
-    weight = 3
+    weight = 4
   [[menu.main]]
     identifier = "about"
     name = "About Me"
     url = "/about/"
-    weight = 4
+    weight = 5
 
   [[menu.tutorials]]
     identifier = "flask-api-tutorial"
@@ -90,8 +100,17 @@ rssLimit = 15
     url = "/series/flask-api-tutorial/overview"
     weight = 0
 
-# For social icons, the "name" field should match the name of the icon to be used
-# The list of available icons can be found at http://fontawesome.io/icons/
+  [[menu.projects]]
+    identifier = "vigorish"
+    name = "Vigorish: Hybrid Python/Node.Js Web Scraper"
+    url = "/projects/vigorish"
+    weight = 1
+
+  [[menu.projects]]
+    identifier = "base64"
+    name = "My First Svelte Application: Base64 Encoder/Decoder"
+    url = "/projects/svelte-app-base64/"
+    weight = 2
 
   [[menu.social]]
     url = "mailto:contact@aaronluna.dev"
@@ -118,16 +137,15 @@ rssLimit = 15
   list = "right"   # Configure layout for list pages
   single = "right" # Configure layout for single pages
   # Enable widgets in given order
-  widgets = ["search", "categories", "recent", "tutorials"]
+  widgets = ["search", "categories", "recent", "projects", "tutorials"]
 
 [Params.widgets]
   recent_num = 5 # Set the number of articles in the "Recent articles" widget
   recent_num_home = 4 # Number of articles in the "Recent Posts" section of the home page
   tags_counter = false # Enable counter for each tag in "Tags" widget (disabled by default)
-  social_title = "Contact"
   recent_title = "Recent Posts"
   categories_title = "Categories"
   search_title = "Search"
-  tags_title = "Tags"
   tutorials_title = "Tutorials"
   flask_api_tutorials_title = "Flask API Tutorial"
+  projects_title = "Projects"

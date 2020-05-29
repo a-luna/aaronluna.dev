@@ -10,19 +10,21 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="msapplication-starturl" content="/blog?souce=pwa" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}{{ if $postImage }}{{ $thumbnail := $postImage.Resize "150x" }}<meta name="thumbnail" content="{{ $thumbnail.Permalink }}">{{ end }}
-    <title>{{ block "title" . }}{{ if not .IsHome }}{{ .Title }} - {{ end }}{{ .Site.Title }}{{ end }}</title>
+    {{- $postImage := .Page.Resources.GetMatch (printf "*cover*") -}}{{ if $postImage -}}{{- $thumbnail := $postImage.Resize "150x" -}}<meta name="thumbnail" content="{{- $thumbnail.Permalink -}}">{{ end -}}
+    <title>{{- block "title" . -}}{{- if not .IsHome -}}{{- .Title -}} - {{- end -}}{{- .Site.Title -}}{{- end -}}</title>
     <script>
         (function(d, e) {
             d[e] = d[e].replace("no-js", "js");
         })(document.documentElement, "className");
     </script>
-    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
-    {{ if .Site.Params.opengraph }}{{ partial "opengraph" . }}{{ end }}
-    {{ if .Site.Params.twitter_cards }}{{ partial "twitter-card" . }}{{ end }}
+    <meta name="description" content="{{- with .Description -}}{{- . -}}{{- else -}}{{if .IsPage}}{{- .Summary -}}{{- else -}}{{- with .Site.Params.description -}}{{- . -}}{{- end -}}{{- end -}}{{- end -}}">
+    {{- if .Site.Params.opengraph -}}{{- partial "opengraph" . -}}{{- end -}}
+    {{- if .Site.Params.twitter_cards -}}{{- partial "twitter-card" . -}}{{- end -}}
     <link rel="manifest" href="/manifest.json">
-    {{ with .OutputFormats.Get "rss" -}}{{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}{{ end -}}
-    {{ partial "css_bundle" . }}
-    <link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
-    {{- if not .Site.IsServer }}{{ template "_internal/google_analytics_async.html" . }}{{- end }}
+    {{- with .OutputFormats.Get "rss" -}}{{- printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML -}}{{- end -}}
+    {{- partial "css_bundle" . -}}
+    <link rel="shortcut icon" href="{{- "favicon.ico" | relURL -}}">
+    {{- if not .Site.IsServer -}}
+    <script async defer data-domain="aaronluna.dev" src="https://plausible.io/js/plausible.js"></script>
+    {{- end -}}
 </head>

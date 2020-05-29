@@ -157,13 +157,14 @@ ol li p {
 .about-me .wrapper,
 .blog-list .wrapper,
 .blog-post .wrapper,
-.tutorial .wrapper {
+.tutorial .wrapper,
+.projects .wrapper {
   padding: 40px 40px 0 40px;
 }
 
 .primary {
   font-size: 1em;
-  flex: 1 0 72%;
+  flex: 1 0 68%;
   margin: 0;
   display: flex;
   flex-flow: column nowrap;
@@ -192,7 +193,7 @@ ol li p {
 
 .sidebar {
   font-size: 1.1em;
-  flex: 0 0 26%;
+  flex: 0 0 30%;
   margin: 0;
   padding: 40px 0 0 0;
 }
@@ -201,7 +202,8 @@ ol li p {
 .about-me .sidebar,
 .blog-list .sidebar,
 .blog-post .sidebar,
-.tutorial .sidebar {
+.tutorial .sidebar,
+.projects .sidebar {
   margin: 0;
   padding: 0;
 }
@@ -424,7 +426,7 @@ ol li p {
 #search-form .search-error {
   position: absolute;
   z-index: 2;
-  font-size: 0.8em;
+  font-size: 0.75em;
   background-color: var(--input-bg-color);
   border: 1px solid var(--input-border-color);
   border-radius: 4px;
@@ -441,12 +443,12 @@ ol li p {
   color: var(--error-message-text-color);
   text-align: center;
   margin: auto;
-  line-height: 14px;
+  line-height: 1;
   transition: all 0.5s ease-out;
 }
 
 .search-results {
-  flex: 1 0 67%;
+  flex: 1 0 68%;
   margin: 0 0 40px 0;
   padding: 30px 0 0 0;
 }
@@ -455,7 +457,8 @@ ol li p {
 .about-me .search-results,
 .blog-list .search-results,
 .blog-post .search-results,
-.tutorial .search-results {
+.tutorial .search-results,
+.projects .search-results {
   padding: 0;
 }
 
@@ -1654,7 +1657,9 @@ pre.chroma code {
   font-weight: 700;
 }
 
-.language-json .err {
+.language-json .err,
+.language-toml .err,
+.language-go-text-template .err {
   color: var(--body-text-color);
   background-color: var(--widget-bg-color);
 }
@@ -1743,7 +1748,8 @@ blockquote.rfc .bold-text {
 .content figure {
   text-align: center;
   display: block;
-  margin: 0;
+  margin: 0 auto;
+  width: 80%;
 }
 
 .content figure img {
@@ -3343,6 +3349,7 @@ header,
 
 .recent-post figure {
   margin: 0 0 15px 0;
+  width: 100%;
 }
 
 .recent-post figure img {
@@ -3406,19 +3413,20 @@ header,
 }
 
 .repo-language i {
-  --cat-color: var(--mid-gray2);
-  color: var(--cat-color);
+  --cat-color-h: 0;
+  --cat-color-s: 100%;
+  --cat-color-l: 50%;
+  color: hsl(var(--cat-color-h), var(--cat-color-s), var(--cat-color-l));
 }
 
 a.post-category,
 .category-list-header span {
-  --cat-color: var(--mid-gray2);
   font-size: 15px;
   font-weight: 700;
   text-align: center;
   text-transform: lowercase;
   color: var(--black2);
-  background-color: var(--cat-color);
+  background-color: hsl(var(--cat-color-h), var(--cat-color-s), var(--cat-color-l));
   border-radius: 4px;
   margin: 3px 10px 3px 0;
   padding: 2px 7px;
@@ -3431,9 +3439,8 @@ a.post-category:hover,
 a.post-category:focus,
 a.post-category:active,
 a.post-category:active:hover {
-  --cat-color-hover: var(--light-gray1);
   color: var(--black2);
-  background-color: var(--cat-color-hover);
+  background-color: hsl(var(--cat-color-h), var(--cat-color-s), calc(var(--cat-color-l) * var(--cat-color-dim-adjust)));
   text-decoration: none;
   font-weight: 700;
   box-shadow: none;
@@ -3446,7 +3453,7 @@ a.post-category:active:hover {
 }
 
 .article-preview a.post-category {
-  margin: 0 10px 0 0;
+  margin: 0 10px 10px 0;
   box-shadow: none;
 }
 
@@ -3477,194 +3484,91 @@ a.post-category:active:hover {
 .post__header a.post-category:focus,
 .post__header a.post-category:active,
 .post__header a.post-category:active:hover {
-  background-color: var(--cat-color-hover);
+  background-color: hsl(var(--cat-color-h), var(--cat-color-s), calc(var(--cat-color-l) * var(--cat-color-dim-adjust)));
 }
 
 a.python,
 i.python,
 span.python {
-  --cat-color: var(--python);
-}
-
-a.python:hover,
-span.python:hover,
-a.python:focus,
-span.python:focus,
-a.python:active,
-span.python:active,
-a.python:active:hover,
-span.python:active:hover {
-  --cat-color-hover: var(--python-hover);
+  --cat-color-h: var(--python-color-h);
 }
 
 a.devops,
 i.devops,
 span.devops {
-  --cat-color: var(--devops);
-}
-
-a.devops:hover,
-span.devops:hover,
-a.devops:focus,
-span.devops:focus,
-a.devops:active,
-span.devops:active,
-a.devops:active:hover,
-span.devops:active:hover {
-  --cat-color-hover: var(--devops-hover);
+  --cat-color-h: var(--devops-color-h);
 }
 
 a.aws,
 i.aws,
 span.aws {
-  --cat-color: var(--aws);
-}
-
-a.aws:hover,
-span.aws:hover,
-a.aws:focus,
-span.aws:focus,
-a.aws:active,
-span.aws:active,
-a.aws:active:hover,
-span.aws:active:hover {
-  --cat-color-hover: var(--aws-hover);
+  --cat-color-h: var(--aws-color-h);
 }
 
 a.hugo,
 i.hugo,
 span.hugo {
-  --cat-color: var(--hugo);
-}
-
-a.hugo:hover,
-span.hugo:hover,
-a.hugo:focus,
-span.hugo:focus,
-a.hugo:active,
-span.hugo:active,
-a.hugo:active:hover,
-span.hugo:active:hover {
-  --cat-color-hover: var(--hugo-hover);
+  --cat-color-h: var(--hugo-color-h);
 }
 
 a.javascript,
 i.javascript,
 span.javascript {
-  --cat-color: var(--javascript);
-}
-
-a.javascript:hover,
-span.javascript:hover,
-a.javascript:focus,
-span.javascript:focus,
-a.javascript:active,
-span.javascript:active,
-a.javascript:active:hover,
-span.javascript:active:hover {
-  --cat-color-hover: var(--javascript-hover);
+  --cat-color-h: var(--javascript-color-h);
 }
 
 a.dotnet,
 i.dotnet,
 span.dotnet {
-  --cat-color: var(--dotnet);
-}
-
-a.dotnet:hover,
-span.dotnet:hover,
-a.dotnet:focus,
-span.dotnet:focus,
-a.dotnet:active,
-span.dotnet:active,
-a.dotnet:active:hover,
-span.dotnet:active:hover {
-  --cat-color-hover: var(--dotnet-hover);
+  --cat-color-h: var(--dotnet-color-h);
 }
 
 a.linux,
 i.linux,
 span.linux {
-  --cat-color: var(--linux);
-}
-
-a.linux:hover,
-span.linux:hover,
-a.linux:focus,
-span.linux:focus,
-a.linux:active,
-span.linux:active,
-a.linux:active:hover,
-span.linux:active:hover {
-  --cat-color-hover: var(--linux-hover);
+  --cat-color-h: var(--linux-color-h);
 }
 
 a.flask,
 i.flask,
 span.flask {
-  --cat-color: var(--flask);
-}
-
-a.flask:hover,
-span.flask:hover,
-a.flask:focus,
-span.flask:focus,
-a.flask:active,
-span.flask:active,
-a.flask:active:hover,
-span.flask:active:hover {
-  --cat-color-hover: var(--flask-hover);
+  --cat-color-h: var(--flask-color-h);
 }
 
 a.virtualization,
 i.virtualization,
 span.virtualization {
-  --cat-color: var(--virtualization);
-}
-
-a.virtualization:hover,
-span.virtualization:hover,
-a.virtualization:focus,
-span.virtualization:focus,
-a.virtualization:active,
-span.virtualization:active,
-a.virtualization:active:hover,
-span.virtualization:active:hover {
-  --cat-color-hover: var(--virtualization-hover);
+  --cat-color-h: var(--virtualization-color-h);
 }
 
 a.tutorial-series,
 i.tutorial-series,
 span.tutorial-series {
-  --cat-color: var(--tutorial-series);
-}
-
-a.tutorial-series:hover,
-span.tutorial-series:hover,
-a.tutorial-series:focus,
-span.tutorial-series:focus,
-a.tutorial-series:active,
-span.tutorial-series:active,
-a.tutorial-series:active:hover,
-span.tutorial-series:active:hover {
-  --cat-color-hover: var(--tutorial-series-hover);
+  --cat-color-h: var(--tutorial-series-color-h);
 }
 
 a.svelte,
 i.svelte,
 span.svelte {
-  --cat-color: var(--svelte);
+  --cat-color-h: var(--svelte-color-h);
 }
 
-a.svelte:hover,
-span.svelte:hover,
-a.svelte:focus,
-span.svelte:focus,
-a.svelte:active,
-span.svelte:active,
-a.svelte:active:hover,
-span.svelte:active:hover {
-  --cat-color-hover: var(--svelte-hover);
+a.personal-project,
+i.personal-project,
+span.personal-project {
+  --cat-color-h: var(--personal-project-color-h);
+}
+
+a.web-scraping,
+i.web-scraping,
+span.web-scraping {
+  --cat-color-h: var(--web-scraping-color-h);
+}
+
+a.nodejs,
+i.nodejs,
+span.nodejs {
+  --cat-color-h: var(--nodejs-color-h);
 }
 
 #home-blog-link,
@@ -3828,7 +3732,7 @@ blockquote td {
     font-size: 0.9em;
   }
   .article-preview a.post-category {
-    margin: 2px 8px 2px 0;
+    margin: 0 6px 8px 0;
     padding: 2px 8px;
     font-size: 14px;
   }
@@ -3944,6 +3848,7 @@ blockquote td {
   .github-repo:first-child,
   .github-repo:last-child {
     width: 80%;
+    max-width: 400px;
     margin: 10px auto;
   }
 
@@ -4011,6 +3916,10 @@ blockquote td {
 
   #widgets a.post-category {
     font-size: 18px;
+  }
+
+  .widget li {
+    font-size: 1.1em;
   }
 
   .sidebar {
@@ -4144,6 +4053,10 @@ blockquote td {
     font-size: 15px;
   }
 
+  #social {
+    margin: auto 0 auto 10px;
+  }
+
   #social ul {
     font-size: 15px;
   }
@@ -4159,7 +4072,7 @@ blockquote td {
   .site-menu a {
     font-size: 13px;
     padding: 4px;
-    margin: 0 6px;
+    margin: 0 4px;
   }
 }
 
@@ -4168,7 +4081,6 @@ blockquote td {
     font-size: 0.85em;
   }
   .article-preview a.post-category {
-    margin: 2px 8px 2px 0;
     padding: 2px 4px;
     font-size: 14px;
   }
@@ -4281,7 +4193,6 @@ blockquote td {
     font-size: 1em;
   }
   .article-preview a.post-category {
-    margin: 3px 10px 3px 0;
     padding: 2px 7px;
     font-size: 16px;
   }

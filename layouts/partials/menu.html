@@ -1,19 +1,19 @@
 <header class="header">
     <div id="menu">
         <div class="menu-bar">
-            <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{ .Site.Title }}" rel="home">
-                <div class="site-name">{{ .Site.Title }}</div>
+            <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{- .Site.Title -}}" rel="home">
+                <div class="site-name">{{- .Site.Title -}}</div>
             </a>
-            {{ partial "social" . }}
+        {{ partial "social" . -}}
         </div>
-        {{- if .Site.Menus.main }}
+        {{ if .Site.Menus.main -}}
             <nav class="site-menu">
-                {{- $currentPage := . }}
-                {{- range .Site.Menus.main }}
-                <a id="{{ .Identifier }}" href="{{ .URL | relURL }}" class="menu-link{{ if or (eq $currentPage.RelPermalink .URL) (eq $currentPage.Params.menu_section .Identifier) }} active{{ end }}">{{ .Name }}</a>
-                {{- end }}
+                {{- $currentPage := . -}}
+                {{ range .Site.Menus.main -}}
+                <a id="{{- .Identifier -}}" href="{{- .URL | relURL -}}" class="menu-link{{- if or (eq $currentPage.RelPermalink .URL) (eq $currentPage.Params.menu_section .Identifier) -}} active{{- end -}}">{{- .Name -}}</a>
+                {{ end -}}
             </nav>
-        {{- end }}
+        {{ end -}}
     </div>
     <div class="divider"></div>
 </header>

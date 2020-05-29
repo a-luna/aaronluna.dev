@@ -391,7 +391,7 @@
 /* CommentPreproc */
 
 .chroma .cp {
-    color: #cd2828;
+    color: #5900ff;
     font-weight: bold
 }
 
@@ -487,4 +487,8 @@
 
 .chroma .w {
     color: #666666
+}
+
+.chroma .nx {
+    color: #e3e3e3
 }

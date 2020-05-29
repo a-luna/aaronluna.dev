@@ -3,8 +3,8 @@ module.exports = {
         require('autoprefixer')({
             grid: true,
         }),
-        require('postcss-uncss')({
-            html: ['public/**/*.html']
+        require('@fullhuman/postcss-purgecss')({
+            content: ['public/**/*.html']
         })
     ]
 }

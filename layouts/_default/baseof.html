@@ -1,35 +1,37 @@
-<!DOCTYPE html>
-{{ if eq .Params.menu_section "home" }}
-	{{ .Scratch.Set "body_class" " home-page" }}
-{{ else if eq .Params.menu_section "about" }}
-    {{ .Scratch.Set "body_class" " about-me"}}
-{{ else if eq .Section "blog" }}
-	{{ .Scratch.Set "body_class" " blog-list" }}
-{{ else if eq .Section "post" }}
-    {{ .Scratch.Set "body_class" " blog-post"}}
-{{ else if or (eq .Section "series") (eq .Section "flask_api_tutorial") }}
-    {{ .Scratch.Set "body_class" " tutorial" }}
-{{ else if or (eq .RelPermalink "/404.html") (eq .RelPermalink "/offline/") }}
-    {{ .Scratch.Set "body_class" " home-page" }}
-{{ end }}
+{{- if eq .Params.menu_section "home" -}}
+	{{- .Scratch.Set "body_class" " home-page" -}}
+{{- else if eq .Params.menu_section "about" -}}
+    {{- .Scratch.Set "body_class" " about-me"}}
+{{- else if eq .Section "projects" -}}
+    {{- .Scratch.Set "body_class" " projects"}}
+{{- else if eq .Section "blog" -}}
+	{{- .Scratch.Set "body_class" " blog-list" -}}
+{{- else if eq .Section "post" -}}
+    {{- .Scratch.Set "body_class" " blog-post"}}
+{{- else if or (eq .Section "series") (eq .Section "flask_api_tutorial") -}}
+    {{- .Scratch.Set "body_class" " tutorial" -}}
+{{- else if or (eq .RelPermalink "/404.html") (eq .RelPermalink "/offline/") -}}
+    {{- .Scratch.Set "body_class" " home-page" -}}
+{{- end -}}
 
-<html class="no-js" lang='{{ .Site.LanguageCode | default "en-us" }}'>
-{{ partial "head" . }}
-<body class='body{{ .Scratch.Get "body_class" }}'>
+<!DOCTYPE html>
+<html class="no-js" lang='{{- .Site.LanguageCode | default "en-us" -}}'>
+{{- partial "head" . -}}
+<body class='body{{- .Scratch.Get "body_class" -}}'>
     <div class="container container--outer">
-        {{ partial "menu" . }}
+        {{- partial "menu" . -}}
         <div class="wrapper flex">
             <div class="primary">
-                {{ block "main" . }}
-                    <div class="content main__content clearfix">{{ .Content }}</div>
-                {{ end }}
+                {{- block "main" . -}}
+                    <div class="content main__content clearfix">{{- .Content -}}</div>
+                {{- end -}}
             </div>
-            {{ partial "search_results"}}
-            {{ partial "sidebar" . }}
+            {{- partial "search_results" . -}}
+            {{- partial "sidebar" . -}}
         </div>
-        {{ partial "footer" . }}
+        {{- partial "footer" . -}}
     </div>
-    {{ partial "js_bundle" . }}
-    {{ partial "service_worker" . }}
+    {{- partial "js_bundle" . -}}
+    {{- partial "service_worker" . -}}
 </body>
 </html>

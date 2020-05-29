@@ -1,21 +1,10 @@
-[{{ range $index, $page := .Site.Pages }}
-    {{- if eq $page.Type "post" -}}
-        {{- if $page.Plain -}}
-            {
-                "href": "{{ $page.Permalink }}",
-                "title": "{{ htmlEscape $page.Title }}",
-                "categories": [{{ range $tindex, $tag := $page.Params.categories }}{{ if $tindex }}, {{ end }}"{{ $tag| htmlEscape }}"{{ end }}],
-                "content": {{$page.Plain | jsonify}}
-            },
-        {{- end -}}
-    {{- end -}}
-{{- end -}}
-{{ range $index, $page := .Site.Taxonomies.series.flask_api_tutorial }}
-    {{- if gt $index 0 -}},{{- end }}
-        {
-            "href": "{{ $page.Permalink }}",
-            "title": "{{ htmlEscape $page.Title }}",
-            "categories": [{{ range $tindex, $tag := $page.Params.categories }}{{ if $tindex }}, {{ end }}"{{ $tag| htmlEscape }}"{{ end }}],
-            "content": {{$page.Plain | jsonify}}
-        }
-{{- end -}}]
+{{ $.Scratch.Add "pagesIndex" slice }}
+{{ range $index, $page := .Site.Pages }}
+  {{ if in (slice "post" "flask_api_tutorial" "projects") $page.Type }}
+    {{ if gt (len $page.Content) 0 }}
+      {{ $pageData := (dict "title" $page.Title "href" $page.Permalink "categories" (delimit $page.Params.categories " ; ") "content" $page.Plain) }}
+      {{ $.Scratch.Add "pagesIndex" $pageData }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+{{ $.Scratch.Get "pagesIndex" | jsonify }}

@@ -1,5 +1,5 @@
 {{ $name := (printf "%s" (.Get 0)) }}
-{{ $vid := .Page.Resources.GetMatch (printf "*%s*" (.Get 0)) }}
+{{ $vid := .Page.Resources.GetMatch $name }}
 {{ if $vid }}
 <div class="vid-wrapper">
     <figure>

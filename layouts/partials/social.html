@@ -1,9 +1,9 @@
 <div id="social" class="site-social">
-    {{ if .Site.Menus.social }}
+    {{ if .Site.Menus.social -}}
     <ul>
-        {{ range sort .Site.Menus.social }}
-        <li><a href="{{ .URL }}" target="_blank"><i class="fa fa-{{ .Name }}"></i></a></li>
-        {{ end }}
+        {{ range sort .Site.Menus.social -}}
+        <li><a href="{{- .URL -}}" target="_blank"><i class="fa fa-{{- .Name -}}"></i></a></li>
+        {{ end -}}
     </ul>
-    {{ end }}
+    {{ end -}}
 </div>

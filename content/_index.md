@@ -1,6 +1,5 @@
 ---
-title: "Hello! My name is Aaron Luna"
-lead: "I'm a freelance developer living in Reno, NV."
+title: "aaronluna.dev"
 sidebar: false
 type: "home"
 menu_section: "home"
