@@ -100,11 +100,11 @@ isPlainText = true
     url = "/series/flask-api-tutorial/overview"
     weight = 0
 
-  [[menu.projects]]
-    identifier = "vigorish"
-    name = "Vigorish: Hybrid Python/Node.Js Web Scraper"
-    url = "/projects/vigorish"
-    weight = 1
+  # [[menu.projects]]
+  #   identifier = "vigorish"
+  #   name = "Vigorish: Hybrid Python/Node.Js Web Scraper"
+  #   url = "/projects/vigorish"
+  #   weight = 1
 
   [[menu.projects]]
     identifier = "base64"
