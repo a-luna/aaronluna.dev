@@ -47,6 +47,11 @@
   status = 200
   force = true
 [[redirects]]
+  from ="/base64"
+  to = "https://svelte-base64.netlify.com/"
+  status = 200
+  force = true
+[[redirects]]
   from ="/base64/*"
   to = "https://svelte-base64.netlify.com/:splat"
   status = 200

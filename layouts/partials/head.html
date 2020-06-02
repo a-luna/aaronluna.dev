@@ -18,11 +18,11 @@
         })(document.documentElement, "className");
     </script>
     <meta name="description" content="{{- with .Description -}}{{- . -}}{{- else -}}{{if .IsPage}}{{- .Summary -}}{{- else -}}{{- with .Site.Params.description -}}{{- . -}}{{- end -}}{{- end -}}{{- end -}}">
-    {{- if .Site.Params.opengraph -}}{{- partial "opengraph" . -}}{{- end -}}
-    {{- if .Site.Params.twitter_cards -}}{{- partial "twitter-card" . -}}{{- end -}}
+    {{ if .Site.Params.opengraph }}{{ partial "opengraph" . }}{{ end -}}
+    {{ if .Site.Params.twitter_cards }}{{- partial "twitter-card" . }}{{ end }}
     <link rel="manifest" href="/manifest.json">
     {{- with .OutputFormats.Get "rss" -}}{{- printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML -}}{{- end -}}
-    {{- partial "css_bundle" . -}}
+    {{- partial "css_bundle" . }}
     <link rel="shortcut icon" href="{{- "favicon.ico" | relURL -}}">
     {{- if not .Site.IsServer -}}
     <script async defer data-domain="aaronluna.dev" src="https://plausible.io/js/plausible.js"></script>

@@ -1,10 +1,4 @@
-function addRelNoOpenerToExternalLinks(a) {
-  if (a.getAttribute("target").startsWith("_blank")) {
-    a.setAttribute("rel", "noopener")
-  }
-}
-
-function addTargetBlankToExternalLinks(a) {
+function protectExternalLinks(a) {
   if (!a.getAttribute("href").startsWith("/")) {
     a.setAttribute("target", "_blank")
     a.setAttribute("rel", "noopener")
@@ -46,11 +40,8 @@ function setSelectedCategory() {
 
 document.addEventListener("DOMContentLoaded", function() {
   document
-    .querySelectorAll("a[target]")
-    .forEach(a => addRelNoOpenerToExternalLinks(a))
-  document
-    .querySelectorAll(".note a, .alert a, .content p a")
-    .forEach(a => addTargetBlankToExternalLinks(a))
+    .querySelectorAll(".content p a")
+    .forEach(a => protectExternalLinks(a))
   document
     .querySelectorAll(".accordion")
     .forEach(accordion => createToggle(accordion))

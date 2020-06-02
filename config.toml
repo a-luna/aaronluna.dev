@@ -1,9 +1,9 @@
 baseurl = "/"
 title = "aaronluna.dev"
 languageCode = "en-us"
-paginate = "4" # Number of posts per page
+paginate = "4"
 assetDir = "static"
-googleAnalytics = "UA-111693264-1" # Enable Google Analytics by entering your tracking id
+#googleAnalytics = "UA-111693264-1" # Enable Google Analytics by entering your tracking id
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsUseClasses = true
@@ -21,10 +21,6 @@ rssLimit = 15
     ordered = false
     startLevel = 2
 
-[mediaTypes."text/netlify"]
-    suffixes = [""]
-    delimiter = ""
-
 [outputs]
   home = ["HTML", "JSON", "RSS", "redirect"]
   page = ["HTML"]
@@ -33,6 +29,10 @@ rssLimit = 15
 mediatype = "text/netlify"
 baseName = "_redirects"
 isPlainText = true
+
+[mediaTypes."text/netlify"]
+    suffixes = [""]
+    delimiter = ""
 
 [twitterCard]
   generate = true
@@ -65,7 +65,6 @@ isPlainText = true
   read_more = "Read More"
   process_dev_css = false
   search_result_preview_max_len = 100
-  customCSS = ["css/syntax.css", "css/style.css", "css/fonts.css", "css/variables.css", "css/custom.css", ]
 
 [taxonomies]
   series = "series"
@@ -81,7 +80,7 @@ isPlainText = true
   [[menu.main]]
     identifier = "projects"
     name = "Projects"
-    url = "/projects"
+    url = "/projects/"
     weight = 3
   [[menu.main]]
     identifier = "tutorials"
@@ -133,16 +132,15 @@ isPlainText = true
     weight = 4
 
 [Params.sidebar]
-  home = "right"   # Configure layout for home page
-  list = "right"   # Configure layout for list pages
-  single = "right" # Configure layout for single pages
-  # Enable widgets in given order
+  home = "right"
+  list = "right"
+  single = "right"
   widgets = ["search", "categories", "recent", "projects", "tutorials"]
 
 [Params.widgets]
-  recent_num = 5 # Set the number of articles in the "Recent articles" widget
-  recent_num_home = 4 # Number of articles in the "Recent Posts" section of the home page
-  tags_counter = false # Enable counter for each tag in "Tags" widget (disabled by default)
+  recent_num = 4
+  recent_num_home = 4
+  tags_counter = false
   recent_title = "Recent Posts"
   categories_title = "Categories"
   search_title = "Search"

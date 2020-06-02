@@ -1,30 +1,34 @@
 {{ $postImage := .Page.Resources.GetMatch (printf "*cover*") }}
-{{ if $postImage }}
-    {{ if ge $postImage.Width "500" }}
-        {{ $tiny := $postImage.Fill "500x320" }}
-        {{ .Scratch.Add "srcset" $tiny.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 500w" }}
-    {{ end }}
-    {{ if ge $postImage.Width "800" }}
-        {{ $small := $postImage.Fill "800x512" }}
-        {{ .Scratch.Add "srcset" ", " }}
-        {{ .Scratch.Add "srcset" $small.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 800w" }}
-    {{ end }}
-    {{ if ge $postImage.Width "1200" }}
-        {{ $medium := $postImage.Fill "1200x768" }}
-        {{ .Scratch.Add "srcset" ", " }}
-        {{ .Scratch.Add "srcset" $medium.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 1200w" }}
-    {{ end }}
-    {{ if ge $postImage.Width "1500" }}
-        {{ $large := $postImage.Fill "1500x960" }}
-        {{ .Scratch.Add "srcset" ", " }}
-        {{ .Scratch.Add "srcset" $large.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 1500w" }}
-    {{ end }}
+{{- if $postImage -}}
+    {{- if ge $postImage.Width "500" -}}
+        {{- $tiny := $postImage.Fill "500x320" -}}
+        {{- .Scratch.Add "srcset" $tiny.RelPermalink -}}
+        {{- .Scratch.Add "srcset" " 500w" -}}
+    {{- end -}}
+    {{- if ge $postImage.Width "800" -}}
+        {{- $small := $postImage.Fill "800x512" -}}
+        {{- .Scratch.Add "srcset" ", " -}}
+        {{- .Scratch.Add "srcset" $small.RelPermalink -}}
+        {{- .Scratch.Add "srcset" " 800w" -}}
+    {{- end -}}
+    {{- if ge $postImage.Width "1200" -}}
+        {{- $medium := $postImage.Fill "1200x768" -}}
+        {{- .Scratch.Add "srcset" ", " -}}
+        {{- .Scratch.Add "srcset" $medium.RelPermalink -}}
+        {{- .Scratch.Add "srcset" " 1200w" -}}
+    {{- end -}}
+    {{- if ge $postImage.Width "1500" -}}
+        {{- $large := $postImage.Fill "1500x960" -}}
+        {{- .Scratch.Add "srcset" ", " -}}
+        {{- .Scratch.Add "srcset" $large.RelPermalink -}}
+        {{- .Scratch.Add "srcset" " 1500w" -}}
+    {{- end -}}
     <figure>
-        <img sizes="(min-width: 35em) 1200px, 100vw" srcset='{{ .Scratch.Get "srcset" }}' src="{{ $postImage.RelPermalink }}" alt="{{ .Page.Title }}">
-        <figcaption><p>{{ $postImage.Params.credit }}</p></figcaption>
+        <img
+            sizes="(min-width: 35em) 1200px, 100vw"
+            srcset='{{- .Scratch.Get "srcset" -}}'
+            src="{{- $postImage.RelPermalink -}}"
+            alt="{{- .Page.Title -}}">
+        <figcaption><p>{{- $postImage.Params.credit -}}</p></figcaption>
     </figure>
-{{ end }}
+{{- end -}}

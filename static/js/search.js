@@ -5,7 +5,6 @@ const WORD_REGEX = /\b(\w*)[\W|\s|\b]?/gm
 const JWT_REGEX = /[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*/gm
 const HSL_REGEX = /hsl\((\d+),\s?(\.?\d+%?),\s?(\.?\d+%?)\)/gm
 
-const getSearchQuery = () => document.getElementById("search").value.trim().toLowerCase()
 const getTotalSearchResults = () =>
   document.querySelectorAll(".search-results ul li").length
 const setQueryLabel = (query) => (document.getElementById("query").innerHTML = query)
@@ -27,9 +26,21 @@ async function initSearchIndex() {
   }
 }
 
+function searchBoxFocused() {
+  const searchWrapper = document.querySelector(".search-container")
+  const searchBox = document.getElementById("search")
+  searchWrapper.classList.add("focused")
+  searchBox.addEventListener("focusout", () => searchBoxFocusOut())
+}
+
+function searchBoxFocusOut() {
+  const searchWrapper = document.querySelector(".search-container")
+  searchWrapper.classList.remove("focused")
+}
+
 function handleSearchQuery(event) {
   event.preventDefault()
-  const query = getSearchQuery()
+  const query = document.getElementById("search").value.trim().toLowerCase()
   if (!query) {
     displayErrorMessage("Please enter a search term")
     return
@@ -48,9 +59,9 @@ function handleSearchQuery(event) {
 
 function displayErrorMessage(message) {
   document.querySelector(".search-container").classList.remove("focused")
-  document.querySelector("#search-form .search-error-message").innerHTML = message
-  document.querySelector("#search-form .search-error").classList.remove("hide-element")
-  document.querySelector("#search-form .search-error").classList.add("fade")
+  document.querySelector(".search-error-message").innerHTML = message
+  document.querySelector(".search-error").classList.remove("hide-element")
+  document.querySelector(".search-error").classList.add("fade")
 }
 
 function searchSite(query) {
@@ -163,7 +174,7 @@ function showSearchResults() {
     document.querySelector(".clear-search-bottom").classList.remove("hide-element")
   }
 
-  document.getElementById("clear-search-results-side").classList.remove("hide-element")
+  document.getElementById("clear-search-results-desktop").classList.remove("hide-element")
 }
 
 function tokenize(input) {
@@ -255,24 +266,12 @@ function handleClearSearchButtonClicked() {
 
 function hideSearchResults() {
   document
-    .querySelectorAll(".clear-search-results-primary")
+    .querySelectorAll(".clear-search-results-mobile")
     .forEach((button) => button.classList.add("hide-element"))
-  document.getElementById("clear-search-results-side").classList.add("hide-element")
+  document.getElementById("clear-search-results-desktop").classList.add("hide-element")
   document.getElementById("site-search").classList.remove("expanded")
   document.querySelector(".search-results").classList.add("hide-element")
   document.querySelector(".primary").classList.remove("hide-element")
-}
-
-function searchBoxFocused() {
-  const searchWrapper = document.querySelector(".search-container")
-  const searchBox = document.getElementById("search")
-  searchWrapper.classList.add("focused")
-  searchBox.addEventListener("focusout", () => searchBoxFocusOut())
-}
-
-function searchBoxFocusOut() {
-  const searchWrapper = document.querySelector(".search-container")
-  searchWrapper.classList.remove("focused")
 }
 
 function getColorForSearchResult(score) {
@@ -309,10 +308,10 @@ initSearchIndex()
 document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("search-form") != null) {
     const searchInput = document.getElementById("search")
+    searchInput.addEventListener("focus", () => searchBoxFocused())
     searchInput.addEventListener("keydown", (event) => {
       if (event.keyCode == 13) handleSearchQuery(event)
     })
-    searchInput.addEventListener("focus", () => searchBoxFocused())
     document
       .querySelector(".search-error")
       .addEventListener("animationend", removeAnimation)

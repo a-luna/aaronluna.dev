@@ -1,10 +1,9 @@
-
-{{ $alljs := slice (resources.Get "js/vendor/lunr.min.js") (resources.Get "js/search.js") (resources.Get "js/copyCodeBlock.js") (resources.Get "js/tox.js") (resources.Get "js/headings.js") (resources.Get "js/main.js") }}
-{{ if .Site.IsServer }}
-    {{ range $alljs -}}
+{{- $alljs := slice (resources.Get "js/vendor/lunr.min.js") (resources.Get "js/search.js") (resources.Get "js/copyCodeBlock.js") (resources.Get "js/tox.js") (resources.Get "js/headings.js") (resources.Get "js/main.js") -}}
+{{- if .Site.IsServer -}}
+    {{- range $alljs }}
         <script type="text/javascript" src="{{ . | relURL }}"></script>
-    {{- end }}
-{{ else }}
-    {{ $bundlejs := $alljs | resources.Concat "bundle.js" | minify | fingerprint }}
+    {{- end -}}
+{{- else -}}
+    {{- $bundlejs := $alljs | resources.Concat "bundle.js" | minify | fingerprint }}
     <script type="text/javascript" src="{{ $bundlejs.RelPermalink }}" integrity="{{ $bundlejs.Data.Integrity }}"></script>
-{{ end }}
+{{ end -}}
