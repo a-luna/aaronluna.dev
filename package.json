@@ -21,7 +21,7 @@
         "@fullhuman/postcss-purgecss": "^2.2.0",
         "autoprefixer": "^9.8.0",
         "lunr": "^2.3.8",
-        "postcss": "^7.0.31",
+        "postcss": "^7.0.32",
         "postcss-cli": "^7.1.1",
         "postcss-uncss": "^0.17.0",
         "root-variables": "^1.0.6",
