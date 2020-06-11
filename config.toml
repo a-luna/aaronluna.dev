@@ -120,16 +120,21 @@ isPlainText = true
     url = "https://github.com/a-luna/"
     name = "github"
     weight = 2
+    
+  [[menu.social]]
+    url = "https://codepen.io/a-luna/"
+    name = "codepen"
+    weight = 3
 
   [[menu.social]]
     url = "https://twitter.com/aaronlunadev/"
     name = "twitter"
-    weight = 3
+    weight = 4
 
   [[menu.social]]
     url = "https://www.linkedin.com/in/aaron-luna-reno-nv/"
     name = "linkedin"
-    weight = 4
+    weight = 5
 
 [Params.sidebar]
   home = "right"
