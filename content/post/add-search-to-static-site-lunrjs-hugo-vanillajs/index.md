@@ -1,7 +1,7 @@
 ---
 title: "Add Search to Your Static Site with Lunr.js (Hugo, Vanilla JS)"
 slug: "add-search-to-static-site-lunrjs-hugo-vanillajs"
-date: "2020-05-30"
+date: "2020-06-30"
 menu_section: "blog"
 toc: true
 categories: ["Hugo", "Javascript"]

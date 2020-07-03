@@ -1,7 +1,7 @@
 ---
 title: "Vigorish: Hybrid Python/Node.Js Web Scraper"
 slug: vigorish
-date: '2020-05-28'
+date: '2020-06-28'
 series: ["projects"]
 series_weight: 1
 series_title: "Personal Projects"
