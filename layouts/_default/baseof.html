@@ -2,8 +2,10 @@
 	{{- .Scratch.Set "body_class" " home-page" -}}
 {{- else if eq .Params.menu_section "about" -}}
     {{- .Scratch.Set "body_class" " about-me"}}
-{{- else if eq .Section "projects" -}}
+{{- else if and (eq .Section "projects") (eq .Kind "page") -}}
     {{- .Scratch.Set "body_class" " projects"}}
+{{- else if and (eq .Section "projects") (ne .Kind "page") -}}
+    {{- .Scratch.Set "body_class" " blog-list" -}}
 {{- else if eq .Section "blog" -}}
 	{{- .Scratch.Set "body_class" " blog-list" -}}
 {{- else if eq .Section "post" -}}

@@ -1,9 +1,13 @@
 {{- $.Scratch.Add "pagesIndex" slice -}}
+{{- $.Scratch.Add "urlsAdded" slice -}}
 {{- range $index, $page := .Site.Pages -}}
   {{- if in (slice "post" "flask_api_tutorial" "projects") $page.Type -}}
     {{- if gt (len $page.Content) 0 -}}
-      {{- $pageData := (dict "title" $page.Title "href" $page.Permalink "categories" (delimit $page.Params.categories " ; ") "content" $page.Plain) -}}
-      {{- $.Scratch.Add "pagesIndex" $pageData -}}
+      {{- if not (in ($.Scratch.Get "urlsAdded") $page.Permalink) -}}
+        {{- $pageData := (dict "title" $page.Title "href" $page.Permalink "categories" (delimit $page.Params.categories " ; ") "content" $page.Plain) -}}
+        {{- $.Scratch.Add "pagesIndex" $pageData -}}
+        {{- $.Scratch.Add "urlsAdded" $page.Permalink -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

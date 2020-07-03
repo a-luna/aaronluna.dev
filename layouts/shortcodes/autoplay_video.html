@@ -1,13 +1,44 @@
-{{ $name := (printf "%s" (.Get 0)) }}
+{{- $name := (printf "%s" (.Get "video")) }}
 {{ $vid := .Page.Resources.GetMatch $name }}
-{{ if $vid }}
-<div class="vid-wrapper">
-    <figure>
-        <video id="vid-{{ $name }}" autoplay playsinline loop muted controls>
-            <source src="{{ $vid.RelPermalink }}" type="video/mp4">
-            Sorry, your browser doesn't support embedded videos, but don't worry, you can <a href="{{ $vid.RelPermalink }}">download it</a> and watch it with your favorite video player!
-        </video>
-        <figcaption><p>{{ $vid.Title }}</p></figcaption>
-    </figure>
-</div>
-{{ end }}
+{{ $device := (printf "%s" (.Get "device")) }}
+{{ $width := (printf "width: %v" (.Get "width" | default "100%")) -}}
+{{- if $vid }}
+    {{ if $device }}
+        {{ if eq $device "desktop"}}
+            <div class="device-mock">
+                <figure id="vid-{{- $name -}}">
+                <div class="mac-book-screen">
+                    <div class="mac-book-top-bezel"><div class="mac-book-webcam"></div></div>
+                    <video class="mac-book-mock" autoplay playsinline loop muted controls>
+                        <source src="{{- $vid.RelPermalink -}}" type="video/mp4">
+                        Sorry, your browser doesn't support embedded videos, but don't worry, you can <a href="{{- $vid.RelPermalink -}}">download it</a> and watch it with your favorite video player!
+                    </video>
+                </div>
+                    <div class="mac-book-bottom"><div class="mac-book-indent-wrapper"><div class="mac-book-indent-top"></div><div class="mac-book-indent-bottom"></div></div></div>
+                </figure>
+                <figcaption><p>{{- $vid.Title -}}</p></figcaption>
+            </div>
+        {{ else if eq $device "mobile" }}
+            <div class="device-mock">
+                <figure id="vid-{{- $name -}}">
+                    <video class="mobile-device-mock" style="{{- $width -}}" autoplay playsinline loop muted controls>
+                        <source src="{{- $vid.RelPermalink -}}" type="video/mp4">
+                        Sorry, your browser doesn't support embedded videos, but don't worry, you can <a href="{{- $vid.RelPermalink -}}">download it</a> and watch it with your favorite video player!
+                    </video>
+                    <div class="mobile-device-bottom"><div class="mobile-device-button"></div></div>
+                </figure>
+                <figcaption><p>{{- $vid.Title -}}</p></figcaption>
+            </div>
+        {{ end }}
+    {{ else }}
+        <div class="vid-wrapper">
+            <figure id="vid-{{- $name -}}">
+                <video style="{{- $width -}}" autoplay playsinline loop muted controls>
+                    <source src="{{- $vid.RelPermalink -}}" type="video/mp4">
+                    Sorry, your browser doesn't support embedded videos, but don't worry, you can <a href="{{- $vid.RelPermalink -}}">download it</a> and watch it with your favorite video player!
+                </video>
+                <figcaption><p>{{- $vid.Title -}}</p></figcaption>
+            </figure>
+        </div>
+    {{ end }}
+{{ end -}}

@@ -1,31 +1,38 @@
-{{ $original := .Page.Resources.GetMatch (printf "*%s*" (.Get 0)) }}
+{{- $name := (printf "%s" (.Get 0)) }}
+{{ $original := .Page.Resources.GetMatch (printf "*%s*" $name) }}
 {{ if $original }}
+    {{ $srcset := ""}}
+    {{ $sizes := ""}}
     {{ if ge $original.Width "500" }}
         {{ $tiny := $original.Resize "500x" }}
-        {{ .Scratch.Add "srcset" $tiny.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 500w" }}
+        {{ $srcset = (print $tiny.RelPermalink " 500w") }}
+        {{ $sizes = "(max-width: 600px) 500px" }}
     {{ end }}
     {{ if ge $original.Width "800" }}
         {{ $small := $original.Resize "800x" }}
-        {{ .Scratch.Add "srcset" ", " }}
-        {{ .Scratch.Add "srcset" $small.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 800w" }}
+        {{ $srcset = (print $srcset ", " $small.RelPermalink " 800w") }}
+        {{ $sizes = (print $sizes ", (max-width: 900px) 800px") }}
     {{ end }}
     {{ if ge $original.Width "1200" }}
         {{ $medium := $original.Resize "1200x" }}
-        {{ .Scratch.Add "srcset" ", " }}
-        {{ .Scratch.Add "srcset" $medium.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 1200w" }}
+        {{ $srcset = (print $srcset ", " $medium.RelPermalink " 1200x") }}
+        {{ $sizes = (print $sizes ", (max-width: 1300px) 1200px") }}
     {{ end }}
     {{ if ge $original.Width "1500" }}
         {{ $large := $original.Resize "1500x" }}
-        {{ .Scratch.Add "srcset" ", " }}
-        {{ .Scratch.Add "srcset" $large.RelPermalink }}
-        {{ .Scratch.Add "srcset" " 1500w" }}
+        {{ $srcset = (print $srcset ", " $large.RelPermalink " 1500x") }}
+        {{ $sizes = (print $sizes ", (max-width: 1600px) 1500px") }}
     {{ end }}
-    <figure>
+    {{ $srcset = (print $srcset ", " $original.RelPermalink " " $original.Width "w") }}
+    {{ $sizes = (print $sizes ", " $original.Width "px") }}
+    {{ $placeholder := ($original.Resize "48x q20") | images.Filter (images.GaussianBlur 6) -}}
+    <figure id="{{ $name }}">
         <a href="{{ $original.RelPermalink }}">
-            <img sizes="(min-width: 35em) 1200px, 100vw" srcset='{{ .Scratch.Get "srcset" }}' src="{{ $original.RelPermalink }}" alt="{{ .Page.Title }}">
+            <img
+                sizes="{{ $sizes }}"
+                srcset='{{ $srcset }}'
+                src="{{ $original.RelPermalink }}"
+                alt="{{ .Page.Title }}">
         </a>
         <figcaption><p>{{ $original.Title }}</p></figcaption>
     </figure>

@@ -3,22 +3,22 @@
 #  functions= "functions/"
   command = "hugo --gc --minify"
 [context.production.environment]
-  HUGO_VERSION = "0.71.1"
+  HUGO_VERSION = "0.73.0"
   HUGO_ENV = "production"
   HUGO_ENABLEGITINFO = "false"
 [context.split1]
   command = "hugo --gc --minify"
 [context.split1.environment]
-  HUGO_VERSION = "0.71.1"
+  HUGO_VERSION = "0.73.0"
   HUGO_ENV = "production"
 [context.deploy-preview]
   command = "hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL"
 [context.deploy-preview.environment]
-  HUGO_VERSION = "0.71.1"
+  HUGO_VERSION = "0.73.0"
 [context.branch-deploy]
     acommand = "hugo --gc --minify -b $DEPLOY_PRIME_URL"
 [context.branch-deploy.environment]
-  HUGO_VERSION = "0.71.1"
+  HUGO_VERSION = "0.73.0"
 [context.next.environment]
   HUGO_ENABLEGITINFO = "false"
 [[redirects]]
@@ -56,3 +56,16 @@
   to = "https://svelte-base64.netlify.com/:splat"
   status = 200
   force = true
+
+# [[plugins]]
+#   package = "netlify-plugin-inline-critical-css"
+
+#   # All inputs are optional, so you can omit this section.
+#   # Defaults are shown below.
+#   # You can also refer to `critical`’s documentation: https://github.com/addyosmani/critical.
+#   [plugins.inputs]
+#     # Whether to minify the generated critical-path CSS.
+#     minify = true
+
+#     # Whether to remove the inlined styles from any stylesheets referenced in the HTML. Use with caution. Removing the critical CSS per page results in a unique async loaded CSS file for every page, meaning you can’t rely on cache across multiple pages.
+#     extract = false

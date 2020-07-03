@@ -1,9 +1,9 @@
 <header class="header">
     <div id="menu">
         <div class="menu-bar">
-            <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{- .Site.Title -}}" rel="home">
-                <div class="site-name">{{- .Site.Title -}}</div>
-            </a>
+            <div class="site-name">
+                <a id="site-name" class="site-name-link" href="{{.Site.BaseURL}}" title="{{- .Site.Title -}}" rel="home">{{- .Site.Title -}}</a>
+            </div>
         {{ partial "social" . -}}
         </div>
         {{ if .Site.Menus.main -}}

@@ -1,5 +1,8 @@
 function protectExternalLinks(a) {
-  if (!a.getAttribute("href").startsWith("/")) {
+  if (
+    !a.getAttribute("href").startsWith("/") &&
+    !a.getAttribute("href").startsWith("#")
+  ) {
     a.setAttribute("target", "_blank")
     a.setAttribute("rel", "noopener")
   }
@@ -38,16 +41,12 @@ function setSelectedCategory() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  document
-    .querySelectorAll(".content p a")
-    .forEach(a => protectExternalLinks(a))
-  document
-    .querySelectorAll(".accordion")
-    .forEach(accordion => createToggle(accordion))
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".content p a").forEach((a) => protectExternalLinks(a))
+  document.querySelectorAll(".accordion").forEach((accordion) => createToggle(accordion))
   const categorySelect = document.getElementById("category-select")
   if (categorySelect != null) {
     categorySelect.addEventListener("focus", () => categorySelectorFocused())
     setSelectedCategory()
   }
-});
+})

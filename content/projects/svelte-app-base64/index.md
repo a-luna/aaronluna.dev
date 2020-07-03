@@ -64,4 +64,4 @@ I deployed this project to Netlify (click the **Launch App** button above to ope
 - Input and expected output for both ASCII and Hex strings taken directly from the [Examples and Illustrations](https://tools.ietf.org/html/rfc4648#section-9) and [Test Vectors](https://tools.ietf.org/html/rfc4648#section-10) sections of RFC4648 which is the original specification for Base64 and other print-safe binary encodings.
 - Github action configured to run all Cypress tests on each push to master branch, build is deployed only if all tests pass.
 
-{{< autoplay_video cypress >}}
+{{< autoplay_video video="cypress" >}}

@@ -99,11 +99,11 @@ isPlainText = true
     url = "/series/flask-api-tutorial/overview"
     weight = 0
 
-  # [[menu.projects]]
-  #   identifier = "vigorish"
-  #   name = "Vigorish: Hybrid Python/Node.Js Web Scraper"
-  #   url = "/projects/vigorish"
-  #   weight = 1
+  [[menu.projects]]
+    identifier = "vigorish"
+    name = "Vigorish: Hybrid Python/Node.Js Web Scraper"
+    url = "/projects/vigorish"
+    weight = 1
 
   [[menu.projects]]
     identifier = "base64"
@@ -120,7 +120,7 @@ isPlainText = true
     url = "https://github.com/a-luna/"
     name = "github"
     weight = 2
-    
+
   [[menu.social]]
     url = "https://codepen.io/a-luna/"
     name = "codepen"
