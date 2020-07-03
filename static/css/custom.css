@@ -1148,7 +1148,8 @@ a:active:hover,
 .content p a,
 header p a,
 .warning a,
-.code-details a {
+.code-details a,
+.doc-link a {
   font-weight: 400;
   color: var(--body-text-color);
   box-shadow: inset 0 -2px 0 var(--new-link-color);
@@ -1163,7 +1164,8 @@ header p a:hover,
 header p a:active,
 header p a:focus,
 header p a:active:hover,
-.warning a:hover {
+.warning a:hover,
+.doc-link a:hover {
   font-weight: 400;
   color: var(--body-text-color);
   background-color: var(--new-link-color-hover);
@@ -3780,9 +3782,17 @@ span.nodejs {
 }
 
 .repo-middle {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  flex: 1;
   font-size: 1.7em;
   line-height: 1.4;
-  margin: 3px 0 auto 0;
+  margin: 3px 0 0 0;
+}
+
+.repo-middle .doc-link {
+  margin: 10px 0 0 0;
 }
 
 .repo-bottom {
