@@ -1807,7 +1807,8 @@ pre.chroma code {
 
 .language-json .err,
 .language-toml .err,
-.language-go-text-template .err {
+.language-go-text-template .err,
+.language-go-html-template .err {
   color: var(--body-text-color);
   background-color: var(--widget-bg-color);
 }
