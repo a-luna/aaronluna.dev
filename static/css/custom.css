@@ -3830,6 +3830,34 @@ span.nodejs {
   margin: 0 5px;
 }
 
+.project-doc-button {
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 10px 0 0 0;
+}
+
+.content .project-doc-button a {
+  color: var(--off-white2);
+  background-color: var(--purple1);
+  white-space: pre;
+  flex: 0 1 40%;
+  font-size: 0.85em;
+  border-radius: 4px;
+  margin: 0;
+  padding: 4px 5px;
+  transition: all 0.4s linear;
+  box-shadow: var(--outer-shadow);
+}
+
+.content .project-doc-button a:hover,
+.content .project-doc-button a:active,
+.content .project-doc-button a:focus,
+.content .project-doc-button a:active:hover {
+  color: var(--white2);
+  background-color: var(--purple1-hov);
+  text-decoration: none;
+}
+
 .comments {
   margin: 30px 2em 30px 0;
   padding: 0 1em 0 0.5em;

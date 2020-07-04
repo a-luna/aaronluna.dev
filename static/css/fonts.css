@@ -3,9 +3,12 @@
   src: url(/fonts/fontawesome-webfont-subset.woff2) format("woff2"),
     url(/fonts/fontawesome-webfont-subset.woff) format("woff"),
     url(/fonts/fontawesome-webfont-subset.ttf) format("truetype");
-  /* unicode-range: U+F002, U+F005, U+F040, U+F053, U+F054, U+F062, U+F071, U+F099, U+F09B,
-    U+F0C1, U+F0D8, U+F0E0, U+F0E1, U+F0ED, U+F111, U+F11C, U+F121, U+F126, U+F178, U+F1CB,
-    U+F2B5; */
+  unicode-range: U+A, U+20-24, U+26-29, U+2B-5B, U+5D, U+5F, U+61-7E, U+A9, U+2014, U+2019,
+    U+201C, U+201D, U+F002, U+F005, U+F006, U+F008, U+F023, U+F02B, U+F040, U+F053, U+F054,
+    U+F060-F062, U+F067, U+F071, U+F077, U+F081, U+F088, U+F08C, U+F08D, U+F092, U+F099,
+    U+F09B, U+F0AC, U+F0C1, U+F0C6, U+F0D8, U+F0DE, U+F0E0, U+F0E1, U+F0ED, U+F102, U+F106,
+    U+F111, U+F119, U+F11A, U+F11C, U+F121, U+F123, U+F126, U+F127, U+F12A, U+F13E, U+F165,
+    U+F178, U+F185, U+F186, U+F199, U+F1CB, U+F1E2, U+F258, U+F292, U+F2B5;
   font-display: swap;
 }
 
