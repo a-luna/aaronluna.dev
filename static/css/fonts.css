@@ -3,9 +3,9 @@
   src: url(/fonts/fontawesome-webfont-subset.woff2) format("woff2"),
     url(/fonts/fontawesome-webfont-subset.woff) format("woff"),
     url(/fonts/fontawesome-webfont-subset.ttf) format("truetype");
-  unicode-range: U+F002, U+F005, U+F040, U+F053, U+F054, U+F062, U+F071, U+F099, U+F09B,
+  /* unicode-range: U+F002, U+F005, U+F040, U+F053, U+F054, U+F062, U+F071, U+F099, U+F09B,
     U+F0C1, U+F0D8, U+F0E0, U+F0E1, U+F0ED, U+F111, U+F11C, U+F121, U+F126, U+F178, U+F1CB,
-    U+F2B5;
+    U+F2B5; */
   font-display: swap;
 }
 

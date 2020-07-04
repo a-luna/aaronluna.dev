@@ -85,7 +85,7 @@ isPlainText = true
   [[menu.main]]
     identifier = "tutorials"
     name = "Tutorials"
-    url = "/series/"
+    url = "/series/flask-api-tutorial/overview/"
     weight = 4
   [[menu.main]]
     identifier = "about"
