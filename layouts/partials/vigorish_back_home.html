@@ -1,0 +1,13 @@
+{{ $project_home := .Site.GetPage "/projects/vigorish" }}
+<div id="header-nav">
+    <a class="post-nav__link post-nav__link--prev" href="{{ $project_home.RelPermalink }}" rel="prev">
+        <div class="post-nav-flex-item-prev">
+            <div class="post-nav__item post-nav__item--prev inner-nav-flex-container">
+                <div class="post-nav__chevron chevron-prev">
+                    <i class="fa fa-lg fa-fw fa-arrow-left" aria-hidden="true"></i>
+                </div>
+                <div class="post-nav__post-title title-prev">Project Home Page</div>
+            </div>
+        </div>
+    </a>
+</div>

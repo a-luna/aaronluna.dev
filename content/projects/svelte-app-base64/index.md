@@ -1,15 +1,16 @@
 ---
 title: "My First Svelte Application: Base64 Encoder/Decoder"
-slug: "svelte-app-base64"
+slug: "svelte-base64"
 date: "2020-01-30"
 aliases:
     - /blog/svelte-svelma-base64-rollup-global-sass/
-    - /blog/svelte-app-base64/
+    - /blog/svelte-base64/
+    - /projects/svelte-base64/
 series: ["projects"]
 series_weight: 2
 series_title: "Personal Projects"
 menu_section: "projects"
-categories: ["svelte", "Javascript", "Personal-Project"]
+categories: ["svelte", "Javascript", "my-projects"]
 summary: "This is a simple application I created using svelte 3.0, that encodes/decodes ASCII text or hex strings to/from base64 and provides reactive ui components to help illustrate the encoding process."
 resources:
   - name: cover

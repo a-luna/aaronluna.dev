@@ -10,7 +10,7 @@
             <nav class="site-menu">
                 {{- $currentPage := . -}}
                 {{ range .Site.Menus.main -}}
-                <a id="{{- .Identifier -}}" href="{{- .URL | relURL -}}" class="menu-link{{- if or (eq $currentPage.RelPermalink .URL) (eq $currentPage.Params.menu_section .Identifier) -}} active{{- end -}}">{{- .Name -}}</a>
+                <a id="{{- .Identifier -}}" href="{{- .URL | relURL -}}" class="menu-link{{ if or (eq $currentPage.RelPermalink .URL) (eq $currentPage.Params.menu_section .Identifier) }} active{{- end -}}">{{- .Name -}}</a>
                 {{ end -}}
             </nav>
         {{ end -}}

@@ -1,0 +1,19 @@
+{{ define "main" }}
+    <main class="main vigorish" role="main">
+        <article class="post">
+            <header class="post__header">
+                <h1 class="post__title">{{ .Title }}</h1>
+                {{ partial "post_categories" . }}
+                <div class="post__image">{{ partial "main_article_image" . }}</div>
+                {{ partial "vigorish_back_home" . }}
+            </header>
+            {{- if .Param "toc" }}
+            <div class="accordion-wrapper">
+                {{ partial "toc_accordion" . }}
+            </div>
+            {{- end }}
+            <div class="content post__content clearfix">{{ .Content }}</div>
+        </article>
+    </main>
+    {{ partial "comments" . }}
+{{ end }}

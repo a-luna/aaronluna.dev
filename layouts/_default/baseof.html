@@ -14,12 +14,14 @@
     {{- .Scratch.Set "body_class" " tutorial" -}}
 {{- else if or (eq .RelPermalink "/404.html") (eq .RelPermalink "/offline/") -}}
     {{- .Scratch.Set "body_class" " home-page" -}}
+{{- else if in .Permalink "/categories/my-projects/" -}}
+    {{- .Scratch.Set "body_class" " projects-list" -}}
 {{- end -}}
 
 <!DOCTYPE html>
-<html class="no-js" lang='{{- .Site.LanguageCode | default "en-us" -}}'>
+<html class="no-js" lang='{{ .Site.LanguageCode | default "en-us" }}'>
 {{- partial "head" . -}}
-<body class='body{{- .Scratch.Get "body_class" -}}'>
+<body class='body{{ .Scratch.Get "body_class" }}'>
     <div class="container container--outer">
         {{- partial "menu" . -}}
         <div class="wrapper flex">

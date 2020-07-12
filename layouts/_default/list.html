@@ -1,15 +1,23 @@
-{{ define "main" }}
-<main class="main list" role="main">
-    <header class="main__header">
-        {{ if in .Permalink "/categories/" }}
+{{- define "main" }}
+{{ if in .Permalink "/categories/my-projects/" }}
+    {{ .Scratch.Set "main_class" "projects-list"  }}
+    {{ .Scratch.Set "projects_list_page" true  }}
+{{ else }}
+    {{ .Scratch.Set "main_class" "list"  }}
+    {{ .Scratch.Set "projects_list_page" false  }}
+{{ end -}}
+<main class='main {{ .Scratch.Get "main_class" }}' role="main">
+    {{ $is_projects_list := .Scratch.Get "projects_list_page" }}
+    <header class='main__header{{ if $is_projects_list }} hide-element{{ end }}'>
+        {{ if and (in .Permalink "/categories/") (not (in .Permalink "/my-projects/")) }}
             <div class="category-list-header">
                 <span class="{{ .Title | urlize | lower }}">{{ .Title }} posts</span>
             </div>
-        {{ else }}
+        {{ else if (not (in .Permalink "/my-projects/")) }}
             <h1 class="main__title">{{ .Title }}</h1>
         {{ end }}
     </header>
-    <div class="content main__content clearfix">{{ .Content }}</div>
+    <div class='content main__content clearfix{{ if $is_projects_list }} hide-element{{ end }}'>{{ .Content }}</div>
     <div class="list-wrapper">
         {{- range .Paginator.Pages }}{{- .Render "summary" }}{{- end }}
     </div>

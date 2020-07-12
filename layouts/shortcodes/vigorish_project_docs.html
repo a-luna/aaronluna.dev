@@ -1,0 +1,22 @@
+{{- $button1 := (printf "%s" (.Get "button1")) -}}
+{{- if eq $button1 "home"}}
+  {{ $.Scratch.Add "button1_page" "/projects/vigorish/home" }}
+{{ else if eq $button1 "install" }}
+  {{ $.Scratch.Add "button1_page" "/projects/vigorish/install" }}
+{{ else if eq $button1 "user" }}
+  {{ $.Scratch.Add "button1_page" "/projects/vigorish/user_guide" }}
+{{ end -}}
+{{- $button2 := (printf "%s" (.Get "button2")) -}}
+{{- if eq $button2 "home"}}
+  {{ $.Scratch.Add "button2_page" "/projects/vigorish/home" }}
+{{ else if eq $button2 "install" }}
+  {{ $.Scratch.Add "button2_page" "/projects/vigorish/install" }}
+{{ else if eq $button2 "user" }}
+  {{ $.Scratch.Add "button2_page" "/projects/vigorish/user_guide" }}
+{{ end -}}
+{{- $button1_page := .Site.GetPage (printf "%s" ($.Scratch.Get "button1_page")) -}}
+{{- $button2_page := .Site.GetPage (printf "%s" ($.Scratch.Get "button2_page")) -}}
+<div class="hero-buttons">
+  <a href="{{ $button1_page.RelPermalink }}">{{ $button1_page.Params.lead }}</a>
+  <a href="{{ $button2_page.RelPermalink }}">{{ $button2_page.Params.lead }}</a>
+</div>

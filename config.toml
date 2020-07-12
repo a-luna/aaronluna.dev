@@ -22,12 +22,17 @@ rssLimit = 15
     startLevel = 2
 
 [outputs]
-  home = ["HTML", "JSON", "RSS", "redirect"]
+  home = ["HTML", "JSON", "RSS", "redirect", "headers"]
   page = ["HTML"]
 
 [outputFormats.redirect]
 mediatype = "text/netlify"
 baseName = "_redirects"
+isPlainText = true
+
+[outputFormats.headers]
+mediatype = "text/netlify"
+baseName = "_headers"
 isPlainText = true
 
 [mediaTypes."text/netlify"]
@@ -49,7 +54,7 @@ isPlainText = true
   bio = "Application and Web Developer living in Reno, NV"
   avatar = "img/AaronLuna.jpg"
 
-[Params]
+[params]
   description = "Web/app programming blog and online portfolio for Aaron Luna" # Description of your site
   copyright = "Aaron Luna"
   opengraph = true
@@ -80,7 +85,7 @@ isPlainText = true
   [[menu.main]]
     identifier = "projects"
     name = "Projects"
-    url = "/projects/"
+    url = "/categories/my-projects/"
     weight = 3
   [[menu.main]]
     identifier = "tutorials"
@@ -108,7 +113,7 @@ isPlainText = true
   [[menu.projects]]
     identifier = "base64"
     name = "My First Svelte Application: Base64 Encoder/Decoder"
-    url = "/projects/svelte-app-base64/"
+    url = "/projects/svelte-base64/"
     weight = 2
 
   [[menu.social]]
@@ -152,3 +157,15 @@ isPlainText = true
   tutorials_title = "Tutorials"
   flask_api_tutorials_title = "Flask API Tutorial"
   projects_title = "Projects"
+
+[Params.cspheaders]
+  fontsrc = ["'self'"]
+  formaction = ["'self'"]
+  framesrc = ["'self'"]
+  imgsrc = ["*"]
+  mediasrc = ["'self'"]
+  objectsrc = ["'none'"]
+  stylesrc = ["'self'"]
+  scriptsrc = ["'self'", "'unsafe-inline'", "'static.codepen.io'", "'*.utteranc.es'"]
+  workersrc = ["'self'"]
+  reportto = "https://1hseel25z7.execute-api.us-east-1.amazonaws.com/prod/report"

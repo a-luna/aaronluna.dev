@@ -1,0 +1,26 @@
+{{- $https1 := "upgrade-insecure-requests" -}}
+{{- $https2 := "block-all-mixed-content" -}}
+{{- $defaultSrc := "default-src 'self'" -}}
+{{- $fontSrc := (delimit .Site.Params.CSPHeaders.fontsrc " ") -}}
+{{- $fontSrc := (print "font-src " $fontSrc) -}}
+{{- $formAction := (delimit .Site.Params.CSPHeaders.formaction " ") -}}
+{{- $formAction := (print "form-action " $formAction) -}}
+{{- $frameSrc := (delimit .Site.Params.CSPHeaders.framesrc " ") -}}
+{{- $frameSrc := (print "frame-src " $frameSrc) -}}
+{{- $imgSrc := (delimit .Site.Params.CSPHeaders.imgsrc " ") -}}
+{{- $imgSrc := (print "img-src " $imgSrc) -}}
+{{- $mediaSrc := (delimit .Site.Params.CSPHeaders.mediasrc " ") -}}
+{{- $mediaSrc := (print "media-src " $mediaSrc) -}}
+{{- $objectSrc := (delimit .Site.Params.CSPHeaders.objectsrc " ") -}}
+{{- $objectSrc := (print "object-src " $objectSrc) -}}
+{{- $styleSrc := (delimit .Site.Params.CSPHeaders.stylesrc " ") -}}
+{{- $styleSrc := (print "style-src " $styleSrc) -}}
+{{- $scriptSrc := (delimit .Site.Params.CSPHeaders.scriptsrc " ") -}}
+{{- $scriptSrc := (print "script-src " $scriptSrc) -}}
+{{- $workerSrc := (delimit .Site.Params.CSPHeaders.workersrc " ") -}}
+{{- $workerSrc := (print "worker-src " $workerSrc) -}}
+{{- $reportTo := (print "report-to " .Site.Params.CSPHeaders.reportto) -}}
+{{- $reportUri := (print "report-uri " .Site.Params.CSPHeaders.reportto) -}}
+{{- $cspContent := (slice $https1 $https2 $defaultSrc $workerSrc $fontSrc $formAction $frameSrc $imgSrc $mediaSrc $objectSrc $styleSrc $scriptSrc $reportTo $reportUri) -}}
+/*
+  Content-Security-Policy-Report-Only:: {{ print (delimit $cspContent "; ") }}
