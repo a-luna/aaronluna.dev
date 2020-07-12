@@ -87,6 +87,7 @@
   --nav-hover-link-color: var(--white2);
   --home-active-link-color: var(--white2);
   --blog-active-link-color: var(--white2);
+  --projects-active-link-color: var(--white2);
   --tutorials-active-link-color: var(--white2);
   --about-active-link-color: var(--white2);
 
@@ -120,7 +121,7 @@
   --virtualization-color-h: 171;
   --svelte-color-h: 206;
   --nodejs-color-h: 305;
-  --personal-project-color-h: 19;
+  --my-projects-color-h: 19;
   --web-scraping-color-h: 224;
 
   /* Section: Blog Posts */

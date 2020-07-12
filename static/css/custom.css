@@ -182,6 +182,10 @@ kbd {
   flex-flow: column nowrap;
 }
 
+.projects-list .primary {
+  padding: 40px 0 0 0;
+}
+
 .post__header {
   margin: 0 0 1.5em;
 }
@@ -224,7 +228,7 @@ kbd {
   background-color: var(--widget-bg-color);
   border-radius: 4px;
   margin: 0 0 20px;
-  padding: 15px;
+  padding: 10px 15px;
   box-shadow: var(--outer-shadow);
 }
 
@@ -687,32 +691,29 @@ p.search-result-score {
 }
 
 .mobile-device-mock {
-  border-top: 12px solid var(--black1);
+  border-top: 8px solid var(--black1);
   border-left: 8px solid var(--black1);
   border-right: 8px solid var(--black1);
   border-bottom: none;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  border-bottom-left-radius: none;
-  border-bottom-right-radius: none;
+  margin: 0 0 -10px 0;
 }
 
 .mobile-device-bottom {
   display: flex;
   justify-content: center;
-  height: 21px;
+  height: 20px;
   background-color: var(--black1);
-  border-top-left-radius: none;
-  border-top-right-radius: none;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
+  padding: 0 0 4px 0;
 }
 
 .mobile-device-button {
   flex: 0 0 16px;
   border-radius: 100px;
   background-color: var(--mid-gray1);
-  margin: 0 0 5px 0;
 }
 
 .hero-buttons {
@@ -2016,7 +2017,7 @@ figcaption {
 
 #social ul li {
   float: left;
-  padding: 3px 0;
+  padding: 4px 0;
   width: 30px;
 }
 
@@ -2073,8 +2074,8 @@ figcaption {
 
 .post__header {
   background-color: var(--dark-gray1);
-  padding: 0 0 10px;
-  margin: 0 0 20px;
+  padding: 0;
+  margin: 0;
 }
 
 .about-me .post__header {
@@ -3237,9 +3238,9 @@ table.aws-hosting-costs {
 }
 
 .site-menu a {
-  font-size: 1.1em;
-  padding: 4px;
-  margin: 0 10px;
+  font-size: 16px;
+  padding: 5px;
+  margin: 0 6px;
 }
 
 #site-search .widget__content,
@@ -3264,7 +3265,8 @@ header,
 .site-name {
   flex: 0;
   text-align: center;
-  margin: 0 10px 0 0;
+  margin: 0 15px 0 0;
+  padding: 4px 0;
 }
 
 .menu-bar {
@@ -3300,6 +3302,10 @@ header,
   color: var(--blog-active-link-color);
 }
 
+#menu #projects.active {
+  color: var(--projects-active-link-color);
+}
+
 #menu #tutorials.active {
   color: var(--tutorials-active-link-color);
 }
@@ -3315,7 +3321,7 @@ header,
 }
 
 #site-name {
-  font-size: 20px;
+  font-size: 19px;
 }
 
 .site-social {
@@ -3717,10 +3723,10 @@ span.svelte {
   --cat-color-h: var(--svelte-color-h);
 }
 
-a.personal-project,
-i.personal-project,
-span.personal-project {
-  --cat-color-h: var(--personal-project-color-h);
+a.my-projects,
+i.my-projects,
+span.my-projects {
+  --cat-color-h: var(--my-projects-color-h);
 }
 
 a.web-scraping,
@@ -4176,6 +4182,10 @@ blockquote td {
     padding: 0 0 0 20px;
   }
 
+  .site-name {
+    padding: 5px 0;
+  }
+
   #site-name {
     font-size: 16px;
   }
@@ -4191,7 +4201,7 @@ blockquote td {
 
   .site-menu a {
     font-size: 14px;
-    padding: 4px;
+    padding: 5px;
     margin: 0 6px;
   }
 
@@ -4234,14 +4244,6 @@ blockquote td {
     font-size: 0.85em;
   }
 
-  #site-name {
-    font-size: 15px;
-  }
-
-  #social ul {
-    font-size: 15px;
-  }
-
   #social ul li {
     width: 25px;
     padding: 4px 0;
@@ -4253,7 +4255,7 @@ blockquote td {
 
   .site-menu a {
     font-size: 13px;
-    padding: 4px;
+    padding: 5px 3px;
     margin: 0 4px;
   }
 }
