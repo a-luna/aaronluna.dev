@@ -161,11 +161,11 @@ isPlainText = true
 [Params.cspheaders]
   fontsrc = ["'self'"]
   formaction = ["'self'"]
-  framesrc = ["'self'"]
+  framesrc = ["'self'", "'static.codepen.io'", "'https://utteranc.es'"]
   imgsrc = ["*"]
   mediasrc = ["'self'"]
   objectsrc = ["'none'"]
   stylesrc = ["'self'"]
-  scriptsrc = ["'self'", "'unsafe-inline'", "'static.codepen.io'", "'*.utteranc.es'"]
+  scriptsrc = ["'self'", "'unsafe-inline'", "'static.codepen.io'", "'https://utteranc.es'"]
   workersrc = ["'self'"]
   reportto = "https://1hseel25z7.execute-api.us-east-1.amazonaws.com/prod/report"
