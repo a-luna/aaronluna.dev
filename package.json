@@ -15,7 +15,7 @@
     },
     "homepage": "https://github.com/a-luna/aaronluna.dev",
     "devDependencies": {
-        "@babel/cli": "^7.10.4",
+        "@babel/cli": "^7.10.5",
         "@babel/core": "^7.10.4",
         "@babel/preset-env": "^7.10.4",
         "@fullhuman/postcss-purgecss": "^2.3.0",
