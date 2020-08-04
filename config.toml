@@ -68,7 +68,6 @@ isPlainText = true
   postSections = ["post"]
   menu_label = "Menu"
   read_more = "Read More"
-  process_dev_css = false
   search_result_preview_max_len = 100
 
 [taxonomies]

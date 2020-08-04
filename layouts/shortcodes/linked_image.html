@@ -30,8 +30,9 @@
         <a href="{{ $original.RelPermalink }}">
             <img
                 sizes="{{ $sizes }}"
-                srcset='{{ $srcset }}'
+                srcset="{{ $srcset }}"
                 src="{{ $original.RelPermalink }}"
+                loading="lazy"
                 alt="{{ .Page.Title }}">
         </a>
         <figcaption><p>{{ $original.Title }}</p></figcaption>

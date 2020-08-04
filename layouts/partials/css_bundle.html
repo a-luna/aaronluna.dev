@@ -1,13 +1,8 @@
 {{ $allcss := slice (resources.Get "css/font-awesome.min.css") (resources.Get "css/style.css") (resources.Get "css/syntax.css") (resources.Get "css/fonts.css") (resources.Get "css/variables.css") (resources.Get "css/custom.css") -}}
 {{ if .Site.IsServer }}
-    {{ if .Site.Params.process_dev_css -}}
-        {{- $bundlecss := $allcss | resources.Concat "bundle.css" | postCSS -}}
-        <link rel="stylesheet" href="{{ $bundlecss.RelPermalink }}" media="screen">
-    {{ else -}}
-        {{- range $allcss }}
-            <link rel="stylesheet" href="{{ . | relURL }}">
-        {{- end -}}
-    {{ end }}
+    {{- range $allcss }}
+        <link rel="stylesheet" href="{{ . | relURL }}">
+    {{- end -}}
 {{ else }}
     {{ $bundlecss := $allcss | resources.Concat "bundle.css" | minify | fingerprint }}
     <link rel="stylesheet" href="{{ $bundlecss.RelPermalink }}" integrity="{{ $bundlecss.Data.Integrity }}" media="screen">

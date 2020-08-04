@@ -3,8 +3,8 @@ module.exports = {
         require('autoprefixer')({
             grid: true,
         }),
-        require('@fullhuman/postcss-purgecss')({
-            content: ['public/**/*.html']
+        require('cssnano')({
+            preset: 'default',
         })
     ]
 }
