@@ -24,7 +24,7 @@
         "autoprefixer": "^9.8.6",
         "cssnano": "^4.1.10",
         "lazysizes": "^5.2.2",
-        "lunr": "^2.3.8",
+        "lunr": "^2.3.9",
         "postcss": "^7.0.32",
         "postcss-cli": "^7.1.1",
         "postcss-uncss": "^0.17.0",
