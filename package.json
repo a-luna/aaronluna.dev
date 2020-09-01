@@ -26,7 +26,7 @@
         "lazysizes": "^5.2.2",
         "lunr": "^2.3.8",
         "postcss": "^7.0.32",
-        "postcss-cli": "^7.1.1",
+        "postcss-cli": "^7.1.2",
         "postcss-uncss": "^0.17.0",
         "root-variables": "^1.0.8",
         "snowpack": "^2.7.5",
