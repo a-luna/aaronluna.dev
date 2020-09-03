@@ -4,11 +4,11 @@
         <script type="text/javascript" src="{{ . | relURL }}"></script>
     {{- end -}}
 {{- else -}}
-    {{- $search := resources.Get "js/search.js" | babel -}}
-    {{- $headings := resources.Get "js/headings.js" | babel -}}
-    {{- $copyCodeBlock := resources.Get "js/copyCodeBlock.js" | babel -}}
-    {{- $tox := resources.Get "js/tox.js" | babel -}}
-    {{- $main := resources.Get "js/main.js" | babel -}}
+    {{- $search := resources.Get "js/search.js" -}}
+    {{- $headings := resources.Get "js/headings.js" -}}
+    {{- $copyCodeBlock := resources.Get "js/copyCodeBlock.js" -}}
+    {{- $tox := resources.Get "js/tox.js" -}}
+    {{- $main := resources.Get "js/main.js" -}}
     {{- $alljs := slice (resources.Get "js/vendor/lunr.min.js") $search $headings $copyCodeBlock $tox $main -}}
     {{- $bundlejs := $alljs | resources.Concat "bundle.js" | minify | fingerprint }}
     <script type="text/javascript" src="{{ $bundlejs.RelPermalink }}" integrity="{{ $bundlejs.Data.Integrity }}"></script>
