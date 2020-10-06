@@ -29,7 +29,7 @@
         "postcss-cli": "^7.1.2",
         "postcss-uncss": "^0.17.0",
         "root-variables": "^1.0.8",
-        "snowpack": "^2.10.1",
+        "snowpack": "^2.13.3",
         "uncss": "^0.17.3"
     },
     "browserslist": [
