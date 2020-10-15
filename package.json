@@ -15,7 +15,7 @@
     },
     "homepage": "https://github.com/a-luna/aaronluna.dev",
     "devDependencies": {
-        "@babel/cli": "^7.11.6",
+        "@babel/cli": "^7.12.0",
         "@babel/core": "^7.11.6",
         "@babel/plugin-transform-regenerator": "^7.10.4",
         "@babel/preset-env": "^7.11.5",
