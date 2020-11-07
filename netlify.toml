@@ -23,37 +23,37 @@
   HUGO_ENABLEGITINFO = "false"
 [[redirects]]
   from ="/build/bundle.js"
-  to = "https://svelte-base64.netlify.com/build/bundle.js"
+  to = "https://svelte-base64.netlify.app/build/bundle.js"
   status = 200
   force = true
 [[redirects]]
   from ="/build/bundle.css"
-  to = "https://svelte-base64.netlify.com/build/bundle.css"
+  to = "https://svelte-base64.netlify.app/build/bundle.css"
   status = 200
   force = true
 [[redirects]]
   from ="/build/global.css"
-  to = "https://svelte-base64.netlify.com/build/global.css"
+  to = "https://svelte-base64.netlify.app/build/global.css"
   status = 200
   force = true
 [[redirects]]
   from ="/webfonts/*"
-  to = "https://svelte-base64.netlify.com/webfonts/:splat"
+  to = "https://svelte-base64.netlify.app/webfonts/:splat"
   status = 200
   force = true
 [[redirects]]
   from ="/favicon.png"
-  to = "https://svelte-base64.netlify.com/favicon.png"
+  to = "https://svelte-base64.netlify.app/favicon.png"
   status = 200
   force = true
 [[redirects]]
   from ="/base64"
-  to = "https://svelte-base64.netlify.com/"
+  to = "https://svelte-base64.netlify.app/"
   status = 200
   force = true
 [[redirects]]
   from ="/base64/*"
-  to = "https://svelte-base64.netlify.com/:splat"
+  to = "https://svelte-base64.netlify.app/:splat"
   status = 200
   force = true
 
