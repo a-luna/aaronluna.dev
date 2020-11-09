@@ -3766,6 +3766,10 @@ span.nodejs {
   margin: 0 0 3px 3px;
 }
 
+.github-repo {
+  padding: 10px 15px;
+}
+
 .repo-top,
 .repo-bottom {
   display: flex;
@@ -3778,13 +3782,12 @@ span.nodejs {
 .project-buttons {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-around;
   line-height: 1.2;
   align-items: center;
 }
 
 .repo-top {
-  font-size: 2em;
+  font-size: 1.7em;
   margin: 0 0 5px 0;
   line-height: 1.2;
 }
@@ -3805,7 +3808,7 @@ span.nodejs {
   flex-flow: column nowrap;
   justify-content: space-between;
   flex: 1;
-  font-size: 1.7em;
+  font-size: 1.5em;
   line-height: 1.4;
   margin: 3px 0 0 0;
 }
@@ -3824,7 +3827,7 @@ span.nodejs {
 
 .language-name {
   display: inline-block;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .repo-stats-wrapper,
@@ -3835,12 +3838,12 @@ span.nodejs {
 }
 
 .repo-stats {
-  font-size: 17px;
+  font-size: 15px;
   margin: 0 3px;
 }
 
 .repo-language .fa {
-  font-size: 17px;
+  font-size: 15px;
   margin: 0 7px 0 0;
 }
 
@@ -3854,17 +3857,21 @@ span.nodejs {
   margin: 10px 0 0 0;
 }
 
+.launch-app-button {
+  margin: 10px 0 0 10px;
+}
+
 .content .project-button a {
   color: var(--off-white2);
   background-color: var(--purple1);
   white-space: pre;
   flex: 0 1 40%;
-  font-size: 0.75em;
+  font-size: 0.8em;
+  font-weight: 700;
   border-radius: 4px;
   margin: 0;
-  padding: 4px 5px;
+  padding: 5px 6px;
   transition: all 0.4s linear;
-  box-shadow: var(--outer-shadow);
 }
 
 .content .project-button a:hover,
