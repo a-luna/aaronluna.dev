@@ -3,9 +3,9 @@ title: "My First Svelte Application: Base64 Encoder/Decoder"
 slug: "svelte-base64"
 date: "2020-01-30"
 aliases:
-    - /blog/svelte-svelma-base64-rollup-global-sass/
-    - /blog/svelte-base64/
-    - /projects/svelte-base64/
+  - /blog/svelte-svelma-base64-rollup-global-sass/
+  - /blog/svelte-base64/
+  - /projects/svelte-base64/
 series: ["projects"]
 series_weight: 2
 series_title: "Personal Projects"
@@ -21,10 +21,11 @@ resources:
     src: media/base64.js.mp4
     title: Automated Cypress Tests (4 Tests on 2 Screen Sizes Shown)
 ---
+
 I am currently teaching myself svelte and I have enjoyed pretty much everything about it. I decided to create a simple application that encodes ASCII text or hex strings to base64, and vice-versa. In order to take advantage of svelte's strengths, the application contains reactive UI components to help illustrate the encoding process.
 
 <div class="hero-buttons">
-  <a href="https://svelte-base64.netlify.app" target="_blank">Launch App</a>
+  <a href="https://aaronluna.dev/base64" target="_blank">Launch App</a>
   <a href="https://github.com/a-luna/svelte-base64" target="_blank">View Github Repo</a>
 </div>
 
@@ -35,7 +36,6 @@ I deployed this project to Netlify (click the **Launch App** button above to ope
     <img alt="Edit svelte-base64" src="https://codesandbox.io/static/img/play-codesandbox.svg">
   </a>
 </div>
-
 
 ## Base64 Encoder/Decoder
 
