@@ -3,59 +3,24 @@
 #  functions= "functions/"
   command = "hugo --gc --minify"
 [context.production.environment]
-  HUGO_VERSION = "0.76.5"
+  HUGO_VERSION = "0.78.1"
   HUGO_ENV = "production"
   HUGO_ENABLEGITINFO = "false"
 [context.split1]
   command = "hugo --gc --minify"
 [context.split1.environment]
-  HUGO_VERSION = "0.76.5"
+  HUGO_VERSION = "0.78.1"
   HUGO_ENV = "production"
 [context.deploy-preview]
   command = "hugo --gc --minify --buildFuture -b $DEPLOY_PRIME_URL"
 [context.deploy-preview.environment]
-  HUGO_VERSION = "0.76.5"
+  HUGO_VERSION = "0.78.1"
 [context.branch-deploy]
     acommand = "hugo --gc --minify -b $DEPLOY_PRIME_URL"
 [context.branch-deploy.environment]
-  HUGO_VERSION = "0.76.5"
+  HUGO_VERSION = "0.78.1"
 [context.next.environment]
   HUGO_ENABLEGITINFO = "false"
-[[redirects]]
-  from ="/build/bundle.js"
-  to = "https://svelte-base64.netlify.app/build/bundle.js"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/build/bundle.css"
-  to = "https://svelte-base64.netlify.app/build/bundle.css"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/build/global.css"
-  to = "https://svelte-base64.netlify.app/build/global.css"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/webfonts/*"
-  to = "https://svelte-base64.netlify.app/webfonts/:splat"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/favicon.png"
-  to = "https://svelte-base64.netlify.app/favicon.png"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/base64"
-  to = "https://svelte-base64.netlify.app/"
-  status = 200
-  force = true
-[[redirects]]
-  from ="/base64/*"
-  to = "https://svelte-base64.netlify.app/:splat"
-  status = 200
-  force = true
 
 # [[plugins]]
 #   package = "netlify-plugin-inline-critical-css"

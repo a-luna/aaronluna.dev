@@ -1,1 +1,8 @@
 /* /404.html 404
+/build/bundle.js https://svelte-base64.netlify.app/build/bundle.js 200
+/build/bundle.css https://svelte-base64.netlify.app/build/bundle.css 200
+/build/global.css https://svelte-base64.netlify.app/build/global.css 200
+/webfonts/* https://svelte-base64.netlify.app/webfonts/:splat 200
+/favicon.png https://svelte-base64.netlify.app/favicon.png 200
+/base64 https://svelte-base64.netlify.app/ 200
+/base64/* https://svelte-base64.netlify.app/:splat 200
