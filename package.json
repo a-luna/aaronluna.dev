@@ -28,7 +28,7 @@
         "postcss": "^8.0.0",
         "postcss-cli": "^8.2.0",
         "postcss-uncss": "^0.17.0",
-        "root-variables": "^1.0.8",
+        "root-variables": "^1.0.9",
         "snowpack": "^2.16.1",
         "uncss": "^0.17.3"
     },
