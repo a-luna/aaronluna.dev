@@ -20,7 +20,7 @@
         "@babel/plugin-transform-regenerator": "^7.12.1",
         "@babel/preset-env": "^7.12.1",
         "@babel/register": "^7.12.1",
-        "@fullhuman/postcss-purgecss": "^3.0.0",
+        "@fullhuman/postcss-purgecss": "^4.0.2",
         "autoprefixer": "^9.8.6",
         "cssnano": "^4.1.10",
         "lazysizes": "^5.2.2",
