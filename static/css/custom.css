@@ -1305,7 +1305,8 @@ article p strong {
   font-weight: 700;
   color: var(--step-list);
 }
-.steps .green .emphasis {
+.steps .green .emphasis,
+.steps .green li {
   color: var(--green3);
 }
 

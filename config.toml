@@ -3,7 +3,7 @@ title = "aaronluna.dev"
 languageCode = "en-us"
 paginate = "4"
 assetDir = "static"
-#googleAnalytics = "UA-111693264-1" # Enable Google Analytics by entering your tracking id
+#googleAnalytics = "" # Enable Google Analytics by entering your tracking id
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsUseClasses = true
@@ -22,7 +22,7 @@ rssLimit = 15
     startLevel = 2
 
 [outputs]
-  home = ["HTML", "JSON", "RSS", "redirect", "headers"]
+  home = ["HTML", "JSON", "RSS", "redirect"]
   page = ["HTML"]
 
 [outputFormats.redirect]
@@ -30,10 +30,10 @@ mediatype = "text/netlify"
 baseName = "_redirects"
 isPlainText = true
 
-[outputFormats.headers]
-mediatype = "text/netlify"
-baseName = "_headers"
-isPlainText = true
+# [outputFormats.headers]
+# mediatype = "text/netlify"
+# baseName = "_headers"
+# isPlainText = true
 
 [mediaTypes."text/netlify"]
     suffixes = [""]
