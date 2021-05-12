@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "Aaron Luna's Blog",
     "dependencies": {
-        "css-doodle": "^0.8.5"
+        "css-doodle": "^0.17.1"
     },
     "repository": {
         "type": "git",
