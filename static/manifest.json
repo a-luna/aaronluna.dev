@@ -5,18 +5,10 @@
   "lang": "en-US",
   "start_url": "/blog?source=pwa",
   "display": "standalone",
-  "theme_color": "#202020",
-  "background_color": "#323232",
+  "theme_color": "#19191A",
+  "background_color": "#000000  ",
   "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "48x48",
-      "type": "image/png"
-    },
-    {
-      "src": "apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
-    }
+    { "src": "/192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/512.png", "type": "image/png", "sizes": "512x512" }
   ]
 }
