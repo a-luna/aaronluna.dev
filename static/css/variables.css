@@ -1,6 +1,7 @@
 :root {
   /* Color Pallette */
-  --black1: hsl(0, 0%, 13%);
+  --black0: hsl(0, 0%, 6%);
+  --black1: hsl(0, 0%, 10%);
   --black2: hsl(240, 4%, 14%);
   --black3: hsl(0, 0%, 16%);
   --dark-gray1: hsl(0, 0%, 20%);
@@ -47,14 +48,14 @@
   --yellow2: hsl(59, 100%, 55%);
 
   /* Theme Colors */
-  --site-bg-color: var(--mid-gray1);
-  --header-bg-color: var(--black1);
-  --page-bg-color: var(--dark-gray1);
+  --site-bg-color: var(--dark-gray1);
+  --header-bg-color: var(--black0);
+  --page-bg-color: var(--black2);
   --body-text-color: var(--off-white2);
   --header-color: var(--white2);
   --header-anchor-link: var(--mid-gray1);
   --header-anchor-link-hover: var(--off-white1);
-  --widget-bg-color: var(--black1);
+  --widget-bg-color: var(--black0);
   --new-link-color: var(--purple1);
   --new-link-color-hover: var(--purple1-hov);
   --link-color: var(--blue2);
@@ -107,7 +108,7 @@
   --cat-color-h: 0;
   --cat-color-s: 100%;
   --cat-color-l: 50%;
-  --cat-color-dim-adjust: .6;
+  --cat-color-dim-adjust: 0.6;
 
   --aws-color-h: 261;
   --devops-color-h: 301;
@@ -138,19 +139,13 @@
   /* Syntax Highlighting */
   --chroma-border-color: var(--dark-gray2);
   --lang-name: var(---code-text-color2);
-  --lang-name-bg: var(--widget-bg-color);
-  --copy-code-button: var(--mid-gray2);
-  --copy-code-button-hover: var(--light-gray2);
-  --copy-code-button-text: var(--black2);
-  --copy-code-button-text-hover: var(--black2);
-  --hl-num-bg: linear-gradient(to right, var(--dark-gray2), var(--dark-gray2));
-  --hl-line-bg: linear-gradient(
-    to right,
-    var(--dark-gray2),
-    var(--dark-gray1),
-    var(--widget-bg-color),
-    rgba(0, 0, 0, 0)
-  );
+  --lang-name-bg: var(--black0);
+  --copy-code-button: var(--dark-gray2);
+  --copy-code-button-hover: var(--off-white2);
+  --copy-code-button-text: var(--black0);
+  --copy-code-button-text-hover: var(--black0);
+  --hl-num-bg: linear-gradient(to right, var(--black3), var(--black3));
+  --hl-line-bg: linear-gradient(to right, var(--black3), var(--black2), var(--black0), rgba(0, 0, 0, 0));
 
   /* Command-line/Python REPL */
   --cmd-lineno: var(--light-gray2);
@@ -191,7 +186,7 @@
   --project-repo-link-color: var(--project-repo-title-color);
 
   /* input controls */
-  --input-bg-color: var(--black3);
+  --input-bg-color: var(--black2);
   --input-text-color: var(--off-white1);
   --input-button-bg-color: var(--dark-gray2);
   --input-button-text-color: var(--light-gray1);
