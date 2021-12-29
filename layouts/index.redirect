@@ -2,7 +2,7 @@
 /readme_custom_settings.png https://svelte-simple-tables.netlify.app/readme_custom_settings.png 200
 /readme_settings_explained.png https://svelte-simple-tables.netlify.app/readme_settings_explained.png 200
 /svelte-simple-tables https://svelte-simple-tables.netlify.app/ 200
-/svelte-simple-tables/_app/* https://svelte-simple-tables.netlify.app/_app/:splat 200
+/_app/* https://svelte-simple-tables.netlify.app/_app/:splat 200
 /build/bundle.js https://svelte-base64.netlify.app/build/bundle.js 200
 /build/bundle.css https://svelte-base64.netlify.app/build/bundle.css 200
 /build/global.css https://svelte-base64.netlify.app/build/global.css 200
