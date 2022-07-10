@@ -284,10 +284,15 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 });
 
-if (!RegExp.escape) {
+// RegExp.escape() polyfill
+//
+// For more see:
+// - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
+// - https://github.com/benjamingr/RegExp.escape/issues/37
+if (!Object.prototype.hasOwnProperty.call(RegExp, 'escape')) {
   RegExp.escape = function(str) {
     // $& means the whole matched string
-    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return str.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
   };
 }
 
