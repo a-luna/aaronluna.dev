@@ -6,6 +6,8 @@ const WORD_REGEX = /\b(\w*)[\W|\s|\b]?/gm;
 async function initSearchIndex() {
   try {
     const response = await fetch("/index.json");
+    if (response.status !== 200) return;
+
     pagesIndex = await response.json();
     searchIndex = lunr(function () {
       this.field("title");
@@ -82,6 +84,8 @@ function getLunrSearchQuery(query) {
 }
 
 function getSearchResults(query) {
+  if (typeof searchIndex === "undefined") return [];
+
   return searchIndex.search(query).flatMap((hit) => {
     if (hit.ref == "undefined") return [];
     let pageMatch = pagesIndex.filter((page) => page.href === hit.ref)[0];
@@ -162,7 +166,8 @@ function createSearchResultBlurb(query, pageContent) {
 }
 
 function createQueryStringRegex(query) {
-  return query.split(" ").length == 1 ? `(${query})` : `(${query.split(" ").join("|")})`;
+  const escaped = RegExp.escape(query);
+  return escaped.split(" ").length == 1 ? `(${escaped})` : `(${escaped.split(" ").join("|")})`;
 }
 
 function tokenize(input) {
@@ -278,6 +283,18 @@ document.addEventListener("DOMContentLoaded", function () {
       button.addEventListener("click", () => handleClearSearchButtonClicked())
     );
 });
+
+// RegExp.escape() polyfill
+//
+// For more see:
+// - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
+// - https://github.com/benjamingr/RegExp.escape/issues/37
+if (!Object.prototype.hasOwnProperty.call(RegExp, 'escape')) {
+  RegExp.escape = function(str) {
+    // $& means the whole matched string
+    return str.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
+  };
+}
 
 if (!String.prototype.matchAll) {
   String.prototype.matchAll = function (regex) {
